@@ -5,6 +5,7 @@ import { StepsContext } from "../layouts/mainLayout";
 const ChooseTemplate = () => {
    const [selectedTemplate,setselectedTemplate]  = useState(null)
    const {currentStep,setCurrentStep} = useContext(StepsContext)
+   const {uuid} = useParams()
    const navigate = useNavigate();
     return ( <div className="  ">
         
@@ -14,7 +15,7 @@ const ChooseTemplate = () => {
           <div className="flex space-x-2 mb-5">
                 <button onClick={()=>{
                     setCurrentStep(currentStep+1)
-                    navigate('/introduction')
+                    navigate(`/introduction/${uuid}`)
                 }} className="bg-green-600 py-4 hover:scale-105 transition-all px-5 rounded-full text-white font-bold">
                     Continue
                 </button>

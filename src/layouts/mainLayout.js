@@ -13,6 +13,7 @@ const MainLayout = () => {
    const [showPreview,setShowPreview] = useState(false)
    const [downloading,setDownloading] = useState(false)
    const [candidate,setCandidate] = useState(null)
+   const [originalDetails,setOriginalDetails] = useState(null)
    
     const steps = [
     {title:"Choose Template"},
@@ -21,8 +22,8 @@ const MainLayout = () => {
     {title:"Education"},
     {title:"Work Experience"},
     {title:"Skills"},
-    {title:"Certifications"},
-    {title:"Refrees"},
+    {title:"Proficiency"},
+    {title:"Referees"},
     {title:"Complete"}]
     const {uuid} = useParams()
 
@@ -30,8 +31,8 @@ useEffect(()=>{
     axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
          if(response){
           const data = response.data.data
-          const userId = data.applicant.id;
-          setDoc(doc(collection(firestore,"apis"),`${userId}`),data) 
+          setOriginalDetails(data);
+          setDoc(doc(collection(firestore,"apis"),`${uuid}`),data) 
          }
     }).catch((error)=>{
         console.log(error);
@@ -48,7 +49,7 @@ useEffect(()=>{
     return ( <div>
         <div className="flex">
             <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-12">
-                <h1 className="font-bold text-3xl">eKazi CV Builder</h1>
+                <h1 className="font-bold text-2xl">eKazi CV Builder</h1>
               <div className="  mt-8">
               {steps.map((item,index)=>{
                     return <div className="font-bold text-opacity-75  border-white border-opacity-50 rounded">
@@ -66,7 +67,7 @@ useEffect(()=>{
             </div>
             <div className="w-9/12 ms-auto min-h-screen bg-gray-100">
             <div className=" px-12 py-12">
-                <StepsContext.Provider value={{currentStep,setCurrentStep}}>
+                <StepsContext.Provider value={{currentStep,setCurrentStep,candidate,setCandidate,originalDetails}}>
                    <Outlet/>
                 </StepsContext.Provider>
 
@@ -80,15 +81,21 @@ useEffect(()=>{
                     }} className="bg-green-600 hover:scale-105 transition-all  text-white shadow-2xl font-bold rounded-full py-4 px-8">Preview template</button>
                     {showPreview && <div className={`inset-0 delay-700 bg-translate fixed  transition-all duration-500  `}>
                        <div className="w-full h-full flex justify-center items-center">
-                       <div className="w-7/12 mx-auto border-8 border-gray-200 rounded-xl bg-white h-[95%] shadow-4xl overflow-y-auto ">
-                            <div className=" bg-gray-100">
-                            
+                       <div className="w-7/12 mx-auto  border-gray-200  bg-white h-[95%] shadow-4xl overflow-y-auto ">
+                            <div className=" bg-gray-50">
+                            <div className="px-12 flex justify-end">
+                            <div onClick={()=>{
+                                setShowPreview(false)
+                               }} className="font-bold cursor-pointer hover:scale-105 transition-all text-gray-800  ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                            </svg>
+                               </div>
+                            </div>
                            <div className="flex   justify-between px-12 py-3 border-b-2 items-center">
                                <h1 className="font-bold text-2xl ">Preview</h1>
                                <div className="flex items-center space-x-4">  
-                               <h1 onClick={()=>{
-                                setShowPreview(false)
-                               }} className="font-bold cursor-pointer hover:scale-105 transition-all text-red-500  ">Hide Preview</h1>
+                               
                                <button onClick={()=>{
                                    setDownloading(true)
                                    axios.get('http://localhost:5000/generatePdf').then((response)=>{
