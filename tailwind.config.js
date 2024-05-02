@@ -11,6 +11,11 @@ module.exports = {
         dark:'#150700'
       }
     },
+    fontFamily:{
+      aeonik:[
+        'Aeonik'
+      ]
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),

@@ -21,17 +21,11 @@ const WorksExperiences = () => {
         <div className="grid grid-cols-2 gap-5 mt-5">
         {
             originalDetails.experience.map((item)=>{
-                return <div className=" py-3 px-5 bg-white border border-gray-200 rounded shadow">
-                    <p> <span className="font-bold">{item.employer_name} </span>| 2023 - 2024</p>
-                     <span className=" capitalize">{item.sub_location}, Tanzania</span>
-                    <div className="flex justify-end">
-                    <div className="font-bold text-primary mt-3 cursor-pointer bg-primary bg-opacity-15 py-2 px-4 rounded-full">Add</div>
-                    </div>
-                </div>
+                return <div></div>
             })
         }
         </div>
-        <div className="flex justify-end space-x-2 mt-4 items-center">
+        <div className="flex justify-end space-x-2 mt-4 items-center z-50">
                   <h1 onClick={()=>{
                       navigate(-1)
                       setCurrentStep(currentStep-1)
@@ -39,8 +33,8 @@ const WorksExperiences = () => {
                   <button onClick={()=>{
                     navigate(`/skills/${uuid}`)
                     setCurrentStep(currentStep+1)
-                  }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
-                </div>
+                }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
+        </div>
     </div> );
 }
  

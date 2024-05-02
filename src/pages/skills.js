@@ -22,28 +22,28 @@ const Skills = () => {
         {
             originalDetails.culture.map((item)=>{
                 return <div className=" flex items-center space-x-2  py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-                    <h1>{item.culture_name}</h1> <input type="checkbox"/>
+                    <h1>{item.culture.culture_name}</h1> <input type="checkbox"/>
                 </div>
             })
         }
         {
             originalDetails.tools.map((item)=>{
                 return <div className=" flex space-x-2 items-center py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-                    <h1>{item.tool_name}</h1> <input type="checkbox"/>
+                    <h1>{item.tool.tool_name}</h1> <input type="checkbox"/>
                 </div>
             })
         }
          {
             originalDetails.applicant_personality.map((item)=>{
                 return <div className=" py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-                    <h1>{item.personality_name}</h1> <input type="checkbox"/>
+                    <h1>{item.personality.personality_name}</h1> <input type="checkbox"/>
                 </div>
             })
         }
         {
             originalDetails.software.map((item)=>{
                 return <div className=" py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-                    <h1>{item.software_name}</h1> <input type="checkbox"/>
+                    <h1>{item.software.software_name}</h1> <input type="checkbox"/>
                 </div>
             })
         }

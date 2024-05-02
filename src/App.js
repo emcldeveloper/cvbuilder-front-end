@@ -13,12 +13,16 @@ import Skills from './pages/skills';
 import Certifications from './pages/proficiency';
 import Refrees from './pages/refrees';
 import Complete from './pages/complete';
+import AboutUs from './samples/aboutUs';
 import Proficiency from './pages/proficiency';
+import A4Paper from './samples/a4Paper';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
+   <Route path='/a4'  element={<A4Paper/>}/>
+
    <Route path='/' element={<MainLayout/>}>
     <Route path='/:uuid' index element={<ChooseTemplate/>}/>
     <Route path='/introduction/:uuid' index element={<IntroductionDetails/>}/>
@@ -29,9 +33,10 @@ function App() {
     <Route path='/proficiency/:uuid' index element={<Proficiency/>}/>
     <Route path='/refrees/:uuid' index element={<Refrees/>}/>
     <Route path='/complete/:uuid' index element={<Complete/>}/>
-   </Route>
-   <Route path='/template1' index element={<Template1/>}/>
+    <Route path='/complete/:uuid' index element={<Complete/>}/>
 
+   </Route>
+   <Route path='/template1/:uuid' index element={<Template1/>}/>
    </Routes>
    </BrowserRouter>
   );
