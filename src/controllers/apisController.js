@@ -4,7 +4,7 @@ import { firestore } from "../utils/firebase"
 export const checkIfExists = async({uuid})=>{
     try {
       const response = await getDoc(doc(collection(firestore,"apis"),uuid))
-      if(response.exists){
+      if(response.exists()){
         return true;
       }
       return false;

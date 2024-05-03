@@ -1,12 +1,18 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { StepsContext } from "../layouts/mainLayout";
+import { firestore } from "../utils/firebase";
+import { collection, doc, setDoc } from "firebase/firestore";
+import PageLoader from "../widgets/pageLoader";
 
 const Educations = () => {
-    const {currentStep,setCurrentStep,originalDetails} = useContext(StepsContext)
+    const {currentStep,setCurrentStep,originalDetails,candidate} = useContext(StepsContext)
     const {uuid} = useParams()
     const navigate = useNavigate();
-    return ( <div>
+    useEffect(()=>{
+        setCurrentStep(3)
+     },[])
+    return ( originalDetails == null || candidate == null ?<PageLoader/> : <div>
          <div className="flex justify-between items-center">
         <div>
         <h1 className="font-bold text-3xl">Education</h1>
@@ -20,12 +26,24 @@ const Educations = () => {
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
         {
+        
             originalDetails.education.map((item)=>{
                 return <div className="p-5 bg-white border border-gray-200 rounded shadow">
                     <p> <span className="font-bold">{item.name}:</span> {new Date(item.started).getFullYear()} - {new Date(item.ended).getFullYear()}</p>
                     <i>{item.education_level}</i>, <span>{item.college_name}</span>
-                    <div className="flex justify-end">
-                    <div className="font-bold text-primary mt-3 cursor-pointer bg-primary bg-opacity-15 py-2 px-4 rounded-full">Add</div>
+                    <div className="flex justify-end">   
+                    {candidate.education.filter((e)=>e.id==item.id).length >0 == true ? <div onClick={()=>{
+                        const newData = { ...candidate };
+                        newData.education = candidate.education.filter((e)=>e == item);
+                        setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                     }} className="font-bold text-red-500 mt-3 cursor-pointer 
+                     bg-red-500 bg-opacity-15 py-2 px-4 rounded-full">Remove</div>:
+                     <div onClick={()=>{
+                        const newData = { ...candidate };
+                        newData.education = [item,...newData.education];
+                        setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                     }} className="font-bold text-primary mt-3 cursor-pointer 
+                     bg-primary bg-opacity-15 py-2 px-4 rounded-full">Add</div>}
                     </div>
                 </div>
             })

@@ -13,7 +13,7 @@ const IntroductionDetails = () => {
        setCurrentStep(1)
     },[])
     return ( originalDetails == null || candidate == null ?<PageLoader/>
-    :<div>
+    :  <div>
          <div className="flex justify-between items-center">
         <div>
         <h1 className="font-bold text-3xl">Introduction Details</h1>
@@ -48,7 +48,7 @@ const IntroductionDetails = () => {
         newData.experience[0].position.position_name = e.target.value;
         setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
       }} 
-      defaultValue={originalDetails.experience[0].position.position_name == candidate.experience[0].position.position_name ? originalDetails.experience[0].position.position_name : candidate.experience[0].position.position_name}
+      defaultValue={originalDetails.experience.length>0&&originalDetails.experience[0].position.position_name == candidate.experience.length>0&& candidate.experience[0].position.position_name ? originalDetails.experience.length>0&& originalDetails.experience[0].position.position_name :candidate.experience.length>0&& candidate.experience[0].position.position_name}
       className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
     />
   </div>
@@ -59,8 +59,6 @@ const IntroductionDetails = () => {
         const newData = { ...candidate };
         newData.applicant_profile[0].email = e.target.value;
         setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
-
-        
       }} 
       defaultValue={originalDetails.applicant_profile[0].email == candidate.applicant_profile[0].email ? originalDetails.applicant_profile[0].email : candidate.applicant_profile[0].email} 
       className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"

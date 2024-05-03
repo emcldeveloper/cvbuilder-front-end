@@ -11,33 +11,38 @@ const Template1 = () => {
   const [candidate,setCandidate] = useState(null)
   const [show, setShow] = useState(false);
   const [pages, setPages] = useState(false);
+  const [experiences,setExperiences] = useState([])
 
   
   useEffect(()=>{
-    getDoc(doc(collection(firestore,"apis"),`${uuid}`)).then((value)=>{
-      setCandidate(value.data());
-      setShow(true);
-    })
-    // h-[1125px]
+    onSnapshot(doc(collection(firestore,"apis"),`${uuid}`),(value)=>{
+      if(value.exists){
+          setCandidate(value.data())
+          setShow(true)
+      }
+      })
 },[])
+ 
 useEffect(()=>{
-  if(show == true){
-    setPages(Math.ceil(cv.current.offsetHeight/1025))
+  if(candidate != null){
+     candidate.experience.forEach(item=>{
+         if(experiences.filter((e)=>e.employer.id==item.employer.id) == 0){
+          item.positions = candidate.experience.filter((ex)=>ex.employer.id==item.employer.id)
+            setExperiences([...experiences,item])
+         }
+     })
   }
-},[show])
+},[candidate,experiences])
+
     return ( show && ( <div  >
       
-        <div className="relative">
-        <div >
-        {Array.from({length:pages}).map((item)=>{
-          return <div  className="h-[1025px] border-b-8  border-slate-900"/>
-        })}
-        </div>
-        <div ref={cv} className="px-12 py-8 absolute">
+        <div className="">
+        
+        <div ref={cv} id="data" className="px-12 pt-14 pb-12 ">
               <div className="flex flex-col items-center justify-center">
                <h1 className="text-2xl font-bold">CURRICULUM VITAE</h1>
                <h1 className="text-xl font-bold mt-3">{candidate.applicant_profile[0].first_name}</h1>
-               <h1 className="">{candidate.experience[0].position.position_name}</h1>
+               <h1 className="">{candidate.experience.length>0&& candidate.experience[0].position.position_name}</h1>
                </div>
                <div className="grid grid-cols-12 items-center mt-8">
                 <div className="col-span-5">
@@ -57,13 +62,13 @@ useEffect(()=>{
                   })}
                 </div>
                 <div className="col-span-7 flex justify-end ">
-                  <div className="">
-                    <img src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
+                  <div  className="">
+                    <img alt="profile image" src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
                     className=" w-48 h-48 object-cover"/>
                   </div>
                 </div>
                </div>
-              <div className="mt-10">
+              <div className="mt-6">
               <h1 className="font-bold mt-5 mb-1 text-lg">PROFESSIONAL SUMMARY</h1>
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                <p >
@@ -77,34 +82,46 @@ useEffect(()=>{
               </p>
              
               </div>
-              <div className="mt-10">
+              {experiences.length> 0 && <div className="mt-6">
               <h1 className="font-bold mt-5 mb-1 text-lg">WORKING EXPRIENCE</h1>
               <div className="h-[2px] bg-gray-100 mb-2 "></div>
-              <div className="">
-              {candidate.experience.map((item)=>{
-                return <div className="mb-5">
-                 <h1 className="font-bold">{item.employer_name}</h1>
-                 <p>{item.sub_location}</p>
-                 <ul className=" list-disc list-outside ml-4 mt-2">
-                  <li>
-                    <div>
-                    <p className="font-bold">Data System Service</p>
-                    <p>Hr Industries</p>
-                    <p>Mar 2022 - Present</p>
-                    <p><span className="font-bold mt-3">Responsibilities:</span> Designing and codding web projects</p>
-                    <p><span className="font-bold">Reason for leaving:</span>  Small pay</p>
-                    </div> 
-                  </li>
-                 </ul>
+              <div className=" space-y-4">
+              {
+             experiences.map((item)=>{
+                return <div className="">
+                          <div className="">
+                            <div className=" ">
+                            <p> <span className="font-bold">{item.employer.employer_name} </span></p>
+                            <span className=" capitalize">{item.employer.region.region_name}, {item.employer.sub_location}</span>                    
+                          </div>
+                           
+                        </div>
+                        <ul className="list-disc list-outside  ml-5 space-y-2">
+                            {item.positions.map((item)=>{
+                                return <li>
+                                <div>
+                                <p className="font-bold">{item.position.position_name}</p>
+                                <i>{item.employer.employer_name}</i>
+                                <p>{new Date(item.start_date).getFullYear()} - {item.end_date == null?"Present":new Date(item.end_date).getFullYear()}</p>
+                                {/* <p className=" flex "><span className="font-bold mt-3" >Responsibilities:</span> <span dangerouslySetInnerHTML={{__html:item.responsibility}}></span></p> */}
+                                {/* <p><span className="font-bold">Reason for leaving:</span>  Small pay</p> */}
+                                </div> 
+                              </li>
+                            })}
+                        </ul>
                 </div>
-              })}
+                
+                
+                
+            })
+        }
 
               </div>
              
               
               
-              </div>
-              <div className="mt-10">
+              </div>}
+              <div className="mt-6">
               <h1 className="font-bold mt-5 mb-1 text-lg">LANGAUGES</h1>
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                <div className="flex space-x-1">
@@ -114,7 +131,7 @@ useEffect(()=>{
                })}
                </div>
               </div>
-              <div className="mt-10">
+              <div className="mt-6">
               <h1 className="font-bold mt-5 mb-1 text-lg">SKILLS</h1>
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                <p className="flex space-x-1"><span className="font-bold">Culture:</span> <div className="flex space-x-1">
@@ -144,7 +161,7 @@ useEffect(()=>{
                </p>
                })}</p>
               </div>
-              <div className="mt-10">
+              {candidate.education.length >0&&<div className="mt-6">
               <h1 className="font-bold mt-5 mb-1 text-lg">EDUCATION DETAILS</h1>
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                {candidate.education.map((item)=>{
@@ -154,32 +171,40 @@ useEffect(()=>{
               </div>
               </p>
                })}
-               
               </div>
-              <div className="mt-10">
-              <h1 className="font-bold mt-5 mb-1 text-lg">PROFICIENCY QUALIFICATION</h1>
-               <div className="h-[2px] bg-gray-100 mb-2 "></div>
-               <p><div>
-                  <p> <span className="font-bold">Culture:</span> 2018 - 2024</p>
-                  <i>Bachelor Degree</i>, <span>UDISM</span>
+              }
+              {
+                candidate.proficiency.length >0 && <div className="mt-6">
+                <h1 className="font-bold mt-5 mb-1 text-lg">PROFICIENCY QUALIFICATION</h1>
+                 <div className="h-[2px] bg-gray-100 mb-2 "></div>
+                 {candidate.proficiency.map((item)=>{
+                 return <>
+                  <p> <span className="font-bold">{item.award}:</span> {item.started} - {item.ended}</p>
+                      <p className="flex space-x-2">
+                      <i>{item.proficiency.proficiency_name}</i>,  
+                       <p>{item.organization.organization_name}</p>
+                      </p></>
+                 })}
+                </div>
+              }
+              
+              {
+                candidate.referees.length > 0  && <div className="mt-6">
+                <h1 className="font-bold mt-5 mb-1 text-lg">REFEREES</h1>
+                 <div className="h-[2px] bg-gray-100 mb-2 "></div>
+                 <div className="space-y-3">
+                 {candidate.referees.map((item)=>{
+                  return <p><div>
+                  <p> <span className="font-bold">{item.first_name} {item.middle_name} {item.last_name}</span></p>
+                  <p>{item.referee_position}</p>
+                  <p> <span className="font-bold">Phone:</span> {item.phone}</p>
+                  <p> <span className="font-bold">Email:</span> {item.email}</p>
                 </div>
                 </p>
-              </div>
-              <div className="mt-10">
-              <h1 className="font-bold mt-5 mb-1 text-lg">REFEREES</h1>
-               <div className="h-[2px] bg-gray-100 mb-2 "></div>
-               <div className="space-y-2">
-               {candidate.referees.map((item)=>{
-                return <p><div>
-                <p> <span className="font-bold">{item.first_name} {item.middle_name} {item.last_name}</span></p>
-                <p>{item.referee_position}</p>
-                <p> <span className="font-bold">Phone:</span> {item.phone}</p>
-                <p> <span className="font-bold">Email:</span> {item.email}</p>
-              </div>
-              </p>
-               })}
-               </div>
-              </div>
+                 })}
+                 </div>
+                </div>
+              }
               </div>
         </div>
         

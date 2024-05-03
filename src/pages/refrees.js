@@ -1,15 +1,21 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { StepsContext } from "../layouts/mainLayout";
+import PageLoader from "../widgets/pageLoader";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../utils/firebase";
 
 const Refrees = () => {
-    const {currentStep,setCurrentStep,originalDetails} = useContext(StepsContext)
+    const {currentStep,setCurrentStep,originalDetails,candidate} = useContext(StepsContext)
     const {uuid} = useParams()
     const navigate = useNavigate();
-    return ( <div>
+    useEffect(()=>{
+        setCurrentStep(7)
+     },[])
+    return ( originalDetails == null || candidate == null ?<PageLoader/> : <div>
         <div className="flex justify-between items-center">
         <div>
-        <h1 className="font-bold text-3xl">Refrees</h1>
+        <h1 className="font-bold text-3xl">Referees</h1>
         <p className="text-lg text-gray-500 mt-2">Add or remove refrees here</p>
         </div>
         <div>
@@ -32,8 +38,19 @@ const Refrees = () => {
                     <p className="mt-2"> <span className="font-bold capitalize">{item.first_name} {item.middle_name} {item.last_name}</span></p>
                     <p>{item.referee_position}</p>
                     <i>Company: {item.employer}</i>
-                    <div className="flex justify-end">
-                    <div className="font-bold text-primary mt-3 cursor-pointer bg-primary bg-opacity-15 py-2 px-4 rounded-full">Add</div>
+                    <div className="flex justify-center">   
+                    {candidate.referees.filter((e)=>e.id==item.id).length >0 == true ? <div onClick={()=>{
+                        const newData = { ...candidate };
+                        newData.referees = candidate.referees.filter((e)=>e.id != item.id);
+                        setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                     }} className="font-bold text-red-500 mt-3 cursor-pointer 
+                     bg-red-500 bg-opacity-15 py-2 px-4 rounded-full">Remove</div>:
+                     <div onClick={()=>{
+                        const newData = { ...candidate };
+                        newData.referees = [item,...newData.referees];
+                        setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                     }} className="font-bold text-primary mt-3 cursor-pointer 
+                     bg-primary bg-opacity-15 py-2 px-4 rounded-full">Add</div>}
                     </div>
                 </div>
             })
@@ -45,7 +62,7 @@ const Refrees = () => {
                       setCurrentStep(currentStep-1)
                   }} className="font-bold text-gray-800 cursor-pointer">Prev</h1>
                   <button onClick={()=>{
-                    navigate(`/experiences/${uuid}`)
+                    navigate(`/complete/${uuid}`)
                     setCurrentStep(currentStep+1)
                   }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
                 </div>

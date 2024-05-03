@@ -1,12 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { StepsContext } from "../layouts/mainLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../utils/firebase";
+import PageLoader from "../widgets/pageLoader";
 
 const ProfessionalSummary = () => {
-    const {currentStep,setCurrentStep,originalDetails} = useContext(StepsContext)
+    const {currentStep,setCurrentStep,originalDetails,candidate} = useContext(StepsContext)
     const {uuid} = useParams()
     const navigate = useNavigate();
-    return (  <div>
+    useEffect(()=>{
+      setCurrentStep(2)
+   },[])
+    return ( originalDetails == null || candidate == null ?<PageLoader/>
+    : <div>
              <div className="flex justify-between items-center">
         <div>
         <h1 className="font-bold text-3xl">Professional Summary</h1>
@@ -20,11 +27,22 @@ const ProfessionalSummary = () => {
         </div>
         <div className=" mt-8">
                     <label>Career Objective</label>
-                    <textarea defaultValue={originalDetails.careers[0].career} className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"/>
+                    <textarea onChange={(e) => {
+                          const newData = { ...candidate };
+                          newData.careers[0].career = e.target.value;
+                          setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                        }} 
+                    defaultValue={originalDetails.careers[0].career == candidate.careers[0].career ?
+                     originalDetails.careers[0].career : candidate.careers[0].career} className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"/>
                   </div>
                   <div className="mt-2">
                     <label>Main Objective</label>
-                    <textarea defaultValue={originalDetails.objective.objective} className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"/>
+                    <textarea onChange={(e) => {
+                          const newData = { ...candidate };
+                          newData.objective.objective = e.target.value;
+                          setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
+                        }}  defaultValue={originalDetails.objective.objective == candidate.objective.objective ?
+                          originalDetails.objective.objective : candidate.objective.objective} className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"/>
                   </div>
                   <div className="flex justify-end space-x-2 mt-4 items-center">
                   <h1 onClick={()=>{
