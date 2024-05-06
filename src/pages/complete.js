@@ -31,10 +31,11 @@ const Complete = () => {
       <p>Press button below to download</p>
       <button onClick={()=>{
                                    setDownloading(true)
-                                   axios.get('http://localhost:5000/generatePdf').then((response)=>{
+                                   axios.get(`http://localhost:5000/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
                                        const link =  response.data.body.link;
                                        setDownloading(false)
                                        window.open(link,'_blank')
+                                   
                                    })
                                }} className="bg-primary mt-8 bg-opacity-90 rounded-full hover:scale-105 transition-all shadow-2xl text-white flex justify-center items-center font-bold h-12 w-40">
                                    {downloading?<div className=" border-4 h-5 w-5 border-white rounded-full border-t-transparent animate-spin"></div>:"Download CV"}

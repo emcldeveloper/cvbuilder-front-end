@@ -53,8 +53,8 @@ useEffect(()=>{
 },[])
     return ( <div>
         <div className="">
-            <div className=" w-3/12 fixed bg-dark h-screen text-white px-12 py-12">
-                <h1 className="font-bold text-2xl">CV Builder</h1>
+            <div className=" w-3/12 fixed bg-dark h-screen text-white px-12 py-8">
+                <h1 className="font-bold text-2xl">CV Builder (eKazi)</h1>
               <div className="  mt-8">
               {steps.map((item,index)=>{
                     return <div className="font-bold text-opacity-75  border-white border-opacity-50 rounded">
@@ -70,7 +70,7 @@ useEffect(()=>{
               </div>
             </div>
             <div className="w-9/12 ms-auto min-h-screen bg-gray-100">
-            <div className=" px-12 py-12 pb-32">
+            <div className=" px-12 py-8 pb-32">
                 <StepsContext.Provider value={{currentStep,setCurrentStep,candidate,setCandidate,originalDetails}}>
                    <Outlet/>
                 </StepsContext.Provider>

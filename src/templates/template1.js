@@ -3,6 +3,8 @@ import { StepsContext } from "../layouts/mainLayout";
 import { useParams } from "react-router-dom";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../utils/firebase";
+import Spinner from "../widgets/spinner";
+import PageLoader from "../widgets/pageLoader";
 
 const Template1 = () => {
  
@@ -34,11 +36,13 @@ useEffect(()=>{
   }
 },[candidate,experiences])
 
-    return ( show && ( <div  >
+    return ( !show? <PageLoader/>: candidate == null?<div className="flex justify-center items-center">
+      <p className="pt-12 text-gray-300">Oops! No Content</p>
+    </div> : ( <div  >
       
         <div className="">
         
-        <div ref={cv} id="data" className="px-12 pt-14 pb-12 ">
+        <div ref={cv} id="data" className="px-12 pt-8 pb-12 ">
               <div className="flex flex-col items-center justify-center">
                <h1 className="text-2xl font-bold">CURRICULUM VITAE</h1>
                <h1 className="text-xl font-bold mt-3">{candidate.applicant_profile[0].first_name}</h1>

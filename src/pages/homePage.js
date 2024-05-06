@@ -27,7 +27,7 @@ const HomePage = () => {
            <button className="bg-white rounded-full">
            <button onClick={()=>{
             navigate(`/introduction/${uuid}/${template}`)
-           }} className="py-2 px-4 bg-green-600 font-bold text-green-600 bg-opacity-20 rounded-full ">Edit before downloading</button>
+           }} className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Edit before downloading</button>
            </button>
            <button className="bg-white rounded-full">
            <button onClick={()=>{
@@ -47,9 +47,7 @@ const HomePage = () => {
         </div>
         </div>
           <div className="flex pt-4">
-           
-            <div className=" w-full ms-auto bg-dark">
-
+          <div className=" w-full ms-auto bg-dark">
            <div className="bg-white pb-16">
             {[
             {template:<Template1/>},
