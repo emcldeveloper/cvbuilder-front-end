@@ -17,24 +17,29 @@ import AboutUs from './samples/aboutUs';
 import Proficiency from './pages/proficiency';
 import A4Paper from './samples/a4Paper';
 import HomePage from './pages/homePage';
+import Template2 from './templates/template2';
+import Template3 from './templates/template3';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
    <Route path='/a4'  element={<A4Paper/>}/>
-   <Route path='/:uuid' index element={<HomePage/>}/>
    <Route path='/' element={<MainLayout/>}>
-    <Route path='/introduction/:uuid' index element={<IntroductionDetails/>}/>
-    <Route path='/professional_summary/:uuid' index element={<ProfessionalSummary/>}/>
-    <Route path='/educations/:uuid' index element={<Educations/>}/>
-    <Route path='/experiences/:uuid' index element={<WorksExperiences/>}/>
-    <Route path='/skills/:uuid' index element={<Skills/>}/>
-    <Route path='/proficiency/:uuid' index element={<Proficiency/>}/>
-    <Route path='/refrees/:uuid' index element={<Refrees/>}/>
-    <Route path='/complete/:uuid' index element={<Complete/>}/>
+   <Route path='/:uuid/:template' index element={<HomePage/>}/>
+    <Route path='/introduction/:uuid/:template' index element={<IntroductionDetails/>}/>
+    <Route path='/professional_summary/:uuid/:template' index element={<ProfessionalSummary/>}/>
+    <Route path='/educations/:uuid/:template' index element={<Educations/>}/>
+    <Route path='/experiences/:uuid/:template' index element={<WorksExperiences/>}/>
+    <Route path='/skills/:uuid/:template' index element={<Skills/>}/>
+    <Route path='/proficiency/:uuid/:template' index element={<Proficiency/>}/>
+    <Route path='/refrees/:uuid/:template' index element={<Refrees/>}/>
+    <Route path='/complete/:uuid/:template' index element={<Complete/>}/>
    </Route>
-   <Route path='/template1/:uuid' index element={<Template1/>}/>
+   <Route path='/template1/:uuid' element={<Template1/>}/>
+   <Route path='/template2/:uuid' element={<Template2/>}/>
+   <Route path='/template3/:uuid' element={<Template3/>}/>
+
    </Routes>
    </BrowserRouter>
   );

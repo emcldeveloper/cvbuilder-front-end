@@ -7,7 +7,7 @@ import { firestore } from "../utils/firebase";
 const Template1 = () => {
  
   const cv  = useRef()
-  const {uuid} = useParams()
+  const {uuid,template} = useParams()
   const [candidate,setCandidate] = useState(null)
   const [show, setShow] = useState(false);
   const [pages, setPages] = useState(false);
@@ -89,12 +89,12 @@ useEffect(()=>{
               {
              experiences.map((item)=>{
                 return <div className="">
+                  <div className="flex"></div>
                           <div className="">
                             <div className=" ">
                             <p> <span className="font-bold">{item.employer.employer_name} </span></p>
                             <span className=" capitalize">{item.employer.region.region_name}, {item.employer.sub_location}</span>                    
-                          </div>
-                           
+                          </div>   
                         </div>
                         <ul className="list-disc list-outside  ml-5 space-y-2">
                             {item.positions.map((item)=>{

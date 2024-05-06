@@ -7,6 +7,8 @@ import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { firestore } from "../utils/firebase";
 import { api } from "../utils/apiSample";
 import { checkIfExists } from "../controllers/apisController";
+import Template2 from "../templates/template2";
+import Template3 from "../templates/template3";
 
 export const StepsContext = createContext() 
 const MainLayout = () => {
@@ -25,7 +27,7 @@ const MainLayout = () => {
     {title:"Proficiency"},
     {title:"Referees"},
     {title:"Complete"}]
-    const {uuid} = useParams()
+    const {uuid,template} = useParams()
 
 useEffect(()=>{
     axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
@@ -52,7 +54,7 @@ useEffect(()=>{
     return ( <div>
         <div className="">
             <div className=" w-3/12 fixed bg-dark h-screen text-white px-12 py-12">
-                <h1 className="font-bold text-2xl">eKazi CV Builder</h1>
+                <h1 className="font-bold text-2xl">CV Builder</h1>
               <div className="  mt-8">
               {steps.map((item,index)=>{
                     return <div className="font-bold text-opacity-75  border-white border-opacity-50 rounded">
@@ -91,8 +93,8 @@ useEffect(()=>{
                            
                             </div>
                             <div className="fixed  bg-white w-7/12">
-                            <div className="flex justify-between px-12 py-3 border-b-2 items-center">
-                               <h1 className="font-bold text-2xl ">Preview</h1>
+                            <div className="flex justify-between px-12 py-4 items-center">
+                               <h1 className="font-bold text-2xl "></h1>
                                <div className="flex items-center space-x-4">  
                                <div onClick={()=>{
                                 setShowPreview(false)
@@ -107,7 +109,12 @@ useEffect(()=>{
                             </div>
                            <div className="mt-12">
                 <StepsContext.Provider value={{currentStep,setCurrentStep,candidate,setCandidate,originalDetails}}>
-                <Template1/>
+                {[
+            {template:<Template1/>},
+            {template:<Template2/>},
+            {template:<Template3/>}].map((item,index)=>{
+              return index+1 == template&& <div>{item.template}</div>
+            })}
                 </StepsContext.Provider>
 
                 

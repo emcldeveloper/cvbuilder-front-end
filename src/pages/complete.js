@@ -9,7 +9,7 @@ const Complete = () => {
    const [margin,setMargin] = useState("mt-32 opacity-0 ")
 
    const {currentStep,setCurrentStep,originalDetails,candidate} = useContext(StepsContext)
-    const {uuid} = useParams()
+    const {uuid,template} = useParams()
     const navigate = useNavigate()
     
    useEffect(()=>{

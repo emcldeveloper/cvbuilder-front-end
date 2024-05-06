@@ -7,7 +7,7 @@ import { firestore } from "../utils/firebase";
 
 const Skills = () => {
     const {currentStep,setCurrentStep,originalDetails,candidate} = useContext(StepsContext)
-    const {uuid} = useParams()
+    const {uuid,template} = useParams()
     const navigate = useNavigate();
     useEffect(()=>{
         setCurrentStep(5)
@@ -129,7 +129,7 @@ const Skills = () => {
                       setCurrentStep(currentStep-1)
                   }} className="font-bold text-gray-800 cursor-pointer">Prev</h1>
                   <button onClick={()=>{
-                    navigate(`/proficiency/${uuid}`)
+                    navigate(`/proficiency/${uuid}/${template}`)
                     setCurrentStep(currentStep+1)
                   }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
                 </div>
