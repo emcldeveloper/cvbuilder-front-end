@@ -53,8 +53,8 @@ useEffect(()=>{
 },[])
     return ( <div>
         <div className="">
-            <div className=" w-3/12 fixed bg-dark h-screen text-white px-12 py-8">
-                <h1 className="font-bold text-2xl">CV Builder (eKazi)</h1>
+            <div className=" w-3/12 fixed bg-black h-screen text-white px-12 py-8">
+                <img src="/logo.png" className="h-12"/>
               <div className="  mt-8">
               {steps.map((item,index)=>{
                     return <div className="font-bold text-opacity-75  border-white border-opacity-50 rounded">

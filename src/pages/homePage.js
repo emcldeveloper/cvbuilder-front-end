@@ -32,13 +32,13 @@ const HomePage = () => {
            <button className="bg-white rounded-full">
            <button onClick={()=>{
                 setDownloading(true)
-                axios.get(`http://localhost:5000/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
+                axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
                     const link =  response.data.body.link;
                     setDownloading(false)
                     window.open(link,'_blank')
                 })
            }} className="py-2 px-4 bg-primary font-bold  text-white
-              rounded-full ">
+              rounded-full">
             {downloading?<Spinner/>:"Download Now"}
             </button>
 

@@ -31,7 +31,7 @@ const Complete = () => {
       <p>Press button below to download</p>
       <button onClick={()=>{
                                    setDownloading(true)
-                                   axios.get(`http://localhost:5000/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
+                                   axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
                                        const link =  response.data.body.link;
                                        setDownloading(false)
                                        window.open(link,'_blank')
