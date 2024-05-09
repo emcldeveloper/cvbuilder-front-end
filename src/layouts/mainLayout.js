@@ -1,4 +1,4 @@
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Template1 from "../templates/template1";
 import { createContext, useEffect, useState } from "react";
 import FromReactPdf from "../templates/fromReactPdf";
@@ -28,6 +28,7 @@ const MainLayout = () => {
     {title:"Referees"},
     {title:"Complete"}]
     const {uuid,template} = useParams()
+    const navigate = useNavigate()
 
 useEffect(()=>{
     axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
@@ -46,31 +47,41 @@ useEffect(()=>{
 },[])
 useEffect(()=>{
     onSnapshot(doc(collection(firestore,"apis"),`${uuid}`),(value)=>{
-        if(value.exists){
+         if(value.exists){
             setCandidate(value.data())
-        }
+         }
         })
 },[])
     return ( <div>
         <div className="">
-            <div className=" w-3/12 fixed bg-black h-screen text-white px-12 py-8">
-                <img src="/logo.png" className="h-12"/>
+            <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
+                <div className="">
+                    <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi)</h1>
+                </div>
               <div className="  mt-8">
               {steps.map((item,index)=>{
                     return <div className="font-bold text-opacity-75  border-white border-opacity-50 rounded">
                       <div className="flex space-x-2 items-center">
-                      <div className={`h-8 w-8  ${index<currentStep?"bg-green-600":" bg-darkShadow"} rounded-full flex justify-center items-center`}>
+                      <div className={`h-8 w-8  ${index<currentStep?"bg-green-600":" bg-white bg-opacity-10"} rounded-full flex justify-center items-center`}>
                         {index+1}
                       </div>
                         <h1>{item.title}</h1>
                       </div>
-                      {index+1 != steps.length && <div className={`h-5 ${index<currentStep?"bg-green-600":"bg-darkShadow"} ml-4 w-[2px]`}/>}
+                      {index+1 != steps.length && <div className={`h-5 ${index<currentStep?"bg-green-600":"bg-white bg-opacity-10"} ml-4 w-[2px]`}/>}
                     </div>
                 })}
               </div>
             </div>
             <div className="w-9/12 ms-auto min-h-screen bg-gray-100">
-            <div className=" px-12 py-8 pb-32">
+            <div className="fixed w-full">
+                <div className="flex py-5 w-9/12  bg-[#E5E4F6] justify-end px-12 ">
+                <h1 onClick={()=>{
+                   window.location.href = "https://test.ekazi.co.tz/applicant/dashboard"
+                }} className="font-bold text-black cursor-pointer">Back to profile</h1>
+                </div>
+            </div>
+            <div className=" px-12 py-8 pb-32 pt-20">
+            
                 <StepsContext.Provider value={{currentStep,setCurrentStep,candidate,setCandidate,originalDetails}}>
                    <Outlet/>
                 </StepsContext.Provider>
@@ -88,6 +99,7 @@ useEffect(()=>{
                     }} className={`inset-0  bg-translate fixed bg-black bg-opacity-30  transition-all duration-500  `}>
                        <div className="w-full h-full flex justify-center items-center">
                        <div className="w-7/12 mx-auto  border-gray-200  bg-white h-[95%] shadow-2xl overflow-y-auto ">
+                        
                             <div className=" bg-gray-50">
                             <div className="px-12 flex justify-end">
                            
