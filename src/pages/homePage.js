@@ -32,7 +32,7 @@ const HomePage = () => {
            <button className="bg-white rounded-full">
            <button onClick={()=>{
                 setDownloading(true)
-                axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}`).then((response)=>{
+                axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`).then((response)=>{
                     const link =  response.data.body.link;
                     setDownloading(false)
                     window.open(link,'_blank')

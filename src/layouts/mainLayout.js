@@ -71,6 +71,7 @@ useEffect(()=>{
                     </div>
                 })}
               </div>
+              
             </div>
             <div className="w-9/12 ms-auto min-h-screen bg-gray-100">
             <div className="fixed w-full">
