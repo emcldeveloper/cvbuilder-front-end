@@ -19,6 +19,8 @@ import A4Paper from './samples/a4Paper';
 import HomePage from './pages/homePage';
 import Template2 from './templates/template2';
 import Template3 from './templates/template3';
+import ProfileLayout from './layouts/profileLayout';
+import ManagePrimaryInformations from './pages/profile/managePrimaryInfo';
 
 function App() {
   return (
@@ -35,6 +37,9 @@ function App() {
     <Route path='/proficiency/:uuid/:template' index element={<Proficiency/>}/>
     <Route path='/refrees/:uuid/:template' index element={<Refrees/>}/>
     <Route path='/complete/:uuid/:template' index element={<Complete/>}/>
+   </Route>
+   <Route path='profile' element={<ProfileLayout/>}>
+    <Route path='/profile/primaryInfo/:uuid' element={<ManagePrimaryInformations/>}/>
    </Route>
    <Route path='/template1/:uuid' element={<Template1/>}/>
    <Route path='/template2/:uuid' element={<Template2/>}/>

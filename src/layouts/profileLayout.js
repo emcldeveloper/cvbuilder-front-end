@@ -11,7 +11,7 @@ import Template2 from "../templates/template2";
 import Template3 from "../templates/template3";
 
 export const StepsContext = createContext() 
-const MainLayout = () => {
+const ProfileLayout = () => {
    const [currentStep,setCurrentStep] = useState(0)
    const [showPreview,setShowPreview] = useState(false)
    const [candidate,setCandidate] = useState(null)
@@ -146,4 +146,4 @@ useEffect(()=>{
     </div> );
 }
  
-export default MainLayout;
+export default ProfileLayout;
