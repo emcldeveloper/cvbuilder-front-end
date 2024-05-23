@@ -35,7 +35,7 @@ const Template3 = () => {
         <div id="data" className="bg-primary py-4">
           <div className="grid grid-cols-12 gap-4 px-12 items-center">
             <div className=" col-span-4 flex ">
-            <img alt="profile image" src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
+            <img alt="profile image" src={`https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
                     className=" w-48 h-48 object-cover rounded-full"/>
             
             </div>

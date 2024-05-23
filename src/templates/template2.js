@@ -38,7 +38,7 @@ const Template2 = () => {
         <div className="grid grid-cols-12 mt-8 items-center">
             <div className=" col-span-4">
             <div  className="">
-                    <img alt="profile image" src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
+                    <img alt="profile image" src={`https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
                     className=" w-48 h-48 object-cover"/>
                   </div>
             </div>
