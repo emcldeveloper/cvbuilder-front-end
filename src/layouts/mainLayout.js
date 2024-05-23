@@ -31,7 +31,7 @@ const MainLayout = () => {
     const navigate = useNavigate()
 
 useEffect(()=>{
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
          if(response != null){
           const data = response.data.data
           setOriginalDetails(data);
@@ -78,7 +78,7 @@ useEffect(()=>{
             <div className="fixed w-full">
                 <div className="flex py-5 w-9/12  bg-[#E5E4F6] justify-end px-12 ">
                 <h1 onClick={()=>{
-                   window.location.href = "https://test.ekazi.co.tz/applicant/dashboard"
+                   window.location.href = "https://ekazi.co.tz/applicant/dashboard"
                 }} className="font-bold text-black cursor-pointer">Back to profile</h1>
                 </div>
             </div>
