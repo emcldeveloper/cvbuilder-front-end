@@ -87,13 +87,13 @@ const Template2 = () => {
                     </div>
                     <div className=" col-span-8">
                     <p >
-                    {candidate.careers[0].career}
+                    {candidate.careers[0]?.career}
                     </p>
                     <h1 className="font-bold mt-2">
                     Career Objective
                     </h1>
                     <p>
-                    {candidate.objective.objective}  
+                    {candidate.objective?.objective}  
                     </p>
                 </div>
             </div>
@@ -119,13 +119,13 @@ const Template2 = () => {
                 <div className="w-4/12">
                 <div className=" ">
                         <p> <span className="font-bold">2014 - 2018 </span></p>
-                        <span className=" capitalize">{item.employer.region.region_name}, {item.employer.sub_location}</span>                    
+                        <span className=" capitalize">{item.employer.region?.region_name}, {item.employer.sub_location}</span>                    
                       </div> 
                 </div>
                 <div className="w-8/12">
                 <div className="">
                         <div className=" ">
-                        <p> <span className="font-bold">{item.employer.employer_name} </span></p>
+                        <p> <span className="font-bold">{item.employer?.employer_name} </span></p>
                         {/* <span className=" capitalize">{item.employer.region.region_name}, {item.employer.sub_location}</span>                     */}
                       </div>   
                     </div>
@@ -137,8 +137,8 @@ const Template2 = () => {
                                     <div className="h-16 w-1 bg-gray-200"></div>
                                 </div>
                             <div className="py-0 my-0">
-                            <p className=" text-orange-500 py-0 my-0">{item.position.position_name}</p>
-                            <i>{item.employer.employer_name}</i>
+                            <p className=" text-orange-500 py-0 my-0">{item.position?.position_name}</p>
+                            <i>{item.employer?.employer_name}</i>
                             <p>{new Date(item.start_date).getFullYear()} - {item.end_date == null?"Present":new Date(item.end_date).getFullYear()}</p>
                            
                             </div> 
