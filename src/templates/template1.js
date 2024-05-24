@@ -52,16 +52,16 @@ useEffect(()=>{
                 <div className="col-span-5">
                   {[
                     {title:"Location:",value:"Dar es salaam"},
-                    {title:"Phone:",value:candidate.phone?.phone_number},
-                    {title:"Email:",value:candidate.applicant_profile[0]?.email},
+                    {title:"Phone:",value:candidate.phone?.phone_number!==null?candidate.phone?.phone_number:"Not speciified"},
+                    {title:"Email:",value:candidate.applicant_profile[0].email},
                     {title:"Nationality:",value:"Tanzanian"},
-                    {title:"Date of birth:",value:candidate.applicant_profile[0]?.dob},
-                    {title:"Gender:",value:candidate.applicant_profile[0]?.gender_name},
-                    {title:"Maritial status:",value:candidate.applicant_profile[0]?.marital_status},
+                    {title:"Date of birth:",value:candidate.applicant_profile[0].dob!==null ? candidate.applicant_profile[0]?.dob : "Not specified"},
+                    {title:"Gender:",value:candidate.applicant_profile[0].gender_name!==null? candidate.applicant_profile[0]?.gender_name  : "Not specified"},
+                    {title:"Maritial status:",value:candidate.applicant_profile[0].marital_status!==null? candidate.applicant_profile[0].marital_status:"Not specified"},
                 ].map((item)=>{
                     return <div className="grid grid-cols-2">
-                      <div>{item?.title}</div>
-                      <div>{item?.value}</div>
+                      <div>{item.title}</div>
+                      <div>{item.value}</div>
                     </div>
                   })}
                 </div>
@@ -76,13 +76,13 @@ useEffect(()=>{
               <h1 className="font-bold mt-5 mb-1 text-lg">PROFESSIONAL SUMMARY</h1>
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                <p >
-                {candidate.careers[0]?.career}
+                {candidate.careers[0].career!==null ? candidate.careers[0].career:"Not Specified"}
                </p>
                <h1 className="font-bold mt-2">
                Career Objective
                </h1>
                <p>
-               {candidate.objective?.objective}  
+               {candidate.objective.objective!==null?candidate.objective.objective:"Not Specified"}  
               </p>
              
               </div>
