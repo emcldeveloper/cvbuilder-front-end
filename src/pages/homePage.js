@@ -3,9 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { StepsContext } from "../layouts/mainLayout";
 import Template1 from "../templates/template1";
 import axios from "axios";
+import Swal from 'sweetalert2';
 import Spinner from "../widgets/spinner";
 import Template2 from "../templates/template2";
 import Template3 from "../templates/template3";
+import Template4 from "../templates/template4";
+import Template5 from "../templates/template5";
+import Template6 from "../templates/template6";
+import Template7 from "../templates/template7";
+import Template8 from "../templates/template8";
+import Template9 from "../templates/template9";
+import Template10 from "../templates/template10";
 
 const HomePage = () => {
    const [downloading,setDownloading] = useState(false)
@@ -16,10 +24,147 @@ const HomePage = () => {
    useEffect(()=>{
     setCurrentStep(0)
  },[])
+    const [margin, setMargin] = useState("mt-32 opacity-0 ")
+
+    const [showModal, setShowModal] = useState(false);
+    const [cvName, setCvName] = useState(""); // To store the user-entered CV name
+    const [error, setError] = useState(null);
+
+  
+
+    useEffect(() => {
+
+        setCurrentStep(11)
+    }, [])
+    useEffect(() => {
+        setMargin("mt-0 opacity-100")
+    }, [originalDetails])
+    const sendToData = {
+        'template':template,
+        'applicant_id': uuid,
+        'cv_name':cvName,
+        
+
+    }
+    const handleDownloadClick = () => {
+        setShowModal(true); // Show the modal when the button is clicked
+      };
+    
+    // const handleSaveAndDownload = () => {
+    //     setDownloading(true);
+    //     console.log('cv name :',cvName);
+    //     axios.post('http://127.0.0.1:8000/api/applicant/savedCv', sendToData)
+
+    //     .then((downloadResponse) => {
+    //         console.log("CV saved successfully!:", downloadResponse.data.success);
+    //         if (downloadResponse.status === 200) {
+    //           Swal.fire({
+    //             title: 'Success!',
+    //             text: downloadResponse.data.success,
+    //             icon: 'success',
+    //             confirmButtonText: 'OK'
+    //           });
+    //         }
+      
+    //         window.location.reload(); // Reloads the entire page
+    //         // const link = downloadResponse.data.body.link;
+    //         // // Initiate download by opening the link in a new tab
+    //         // window.open(link, '_blank');
+
+    //         // // After download, call the API to save the CV
+    //         // return axios.get('https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}');
+    //     //     const blob = new Blob([downloadResponse.data], {
+    //     //         type: downloadResponse.headers["content-type"] || "application/pdf", // Fallback to 'application/pdf'
+    //     //     });
+
+    //     //     // Create a download link dynamically
+    //     //     const link = document.createElement("a");
+    //     //     link.href = window.URL.createObjectURL(blob);
+    //     //     link.download = `${cvName}.pdf`; // Set filename
+    //     //     link.click(); 
+
+    //     //     // Cleanup
+    //     //     window.URL.revokeObjectURL(link.href);
+    //     //     setDownloading(false);
+    //     //     setShowModal(false);
+    //     //     console.log("CV downloaded successfully!")
+    //     // })
+    //     // .then((saveResponse) => {
+    //     //     // Once the CV is saved successfully, stop loading
+    //     //     setDownloading(false);
+    //     //     window.location.reload();
+    //     //     console.log("CV saved successfully!");
+    //     })
+    //     .catch((error) => {
+    //         setDownloading(false);
+    //         console.error("Error occurred while downloading or saving the CV:", error);
+    //     });
+ 
+    //     setShowModal(false); 
+    //     }
+    const handleSaveAndDownload = () => {
+      setDownloading(true); // Start loading indicator
+  
+      console.log("CV name:", cvName);
+  
+      // Step 1: Save the CV
+      axios
+          .post("https://test.ekazi.co.tz/api/applicant/savedCv", sendToData)
+          .then((saveResponse) => {
+              // Ensure the save operation was successful
+              if (saveResponse.status === 200) {
+                  Swal.fire({
+                      title: "Success!",
+                      text: saveResponse.data.success,
+                      icon: "success",
+                      confirmButtonText: "OK",
+                  });
+  
+                  // Step 2: Generate the PDF and get the link
+                  return axios.get(
+                      `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`
+                  );
+              } else {
+                  throw new Error("Failed to save CV. Please try again.");
+              }
+          })
+          .then((generateResponse) => {
+              // Handle the response from the PDF generation
+              const link = generateResponse?.data?.body?.link;
+              if (link) {
+                  window.open(link, "_blank"); // Open the link in a new tab
+              } else {
+                  throw new Error("Failed to generate PDF link.");
+              }
+          })
+          .catch((error) => {
+              // Handle any errors in the process
+              console.error("Error occurred during saving or downloading the CV:", error);
+              Swal.fire({
+                  title: "Error!",
+                  text: error.message || "An error occurred. Please try again.",
+                  icon: "error",
+                  confirmButtonText: "OK",
+              });
+          })
+          .finally(() => {
+              setDownloading(false); // Stop loading indicator
+              setShowModal(false); // Close modal
+          });
+  };
+  
+              
+           
+
+
+
+
+
+
     return ( <div className=" min-h-screen overflow-x-hidden  ">
          <div className="flex justify-between items-center">
         <div>
-        <h1 className="font-bold text-3xl">Welcome to CV builder</h1>
+        <h1 className="font-bold text-3xl">Welcome to CV builder </h1>
         <p className="text-lg text-gray-500 mt-2">Here is your CV template preview</p>
         </div>
         <div>
@@ -30,16 +175,9 @@ const HomePage = () => {
            }} className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Edit before downloading</button>
            </button>
            <button className="bg-white rounded-full">
-           <button onClick={()=>{
-                setDownloading(true)
-                axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`).then((response)=>{
-                    const link =  response.data.body.link;
-                    setDownloading(false)
-                    window.open(link,'_blank')
-                })
-           }} className="py-2 px-4 bg-primary font-bold  text-white
+           <button   onClick={handleDownloadClick} className="py-2 px-4 bg-primary font-bold  text-white
               rounded-full">
-            {downloading?<Spinner/>:"Download Now"}
+            {downloading?<Spinner/>:"Save & Download"}
             </button>
 
            </button>
@@ -52,13 +190,55 @@ const HomePage = () => {
             {[
             {template:<Template1/>},
             {template:<Template2/>},
-            {template:<Template3/>}].map((item,index)=>{
+            {template:<Template3/>},
+            {template:<Template4/>},
+            {template:<Template5/>},
+            {template:<Template6/>},
+            {template:<Template7/>},
+            {template:<Template8/>},
+            {template:<Template9/>},
+            {template:<Template10/>}].map((item,index)=>{
               return index+1 == template&& <div>{item.template}</div>
             })}
            </div>
           
             </div>
-
+            {/* model for popup */}
+            {showModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-8 rounded shadow-lg">
+                        <h2 className="text-lg font-bold mb-4">Enter CV Name</h2>
+                         {/* Informational description */}
+                         <p className="mb-2 text-gray-700 max-w-xs">
+                            Your CV will be saved to the Ekazi platform and will be available in your personal account. 
+                            You can view  your saved CVs at any time by going to the <strong>My CV</strong> section on Ekazi.
+            
+                            </p>
+                        <input
+                        type="text"
+                        className="border p-2 w-full"
+                        placeholder="Enter CV Name"
+                        value={cvName}
+                        onChange={(e) => setCvName(e.target.value)}
+                        />
+                        {error && <p className="text-red-500 mt-2">{error}</p>}
+                        <div className="mt-4 flex justify-end">
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="bg-gray-300 px-4 py-2 rounded mr-2"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSaveAndDownload}
+                            className="bg-primary px-4 py-2 text-white rounded"
+                        >
+                            Save & Download
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                )}
           </div>
     </div> );
 }

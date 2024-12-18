@@ -5,6 +5,7 @@ import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../utils/firebase";
 import Spinner from "../widgets/spinner";
 import PageLoader from "../widgets/pageLoader";
+import axios from 'axios';
 
 const Template1 = () => {
  
@@ -15,16 +16,22 @@ const Template1 = () => {
   const [pages, setPages] = useState(false);
   const [experiences,setExperiences] = useState([])
 
-  
-  useEffect(()=>{
-    onSnapshot(doc(collection(firestore,"apis"),`${uuid}`),(value)=>{
-      if(value.exists){
-          setCandidate(value.data())
-          setShow(true)
-      }
+  const isVerified = candidate?.subscription?.verify === 1;
+  console.log("checjk verifcation:",isVerified);
+  useEffect(() => {
+    // Fetch data from the API
+    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+      .then((response) => {
+        if (response?.data?.data) {
+          setCandidate(response.data.data);  // Set the candidate data from the API response
+          setShow(true);  // Display the content
+        }
       })
-},[])
- 
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [uuid]);
+  
 useEffect(()=>{
   if(candidate != null){
      candidate.experience.forEach(item=>{
@@ -43,9 +50,27 @@ useEffect(()=>{
         <div className="">
         
         <div ref={cv} id="data" className="px-12 pt-8 pb-12 ">
+          {/* Watermark */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+            {candidate.subscription.length < 1 && ( // Render the image only if length is 1 or less
+              <div style={{ textAlign: 'center' }}>
+                <img
+                  src="/logo.png"
+                  alt="Watermark"
+                  className="opacity-1"
+                  style={{ width: '550px', height: '200px' }}
+                />
+              </div>
+            )}
+          
+         
+          
+        
+        
+           </div>
               <div className="flex flex-col items-center justify-center">
                <h1 className="text-2xl font-bold">CURRICULUM VITAE</h1>
-               <h1 className="text-xl font-bold mt-3">{candidate.applicant_profile[0]?.first_name}</h1>
+               <h1 className="text-xl font-bold mt-3">{candidate.applicant_profile[0]?.first_name},</h1>
                <h1 className="">{candidate.experience?.length>0&& candidate.experience[0]?.position?.position_name}</h1>
                </div>
                <div className="grid grid-cols-12 items-center mt-8">
@@ -54,7 +79,7 @@ useEffect(()=>{
                     {title:"Location:",value:"Dar es salaam"},
                     {title:"Phone:",value:candidate.phone?.phone_number!==null?candidate.phone?.phone_number:"Not speciified"},
                     {title:"Email:",value:candidate.applicant_profile[0].email},
-                    {title:"Nationality:",value:"Tanzanian"},
+                    {title:"Nationality:",value:"Tanzanian"}, 
                     {title:"Date of birth:",value:candidate.applicant_profile[0].dob!==null ? candidate.applicant_profile[0]?.dob : "Not specified"},
                     {title:"Gender:",value:candidate.applicant_profile[0].gender_name!==null? candidate.applicant_profile[0]?.gender_name  : "Not specified"},
                     {title:"Maritial status:",value:candidate.applicant_profile[0].marital_status!==null? candidate.applicant_profile[0].marital_status:"Not specified"},
@@ -82,6 +107,7 @@ useEffect(()=>{
                Career Objective
                </h1>
                <p>
+                
                {candidate.objective.objective!==null?candidate.objective.objective:"Not Specified"}  
               </p>
              
@@ -170,8 +196,8 @@ useEffect(()=>{
                <div className="h-[2px] bg-gray-100 mb-2 "></div>
                {candidate.education.map((item)=>{
                 return <p><div>
-                <p> <span className="font-bold">{item?.name}:</span> {new Date(item?.started).getFullYear()} - {new Date(item?.ended).getFullYear()}</p>
-                <i>{item?.education_level}</i>, <span>{item?.college_name}</span>
+                <p> <span className="font-bold">{item?.course.course_name}:</span> {new Date(item?.started).getFullYear()} - {new Date(item?.ended).getFullYear()}</p>
+                <i>{item?.level.education_level}</i>, <span>{item?.college.college_name}</span>
               </div>
               </p>
                })}

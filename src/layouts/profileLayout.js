@@ -9,6 +9,11 @@ import { api } from "../utils/apiSample";
 import { checkIfExists } from "../controllers/apisController";
 import Template2 from "../templates/template2";
 import Template3 from "../templates/template3";
+import Template4 from "../templates/template4";
+import Template5 from "../templates/template5";
+import Template6 from "../templates/template6";
+import Template7 from "../templates/template7";
+import Template8 from "../templates/template8";
 
 export const StepsContext = createContext() 
 const ProfileLayout = () => {
@@ -17,21 +22,26 @@ const ProfileLayout = () => {
    const [candidate,setCandidate] = useState(null)
    const [originalDetails,setOriginalDetails] = useState(null)
    
+   
+    
     const steps = [
-    {title:"Preview"},
-    {title:"Introduction"},
-    {title:"Professional Summary"},
-    {title:"Education"},
-    {title:"Work Experience"},
-    {title:"Skills"},
-    {title:"Proficiency"},
-    {title:"Referees"},
-    {title:"Complete"}]
-    const {uuid,template} = useParams()
-    const navigate = useNavigate()
+        {title:"Preview"},
+        {title:"Introduction"},
+        {title:"Professional Summary"},
+        {title:"Education"},
+        {title:"Work Experience"},
+        {title:"Skills"},
+        {title:"Language"},
+        {title:"Proficiency"},
+        {title:"Training"},
+        {title:"Referees"},
+        {title:"Complete"}]
+        const {uuid,template} = useParams()
+        const navigate = useNavigate()
+    
 
 useEffect(()=>{
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
+    axios.get(`https://test.ekazi.co.tz/api//${uuid}`).then((response)=>{
          if(response != null){
           const data = response.data.data
           setOriginalDetails(data);
@@ -57,7 +67,7 @@ useEffect(()=>{
         <div className="">
             <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
                 <div className="">
-                    <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi)</h1>
+                    <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi) </h1>
                 </div>
               <div className="  mt-8">
               {steps.map((item,index)=>{
@@ -78,7 +88,7 @@ useEffect(()=>{
             <div className="fixed w-full">
                 <div className="flex py-5 w-9/12  bg-[#E5E4F6] justify-end px-12 ">
                 <h1 onClick={()=>{
-                   window.location.href = "https://ekazi.co.tz/applicant/dashboard"
+                   window.location.href = "https://test.ekazi.co.tz/applicant/dashboard"
                 }} className="font-bold text-black cursor-pointer">Back to profile</h1>
                 </div>
             </div>
@@ -89,7 +99,7 @@ useEffect(()=>{
                 </StepsContext.Provider>
 
             </div>
-            {currentStep !== 0 && currentStep !== 9 && <div className="fixed bottom-6 left-0 right-0 py-5">
+            {currentStep !== 0 && currentStep !== 11 && <div className="fixed bottom-6 left-0 right-0 py-5">
                 <div className="w-3/12"></div>
                 <div className="w-9/12 ms-auto flex justify-center">
                 <div className="">
@@ -126,7 +136,12 @@ useEffect(()=>{
                 {[
             {template:<Template1/>},
             {template:<Template2/>},
-            {template:<Template3/>}].map((item,index)=>{
+            {template:<Template3/>},
+            {template:<Template4/>},
+            {template:<Template5/>},
+            {template:<Template6/>},
+            {template:<Template7/>},
+            {template:<Template8/>}].map((item,index)=>{
               return index+1 == template&& <div>{item.template}</div>
             })}
                 </StepsContext.Provider>

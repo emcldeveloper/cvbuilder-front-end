@@ -21,6 +21,19 @@ import Template2 from './templates/template2';
 import Template3 from './templates/template3';
 import ProfileLayout from './layouts/profileLayout';
 import ManagePrimaryInformations from './pages/profile/managePrimaryInfo';
+import Languages from './pages/language';
+import Training from './pages/training';
+import MySubscription from './pages/mySubscription';
+import MyCv from './pages/mycv';
+import Samplemplate from './pages/sampletemplate'
+import CoverLetterGenerator from './pages/coverletter';
+import Template4 from './templates/template4';
+import Template5 from './templates/template5';
+import Template6 from './templates/template6';
+import Template7 from './templates/template7';
+import Template8 from './templates/template8';
+import Template9 from './templates/template9';
+import Template10 from './templates/template10';
 
 function App() {
   return (
@@ -34,9 +47,16 @@ function App() {
     <Route path='/educations/:uuid/:template' index element={<Educations/>}/>
     <Route path='/experiences/:uuid/:template' index element={<WorksExperiences/>}/>
     <Route path='/skills/:uuid/:template' index element={<Skills/>}/>
+    <Route path='/Languages/:uuid/:template' index element={<Languages/>}/>
     <Route path='/proficiency/:uuid/:template' index element={<Proficiency/>}/>
+    <Route path='/Training/:uuid/:template' index element={<Training/>}/>
     <Route path='/refrees/:uuid/:template' index element={<Refrees/>}/>
     <Route path='/complete/:uuid/:template' index element={<Complete/>}/>
+    <Route path='/my-subscription/:uuid/:template' index element={<MySubscription />}/>
+    <Route path='/my-cv/:uuid/:template' index element={<MyCv />}/>
+    <Route path='/sample-template/:uuid/:template' index element={<Samplemplate/>}/>
+    <Route path='/cover-letter/:uuid/:template' index element={< CoverLetterGenerator />}/>
+ 
    </Route>
    <Route path='profile' element={<ProfileLayout/>}>
     <Route path='/profile/primaryInfo/:uuid' element={<ManagePrimaryInformations/>}/>
@@ -44,6 +64,13 @@ function App() {
    <Route path='/template1/:uuid' element={<Template1/>}/>
    <Route path='/template2/:uuid' element={<Template2/>}/>
    <Route path='/template3/:uuid' element={<Template3/>}/>
+   <Route path='/template4/:uuid' element={<Template4/>}/>
+   <Route path='/template5/:uuid' element={<Template5/>}/>
+   <Route path='/template6/:uuid' element={<Template6/>}/>
+   <Route path='/template7/:uuid' element={<Template7/>}/>
+   <Route path='/template8/:uuid' element={<Template8/>}/>
+   <Route path='/template9/:uuid' element={<Template9/>}/>
+   10<Route path='/template10/:uuid' element={<Template10/>}/>
 
    </Routes>
    </BrowserRouter>

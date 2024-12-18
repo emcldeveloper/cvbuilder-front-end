@@ -1,15 +1,17 @@
-import { collection, doc, getDoc } from "firebase/firestore"
-import { firestore } from "../utils/firebase"
+import axios from 'axios';
 
-export const checkIfExists = async({uuid})=>{
+export const checkIfExists = async ({ uuid }) => {
     try {
-      const response = await getDoc(doc(collection(firestore,"apis"),uuid))
-      if(response.exists()){
-        return true;
-      }
-      return false;
+        // Replace the URL with your Laravel API endpoint
+        const response = await axios.get(` https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`);
+        
+        // Assuming the Laravel API returns a JSON response with a boolean `exists` field
+        if (response.data.exists) {
+            return true;
+        }
+        return false;
     } catch (error) {
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
     }
 }

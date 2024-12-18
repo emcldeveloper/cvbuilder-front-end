@@ -2,7 +2,7 @@ import { useContext,useEffect,useRef, useState } from "react";
 import { StepsContext } from "../layouts/mainLayout";
 import { useParams } from "react-router-dom";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../utils/firebase";
+import axios from 'axios';
 
 const Template2 = () => {
     const cv  = useRef()
@@ -13,14 +13,19 @@ const Template2 = () => {
     const [experiences,setExperiences] = useState([])
   
     
-    useEffect(()=>{
-      onSnapshot(doc(collection(firestore,"apis"),`${uuid}`),(value)=>{
-        if(value.exists){
-            setCandidate(value.data())
-            setShow(true)
-        }
-        })
-  },[])
+    useEffect(() => {
+        // Fetch data from the API
+        axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+          .then((response) => {
+            if (response?.data?.data) {
+              setCandidate(response.data.data);  // Set the candidate data from the API response
+              setShow(true);  // Display the content
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }, [uuid]);
    
   useEffect(()=>{
     if(candidate != null){
@@ -34,11 +39,29 @@ const Template2 = () => {
   },[candidate,experiences])
     return ( show&& <div className="">
         <div id="data" className="w-11/12 mx-auto">
+            
         <div  className="py-3 bg-orange-400 "></div>
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+
+          {candidate.subscription.length < 1 && ( // Render the image only if length is 1 or less
+            <div className="text-center">
+              <img
+                src="/logo.png" // Replace with the actual path to the watermark image
+                alt="Ekazi watermark"
+                className="mx-auto mb-2 w-48 opacity-1" // Adjust size and opacity as needed
+                style={{ width: "550px", height: "200px" }}
+              />
+            
+            </div>
+          )}
+          
+          </div>
         <div className="grid grid-cols-12 mt-8 items-center">
+           
+          
             <div className=" col-span-4">
             <div  className="">
-                    <img alt="profile image" src={`https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
+                    <img alt="profile image" src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`}
                     className=" w-48 h-48 object-cover"/>
                   </div>
             </div>
@@ -172,8 +195,8 @@ const Template2 = () => {
                     <div className=" space-y-4">
                     {candidate.education.map((item)=>{
                         return <p><div>
-                        <p> <span className="font-bold">{item.name}:</span> {new Date(item.started).getFullYear()} - {new Date(item.ended).getFullYear()}</p>
-                        <span className=" text-orange-500">{item.education_level}</span>, <span>{item.college_name}</span>
+                        <p> <span className="font-bold">{item.course.course_name}:</span> {new Date(item.started).getFullYear()} - {new Date(item.ended).getFullYear()}</p>
+                        <span className=" text-orange-500">{item.level.education_level}</span>, <span>{item.college.college_name}</span>
                         </div>
                          </p>
                     })}
