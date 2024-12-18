@@ -148,11 +148,7 @@ const WorksExperiences = () => {
 
 
 
-  const formatDate = (date) => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toISOString().split('T')[0]; // 'yyyy-mm-dd'
-  };
+ 
   const openEditModal = (experience) => {
     setEditEmployer(experience.employer.employer_name);
     setEditSublocation(experience.employer.sub_location);
@@ -161,8 +157,7 @@ const WorksExperiences = () => {
     setEditRegion(experience.employer.region.region_name);
     setEditPosition(experience.position.position_name);
     setEditIndustry(experience.industry.industry_name);
-    // setEditstartdate(experience.start_date);
-   // setEditenddate(experience.end_date);
+   
     setEditstartsalaryid(experience.start_salary_id);
     setEditendsalaryid(experience.end_salary_id);
     setEditremark(experience.remark);
@@ -185,12 +180,7 @@ const WorksExperiences = () => {
     setEditEmployer(employer);
 
   };
-  // useEffect(() => {
-   
-  // }, [editexperiency]);
-  // useEffect(() => {
  
-  // }, [editexperiency]);
 
 
   const handleEditcountry = (country) => {
@@ -316,10 +306,7 @@ const WorksExperiences = () => {
 
       window.location.reload();
 
-      // Handle the response
-      //   console.log('Response data:', response.data); // The actual response data from the server
-      //   console.log('Status:', response.status); // The HTTP status code
-      //  alert('Referee added successfully!'); // Notify the user of success
+     
     } catch (error) {
       // Handle any errors that occur during the request
       console.error('There was an error submitting the form:', error);
