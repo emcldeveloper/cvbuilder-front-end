@@ -250,48 +250,69 @@ const Refrees = () => {
 
         </div>
         <div className="grid grid-cols-3 gap-5 mt-5">
-            {
-                originalDetails.referees.map((item) => {
-                    return <div className="p-5 bg-white border border-gray-200 flex flex-col items-center rounded shadow">
-                        <div className="  bg-orange-100 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" s
-                                trokeWidth={1.5} stroke="currentColor" className="w-20 h-20 p-5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                            </svg>
+        {
+  originalDetails?.referees?.map((item) => {
+    // Safely access properties with optional chaining and provide fallback values
+    const firstName = item?.first_name || "First name not available";
+    const middleName = item?.middle_name || "";
+    const lastName = item?.last_name || "Last name not available";
+    const position = item?.referee_position || "Position not available";
+    const employer = item?.employer || "Employer not available";
 
-                        </div>
-                        <p className="mt-2"> <span className="font-bold capitalize">{item.first_name} {item.middle_name} {item.last_name}</span></p>
-                        <p>{item.referee_position}</p>
-                        <i>Company: {item.employer}</i>
-                        <div className="flex justify-center">
-                            {candidate.referees.filter((e) => e.id === item.id).length > 0 ? (
-                    <div className="flex space-x-4 mt-3">
-                    <div
-                        onClick={() => openEditModal(item)}
-                        className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all">
-                        <FontAwesomeIcon icon={faEdit} className="text-blue-500" /> {/* Edit icon */}
-                    </div>
-                    <div
-                        onClick={() => handleRemove(item.id)}
-                        className="cursor-pointer text-red-500 hover:text-red-700 transition-all">
-                        <FontAwesomeIcon icon={faTrash} className="text-red-500" /> {/* Remove (delete) icon */}
-                    </div>
-                    <div
-                        onClick={() => handleHide(item.id)}
-                        className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all">
-                        <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" /> {/* Hide icon */}
-                    </div>
-                </div>
-                
+    return (
+      <div className="p-5 bg-white border border-gray-200 flex flex-col items-center rounded shadow" key={item?.id}>
+        <div className="bg-orange-100 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-20 h-20 p-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+            />
+          </svg>
+        </div>
+        <p className="mt-2">
+          <span className="font-bold capitalize">
+            {firstName} {middleName} {lastName}
+          </span>
+        </p>
+        <p>{position}</p>
+        <i>Company: {employer}</i>
+        <div className="flex justify-center">
+          {candidate?.referees?.some((e) => e.id === item?.id) && (
+            <div className="flex space-x-4 mt-3">
+              <div
+                onClick={() => openEditModal(item)}
+                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+              >
+                <FontAwesomeIcon icon={faEdit} className="text-blue-500" /> {/* Edit icon */}
+              </div>
+              <div
+                onClick={() => handleRemove(item?.id)}
+                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+              >
+                <FontAwesomeIcon icon={faTrash} className="text-red-500" /> {/* Remove (delete) icon */}
+              </div>
+              <div
+                onClick={() => handleHide(item?.id)}
+                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+              >
+                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" /> {/* Hide icon */}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  })
+}
 
-
-                            ) : (
-                                <div></div>
-                            )}
-                        </div>
-                    </div>
-                })
-            }
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {

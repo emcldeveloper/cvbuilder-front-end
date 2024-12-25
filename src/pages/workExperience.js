@@ -452,61 +452,70 @@ const WorksExperiences = () => {
       </div>
       <div className="grid grid-cols-1 gap-2 mt-5">
 
-        {
-          experiences.map((item) => {
-            return <div className="py-3 px-5 bg-white border border-gray-200 rounded shadow">
-              <div className="flex justify-between">
-                <div className=" ">
-                  <p> <span className="font-bold">{item.employer.employer_name} </span></p>
-                  <span className=" capitalize">{item.employer.region.region_name}, {item.employer.sub_location}</span>
+      {
+  experiences?.map((item) => {
+    const employerName = item?.employer?.employer_name || "Employer name not available";
+    const regionName = item?.employer?.region?.region_name || "Region not specified";
+    const subLocation = item?.employer?.sub_location || "Sub-location not specified";
+    
+    return (
+      <div className="py-3 px-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
+        <div className="flex justify-between">
+          <div>
+            <p><span className="font-bold">{employerName}</span></p>
+            <span className="capitalize">{regionName}, {subLocation}</span>
+          </div>
+        </div>
+
+        <ul className="list-disc list-outside ml-5 space-y-4">
+          {item?.positions?.map((positionItem) => {
+            const positionName = positionItem?.position?.position_name || "Position name not available";
+            const employerPosition = positionItem?.employer?.employer_name || "Employer name not available";
+            const startDate = positionItem?.start_date ? new Date(positionItem.start_date).getFullYear() : "Not specified";
+            const endDate = positionItem?.end_date 
+              ? new Date(positionItem.end_date).getFullYear() 
+              : "Present";
+            
+            return (
+              <li key={positionItem?.id}>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-bold">{positionName}</p>
+                    <i>{employerPosition}</i>
+                    <p>{startDate} - {endDate}</p>
+                  </div>
+
+                  {/* Action Icons */}
+                  <div className="flex space-x-3 text-gray-500">
+                    <button
+                      className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+                      onClick={() => openEditModal(item)} // Add your edit logic here
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button
+                      className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+                      onClick={() => handleDelete(positionItem?.id)} // Add your delete logic here
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                    <button
+                      className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+                      onClick={() => handleHide(positionItem?.id)} // Add your hide logic here
+                    >
+                      <FontAwesomeIcon icon={faEyeSlash} />
+                    </button>
+                  </div>
                 </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  })
+}
 
-              </div>
-              <ul className="list-disc list-outside ml-5 space-y-4">
-                {item.positions.map((positionItem) => {
-                  return (
-                    <li key={positionItem.id}>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="font-bold">{positionItem.position.position_name}</p>
-                          <i>{positionItem.employer.employer_name}</i>
-                          <p>
-                            {new Date(positionItem.start_date).getFullYear()} -{' '}
-                            {positionItem.end_date == null
-                              ? 'Present'
-                              : new Date(positionItem.end_date).getFullYear()}
-                          </p>
-                        </div>
-
-                        {/* Action Icons */}
-                        <div className="flex space-x-3 text-gray-500">
-                          <button
-                            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                            onClick={() => openEditModal(item)} // Add your edit logic here
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button
-                            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                            onClick={() => handleDelete(positionItem.id)} // Add your delete logic here
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                          <button
-                            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                            onClick={() => handleHide(positionItem.id)} // Add your hide logic here
-                          >
-                            <FontAwesomeIcon icon={faEyeSlash} />
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          })
-        }
       </div>
       <div className="flex justify-end space-x-2 mt-4 items-center z-50">
         <h1 onClick={() => {

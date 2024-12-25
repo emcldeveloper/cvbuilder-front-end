@@ -320,53 +320,57 @@ const Languages = () => {
 
         </div>
         <div className="grid grid-cols-3 gap-5 mt-5">
-            {
+        {
+  originalDetails?.language?.map((item) => {
+    // Safely access language properties using optional chaining and provide fallback values
+    const languageName = item?.language?.language_name || "Language name not available";
+    const readAbility = item?.read?.read_ability || "Not specified";
+    const writeAbility = item?.write?.write_ability || "Not specified";
+    const speakAbility = item?.speak?.speak_ability || "Not specified";
+    const understandAbility = item?.understand?.understand_ability || "Not specified";
 
-                originalDetails.language.map((item) => {
-                    return <div className="p-3 bg-white border border-gray-200 rounded shadow">
+    return (
+      <div className="p-3 bg-white border border-gray-200 rounded shadow" key={item?.id}>
+        <p className="flex space-x-2">
+          <strong>{languageName}</strong>
+        </p>
+        <p className="flex space-x-2">
+          <span>Read Ability :</span> <span>{readAbility}</span>
+        </p>
+        <p className="flex space-x-2">
+          <span>Write Ability:</span> <span>{writeAbility}</span>
+        </p>
+        <p className="flex space-x-2">
+          <span>Speak Ability:</span> <span>{speakAbility}</span>
+        </p>
+        <p className="flex space-x-2">
+          <span>Understand Ability:</span> <span>{understandAbility}</span>
+        </p>
+        <div className="flex space-x-4 mt-3">
+          <div
+            onClick={() => openEditModal(item)}
+            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faEdit} />
+          </div>
+          <div
+            onClick={() => handleRemove(item?.id)}
+            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </div>
+          <div
+            onClick={() => handleHide(item?.id)} // Implement handleHide to hide the language item
+            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faEyeSlash} />
+          </div>
+        </div>
+      </div>
+    );
+  })
+}
 
-                        <p className="flex space-x-2">
-                            {/* <i></i> */}
-                            <strong> {item.language.language_name}</strong>
-
-                        </p>
-                        <p className="flex space-x-2">
-                            <span>Read Ability :</span> <span>{item.read.read_ability}</span>
-                        </p>
-                        <p className="flex space-x-2">
-                            <span>Write Ability:</span> <span>{item.write.write_ability}</span>
-                        </p>
-                        <p className="flex space-x-2">
-                            <span>Speak Ability:</span> <span>{item.speak.speak_ability}</span>
-                        </p>
-                        <p className="flex space-x-2">
-                            <span>Understand Ability:</span> <span>{item.understand.understand_ability}</span>
-                        </p>
-                        <div className="flex space-x-4 mt-3">
-                            <div
-
-                                onClick={() => openEditModal(item)}
-                                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all">
-                                <FontAwesomeIcon icon={faEdit} />
-
-                            </div>
-                            <div
-                                onClick={() => handleRemove(item.id)}
-                                className="cursor-pointer text-red-500 hover:text-red-700 transition-all">
-                                <FontAwesomeIcon icon={faTrash} />
-
-                            </div>
-                            <div
-                                onClick={() => handleHide(item.id)} // Implement handleHide to hide the referee
-                                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all">
-                                <FontAwesomeIcon icon={faEyeSlash} />
-
-                            </div>
-                        </div>
-
-                    </div>
-                })
-            }
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {

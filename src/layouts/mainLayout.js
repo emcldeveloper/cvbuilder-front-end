@@ -6,6 +6,9 @@ import axios from "axios";
 // import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 // import { firestore } from "../utils/firebase";
 // import { api } from "../utils/apiSample";
+// MainLayout.js
+ 
+
 import { checkIfExists } from "../controllers/apisController";
 import Template2 from "../templates/template2";
 import Template3 from "../templates/template3";

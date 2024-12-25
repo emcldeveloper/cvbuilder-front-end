@@ -373,159 +373,114 @@ const Skills = () => {
           </div>
         </div>
       </div>
-      <p className="mt-4">Culture</p>
-      <div className="flex flex-wrap mt-1">
-        {
-          originalDetails.culture.map((item) => {
-            return <div className="flex items-center space-x-2 py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all">
-              <h1>{item.culture.culture_name}</h1>
-
-              {/* Edit Icon */}
-
-
-              {/* Delete Icon */}
-              {/* <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => {
-                  handleRemove(item.id)
-                }}
-              /> */}
-
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => {
-                  hideculture(item.id)
-
-                  console.log('Hide clicked');
-                }}
-              />
-            </div>
-
-          })
-        }
+   {/* Culture Section */}
+<p className="mt-2">Culture</p>
+<div className="flex flex-wrap mt-1">
+  {originalDetails?.culture?.map((item) => {
+    const cultureName = item?.culture?.culture_name || "Culture name not available";
+    return (
+      <div className="flex items-center space-x-2 py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
+        <h1>{cultureName}</h1>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          onClick={() => {
+            hideculture(item?.id);
+            console.log('Hide clicked');
+          }}
+        />
       </div>
-      <p className="mt-2">Tools</p>
-      <div className="flex flex-wrap mt-1">
-        {
-          originalDetails.tools.map((item) => {
-            return <div className=" flex space-x-2 items-center py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-              <h1>{item.tool.tool_name}</h1>
+    );
+  })}
+</div>
 
-              {/* Delete Icon */}
-              {/* <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => {
-                  
-                }}
-              /> */}
-
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => {
-                  hidetool(item.id)
-                }}
-              />
-            </div>
-          })
-        }
+{/* Tools Section */}
+<p className="mt-2">Tools</p>
+<div className="flex flex-wrap mt-1">
+  {originalDetails?.tools?.map((item) => {
+    const toolName = item?.tool?.tool_name || "Tool name not available";
+    return (
+      <div className="flex space-x-2 items-center py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
+        <h1>{toolName}</h1>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          onClick={() => {
+            hidetool(item?.id);
+          }}
+        />
       </div>
-      <p className="mt-2">Personality</p>
-      <div className="flex flex-wrap mt-1">
-        {
-          originalDetails.applicant_personality.map((item) => {
-            return <div className=" py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-              <h1>{item.personality.personality_name}</h1>
-              {/* Delete Icon */}
-              {/* <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => {
-                  
-                }}
-              /> */}
+    );
+  })}
+</div>
 
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => {
-                  hidepersonality(item.id)
-                  console.log('Hide clicked');
-                }}
-              />
-            </div>
-          })
-        }
+{/* Personality Section */}
+<p className="mt-2">Personality</p>
+<div className="flex flex-wrap mt-1">
+  {originalDetails?.applicant_personality?.map((item) => {
+    const personalityName = item?.personality?.personality_name || "Personality name not available";
+    return (
+      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
+        <h1>{personalityName}</h1>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          onClick={() => {
+            hidepersonality(item?.id);
+            console.log('Hide clicked');
+          }}
+        />
       </div>
-      <p className="mt-2">Softwares</p>
-      <div className="flex flex-wrap mt-1">
-        {
-          originalDetails.software.map((item) => {
-            return <div className=" py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all ">
-              <h1>{item.software.software_name}</h1>
-              {/* Delete Icon */}
-              {/* <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => {
-                  
-                }}
-              /> */}
+    );
+  })}
+</div>
 
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => {
-                  hidesoftware(item.id)
-                  console.log('Hide clicked');
-                }}
-              />
-            </div>
-          })
-        }
+{/* Softwares Section */}
+<p className="mt-2">Softwares</p>
+<div className="flex flex-wrap mt-1">
+  {originalDetails?.software?.map((item) => {
+    const softwareName = item?.software?.software_name || "Software name not available";
+    return (
+      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
+        <h1>{softwareName}</h1>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          onClick={() => {
+            hidesoftware(item?.id);
+            console.log('Hide clicked');
+          }}
+        />
       </div>
-      <p className="mt-2">Skills & knowledge</p>
-      <div className="flex flex-wrap mt-1">
-        {
-          originalDetails.knowledge.map((item) => {
-            return <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all">
-              <h1>{item.knowledge.knowledge_name}</h1>
+    );
+  })}
+</div>
 
-
-
-              {/* Delete Icon */}
-              {/* <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => {
-                  // Handle delete functionality here
-                  const newData = { ...candidate };
-                  newData.knowledge = candidate.knowledge.filter((e) => e.knowledge.knowledge_name !== item.knowledge.knowledge_name);
-                  setDoc(doc(collection(firestore, "apis"), `${uuid}`), newData);
-                  console.log('Delete clicked');
-                }}
-              /> */}
-
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => {
-                  hideknowledge(item.id)
-                  console.log('Hide clicked');
-                }}
-              />
-            </div>
-          })
-        }
+{/* Skills & Knowledge Section */}
+<p className="mt-2">Skills & knowledge</p>
+<div className="flex flex-wrap mt-1">
+  {originalDetails?.knowledge?.map((item) => {
+    const knowledgeName = item?.knowledge?.knowledge_name || "Knowledge name not available";
+    return (
+      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
+        <h1>{knowledgeName}</h1>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          onClick={() => {
+            hideknowledge(item?.id);
+            console.log('Hide clicked');
+          }}
+        />
       </div>
+    );
+  })}
+</div>
 
       <div className="flex justify-end space-x-2 mt-4 items-center">
         <h1 onClick={() => {

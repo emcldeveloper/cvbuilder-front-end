@@ -305,39 +305,49 @@ const Proficiency = () => {
 
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
-            {
-                originalDetails.proficiency.map((item) => {
-                    return <div className="p-5 bg-white border border-gray-200 rounded shadow">
-                        <p> <span className="font-bold">{item.award}:</span> {moment(item.started).format("YYYY-MM-DD ")} - {moment(item.ended).format("YYYY-MM-DD")}</p>
-                        <p className="flex space-x-2">
-                            <i>{item.proficiency.proficiency_name}</i>,
-                            <p>{item.organization.organization_name}</p>
-                        </p>
-                        <div className="flex space-x-4 mt-3">
-                            <div
+        {
+  originalDetails?.proficiency?.map((item) => {
+    // Safely access properties and provide fallback values
+    const award = item?.award || "Award not available";
+    const started = item?.started ? moment(item.started).format("YYYY-MM-DD") : "Start date not available";
+    const ended = item?.ended ? moment(item.ended).format("YYYY-MM-DD") : "End date not available";
+    const proficiencyName = item?.proficiency?.proficiency_name || "Proficiency name not available";
+    const organizationName = item?.organization?.organization_name || "Organization name not available";
 
-                                onClick={() => openEditModal(item)}
-                                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all">
-                                <FontAwesomeIcon icon={faEdit} />
+    return (
+      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
+        <p>
+          <span className="font-bold">{award}:</span> {started} - {ended}
+        </p>
+        <p className="flex space-x-2">
+          <i>{proficiencyName}</i>,
+          <p>{organizationName}</p>
+        </p>
+        <div className="flex space-x-4 mt-3">
+          <div
+            onClick={() => openEditModal(item)}
+            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faEdit} />
+          </div>
+          <div
+            onClick={() => handleRemove(item?.id)}
+            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </div>
+          <div
+            onClick={() => handleHide(item?.id)} // Implement handleHide to hide the proficiency
+            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+          >
+            <FontAwesomeIcon icon={faEyeSlash} />
+          </div>
+        </div>
+      </div>
+    );
+  })
+}
 
-                            </div>
-                            <div
-                                onClick={() => handleRemove(item.id)}
-                                className="cursor-pointer text-red-500 hover:text-red-700 transition-all">
-                                <FontAwesomeIcon icon={faTrash} />
-
-                            </div>
-                            <div
-                                onClick={() => handleHide(item.id)} // Implement handleHide to hide the referee
-                                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all">
-                                <FontAwesomeIcon icon={faEyeSlash} />
-
-                            </div>
-                        </div>
-
-                    </div>
-                })
-            }
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {
@@ -419,7 +429,7 @@ const Proficiency = () => {
                             <input
                                 type="text"
                                 name="award"
-                                value={editaward}
+                                
                                 onChange={handleChange}
                                 className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
                                 required

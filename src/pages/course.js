@@ -1,41 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import AsyncSelect from 'react-select/async'; // Use AsyncSelect for async loading
 import AsyncCreatableSelect from 'react-select/async-creatable';
- 
 
-const Course = ({ label, onSelect ,onOptionsLoad, initialValue}) => {
-  const [options, setOptions] = useState(null); // Store fetched options
+const Course = ({ label, onSelect, onOptionsLoad, initialValue }) => {
+  const [options, setOptions] = useState([]); // Store fetched options
   const [selected, setSelected] = useState(null); // To store the selected option
   const [error, setError] = useState(null); // For error handling
+  const [page, setPage] = useState(1); // Keep track of current page for pagination
+  const [loading, setLoading] = useState(false); // Track loading state
+  const [hasMore, setHasMore] = useState(true); // Track if there's more data to load
 
-  // Fetch options from API once when component mounts
-  const fetchOptions = async () => {
+  // Fetch options from API with pagination
+  const fetchOptions = async (pageNum = 1) => {
+    if (loading || !hasMore) return; // Avoid fetching when already loading or no more data
+
+    setLoading(true);
     try {
-      const response = await fetch('https://test.ekazi.co.tz/api/applicant/course');
+      const response = await fetch(`https://test.ekazi.co.tz/api/applicant/course?page=${pageNum}`);
       const data = await response.json();
 
-      // Format options for react-select
-      const formattedOptions = Array.isArray(data.course)
-      ? data.course.map(option => ({
-          value: option.course_name, // use as value
-          label: option.course_name, // use as label for display
-        }))
-      : [];
+      if (data.course && Array.isArray(data.course)) {
+        const formattedOptions = data.course.map(option => ({
+          value: option.course_name,
+          label: option.course_name,
+        }));
 
-      setOptions(formattedOptions);
-
-      if (onOptionsLoad) {
-        onOptionsLoad(formattedOptions);
+        setOptions(prevOptions => [...prevOptions, ...formattedOptions]); // Append new data to the existing options
+        setHasMore(data.course.length > 0); // Set hasMore based on the response length
       }
 
-      // Set initial selection based on initialValue
+      if (onOptionsLoad) {
+        onOptionsLoad(options);
+      }
+
       if (initialValue) {
-        const initialOption = formattedOptions.find(option => option.value === initialValue);
+        const initialOption = options.find(option => option.value === initialValue);
         setSelected(initialOption || null);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('Failed to load options');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,12 +66,10 @@ const Course = ({ label, onSelect ,onOptionsLoad, initialValue}) => {
     }
   };
 
- 
-
-  // Fetch options when the component mounts
+  // Fetch initial options on component mount
   useEffect(() => {
-    fetchOptions();
-  }, []);
+    fetchOptions(page);
+  }, [page]);
 
   // Update the selected option if initialValue changes
   useEffect(() => {
@@ -76,39 +79,46 @@ const Course = ({ label, onSelect ,onOptionsLoad, initialValue}) => {
     }
   }, [initialValue, options]);
 
+  // Error handling
   if (error) {
     return <div>{error}</div>;
   }
 
+  // Load more options when scrolled to the bottom or as needed
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      setPage(prevPage => prevPage + 1); // Increment page to load more data
+    }
+  };
+
   return (
     <div>
-    <AsyncCreatableSelect 
-        value={selected} // Should be an array if isMulti is true
-        onChange={handleSelect} // Handle selection change
-        loadOptions={loadOptions} // Function to load options asynchronously
-        defaultOptions={options} // Options to preload for faster initial load
-        placeholder="Select a course" // Placeholder text
-        // isMulti // Enable multi-select
-        isClearable // Allow clearing the selected options
+      <AsyncCreatableSelect
+        value={selected}
+        onChange={handleSelect}
+        loadOptions={loadOptions}
+        defaultOptions={options}
+        placeholder="Select a course"
+        isClearable
+        onMenuScrollToBottom={handleLoadMore} // Trigger more data load on scroll
         styles={{
-            control: (provided) => ({
-              ...provided,
-              minHeight: '30px', // Adjust the minimum height
-              height: '32px',    // Set a fixed height if desired
-            }),
-            valueContainer: (provided) => ({
-              ...provided,
-              padding: '0px 8px', // Adjust padding for a smaller container
-            }),
-            input: (provided) => ({
-              ...provided,
-              margin: '0px', // Remove margins for a tighter input field
-            }),
-          }}
-    />
-</div>
-
-
+          control: (provided) => ({
+            ...provided,
+            minHeight: '30px',
+            height: '32px',
+          }),
+          valueContainer: (provided) => ({
+            ...provided,
+            padding: '0px 8px',
+          }),
+          input: (provided) => ({
+            ...provided,
+            margin: '0px',
+          }),
+        }}
+      />
+      {loading && <div>Loading more...</div>} {/* Show loading indicator */}
+    </div>
   );
 };
 

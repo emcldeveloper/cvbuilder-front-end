@@ -280,44 +280,51 @@ const Training = () => {
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
 
-            {
+        {
+  originalDetails?.training?.map((item) => {
+    // Safely access properties with optional chaining and provide fallback values
+    const name = item?.name || "Training name not available";
+    const startedYear = item?.started ? new Date(item.started).getFullYear() : "Start year not available";
+    const endedYear = item?.ended ? new Date(item.ended).getFullYear() : "End year not available";
+    const institution = item?.institution || "Institution not available";
 
-                originalDetails.training.map((item) => {
-                    return <div className="p-5 bg-white border border-gray-200 rounded shadow">
-                        <p> <span className="font-bold">{item.name}:</span> {new Date(item.started).getFullYear()} - {new Date(item.ended).getFullYear()}</p>
-                        <span>{item.institution}</span>
-                        <div className="flex justify-end">
-                            <div className="flex justify-end">
-                                {/* Delete Icon */}
-                                {candidate.training.filter((e) => e.id === item.id).length > 0 ? (
-                                    <div className="flex space-x-3 mt-3">
-                                        {/* Edit Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faEdit}
-                                            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                                            onClick={() => openEditModal(item)}
-                                        />
+    return (
+      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
+        <p>
+          <span className="font-bold">{name}:</span> {startedYear} - {endedYear}
+        </p>
+        <span>{institution}</span>
+        <div className="flex justify-end">
+          {candidate?.training?.some((e) => e.id === item?.id) && (
+            <div className="flex space-x-3 mt-3">
+              {/* Edit Icon */}
+              <FontAwesomeIcon
+                icon={faEdit}
+                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+                onClick={() => openEditModal(item)}
+              />
 
-                                        {/* Delete Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faTrash}
-                                            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                                            onClick={() => handleRemove(item.id)}
-                                        />
+              {/* Delete Icon */}
+              <FontAwesomeIcon
+                icon={faTrash}
+                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+                onClick={() => handleRemove(item?.id)}
+              />
 
-                                        {/* Hide Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faEyeSlash}
-                                            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                                            onClick={() => handleHide(item.id)}
-                                        />
-                                    </div>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                })
-            }
+              {/* Hide Icon */}
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+                onClick={() => handleHide(item?.id)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  })
+}
+
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {

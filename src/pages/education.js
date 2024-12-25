@@ -368,46 +368,56 @@ const Educations = () => {
 
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
-            {
+        {
+  originalDetails?.education?.map((item) => {
+    // Ensure 'item' and its properties are defined before accessing them
+    const courseName = item?.course?.course_name || "Course name not available";
+    const startedYear = item?.started ? new Date(item.started).getFullYear() : "Not specified";
+    const endedYear = item?.ended ? new Date(item.ended).getFullYear() : "Not specified";
+    const educationLevel = item?.level?.education_level || "Level not specified";
+    const collegeName = item?.college?.college_name || "College name not specified";
 
-                originalDetails.education.map((item) => {
-                    return <div className="p-5 bg-white border border-gray-200 rounded shadow">
-                        <p> <span className="font-bold">{item.course.course_name}:</span> {new Date(item.started).getFullYear()} - {new Date(item.ended).getFullYear()}</p>
-                        <i>{item.level.education_level}</i>, <span>{item.college.college_name}</span>
+    return (
+      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
+        <p>
+          <span className="font-bold">{courseName}:</span> {startedYear} - {endedYear}
+        </p>
+        <i>{educationLevel}</i>, <span>{collegeName}</span>
 
-                        <div className="flex justify-end">
-                            <div className="flex justify-end">
-                                {/* Delete Icon */}
-                                {candidate.education.filter((e) => e.id === item.id).length > 0 ? (
-                                    <div className="flex space-x-3 mt-3">
-                                        {/* Edit Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faEdit}
-                                            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                                            onClick={() => openEditModal(
-                                                item)}
-                                        />
+        <div className="flex justify-end">
+          <div className="flex justify-end">
+            {/* Delete Icon */}
+            {candidate?.education?.some((e) => e.id === item.id) ? (
+              <div className="flex space-x-3 mt-3">
+                {/* Edit Icon */}
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
+                  onClick={() => openEditModal(item)}
+                />
 
-                                        {/* Delete Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faTrash}
-                                            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                                            onClick={() => handleRemove(item.id)}
-                                        />
+                {/* Delete Icon */}
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
+                  onClick={() => handleRemove(item.id)}
+                />
 
-                                        {/* Hide Icon */}
-                                        <FontAwesomeIcon
-                                            icon={faEyeSlash}
-                                            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                                            onClick={() => handleHide(item.id)}
-                                        />
-                                    </div>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                })
-            }
+                {/* Hide Icon */}
+                <FontAwesomeIcon
+                  icon={faEyeSlash}
+                  className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+                  onClick={() => handleHide(item.id)}
+                />
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    );
+  })
+}
+
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {
