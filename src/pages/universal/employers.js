@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AsyncSelect from 'react-select/async'; // Use AsyncSelect for async loading
+import AsyncCreatableSelect from 'react-select/async-creatable';
  
 
 const Employers = ({ label, onSelect,onOptionsLoad, initialValue  }) => {
@@ -72,7 +73,7 @@ const Employers = ({ label, onSelect,onOptionsLoad, initialValue  }) => {
 
   return (
     <div>
-    <AsyncSelect
+    <AsyncCreatableSelect
         value={selected} // Should be an array if isMulti is true
         onChange={handleSelect} // Handle selection change
         loadOptions={loadOptions} // Function to load options asynchronously
