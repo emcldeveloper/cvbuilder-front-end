@@ -1,71 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import AsyncSelect from 'react-select/async'; // Use AsyncSelect for async loading
+import React, { useState, useEffect, memo } from 'react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
- 
 
-const Employers = ({ label, onSelect,onOptionsLoad, initialValue  }) => {
-  const [options, setOptions] = useState(null); // Store fetched options
+const  Employers = ({ label = "Select a position", onSelect, initialValue }) => {
+  const [options, setOptions] = useState([]); // Store fetched options
   const [selected, setSelected] = useState(null); // To store the selected option
   const [error, setError] = useState(null); // For error handling
+  const [loading, setLoading] = useState(false); // For loading state
+  const [page, setPage] = useState(1); // Current page
+  const [totalPages, setTotalPages] = useState(1); // Total pages for pagination
 
-  // Fetch options from API once when component mounts
-  const fetchOptions = async () => {
+  // Fetch positions for the current page
+  const fetchEmployers = async (inputValue = '', page = 1) => {
+    setLoading(true);
     try {
-      const response = await fetch(' https://test.ekazi.co.tz/api/applicant/applicant_employer');
+      const response = await fetch(`http://127.0.0.1:8000/api/applicant/applicant_employer?search=${inputValue}&page=${page}&perPage=10`);
       const data = await response.json();
 
-      // Format options for react-select
-      const formattedOptions = Array.isArray(data.applicant_employer)
-      ? data.applicant_employer.map(option => ({
-          value: option.employer_name,
-          label: option.employer_name,
-        }))
-      : [];
+      // Process the data by trimming position names and appending to options
+      const formattedData = data.data.map(applicant_employer => ({
+        value: applicant_employer.employer_name,
+        label: applicant_employer.employer_name.trim() // Remove leading/trailing spaces
+      }));
 
-
-      
-      setOptions(formattedOptions);
-         // Call the onOptionsLoad callback to pass options back to parent
-         if (onOptionsLoad) {
-          onOptionsLoad(formattedOptions);
-        }
-  
-        // If there's an initial value, find and set it as the selected option
-        if (initialValue) {
-          const selectedOption = formattedOptions.find(option => option.value === initialValue);
-          setSelected(selectedOption || null);
-        }
+      setOptions((prevOptions) => [...prevOptions, ...formattedData]); // Append new data to options
+      setPage(data.current_page); // Update current page
+      setTotalPages(data.last_page); // Update total pages
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('Failed to load options');
+    } finally {
+      setLoading(false);
     }
-    
   };
 
-  // Function to load options asynchronously based on user input
- 
- const loadOptions = (inputValue, callback) => {
-    const filteredOptions = options.filter(option =>
-      option.label.toLowerCase().includes(inputValue.toLowerCase())
-    );
-    callback(filteredOptions);
+  // Load options for search filtering
+  const loadOptions = (inputValue, callback) => {
+    setOptions([]); // Clear options before new search
+    fetchEmployers(inputValue, 1); // Start with the first page when searching
+    callback(options); // Return options to AsyncSelect
   };
 
-  // Handle select option change
-  const handleSelect = (selectedOption) => {
-    setSelected(selectedOption);
-    onSelect(selectedOption ? selectedOption.value : ''); // Pass selected value to parent
+  // Load more options when scrolling (pagination)
+  const loadMoreOptions = () => {
+    if (loading || page >= totalPages) return; // Prevent multiple requests while loading or at last page
+    fetchEmployers('', page + 1); // Fetch the next page
   };
 
-  // Fetch options once when the component mounts
+  // Fetch initial options when component mounts
   useEffect(() => {
-    fetchOptions();
+    fetchEmployers(); // Initially fetch all options
   }, []);
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
 
   if (error) {
     return <div>{error}</div>;
@@ -73,34 +57,35 @@ const Employers = ({ label, onSelect,onOptionsLoad, initialValue  }) => {
 
   return (
     <div>
-    <AsyncCreatableSelect
-        value={selected} // Should be an array if isMulti is true
-        onChange={handleSelect} // Handle selection change
-        loadOptions={loadOptions} // Function to load options asynchronously
-        defaultOptions={options} // Options to preload for faster initial load
-        placeholder="Select a employer" // Placeholder text
-        // isMulti // Enable multi-select
-        isClearable // Allow clearing the selected options
-        styles={{
+      <div className="select-container">
+        <AsyncCreatableSelect
+          value={selected}
+          onChange={setSelected}
+          loadOptions={loadOptions}
+          onMenuScrollToBottom={loadMoreOptions} // Load more when scrolling to the bottom
+          placeholder={label}
+          isClearable
+          cacheOptions
+          defaultOptions={options}
+          styles={{
             control: (provided) => ({
               ...provided,
-              minHeight: '30px', // Adjust the minimum height
-              height: '30px',    // Set a fixed height if desired
+              minHeight: '30px',
+              height: '35px',
             }),
             valueContainer: (provided) => ({
               ...provided,
-              padding: '0px 8px', // Adjust padding for a smaller container
+              padding: '0px 8px',
             }),
             input: (provided) => ({
               ...provided,
-              margin: '0px', // Remove margins for a tighter input field
+              margin: '0px',
             }),
           }}
-    />
-</div>
-
-
+        />
+      </div>
+    </div>
   );
 };
 
-export default Employers
+export default memo(Employers);

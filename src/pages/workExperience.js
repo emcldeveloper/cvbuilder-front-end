@@ -114,9 +114,15 @@ const WorksExperiences = () => {
     setregionSelected(region)
   };
   const handPosition = (position) => {
-    setPosition(position);
+  
+    if (position) {
+      setPosition(position.value);// Update state with the selected value
+    } else {
+      setEditPosition(null); // Handle case where the selection is cleared
+    }
 
   };
+  console.log("psoiton is inter ",selectedposition)
   const handleIndustry = (industry) => {
     setIndustry(industry);
 
@@ -191,9 +197,13 @@ const WorksExperiences = () => {
     setEditRegion(region);
   };
   const handEditPosition = (position) => {
-    setEditPosition(position);
-
+    if (position) {
+      setEditPosition(position.value); // Update state with the selected value
+    } else {
+      setEditPosition(null); // Handle case where the selection is cleared
+    }
   };
+  
   const handleEditIndustry = (industry) => {
     setEditIndustry(industry);
 
@@ -304,7 +314,7 @@ const WorksExperiences = () => {
       }
 
 
-      window.location.reload();
+      // window.location.reload();
 
      
     } catch (error) {
@@ -859,10 +869,12 @@ const WorksExperiences = () => {
                           </label>
                           <Positions
                             onSelect={handEditPosition}
-                            initialValue={editPosition}// Pass the language ID to edit
-                            onOptionsLoad={(options) => console.log('Loaded Options region tttr:', options)}
+                            // initialValue={editPosition}// Pass the language ID to edit
+                           
+                            initialValue={{ value: editPosition , label: editPosition  }}
+                            onOptionsLoad={(options) => console.log('Loaded Option position experi:', options)}
                           />
-
+ 
                         </div>
                       </div>
                     </div>
