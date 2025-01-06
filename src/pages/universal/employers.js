@@ -13,7 +13,7 @@ const  Employers = ({ label = "Select a position", onSelect, initialValue }) => 
   const fetchEmployers = async (inputValue = '', page = 1) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/applicant/applicant_employer?search=${inputValue}&page=${page}&perPage=10`);
+      const response = await fetch(`https://test.ekazi.co.tz/api/applicant/applicant_employer?search=${inputValue}&page=${page}&perPage=10`);
       const data = await response.json();
 
       // Process the data by trimming position names and appending to options
