@@ -85,7 +85,7 @@ const Refrees = () => {
 
         try {
 
-            const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/refereestore/`, dataToSend,
+            const response = await axios.post(`https://ekazi.co.tz/api/applicant/refereestore/`, dataToSend,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ const Refrees = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`https://test.ekazi.co.tz/api/applicant/refereedelete/${id}`);
+                    const response = await axios.delete(`https://ekazi.co.tz/api/applicant/refereedelete/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -174,7 +174,7 @@ const Refrees = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hide/${id}`);
+                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hide/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -200,7 +200,7 @@ const Refrees = () => {
     };
     const handleUpdate =async (id,updateData) => {
         try {
-            const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/updatereferee/${id}`,updateData ,
+            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updatereferee/${id}`,updateData ,
                 {
                     headers: {
                         'Content-Type': 'application/json',

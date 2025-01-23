@@ -141,7 +141,7 @@ const Proficiency = () => {
 
         e.preventDefault();
         console.log('send data :', sendTOdata);
-        const response = await axios.post(' https://test.ekazi.co.tz/api/applicant/proficiencystore', sendTOdata, {
+        const response = await axios.post('https://ekazi.co.tz/api/applicant/proficiencystore', sendTOdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -188,7 +188,7 @@ const Proficiency = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const response = await axios.delete(`https://test.ekazi.co.tz/api/applicant/deleteproficiency/${id}`);
+                        const response = await axios.delete(`https://ekazi.co.tz/api/applicant/deleteproficiency/${id}`);
 
                         if (response.status === 200) {
                             Swal.fire({
@@ -228,7 +228,7 @@ const Proficiency = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hideproficiency/${id}`);
+                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideproficiency/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -255,7 +255,7 @@ const Proficiency = () => {
     const handleUpdate = async (id, updateData) => {
         try {
             console.log("update proficience  ", updateData);
-            const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/updateproficiency/${id}`, updateData,
+            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updateproficiency/${id}`, updateData,
                 {
                     headers: {
                         'Content-Type': 'application/json',

@@ -236,7 +236,7 @@ const Languages = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hidelanguage/${id}`);
+                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidelanguage/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -263,7 +263,7 @@ const Languages = () => {
     const handleUpdate = async (id, updateData) => {
         try {
             console.log('update data for Lnaguage ',updateData);
-            const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/languageupdate/${id}`, updateData,
+            const response = await axios.post(`https://ekazi.co.tz/api/applicant/languageupdate/${id}`, updateData,
                 {
                     
                     headers: {

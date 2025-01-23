@@ -8,7 +8,7 @@ export const SubscriptionProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`https://test.ekazi.co.tz/api/applicant/CvSubscription`)
+      .get(`https://ekazi.co.tz/api/applicant/CvSubscription`)
       .then((response) => {
         console.log("API Response:", response); // Debug API response
         if (response ) {

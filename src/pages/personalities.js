@@ -9,7 +9,7 @@ const Personality = ({ label, onSelect , onOptionsLoad, initialValue }) => {
   // Fetch options from API once when component mounts
   const fetchOptions = async () => {
     try {
-      const response = await fetch('https://test.ekazi.co.tz/api/applicant/personality');
+      const response = await fetch('https://ekazi.co.tz/api/applicant/personality');
       const data = await response.json();
 
       // Format options for react-select

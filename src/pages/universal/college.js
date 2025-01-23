@@ -11,7 +11,7 @@ const College = ({ label, onSelect, onOptionsLoad, initialValue, setInitialSelec
   // Fetch options from API once when component mounts
   const fetchOptions = async () => {
     try {
-      const response = await fetch(' https://test.ekazi.co.tz/api/applicant/college');
+      const response = await fetch('https://ekazi.co.tz/api/applicant/college');
       const data = await response.json();
 
       // Format options for react-select

@@ -9,7 +9,7 @@ const EducationLevel = ({ label, onSelect, onOptionsLoad, initialValue}) => {
   // Fetch options from API when the component mounts
   const fetchOptions = async () => {
     try {
-      const response = await fetch(' https://test.ekazi.co.tz/api/applicant/education_level');
+      const response = await fetch('https://ekazi.co.tz/api/applicant/education_level');
       const data = await response.json();
 
       const formattedOptions = Array.isArray(data.education_category)

@@ -112,7 +112,7 @@ const Skills = () => {
     console.log('send data  skills to skills:', personalityData)
     try {
 
-      const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/generalskills`, dataToSend,
+      const response = await axios.post(`https://ekazi.co.tz/api/applicant/generalskills`, dataToSend,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ const Skills = () => {
       if (result.isConfirmed) {
         try {
           console.log('delete culture :', id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hideculture/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideculture/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -200,7 +200,7 @@ const Skills = () => {
       if (result.isConfirmed) {
         try {
           console.log('delete culture :', id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hidetool/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidetool/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -239,7 +239,7 @@ const Skills = () => {
       if (result.isConfirmed) {
         try {
           console.log('delete culture :', id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hidepersonality/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidepersonality/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -278,7 +278,7 @@ const Skills = () => {
       if (result.isConfirmed) {
         try {
           console.log('delete culture :', id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hidesoftware/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidesoftware/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -317,7 +317,7 @@ const Skills = () => {
       if (result.isConfirmed) {
         try {
           console.log('delete culture :', id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hideknowledge/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideknowledge/${id}`);
 
           if (response.status === 200) {
             Swal.fire({

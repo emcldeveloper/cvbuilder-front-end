@@ -40,7 +40,7 @@ const MyCv = () => {
 
     useEffect(() => {
         axios
-            .get(`https://test.ekazi.co.tz/api/applicant/mycv/${uuid}`)
+            .get(`https://ekazi.co.tz/api/applicant/mycv/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {

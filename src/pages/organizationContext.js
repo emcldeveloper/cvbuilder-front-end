@@ -14,7 +14,7 @@ export const OrganizationProvider = ({ children }) => {
     // Fetch organizations from API
     const fetchOrganizations = async () => {
       try {
-        const response = await axios.get('https://test.ekazi.co.tz/api/applicant/organization'); 
+        const response = await axios.get('https://ekazi.co.tz/api/applicant/organization'); 
         setOrganizations(response.data.organization); 
         setLoading(false);
       } catch (error) {

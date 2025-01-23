@@ -296,7 +296,7 @@ const WorksExperiences = () => {
     console.log('send data  to  experince:', sendToData)
     try {
 
-      const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/experiencestore`, sendToData,
+      const response = await axios.post(`https://ekazi.co.tz/api/applicant/experiencestore`, sendToData,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -343,7 +343,7 @@ const WorksExperiences = () => {
       if (result.isConfirmed) {
         try {
           console.log("delete epxeirnce id", id);
-          const response = await axios.delete(`https://test.ekazi.co.tz/api/applicant/deleteexperience/${id}`);
+          const response = await axios.delete(`https://ekazi.co.tz/api/applicant/deleteexperience/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -382,7 +382,7 @@ const WorksExperiences = () => {
       if (result.isConfirmed) {
         try {
           console.log("hidden experince id", id);
-          const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hideexperiences/${id}`);
+          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideexperiences/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -409,7 +409,7 @@ const WorksExperiences = () => {
   const handleUpdate = async (id, updateData) => {
     try {
       console.log("update proficience  ", updateData);
-      const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/updateexperience/${id}`, updateData,
+      const response = await axios.post(`https://ekazi.co.tz/api/applicant/updateexperience/${id}`, updateData,
         {
           headers: {
             'Content-Type': 'application/json',

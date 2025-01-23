@@ -12,7 +12,7 @@ const PositionLevel = ({   label, onSelect, onOptionsLoad, initialValue }) => {
   // Fetch options from API once when component mounts
   const fetchOptions = async () => {
     try {
-      const response = await fetch('https://test.ekazi.co.tz/api/applicant/position_level');
+      const response = await fetch('https://ekazi.co.tz/api/applicant/position_level');
       const data = await response.json();
 
       // Format options for react-select

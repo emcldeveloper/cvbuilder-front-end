@@ -25,7 +25,7 @@ const MySubscription = () => {
 
     useEffect(() => {
         axios
-            .get(`https://test.ekazi.co.tz/api/applicant/CvSubscriptiondata/${uuid}`)
+            .get(`https://ekazi.co.tz/api/applicant/CvSubscriptiondata/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {
