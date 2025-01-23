@@ -16,16 +16,16 @@ const Template8 = () => {
   const [pages, setPages] = useState(false);
   const [experiences,setExperiences] = useState([])
 
-  const isVerified = candidate?.subscription?.verify === 1;
+ 
   const formatDate = (date) => {
     if (!date) return '';
     const d = new Date(date);
     return d.toISOString().split('T')[0]; // 'yyyy-mm-dd'
 };
-  console.log("checjk verifcation:",isVerified);
+ 
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response

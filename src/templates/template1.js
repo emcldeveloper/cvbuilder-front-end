@@ -6,6 +6,7 @@ import { firestore } from "../utils/firebase";
 import Spinner from "../widgets/spinner";
 import PageLoader from "../widgets/pageLoader";
 import axios from 'axios';
+import moment from "moment";
 
 const Template1 = () => {
  
@@ -20,7 +21,7 @@ const Template1 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -103,10 +104,7 @@ useEffect(()=>{
       title: "Gender:",
       value: candidate.applicant_profile?.[0]?.gender_name ? candidate.applicant_profile[0].gender_name : "Not specified"
     },
-    {
-      title: "Marital status:",
-      value: candidate.applicant_profile?.[0]?.marital_status ? candidate.applicant_profile[0].marital_status : "Not specified"
-    },
+   
   ].map((item, index) => (
     <div className="grid grid-cols-2" key={index}>
       <div>{item.title}</div>
@@ -178,6 +176,10 @@ useEffect(()=>{
                     {position?.end_date
                       ? new Date(position.end_date).getFullYear()
                       : "Present"}
+                  </p>
+                  <p className="mt-2">
+                    <span className="font-semibold">Responsibilities: </span>
+                    <span dangerouslySetInnerHTML={{ __html: position.responsibility }}></span>
                   </p>
                   {/* Uncomment and handle null values for these if needed */}
                   {/* <p className="flex">
@@ -331,13 +333,30 @@ useEffect(()=>{
     {candidate.proficiency.map((item, index) => (
       <div key={index}>
         <p>
-          <span className="font-bold">{item?.award || "Award not specified"}:</span>{" "}
-          {item?.started || "Start date not specified"} -{" "}
-          {item?.ended || "End date not specified"}
+          {moment(item?.started || 'Unknown Start').format("YYYY-MM-DD")}- {moment(item?.ended || 'Present').format("YYYY-MM-DD")}
         </p>
         <p className="flex space-x-2">
           <i>{item?.proficiency?.proficiency_name || "Proficiency not specified"}</i>,{" "}
           <span>{item?.organization?.organization_name || "Organization not specified"}</span>
+        </p>
+      </div>
+    ))}
+  </div>
+)}
+{candidate?.training?.length > 0 && (
+  <div className="mt-6">
+    <h1 className="font-bold mt-5 mb-1 text-lg">TRAININGS & WORKSHOPS</h1>
+    <div className="h-[2px] bg-gray-100 mb-2"></div>
+    {candidate.training.map((item, index) => (
+      <div key={index}>
+        <p>
+          <span className="font-bold"> {item?.name || "Training not specified"}:</span>{" "}
+          {item?.started || "Start date not specified"} -{" "}
+          {item?.ended || "End date not specified"}
+        </p>
+        <p className="flex space-x-2">
+   
+          <span> {item?.institution || 'Unknown institution'}</span>
         </p>
       </div>
     ))}

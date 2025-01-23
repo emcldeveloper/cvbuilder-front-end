@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../utils/firebase";
 import axios from 'axios';
+import moment from "moment";
+
 const Template3 = () => {
     const cv  = useRef()
     const {uuid,template} = useParams()
@@ -16,7 +18,7 @@ const Template3 = () => {
    
     useEffect(() => {
       // Fetch data from the API
-      axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+      axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
         .then((response) => {
           if (response?.data?.data) {
             setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -46,7 +48,7 @@ const Template3 = () => {
             {/* Profile image with fallback if picture is missing */}
             <img 
               alt="profile image" 
-              src={`https://test.ekazi.co.tz/${candidate?.applicant_profile?.[0]?.picture || 'default-profile.jpg'}`}
+              src={`https://ekazi.co.tz/${candidate?.applicant_profile?.[0]?.picture || 'default-profile.jpg'}`}
               className="w-48 h-48 object-cover rounded-full"
             />
           </div>
@@ -180,7 +182,7 @@ const Template3 = () => {
                   {candidate?.culture && candidate.culture.length > 0 ? (
                     candidate.culture.map((item, index) => (
                       <li key={index} className="py-0">
-                        {item?.culture?.culture_name || 'Culture Name Not Available'} {index + 1}
+                        {item?.culture?.culture_name || 'Culture Name Not Available'} 
                       </li>
                     ))
                   ) : (
@@ -193,7 +195,7 @@ const Template3 = () => {
                   {candidate?.software && candidate.software.length > 0 ? (
                     candidate.software.map((item, index) => (
                       <li key={index} className="py-0">
-                        {item?.software?.software_name || 'Software Name Not Available'} {index + 1}
+                        {item?.software?.software_name || 'Software Name Not Available'} 
                       </li>
                     ))
                   ) : (
@@ -206,7 +208,7 @@ const Template3 = () => {
                   {candidate?.tools && candidate.tools.length > 0 ? (
                     candidate.tools.map((item, index) => (
                       <li key={index} className="py-0">
-                        {item?.tool?.tool_name || 'Tool Name Not Available'} {index + 1}
+                        {item?.tool?.tool_name || 'Tool Name Not Available'} 
                       </li>
                     ))
                   ) : (
@@ -219,7 +221,7 @@ const Template3 = () => {
                   {candidate?.knowledge && candidate.knowledge.length > 0 ? (
                     candidate.knowledge.map((item, index) => (
                       <li key={index} className="py-0">
-                        {item?.knowledge?.knowledge_name || 'Knowledge Name Not Available'} {index + 1}
+                        {item?.knowledge?.knowledge_name || 'Knowledge Name Not Available'} 
                       </li>
                     ))
                   ) : (
@@ -234,7 +236,7 @@ const Template3 = () => {
                   {candidate?.language && candidate.language.length > 0 ? (
                     candidate.language.map((item, index) => (
                       <div key={index} className="py-1 px-3 mr-2 mb-2 rounded-md border">
-                        {item?.language?.language_name || 'Language Name Not Available'} {index + 1}
+                        {item?.language?.language_name || 'Language Name Not Available'} 
                       </div>
                     ))
                   ) : (
@@ -285,6 +287,9 @@ const Template3 = () => {
                                   {position?.start_date ? new Date(position.start_date).getFullYear() : 'Start Year Not Available'} - 
                                   {position?.end_date ? new Date(position.end_date).getFullYear() : 'Present'}
                                 </p>
+                                <p>
+                                  {position?.responsibility || 'No responsibility'}   
+                                </p>
                               </div>
                             </div>
                           ))}
@@ -303,12 +308,12 @@ const Template3 = () => {
                 {candidate?.proficiency?.length > 0 ? (
                   candidate.proficiency.map((item, index) => (
                     <div className="flex" key={index}>
-                      <div className="w-4/12">
+                      <div className="w-5/12">
                         <p className="font-bold">
-                          {item?.started} - {item?.ended || 'Present'}
+                          {moment(item?.started || 'Unknown Start').format("YYYY-MM")}- {moment(item?.ended || 'Present').format("YYYY-MM")}
                         </p>
                       </div>
-                      <div className="w-8/12">
+                      <div className="w-7/12">
                         <p><span className="font-bold">{item?.award || 'Award Not Available'}</span></p>
                         <p className="text-primary">{item?.organization?.organization_name || 'Organization Not Available'}</p>
                         <p className="flex space-x-2">
@@ -326,20 +331,20 @@ const Template3 = () => {
               {/* TRAININGS & WORKSHOPS */}
               <div className="mt-4">
                 <div className="bg-primary py-2 text-white font-bold px-4">TRAININGS & WORKSHOPS</div>
-                {candidate?.proficiency?.length > 0 ? (
-                  candidate.proficiency.map((item, index) => (
+                {candidate?.training?.length > 0 ? (
+                  candidate.training.map((item, index) => (
                     <div className="flex" key={index}>
-                      <div className="w-4/12">
+                      <div className="w-5/12">
                         <p className="font-bold">
                           {item?.started} - {item?.ended || 'Present'}
                         </p>
                       </div>
-                      <div className="w-8/12">
-                        <p><span className="font-bold">{item?.award || 'Award Not Available'}</span></p>
-                        <p className="text-primary-500">{item?.organization?.organization_name || 'Organization Not Available'}</p>
+                      <div className="w-7/12">
+                       
+                        <p className="text-primary-500">   {item?.institution || 'Unknown institution'}</p>
                         <p className="flex space-x-2">
-                          <span className="font-bold">Proficiency:</span>
-                          <span>{item?.proficiency?.proficiency_name || 'Proficiency Not Available'}</span>
+                          <span className="font-bold">Training:</span>
+                          <span> {item?.name || 'Unknown Training'}</span>
                         </p>
                       </div>
                     </div>

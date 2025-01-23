@@ -15,7 +15,7 @@ const Course = ({ label, onSelect, onOptionsLoad, initialValue }) => {
 
     setLoading(true);
     try {
-      const response = await fetch(`https://test.ekazi.co.tz/api/applicant/course?page=${pageNum}`);
+      const response = await fetch(`https://ekazi.co.tz/api/applicant/course?page=${pageNum}`);
       const data = await response.json();
 
       if (data.course && Array.isArray(data.course)) {

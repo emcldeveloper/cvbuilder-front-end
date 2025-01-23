@@ -25,7 +25,7 @@ const Template4 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -76,10 +76,11 @@ useEffect(()=>{
             </div>
            </div>
            <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold text-blue-700">
+            <h1 className="text-4xl font-bold">CURRICULUM VITAE</h1>
+            <h2 className="text-2xl font-bold text-blue-700">
               {candidate.applicant_profile?.[0]?.first_name || "N/A"}
               , {candidate.applicant_profile?.[0]?.last_name || "N/A"}
-            </h1>
+            </h2>
           </div>
           
           <div className="grid grid-cols-12 items-center mt-8">
@@ -160,14 +161,9 @@ useEffect(()=>{
                                 : "Present"}
                             </p>
                             {/* Uncomment if necessary */}
-                            {/* <p className="flex">
-                              <span className="font-bold mt-3">Responsibilities:</span>
-                              <span
-                                dangerouslySetInnerHTML={{
-                                  __html: position?.responsibility,
-                                }}
-                              ></span>
-                            </p> */}
+                             <p className="flex">
+                              <span className=" mt-3">Responsibilities: {position?.responsibility || 'No responsibility'} </span> 
+                            </p> 
                             {/* <p>
                               <span className="font-bold">Reason for leaving:</span>{" "}
                               {position.reason_for_leaving || "Not Specified"}
@@ -327,6 +323,30 @@ useEffect(()=>{
                   <p className="flex space-x-2">
                     <i>{item?.proficiency?.proficiency_name || "Proficiency Not Specified"}</i>,{" "}
                     <span>{item?.organization?.organization_name || "Organization Not Specified"}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Proficiency Qualification Section */}
+          {candidate.training?.length > 0 && (
+            <div className="mt-6">
+              <h1 className="font-bold mt-5 mb-1 text-lg" style={{ color: "rgb(46, 88, 166)" }}>
+                TRAINING QUALIFICATION
+              </h1>
+              <div className="h-[2px] bg-gray-100 mb-2"></div>
+              {candidate.training.map((item, index) => (
+                <div key={index}>
+                  <p>
+                    <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
+                      {item?.name || 'Unknown Training'}:
+                    </span>{" "}
+                    {formatDate(item?.started) || "Start Date Not Specified"} -{" "}
+                    {formatDate(item?.ended) || "End Date Not Specified"}
+                  </p>
+                  <p className="flex space-x-2">
+                    
+                    <span>{item?.institution || 'Unknown institution'}</span>
                   </p>
                 </div>
               ))}

@@ -25,7 +25,7 @@ const Template4 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response

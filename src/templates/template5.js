@@ -25,7 +25,7 @@ const Template4 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -79,6 +79,7 @@ useEffect(()=>{
            </div>
            <div className="flex flex-col items-center justify-center">
             {/* Candidate Name */}
+            <h1 className="text-4xl font-bold">CURRICULUM VITAE</h1>
             <h1 className="text-3xl font-bold" style={{ color: "rgb(46, 88, 166)" }}>
               {candidate.applicant_profile[0]?.first_name || "First Name"}, {candidate.applicant_profile[0]?.last_name || "Last Name"}
             </h1>
@@ -89,7 +90,7 @@ useEffect(()=>{
             <div className="col-span-5 flex justify-center">
               <img 
                 alt="profile" 
-                src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0]?.picture || "default-profile.png"}`}
+                src={`https://ekazi.co.tz/${candidate.applicant_profile[0]?.picture || "default-profile.png"}`}
                 className="w-48 h-48 object-cover rounded-full border-2 border-gray-300"
               />
             </div>
@@ -103,7 +104,7 @@ useEffect(()=>{
                 { title: "Nationality:", value: "Tanzanian" },
                 { title: "Date of birth:", value: candidate.applicant_profile[0]?.dob || "Not Specified" },
                 { title: "Gender:", value: candidate.applicant_profile[0]?.gender_name || "Not Specified" },
-                { title: "Marital status:", value: candidate.applicant_profile[0]?.marital_status || "Not Specified" },
+ 
               ].map((item, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4">
                   <div className="font-semibold text-gray-700">{item.title}</div>
@@ -179,7 +180,10 @@ useEffect(()=>{
                                 ? new Date(position.end_date).getFullYear()
                                 : "Present"}
                             </p>
-          
+                            <p className="mt-2">
+                              <span className="font-semibold">Responsibilities: </span>
+                              <span dangerouslySetInnerHTML={{ __html: position.responsibility }}></span>
+                            </p>
                             {/* Uncomment below if Responsibilities or Reasons are needed */}
                             {/* <p className="mt-2">
                               <span className="font-semibold">Responsibilities: </span>
@@ -365,7 +369,39 @@ useEffect(()=>{
     </div>
   </div>
 )}
+{candidate.training.length > 0 && (
+  <div className="mt-6">
+    {/* Header */}
+    <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
+      TRAININGS & WORKSHOPS
+    </h1>
+    <div className="h-[2px] bg-gray-200 mb-3"></div>
 
+    {/* Proficiency List */}
+    <div className="space-y-4">
+      {candidate.training.map((item, index) => (
+        <div key={index} className="p-4 bg-gray-50 rounded-md">
+          {/* Award Name */}
+          <p className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
+            {item?.name || "Training Not Specified"}
+          </p>
+
+          {/* Start and End Dates */}
+          <p className="text-gray-700">
+            {item?.started ? formatDate(item.started) : "Start Date Not Specified"} -{" "}
+            {item?.ended ? formatDate(item.ended) : "End Date Not Specified"}
+          </p>
+
+          {/* Proficiency and Organization */}
+          <div className="flex space-x-2 text-gray-700 mt-2">
+         
+            <p>{item?.institution || "Institution Not Specified"}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 {/* Referees Section */}
 {candidate.referees.length > 0 && (
   <div className="mt-6">

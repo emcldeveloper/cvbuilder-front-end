@@ -43,7 +43,7 @@ const Complete = () => {
     
         // Step 1: Save the CV
         axios
-            .post("https://test.ekazi.co.tz/api/applicant/savedCv", sendToData)
+            .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
             .then((saveResponse) => {
                 // Ensure the save operation was successful
                 if (saveResponse.status === 200) {

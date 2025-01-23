@@ -64,7 +64,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         console.log(uuid);
-        axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response) => {
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
             
             if (response != null) {
                 const data = response.data.data
@@ -83,7 +83,7 @@ const MainLayout = () => {
     }, [])
     useEffect(() => {
         console.log(uuid);
-        axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response) => {
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
             if (response != null) {
                 const data = response.data.data
 
@@ -100,7 +100,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         axios
-            .get(`https://test.ekazi.co.tz/api/applicant/CvSubscription`)
+            .get(`http://127.0.0.1:8000/api/applicant/CvSubscription`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {
@@ -118,7 +118,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         axios
-            .get(`https://test.ekazi.co.tz/api/applicant/CvSubscriptiondata/${uuid}`)
+            .get(`http://127.0.0.1:8000/api/applicant/CvSubscriptiondata/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {
@@ -140,7 +140,7 @@ const MainLayout = () => {
     
         // Step 1: Check if the user already has an active subscription
         axios
-            .get(`https://test.ekazi.co.tz/api/applicant/checksubsription/${subId}`) // Replace with your actual API endpoint
+            .get(`http://127.0.0.1:8000/api/applicant/checksubsription/${subId}`) // Replace with your actual API endpoint
             .then((response) => {
                console.log("check id",response.data);
                 if (response.data.data && response.data.data.length > 0) {
@@ -197,7 +197,7 @@ const MainLayout = () => {
         try {
 
             // Submit form data without manually setting the Content-Type
-            const response = await axios.post('https://test.ekazi.co.tz/api/applicant/savesubsription', paymentData, {
+            const response = await axios.post('http://127.0.0.1:8000/api/applicant/savesubsription', paymentData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -25,7 +25,7 @@ const Template10 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -82,7 +82,7 @@ useEffect(()=>{
       alt={candidate.applicant_profile?.[0]?.picture ? "Profile image" : "Default profile image"}
       src={
         candidate.applicant_profile?.[0]?.picture
-          ? `https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`
+          ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
           : "/default-profile.png" // Fallback image in case of missing profile picture
       }
       className="w-48 h-48 object-cover rounded-full border-2 border-gray-300"
@@ -93,7 +93,7 @@ useEffect(()=>{
     {/* Name and Contact Details */}
     <div className="ml-8 flex-grow">
       <h1 className="text-4xl font-bold text-blue-900">
-        {candidate.applicant_profile?.[0]?.first_name} {candidate.applicant_profile?.[0]?.last_name}
+        {candidate.applicant_profile[0]?.first_name} {candidate.applicant_profile[0]?.last_name}
       </h1>
       
       <p className="text-gray-600 text-lg mt-2">
@@ -101,7 +101,7 @@ useEffect(()=>{
       </p>
       
       <p className="text-gray-600 text-lg">
-        ✉️ {candidate.applicant_profile?.[0]?.email || "Not provided"}
+        ✉️ {candidate.applicant_profile[0]?.email || "Not provided"}
       </p>
     
       <div className="mt-2">

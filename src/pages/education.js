@@ -198,7 +198,7 @@ const Educations = () => {
         try {
 
             // Submit form data without manually setting the Content-Type
-            const response = await axios.post('https://test.ekazi.co.tz/api/applicant/educationstore', sendToData, {
+            const response = await axios.post('https://ekazi.co.tz/api/applicant/educationstore', sendToData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -248,7 +248,7 @@ const Educations = () => {
             if (result.isConfirmed) {
                 try {
                     console.log("delete education :", id);
-                    const response = await axios.delete(`https://test.ekazi.co.tz/api/applicant/deleteeducation/${id}`);
+                    const response = await axios.delete(`https://ekazi.co.tz/api/applicant/deleteeducation/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -286,7 +286,7 @@ const Educations = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/hideeducation/${id}`);
+                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideeducation/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -313,7 +313,7 @@ const Educations = () => {
     const handleUpdate = async (id, updateData) => {
         try {
             console.log("update education is available 00005 ",updateData);
-            const response = await axios.post(`https://test.ekazi.co.tz/api/applicant/updateeducation/${id}`, updateData,
+            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updateeducation/${id}`, updateData,
                 {
                     headers: {
                         'Content-Type': 'application/json',

@@ -70,7 +70,7 @@ function App() {
    <Route path='/template7/:uuid' element={<Template7/>}/>
    <Route path='/template8/:uuid' element={<Template8/>}/>
    <Route path='/template9/:uuid' element={<Template9/>}/>
-   10<Route path='/template10/:uuid' element={<Template10/>}/>
+   <Route path='/template10/:uuid' element={<Template10/>}/>
 
    </Routes>
    </BrowserRouter>

@@ -148,7 +148,7 @@ const Languages = () => {
 
         e.preventDefault();
         console.log('send data for language purpose :', sendTOdata);
-        const response = await axios.post('https://test.ekazi.co.tz/api/applicant/storeLanguage', sendTOdata, {
+        const response = await axios.post('https://ekazi.co.tz/api/applicant/storeLanguage', sendTOdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -196,7 +196,7 @@ const Languages = () => {
                 if (result.isConfirmed) {
                     try {
 
-                        const response = await axios.delete(`https://test.ekazi.co.tz/api/applicant/languagedelete/${id}`);
+                        const response = await axios.delete(`https://ekazi.co.tz/api/applicant/languagedelete/${id}`);
 
                         if (response.status === 200) {
                             Swal.fire({

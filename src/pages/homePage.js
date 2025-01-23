@@ -102,57 +102,67 @@ const HomePage = () => {
  
     //     setShowModal(false); 
     //     }
-    const handleSaveAndDownload = () => {
-      setDownloading(true); // Start loading indicator
-  
-      console.log("CV name:", cvName);
-  
-      // Step 1: Save the CV
-      axios
-          .post("https://test.ekazi.co.tz/api/applicant/savedCv", sendToData)
-          .then((saveResponse) => {
-              // Ensure the save operation was successful
-              if (saveResponse.status === 200) {
-                  Swal.fire({
-                      title: "Success!",
-                      text: saveResponse.data.success,
-                      icon: "success",
-                      confirmButtonText: "OK",
-                  });
-  
-                  // Step 2: Generate the PDF and get the link
-                  return axios.get(
-                      `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`
-                  );
-              } else {
-                  throw new Error("Failed to save CV. Please try again.");
-              }
-          })
-          .then((generateResponse) => {
-              // Handle the response from the PDF generation
-              const link = generateResponse?.data?.body?.link;
-              if (link) {
-                  window.open(link, "_blank"); // Open the link in a new tab
-              } else {
-                  throw new Error("Failed to generate PDF link.");
-              }
-          })
-          .catch((error) => {
-              // Handle any errors in the process
-              console.error("Error occurred during saving or downloading the CV:", error);
-              Swal.fire({
-                  title: "Error!",
-                  text: error.message || "An error occurred. Please try again.",
-                  icon: "error",
-                  confirmButtonText: "OK",
-              });
-          })
-          .finally(() => {
-              setDownloading(false); // Stop loading indicator
-              setShowModal(false); // Close modal
-          });
-  };
-  
+   const handleSaveAndDownload = () => {
+    if (!cvName || !sendToData || !template || !uuid) {
+        console.error("Missing required data: cvName, sendToData, template, or uuid.");
+        Swal.fire({
+            title: "Error!",
+            text: "Required data is missing. Please fill in all fields.",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+        return;
+    }
+
+    setDownloading(true); // Start loading indicator
+
+    console.log("CV Name:", cvName);
+
+    // Step 1: Save the CV
+    axios
+        .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
+        .then((saveResponse) => {
+            console.log("Save Response:", saveResponse);
+
+            if (saveResponse.status === 200 && saveResponse.data.success) {
+                // Step 2: Generate the PDF
+                return axios.get(
+                    `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`
+                );
+            } else {
+                throw new Error(
+                    saveResponse.data.message || "Failed to save CV. Please try again."
+                );
+            }
+        })
+        .then((generateResponse) => {
+            console.log("Generate Response:", generateResponse);
+
+            const link = generateResponse?.data?.body?.link;
+            if (link) {
+                setDownloading(false); // Stop loading indicator
+                window.open(link, "_blank"); // Open the link in a new tab
+            } else {
+                throw new Error("Failed to generate PDF link. Please try again.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error during save or download process:", error);
+            Swal.fire({
+                title: "Error!",
+                text: error.message || "An unexpected error occurred. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        })
+        .finally(() => {
+            setDownloading(false); // Stop loading indicator
+            if (showModal) {
+                setShowModal(false); // Close modal
+            }
+        });
+};
+
               
            
 

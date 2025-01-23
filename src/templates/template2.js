@@ -3,6 +3,7 @@ import { StepsContext } from "../layouts/mainLayout";
 import { useParams } from "react-router-dom";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import axios from 'axios';
+import moment from "moment";
 
 const Template2 = () => {
     const cv  = useRef()
@@ -15,7 +16,7 @@ const Template2 = () => {
     
     useEffect(() => {
         // Fetch data from the API
-        axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+        axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
           .then((response) => {
             if (response?.data?.data) {
               setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -62,7 +63,7 @@ const Template2 = () => {
               <div>
                 <img 
                   alt="profile image" 
-                  src={`https://test.ekazi.co.tz/${candidate.applicant_profile[0]?.picture}`}
+                  src={`https://ekazi.co.tz/${candidate.applicant_profile[0]?.picture}`}
                   className="w-48 h-48 object-cover"
                 />
               </div>
@@ -230,6 +231,11 @@ const Template2 = () => {
                                           : new Date(positionItem.end_date).getFullYear()
                                         : 'N/A'}
                                     </p>
+                                    <p className="mt-2">
+                                      <span className="font-semibold">Responsibilities: </span>
+                                      <span dangerouslySetInnerHTML={{ __html: positionItem.responsibility }}></span>
+                                    </p>
+                                    
                                   </div>
                                 </div>
                               ))
@@ -397,12 +403,13 @@ const Template2 = () => {
                     {candidate?.proficiency?.length > 0 ? (
                       candidate.proficiency.map((item, index) => (
                         <div key={index} className="flex">
-                          <div className="w-4/12">
+                          <div className="w-5/12">
                             <p className="font-bold">
-                              {item?.started || 'Unknown Start'} - {item?.ended || 'Present'}
+                              {moment(item?.started || 'Unknown Start').format("YYYY-MM")}- {moment(item?.ended || 'Present').format("YYYY-MM")}
+                             
                             </p>
                           </div>
-                          <div className="w-8/12">
+                          <div className="w-7/12">
                             <p>
                               <span className="font-bold">{item?.award || 'Unknown Award'}</span>
                             </p>
@@ -438,24 +445,22 @@ const Template2 = () => {
                     <h1 className="font-bold text-lg">TRAININGS AND WORKSHOPS</h1>
                   </div>
                   <div className="col-span-8">
-                    {candidate?.proficiency?.length > 0 ? (
-                      candidate.proficiency.map((item, index) => (
+                    {candidate?.training?.length > 0 ? (
+                      candidate.training.map((item, index) => (
                         <div key={index} className="flex">
-                          <div className="w-4/12">
+                          <div className="w-5/12">
                             <p className="font-bold">
                               {item?.started || 'Unknown Start'} - {item?.ended || 'Present'}
                             </p>
                           </div>
-                          <div className="w-8/12">
-                            <p>
-                              <span className="font-bold">{item?.award || 'Unknown Award'}</span>
-                            </p>
+                          <div className="w-7/12">
+                            
                             <p className="text-orange-500">
-                              {item?.organization?.organization_name || 'Unknown Organization'}
+                              {item?.institution || 'Unknown institution'}
                             </p>
                             <p className="flex space-x-2">
-                              <span className="font-bold">Proficiency:</span>
-                              <span>{item?.proficiency?.proficiency_name || 'Unknown Proficiency'}</span>
+                              <span className="font-bold">Training:</span>
+                              <span>{item?.name || 'Unknown Training'}</span>
                             </p>
                           </div>
                         </div>
@@ -485,7 +490,7 @@ const Template2 = () => {
               <div className="col-span-8">
                 {candidate?.referees?.length > 0 ? (
                   candidate.referees.map((item, index) => (
-                    <div key={index} className="grid grid-cols-3">
+                    <div key={index} className="grid grid-cols-2">
                       <div>
                         <p>
                           <span className="font-bold">

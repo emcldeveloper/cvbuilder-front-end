@@ -7,7 +7,7 @@ import Spinner from "../widgets/spinner";
 import PageLoader from "../widgets/pageLoader";
 import axios from 'axios';
 
-const Template4 = () => {
+const Template6 = () => {
  
   const cv  = useRef()
   const {uuid,template} = useParams()
@@ -25,7 +25,7 @@ const Template4 = () => {
   console.log("checjk verifcation:",isVerified);
   useEffect(() => {
     // Fetch data from the API
-    axios.get(`https://test.ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
       .then((response) => {
         if (response?.data?.data) {
           setCandidate(response.data.data);  // Set the candidate data from the API response
@@ -101,7 +101,7 @@ useEffect(()=>{
                     item.positions.map((position, posIndex) => (
                       <li key={posIndex}>
                         <p className="font-bold">
-                          {position?.position_name || 'Position Not Specified'}
+                          {position.position?.position_name || "Position Not Specified"}
                         </p>
                         <p className="text-gray-600">
                           {position?.start_date ? new Date(position.start_date).getFullYear() : 'Start Date Not Available'} -{' '}
@@ -196,6 +196,39 @@ useEffect(()=>{
           <p className="text-gray-700">No proficiency qualifications available.</p>
         </div>
       )}
+      {candidate?.training?.length > 0 ? (
+        <div className="mt-6">
+          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
+            TRAININGS & WORKSHOPS
+          </h1>
+          <div className="h-[2px] bg-gray-200 mb-3"></div>
+          <div className="space-y-4">
+            {candidate.training?.map((item, index) => (
+              <div key={index} className="p-4 rounded-md">
+                <p className="font-bold">
+                  {item?.name || 'Award Not Available'}:
+                </p>
+                <p className="text-gray-700">
+                  {item?.started ? formatDate(item.started) : 'Start Date Not Available'} - 
+                  {item?.ended ? formatDate(item.ended) : 'End Date Not Available'}
+                </p>
+                <div className="flex space-x-2 text-gray-700 mt-2">
+             
+                  <p>{item?.institution || 'Institution Name Not Available'}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
+            PROFICIENCY QUALIFICATION
+          </h1>
+          <div className="h-[2px] bg-gray-200 mb-3"></div>
+          <p className="text-gray-700">No proficiency qualifications available.</p>
+        </div>
+      )}
       
   
     </div>
@@ -212,7 +245,7 @@ useEffect(()=>{
         alt="profile image"
         src={
           candidate?.applicant_profile?.[0]?.picture
-            ? `https://test.ekazi.co.tz/${candidate.applicant_profile[0].picture}`
+            ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
             : 'path_to_default_image_or_placeholder.jpg' // Fallback image if no profile picture exists
         }
         className="w-48 h-48 object-cover rounded-full border-2 border-gray-300"
@@ -407,4 +440,4 @@ useEffect(()=>{
     </div> ));
 }
  
-export default Template4;
+export default Template6;
