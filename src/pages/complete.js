@@ -56,7 +56,7 @@ const Complete = () => {
     
                     // Step 2: Generate the PDF and get the link
                     return axios.get(
-                        `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`
+                        `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
                     );
                 } else {
                     throw new Error("Failed to save CV. Please try again.");
