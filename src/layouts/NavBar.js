@@ -60,7 +60,7 @@ const NavBar = ({ openModal }) => {
                         }}
                         className="text-black font-semibold hover:text-blue-600 transition"
                     >
-                        Template
+                       Cv Templates
                     </a>
                     <a
                       

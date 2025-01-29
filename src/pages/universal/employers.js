@@ -1,16 +1,16 @@
 import React, { useState, useEffect, memo } from 'react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 
-const  Employers = ({ label = "Select a position", onSelect, initialValue }) => {
+const Positions = ({ label = "Select a position", onSelect, initialValue }) => {
   const [options, setOptions] = useState([]); // Store fetched options
-  const [selected, setSelected] = useState(null); // To store the selected option
+  const [selected, setSelected] = useState(initialValue || null); // To store the selected option
   const [error, setError] = useState(null); // For error handling
   const [loading, setLoading] = useState(false); // For loading state
   const [page, setPage] = useState(1); // Current page
   const [totalPages, setTotalPages] = useState(1); // Total pages for pagination
 
   // Fetch positions for the current page
-  const fetchEmployers = async (inputValue = '', page = 1) => {
+  const fetchPositions = async (inputValue = '', page = 1) => {
     setLoading(true);
     try {
       const response = await fetch(`https://ekazi.co.tz/api/applicant/applicant_employer?search=${inputValue}&page=${page}&perPage=10`);
@@ -22,6 +22,9 @@ const  Employers = ({ label = "Select a position", onSelect, initialValue }) => 
         label: applicant_employer.employer_name.trim() // Remove leading/trailing spaces
       }));
 
+   
+
+    
       setOptions((prevOptions) => [...prevOptions, ...formattedData]); // Append new data to options
       setPage(data.current_page); // Update current page
       setTotalPages(data.last_page); // Update total pages
@@ -36,20 +39,28 @@ const  Employers = ({ label = "Select a position", onSelect, initialValue }) => 
   // Load options for search filtering
   const loadOptions = (inputValue, callback) => {
     setOptions([]); // Clear options before new search
-    fetchEmployers(inputValue, 1); // Start with the first page when searching
+    fetchPositions(inputValue, 1); // Start with the first page when searching
     callback(options); // Return options to AsyncSelect
   };
 
   // Load more options when scrolling (pagination)
   const loadMoreOptions = () => {
     if (loading || page >= totalPages) return; // Prevent multiple requests while loading or at last page
-    fetchEmployers('', page + 1); // Fetch the next page
+    fetchPositions('', page + 1); // Fetch the next page
   };
 
   // Fetch initial options when component mounts
   useEffect(() => {
-    fetchEmployers(); // Initially fetch all options
+    fetchPositions(); // Initially fetch all options
   }, []);
+
+  // Handle selection change
+  const handleSelect = (selectedOption) => {
+    setSelected(selectedOption); // Update local state
+    if (onSelect) {
+      onSelect(selectedOption); // Pass selected option to parent component
+    }
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -60,7 +71,7 @@ const  Employers = ({ label = "Select a position", onSelect, initialValue }) => 
       <div className="select-container">
         <AsyncCreatableSelect
           value={selected}
-          onChange={setSelected}
+          onChange={handleSelect} // Pass the handleSelect function to onChange
           loadOptions={loadOptions}
           onMenuScrollToBottom={loadMoreOptions} // Load more when scrolling to the bottom
           placeholder={label}
@@ -88,4 +99,4 @@ const  Employers = ({ label = "Select a position", onSelect, initialValue }) => 
   );
 };
 
-export default memo(Employers);
+export default memo(Positions);

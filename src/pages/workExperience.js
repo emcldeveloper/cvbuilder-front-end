@@ -295,8 +295,8 @@ const WorksExperiences = () => {
     e.preventDefault();
     console.log('send data  to  experince:', sendToData)
     try {
-
-      const response = await axios.post(`https://ekazi.co.tz/api/applicant/experiencestore`, sendToData,
+    
+      const response = await axios.post(`http://127.0.0.1:8000/api/applicant/experiencestoreyy`, sendToData,
         {
           headers: {
             'Content-Type': 'application/json',

@@ -126,8 +126,9 @@ const HomePage = () => {
 
             if (saveResponse.status === 200 && saveResponse.data.success) {
                 // Step 2: Generate the PDF
+                // candidate.applicant_profile[0].first_name
                 return axios.get(
-                    `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${candidate.applicant_profile[0].first_name}`
+                    `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
                 );
             } else {
                 throw new Error(
