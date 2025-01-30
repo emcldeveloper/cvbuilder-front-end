@@ -114,7 +114,7 @@ const HomePage = () => {
         return;
     }
 
-
+  
 
     console.log("CV Name:", cvName);
     const newTab = window.open("", "_blank"); // Open a blank tab immediately
@@ -137,15 +137,20 @@ const HomePage = () => {
             }
         })
         .then((generateResponse) => {
-            const newTab = window.open("", "_blank"); // Open a blank tab immediately
             console.log("Generate Response:", generateResponse);
 
             const link = generateResponse?.data?.body?.link;
-            if (link && newTab) {
-                newTab.location.href = link; // Update URL after fetching the link
-                setDownloading(false); // Stop loading indicator
-          
-             
+            if (link) {
+              
+       
+                // const newTab = window.open("", "_blank"); // Open a blank tab immediately
+                // window.open(link, "_blank"); // Open the link in a new tab
+                if (newTab) {
+                    newTab.location.href = link; // Update URL after fetching the link
+                    setDownloading(false); // Stop loading indicator
+                } else {
+                    alert("Pop-up blocked! Please allow pop-ups for this site.");
+                }
             } else {
                 throw new Error("Failed to generate PDF link. Please try again.");
             }
