@@ -37,6 +37,7 @@ const Complete = () => {
       };
     
       const handleSaveAndDownload = () => {
+        const newTab = window.open("", "_blank"); // Open a blank tab immediately
         setDownloading(true); // Start loading indicator
     
         console.log("CV name:", cvName);
@@ -66,7 +67,13 @@ const Complete = () => {
                 // Handle the response from the PDF generation
                 const link = generateResponse?.data?.body?.link;
                 if (link) {
-                    window.open(link, "_blank"); // Open the link in a new tab
+                    // window.open(link, "_blank"); // Open the link in a new tab
+                    if (newTab) {
+                        newTab.location.href = link; // Update URL after fetching the link
+                        setDownloading(false); // Stop loading indicator
+                    } else {
+                        alert("Pop-up blocked! Please allow pop-ups for this site.");
+                    }
                 } else {
                     throw new Error("Failed to generate PDF link.");
                 }
