@@ -123,10 +123,9 @@ const HomePage = () => {
         .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
         .then((saveResponse) => {
             console.log("Save Response:", saveResponse);
-
+            const newTab = window.open("", "_blank"); // Open a blank tab immediately
             if (saveResponse.status === 200 && saveResponse.data.success) {
-                // Step 2: Generate the PDF
-                // candidate.applicant_profile[0].first_name
+              
                 return axios.get(
                     `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
                 );
@@ -143,7 +142,7 @@ const HomePage = () => {
             if (link) {
               
                 setDownloading(false); // Stop loading indicator
-                const newTab = window.open("", "_blank"); // Open a blank tab immediately
+                // const newTab = window.open("", "_blank"); // Open a blank tab immediately
                 // window.open(link, "_blank"); // Open the link in a new tab
                 if (newTab) {
                     newTab.location.href = link; // Update URL after fetching the link
