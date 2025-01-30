@@ -117,7 +117,7 @@ const HomePage = () => {
     setDownloading(true); // Start loading indicator
 
     console.log("CV Name:", cvName);
-    const newTab = window.open("", "_blank"); // Open a blank tab immediately
+    // const newTab = window.open("", "_blank"); // Open a blank tab immediately
     // Step 1: Save the CV
     axios
         .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
@@ -136,6 +136,7 @@ const HomePage = () => {
             }
         })
         .then((generateResponse) => {
+            const newTab = window.open("", "_blank"); // Open a blank tab immediately
             console.log("Generate Response:", generateResponse);
 
             const link = generateResponse?.data?.body?.link;
