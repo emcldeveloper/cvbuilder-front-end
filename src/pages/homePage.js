@@ -114,10 +114,11 @@ const HomePage = () => {
         return;
     }
 
-    setDownloading(true); // Start loading indicator
+
 
     console.log("CV Name:", cvName);
-    // const newTab = window.open("", "_blank"); // Open a blank tab immediately
+    const newTab = window.open("", "_blank"); // Open a blank tab immediately
+    setDownloading(true); // Start loading indicator
     // Step 1: Save the CV
     axios
         .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
@@ -140,16 +141,11 @@ const HomePage = () => {
             console.log("Generate Response:", generateResponse);
 
             const link = generateResponse?.data?.body?.link;
-            if (link) {
-              
+            if (link && newTab) {
+                newTab.location.href = link; // Update URL after fetching the link
                 setDownloading(false); // Stop loading indicator
-                // const newTab = window.open("", "_blank"); // Open a blank tab immediately
-                // window.open(link, "_blank"); // Open the link in a new tab
-                if (newTab) {
-                    newTab.location.href = link; // Update URL after fetching the link
-                } else {
-                    alert("Pop-up blocked! Please allow pop-ups for this site.");
-                }
+          
+             
             } else {
                 throw new Error("Failed to generate PDF link. Please try again.");
             }
