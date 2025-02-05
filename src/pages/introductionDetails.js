@@ -6,6 +6,7 @@ import { firestore } from "../utils/firebase";
 import PageLoader from "../widgets/pageLoader";
 import { useState } from "react";
 import axios from "axios";
+import HideInfo from '../layouts/useHideFields';
 
 const IntroductionDetails = () => {
   const { currentStep, setCurrentStep, originalDetails, candidate, setCandidate } = useContext(StepsContext)
@@ -231,6 +232,7 @@ const IntroductionDetails = () => {
           <p className="text-lg text-gray-500 mt-2">Edit introduction details here</p>
         </div>
         <div>
+        <HideInfo uuid={uuid} template={template} />
           <div className="bg-white rounded-full">
             <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Step 2</button>
           </div>

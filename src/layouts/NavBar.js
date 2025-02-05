@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 import FromReactPdf from "../templates/fromReactPdf";
 import axios from "axios";
 import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import HideInfo from './useHideFields';
 
 
 const NavBar = ({ openModal }) => {
@@ -32,6 +33,7 @@ const NavBar = ({ openModal }) => {
                     >
                         Home
                     </a>
+                
                     <a
                   
                         onClick={() => {

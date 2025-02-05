@@ -6,6 +6,7 @@ import { firestore } from "../utils/firebase";
 import PageLoader from "../widgets/pageLoader";
 import axios from "axios";
 import { checkIfExists } from "../controllers/apisController";
+import HideInfo from '../layouts/useHideFields';
 
 const ProfessionalSummary = () => {
   const { currentStep, setCurrentStep, candidate, setCandidate } = useContext(StepsContext)
@@ -134,6 +135,7 @@ const ProfessionalSummary = () => {
           <div>
             <h1 className="font-bold text-3xl">Professional Summary</h1>
             <p className="text-lg text-gray-500 mt-2">Edit professional summary here</p>
+            <HideInfo uuid={uuid} template={template} />
           </div>
           <div>
             <div className="bg-white rounded-full">

@@ -7,6 +7,11 @@ import Spinner from "../widgets/spinner";
 import PageLoader from "../widgets/pageLoader";
 import axios from 'axios';
 import moment from "moment";
+import HideInfo from '../layouts/useHideFields';
+import { useLocation } from 'react-router-dom';
+ 
+import { useHideFields } from '../layouts/HideFieldsContext';
+
 
 const Template1 = () => {
  
@@ -16,6 +21,8 @@ const Template1 = () => {
   const [show, setShow] = useState(false);
   const [pages, setPages] = useState(false);
   const [experiences,setExperiences] = useState([])
+  // Access hideFields from the navigation state
+  const { hideFields } = useHideFields();
 
   const isVerified = candidate?.subscription?.verify === 1;
   console.log("checjk verifcation:",isVerified);
@@ -43,6 +50,37 @@ useEffect(()=>{
      })
   }
 },[candidate,experiences])
+const processText = (text) => {
+  return text
+    // Split on multiple sentence separators
+    .split(/(?<=[.])|(?=\d+\.)/g)
+    // Group items and clean
+    .reduce((acc, item) => {
+      const trimmed = item.trim();
+      if (!trimmed) return acc;
+      
+      // Check if item starts with number
+      if (/^\d+\./.test(trimmed)) {
+        acc.push(trimmed);
+      } else {
+        // Append to previous item if exists
+        acc.length > 0 
+          ? acc[acc.length - 1] += ` ${trimmed}`
+          : acc.push(trimmed);
+      }
+      return acc;
+    }, [])
+    // Final cleanup
+    .map(item => {
+      const cleaned = item
+        .replace(/^\d+\.\s*/, '')
+        .replace(/([^.])$/, '$1.') // Add period if missing
+        .trim();
+      
+      return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    })
+    .filter(item => item.length > 1);
+};
 
     return ( !show? <PageLoader/>: candidate == null?<div className="flex justify-center items-center">
       <p className="pt-12 text-gray-300">Oops! No Content</p>
@@ -74,7 +112,9 @@ useEffect(()=>{
 
   {/* Check if `applicant_profile` exists and has a valid `first_name` */}
   <h1 className="text-xl font-bold mt-3">
-    {candidate.applicant_profile?.[0]?.first_name || "No Name Provided"}
+    {hideFields.name
+      ? " "
+      : `${candidate.applicant_profile?.[0]?.first_name || "No Name Provided"} ${candidate.applicant_profile?.[0]?.middle_name || ""} ${candidate.applicant_profile?.[0]?.last_name || ""}`}
   </h1>
 
   {/* Check if `experience` exists, has at least one item, and the position name is valid */}
@@ -85,45 +125,50 @@ useEffect(()=>{
 
                <div className="grid grid-cols-12 items-center mt-8">
             <div className="col-span-5">
-  {[
-    { title: "Location:", value: "Dar es Salaam" },
-    { 
-      title: "Phone:", 
-      value: candidate.phone?.phone_number ? candidate.phone.phone_number : "Not specified" 
-    },
-    { 
-      title: "Email:", 
-      value: candidate.applicant_profile?.[0]?.email ? candidate.applicant_profile[0].email : "Email not provided" 
-    },
-    { title: "Nationality:", value: "Tanzanian" },
-    {
-      title: "Date of birth:",
-      value: candidate.applicant_profile?.[0]?.dob ? candidate.applicant_profile[0].dob : "Not specified"
-    },
-    {
-      title: "Gender:",
-      value: candidate.applicant_profile?.[0]?.gender_name ? candidate.applicant_profile[0].gender_name : "Not specified"
-    },
-   
-  ].map((item, index) => (
-    <div className="grid grid-cols-2" key={index}>
-      <div>{item.title}</div>
-      <div>{item.value}</div>
-    </div>
-  ))}
+              {[
+                { title: "Location:", value: "Dar es Salaam" },
+                !hideFields.phone && { 
+                  title: "Phone:", 
+                  value: candidate.phone?.phone_number || "Not specified" 
+                },
+                !hideFields.email && { 
+                  title: "Email:", 
+                  value: candidate.applicant_profile?.[0]?.email || "Email not provided" 
+                },
+                { title: "Nationality:", value: "Tanzanian" },
+                {
+                  title: "Date of birth:",
+                  value: candidate.applicant_profile?.[0]?.dob || "Not specified"
+                },
+                {
+                  title: "Gender:",
+                  value: candidate.applicant_profile?.[0]?.gender_name || "Not specified"
+                },
+              ]
+              .filter(Boolean)  // Remove 'false' items from the array
+              .map((item, index) => (
+                <div className="grid grid-cols-2" key={index}>
+                  <div>{item.title}</div>
+                  <div>{item.value}</div>
+                </div>
+              ))}
+              
 </div>
 
                <div className="col-span-7 flex justify-end">
   <div>
-    <img
-      alt="profile image"
-      src={
-        candidate.applicant_profile?.[0]?.picture
-          ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
-          : "https://ekazi.co.tz/default-placeholder.png"
-      }
-      className="w-48 h-48 object-cover"
-    />
+    {!hideFields.picture && (
+      <img
+        alt="profile image"
+        src={
+          candidate.applicant_profile?.[0]?.picture
+            ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
+            : "https://ekazi.co.tz/default-placeholder.png"
+        }
+        className="w-48 h-48 object-cover"
+      />
+    )}
+    
   </div>
 </div>
 
@@ -167,20 +212,34 @@ useEffect(()=>{
                   <p className="font-bold">
                     {position?.position?.position_name || "Position not specified"}
                   </p>
-                  <i>{position?.employer?.employer_name || "Employer name not specified"}</i>
+          
                   <p>
                     {position?.start_date
-                      ? new Date(position.start_date).getFullYear()
+                      ? `${new Date(position.start_date).getFullYear()}-${(new Date(position.start_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.start_date).getDate().toString().padStart(2, '0')}`
                       : "Start date not specified"}{" "}
                     -{" "}
                     {position?.end_date
-                      ? new Date(position.end_date).getFullYear()
+                      ? `${new Date(position.end_date).getFullYear()}-${(new Date(position.end_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.end_date).getDate().toString().padStart(2, '0')}`
                       : "Present"}
                   </p>
+                 
                   <p className="mt-2">
                     <span className="font-semibold">Responsibilities: </span>
-                    <span dangerouslySetInnerHTML={{ __html: position.responsibility }}></span>
+                    <ul className="list-disc pl-6 mt-2 space-y-2">
+                      {(() => {
+                        const text = position.responsibility.trim();
+                        const isNumbered = /^\d+\./.test(text); // Check if it starts with "1.", "2." etc.
+                        
+                        return text
+                          .split(isNumbered ? /\d+\.\s*/g : /(?<=\.)\s+/g) // Choose splitting method
+                          .filter(item => item.trim().length > 0)
+                          .map((item, index) => (
+                            <li key={index} className="mb-2">{item.trim()}</li>
+                          ));
+                      })()}
+                    </ul>
                   </p>
+                  
                   {/* Uncomment and handle null values for these if needed */}
                   {/* <p className="flex">
                     <span className="font-bold mt-3">Responsibilities:</span>
@@ -363,7 +422,7 @@ useEffect(()=>{
   </div>
 )}
 
-{candidate?.referees?.length > 0 && (
+{candidate?.referees?.length > 0 && !hideFields.referee && ( 
   <div className="mt-6">
     <h1 className="font-bold mt-5 mb-1 text-lg">REFEREES</h1>
     <div className="h-[2px] bg-gray-100 mb-2"></div>
@@ -390,6 +449,7 @@ useEffect(()=>{
     </div>
   </div>
 )}
+
 
               </div>
         </div>
