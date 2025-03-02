@@ -88,21 +88,20 @@ const MyCv = () => {
         
         <div>
             
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="font-bold text-3xl">My Cv Downloaded</h1>
+                <div className="p-4 sm:p-6">
+    {/* Header Section */}
+    <div className="flex justify-between items-center">
+        <h1 className="font-bold text-2xl sm:text-3xl">My CV Downloaded</h1>
+    </div>
 
-                </div>
-
-            </div>
-            <div className=" mt-8">
-                <label>My subcription cv</label>
-                <div className="subscription-page">
-
-                </div>
-
-
-            </div>
+    {/* Subscription CV Section */}
+    {/* <div className="mt-8">
+        <label className="block text-lg font-medium text-gray-700 mb-2">My Subscription CV</label>
+        <div className="subscription-page bg-gray-50 p-4 rounded-lg">
+         
+        </div>
+    </div> */}
+    </div>
             <div className="mt-2">
 
                 {/* end table */}

@@ -232,25 +232,32 @@ const Refrees = () => {
     };
 
     return (originalDetails == null || candidate == null ? <PageLoader /> : <div>
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Referees</h1>
-                <p className="text-lg text-gray-500 mt-2">Add or remove refrees here</p>
-            </div>
-            <div>
-                <div className="bg-white rounded-full flex space-x-4">
-                    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                        Step 10
-                    </button>
-                    <button className="py-2 px-4 bg-primary font-bold text-primary bg-opacity-20 rounded-full"
-                        onClick={openModal}>
-                        Add Referee
-                    </button>
-                </div>
+      
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white  rounded-lg mt-3">
+            {/* Left Section: Title & Description */}
+            <div className="text-center sm:text-left">
+                <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Referees</h1>
+                <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+                Add or remove refrees here
+                </p>
             </div>
 
+            {/* Right Section: Buttons */}
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+                Step 10
+                </button>
+
+                {/* Add Experience Button */}
+                <button
+                    className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+                    onClick={openModal}> 
+                
+                    Add Referee
+                </button>
+            </div>
         </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-5">
         {
   originalDetails?.referees?.map((item) => {
     // Safely access properties with optional chaining and provide fallback values
@@ -261,7 +268,11 @@ const Refrees = () => {
     const employer = item?.employer || "Employer not available";
 
     return (
-      <div className="p-5 bg-white border border-gray-200 flex flex-col items-center rounded shadow" key={item?.id}>
+        <div
+        className="p-4 sm:p-5 bg-white border border-gray-200 flex flex-col items-center rounded-lg    transition-all   "
+        key={item?.id}
+      >
+        {/* Profile Icon */}
         <div className="bg-orange-100 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +280,7 @@ const Refrees = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-20 h-20 p-5"
+            className="w-16 h-16 sm:w-20 sm:h-20 p-4 sm:p-5"
           >
             <path
               strokeLinecap="round"
@@ -278,37 +289,50 @@ const Refrees = () => {
             />
           </svg>
         </div>
-        <p className="mt-2">
-          <span className="font-bold capitalize">
+      
+        {/* Name */}
+        <p className="mt-2 text-center">
+          <span className="font-bold capitalize text-lg sm:text-xl">
             {firstName} {middleName} {lastName}
           </span>
         </p>
-        <p>{position}</p>
-        <i>Company: {employer}</i>
-        <div className="flex justify-center">
-          {candidate?.referees?.some((e) => e.id === item?.id) && (
-            <div className="flex space-x-4 mt-3">
-              <div
-                onClick={() => openEditModal(item)}
-                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-              >
-                <FontAwesomeIcon icon={faEdit} className="text-blue-500" /> {/* Edit icon */}
-              </div>
-              <div
-                onClick={() => handleRemove(item?.id)}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-              >
-                <FontAwesomeIcon icon={faTrash} className="text-red-500" /> {/* Remove (delete) icon */}
-              </div>
-              <div
-                onClick={() => handleHide(item?.id)}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-              >
-                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" /> {/* Hide icon */}
-              </div>
-            </div>
-          )}
-        </div>
+      
+        {/* Position */}
+        <p className="text-sm sm:text-base text-gray-600 text-center">Position : {position}</p>
+      
+        {/* Employer */}
+        <p className="text-sm sm:text-base text-gray-600 italic text-center">
+          Company: {employer}
+        </p>
+      
+        {/* Action Icons (Conditional Rendering) */}
+        {candidate?.referees?.some((e) => e.id === item?.id) && (
+          <div className="flex justify-center space-x-4 mt-3">
+            {/* Edit Icon */}
+            <button
+              onClick={() => openEditModal(item)}
+              className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition-all"
+            >
+              <FontAwesomeIcon icon={faEdit} className="w-5 h-5" />
+            </button>
+      
+            {/* Delete Icon */}
+            <button
+              onClick={() => handleRemove(item?.id)}
+              className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all"
+            >
+              <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+            </button>
+      
+            {/* Hide Icon */}
+            <button
+              onClick={() => handleHide(item?.id)}
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-50 transition-all"
+            >
+              <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </div>
     );
   })

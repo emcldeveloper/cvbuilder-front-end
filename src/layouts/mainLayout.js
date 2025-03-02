@@ -3,6 +3,9 @@ import Template1 from "../templates/template1";
 import { createContext, useEffect, useState } from "react";
 import FromReactPdf from "../templates/fromReactPdf";
 import axios from "axios";
+import { FaBars, FaTimes } from "react-icons/fa"; 
+import Sidebar from '../layouts/Sidebar';
+ 
 // import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 // import { firestore } from "../utils/firebase";
 // import { api } from "../utils/apiSample";
@@ -26,6 +29,11 @@ import { Link } from 'react-router-dom';
 
 export const StepsContext = createContext()
 const MainLayout = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+      };
+      
     const [currentStep, setCurrentStep] = useState(0)
     const [showPreview, setShowPreview] = useState(false)
     const [candidate, setCandidate] = useState(null)
@@ -43,9 +51,9 @@ const MainLayout = () => {
     const steps = [
         { title: "Preview" },
         { title: "Introduction" },
-        { title: "Professional Summary" },
+        { title: "Objective" },
         { title: "Education" },
-        { title: "Work Experience" },
+        { title: "Experience" },
         { title: "Skills" },
         { title: "Language" },
         { title: "Proficiency" },
@@ -61,7 +69,7 @@ const MainLayout = () => {
         setIsModalOpen(false);
         setSelected(null);
     }
-
+ 
     useEffect(() => {
         console.log(uuid);
         axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response) => {
@@ -100,7 +108,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         axios
-            .get(`https://ekazi.co.tz/api/applicant/CvSubscription`)
+            .get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {
@@ -241,7 +249,10 @@ const MainLayout = () => {
       
 
         <div className="">
-            <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
+         <Sidebar steps={steps} currentStep={currentStep} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> 
+      
+        <NavBar openModal={() => {}} />
+            {/* <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
                 <div className="">
                     <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi)</h1>
                 </div>
@@ -259,15 +270,24 @@ const MainLayout = () => {
                     })}
                 </div>
 
-            </div>
+            </div> */}
+    
+         
             <div className="w-9/12 ms-auto min-h-screen bg-gray-100">
-                <NavBar openModal={openModal} />
-                <div className=" px-12 py-8 pb-32 pt-20">
+                
+                {/* <div className=" px-12 py-8 pb-32 pt-20">
 
                     <StepsContext.Provider value={{ currentStep, setCurrentStep, candidate, setCandidate, originalDetails }}>
                         <Outlet />
                     </StepsContext.Provider>
 
+                </div> */}
+                <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6 md:py-8 pb-16 sm:pb-24 md:pb-32 pt-10 sm:pt-16 md:pt-20 max-w-full overflow-x-hidden">
+                <StepsContext.Provider
+                    value={{ currentStep, setCurrentStep, candidate, setCandidate, originalDetails }}
+                >
+                    <Outlet />
+                </StepsContext.Provider>
                 </div>
                 {currentStep !== 0 && currentStep !== 11 && <div className="fixed bottom-6 left-0 right-0 py-5">
                     <div className="w-3/12"></div>
@@ -279,7 +299,7 @@ const MainLayout = () => {
                             {showPreview && <div onClick={() => {
                                 // setShowPreview(false)
                             }} className={`inset-0  bg-translate fixed bg-black bg-opacity-30  transition-all duration-500  `}>
-                                <div className="w-full h-full flex justify-center items-center">
+                                <div className="w-full h-full flex justify-center items-center mt-12">
                                     <div className="w-7/12 mx-auto  border-gray-200  bg-white h-[95%] shadow-2xl overflow-y-auto ">
 
                                         <div className=" bg-gray-50">

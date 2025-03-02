@@ -16,10 +16,12 @@ import Template9 from "../templates/template9";
 import Template10 from "../templates/template10";
 import HideInfo from '../layouts/useHideFields';
 import { useLocation } from 'react-router-dom';
+import { FaDownload } from "react-icons/fa";
 
 const HomePage = () => {
     const [downloading, setDownloading] = useState(false)
     const [selectedTemplate, setselectedTemplate] = useState(null)
+    const [donwload, setSub] = useState(null)
     const { currentStep, setCurrentStep, originalDetails, candidate } = useContext(StepsContext)
     const { uuid, template } = useParams()
     const navigate = useNavigate();
@@ -125,9 +127,52 @@ const HomePage = () => {
                 }
             });
     };
-
-
-
+    useEffect(() => {
+        axios
+            .get(`https://ekazi.co.tz/api/applicant/mycv/${uuid}`)
+            .then((response) => {
+                console.log("API Response:", response); // Debug API response
+                if (response) {
+                    const data = response.data.mycv
+                    setSub(data);
+                    console.log("test cv sub", data);
+                } else {
+                    console.error("Unexpected response structure:", response);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching CV Subscription data:", error.message);
+            });
+    }, []); 
+    console.log("check download",donwload);
+    
+    let templateCount = {};
+    let uniqueTemplateCount = 0;
+    let totalUsageSum = 0;
+    
+    if (Array.isArray(donwload)) {
+      donwload.forEach(item => {
+        const templateNo = item.template_no;
+        if (templateNo != null) {  // Skip if template_no is null or undefined
+          templateCount[templateNo] = (templateCount[templateNo] || 0) + 1;
+        }
+      });
+    
+      // Step 2: Count unique templates (avoid redundancy)
+      uniqueTemplateCount = Object.keys(templateCount).length;
+  
+      totalUsageSum = Object.values(templateCount).reduce((sum, count) => sum + count, 0);
+    } else {
+     
+      templateCount = {};
+      uniqueTemplateCount = 0;
+      totalUsageSum = 0;
+    }
+    
+    console.log("Template Usage:", templateCount);
+    console.log("Unique Template Count:", uniqueTemplateCount);
+    console.log("Total Template Usage Count:", totalUsageSum);
+    
 
 
 
@@ -135,29 +180,46 @@ const HomePage = () => {
 
 
     return (<div className=" min-h-screen overflow-x-hidden  ">
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Welcome to CV builder </h1>
-                <p className="text-lg text-gray-500 mt-2">Here is your CV template preview</p>
-            </div>
-            <div>
-                <div className=" flex space-x-2">
-                    <HideInfo uuid={uuid} template={template} />
-                    <button className="bg-white rounded-full">
-                        <button onClick={() => {
-                            navigate(`/introduction/${uuid}/${template}`)
-                        }} className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Edit before downloading</button>
-                    </button>
-                    <button className="bg-white rounded-full">
-                        <button onClick={handleDownloadClick} className="py-2 px-4 bg-primary font-bold  text-white
-              rounded-full">
-                            {downloading ? <Spinner /> : "Save & Download"}
-                        </button>
+<div className="bg-white p-5 rounded-lg shadow-md w-full mt-3">
+  {/* Dashboard Header */}
+  <div className="flex flex-col md:flex-row justify-between items-center">
+    <div className="text-center md:text-left">
+      <h2 className="font-bold text-2xl sm:text-3xl">CV Dashboard</h2>
+      <p className="text-gray-500 text-sm sm:text-base">Manage your CV templates and downloads</p>
+    </div>
+    
+    {/* CV Statistics */}
+    <div className="flex justify-between w-full md:w-auto mt-4 md:mt-0 space-x-4">
+      <div className="bg-gray-100 p-4 rounded-lg text-center shadow-sm w-1/2 md:w-auto">
+        <h3 className="text-xl font-bold"> {totalUsageSum != null ? totalUsageSum : 'N/A'}</h3>
+        <p className="text-xs text-gray-500">Downloads</p>
+      </div>
+      <div className="bg-gray-100 p-4 rounded-lg text-center shadow-sm w-1/2 md:w-auto">
+        <h3 className="text-xl font-bold">{uniqueTemplateCount}</h3>
+        <p className="text-xs text-gray-500">Templates Used</p>
+      </div>
+       
+    </div>
+  </div>
 
-                    </button>
-                </div>
-            </div>
-        </div>
+  {/* Action Buttons */}
+  <div className="flex flex-col md:flex-row mt-6 space-y-4 md:space-y-0 md:space-x-4 w-full">
+    <HideInfo uuid={uuid} template={template} />
+    <button
+      onClick={() => navigate(`/introduction/${uuid}/${template}`)}
+      className="w-full md:w-auto py-2 px-4 bg-primary font-bold text-white rounded-full hover:bg-primary-dark transition"
+    >
+      Edit before downloading
+    </button>
+    <button
+      onClick={handleDownloadClick}
+      className="w-full md:w-auto py-2 px-4 bg-green-500 font-bold text-white rounded-full hover:bg-green-600 transition"
+    >
+      {downloading ? <Spinner /> : "Save & Download"}
+    </button>
+  </div>
+</div>
+
         <div className="flex pt-4">
             <div className=" w-full ms-auto bg-dark">
                 <div className="bg-white pb-16">

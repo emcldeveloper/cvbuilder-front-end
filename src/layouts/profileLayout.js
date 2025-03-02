@@ -67,7 +67,7 @@ useEffect(()=>{
         <div className="">
             <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
                 <div className="">
-                    <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi) </h1>
+                    <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi)  </h1>
                 </div>
               <div className="  mt-8">
               {steps.map((item,index)=>{

@@ -46,25 +46,21 @@ const MySubscription = () => {
     //   originalDetails == null || candidate == null ? <PageLoader />
     return (
         <div>
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="font-bold text-3xl">My CV Subscription</h1>
+        <div className="p-4 sm:p-6">
+  {/* Header Section */}
+  <div className="flex flex-col sm:flex-row justify-between items-center">
+    <h1 className="font-bold text-2xl sm:text-3xl mb-4 sm:mb-0">My CV Subscription</h1>
+   
+  </div>
 
-                </div>
-                <div>
-                    <div className="bg-white rounded-full">
-                        <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Step 3</button>
-                    </div>
-                </div>
-            </div>
-            <div className=" mt-8">
-                <label>My subcription cv</label>
-                <div className="subscription-page">
-
-                </div>
-
-
-            </div>
+  {/* Subscription CV Section */}
+  <div className="mt-8">
+    <label className="block text-lg font-medium text-gray-700 mb-2">My Subscription CV</label>
+    {/* <div className="subscription-page bg-gray-50 p-4 rounded-lg">
+  
+    </div> */}
+  </div>
+</div>
             <div className="mt-2">
                 <div className="overflow-x-auto">
                     <table className="table-auto border-collapse border border-gray-300 w-full text-left">
@@ -114,7 +110,7 @@ const MySubscription = () => {
                                     <td className="border border-gray-300 px-4 py-2">{moment(sub.start_date).format("YYYY-MM-DD ")}</td>
                                     <td className="border border-gray-300 px-4 py-2">{moment(sub.end_date).format("YYYY-MM-DD ")}</td>
                                     <td className="border border-gray-300 px-4 py-2">
-                                    {sub.verify === 0 ? "Pending" : "Active"}
+                                        {sub.verify === 0 ? "Pending" : "Active"}
 
                                     </td>
 

@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHideFields } from '../layouts/HideFieldsContext';
 import { useEffect } from 'react';
+import axios from "axios";
+import Swal from 'sweetalert2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faEyeSlash, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Reusable Modal Component
 const HideModal = ({ hideFields, onFieldChange, onApply, onCancel, onHide }) => {
@@ -88,20 +92,63 @@ const MyComponent = ({ uuid, template }) => {
   // Use object destructuring here
   const { hideFields, setHideFields } = useHideFields();
   const [modalOpen, setModalOpen] = useState(false);
+ 
 
-  const handleApply = () => {
-    console.log("Apply clicked - Check if name is hidden:", hideFields.name);
-    // Create a new object so the state used in navigate is updated immediately.
-    const newHideFields = {
-      name: true,
-      phone: true,
-      email: true,
-      referee: true,
-      picture :true,
-    };
-    setHideFields(newHideFields);
-    setModalOpen(false);
-    navigate(`/introduction/${uuid}/${template}`, { state: { hideFields: newHideFields } });
+  const CvToData = {
+    
+    
+      name : hideFields.name,
+      phone: hideFields.phone,
+      email: hideFields.email,
+      referee: hideFields.referee,
+      picture: hideFields.picture,
+    
+  };
+  const handleApply = async (e) => {
+    console.log("Apply clicked - Check if name is hidden:", CvToData);
+    // // Create a new object so the state used in navigate is updated immediately.
+    // const newHideFields = {
+    //   name: true,
+    //   phone: true,
+    //   email: true,
+    //   referee: true,
+    //   picture :true,
+    // };
+    // setHideFields(newHideFields);
+    // setModalOpen(false);
+    // navigate(`/introduction/${uuid}/${template}`, { state: { hideFields: newHideFields } });
+    e.preventDefault();
+    console.log('send data :', CvToData);
+    const response = await axios.post(' http://127.0.0.1:8000/api/applicant/Hidepersoninfo', CvToData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }
+
+    );
+    try {
+        if (response.status === 200) {
+            console.log(response.data.success);
+            Swal.fire({
+                title: 'Success!',
+                text: response.data.success,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+           // window.location.reload(); // Reloads the entire page
+        }
+    } catch (error) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+
+
+
+    
   };
 
   useEffect(() => {

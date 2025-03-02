@@ -219,10 +219,10 @@ const Training = () => {
     };
     const handleUpdate = async (id, updateData) => {
         try {
-            console.log('update data for training ',updateData);
+            console.log('update data for training ', updateData);
             const response = await axios.post(`https://ekazi.co.tz/api/applicant/updatetraining/${id}`, updateData,
                 {
-                    
+
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -239,7 +239,7 @@ const Training = () => {
             }
 
 
-             window.location.reload(); // Reloads the entire page
+            window.location.reload(); // Reloads the entire page
         } catch (error) {
             console.error('There was an error update the training', error);
             Swal.fire({
@@ -255,75 +255,86 @@ const Training = () => {
 
 
     return (originalDetails == null || candidate == null ? <PageLoader /> : <div>
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Training</h1>
-                <p className="text-lg text-gray-500 mt-2">Add or remove training here</p>
-            </div>
-            <div>
-                <div className="bg-white rounded-full flex space-x-4">
-                    {/* Step 4 Button */}
-                    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                        Step 9
-                    </button>
-
-                    {/* Add Education Button */}
-                    <button
-                        className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all"
-                        onClick={openModel}
-                    >
-                        Add Training
-                    </button>
-                </div>
+     
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+            {/* Left Section: Title & Description */}
+            <div className="text-center sm:text-left">
+                <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Training</h1>
+                <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+                Add or remove training here
+                </p>
             </div>
 
+            {/* Right Section: Buttons */}
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+                Step 9
+                </button>
+
+                {/* Add Experience Button */}
+                <button
+                    className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+                    onClick={openModel}
+                >
+                   Add Training
+                </button>
+            </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 mt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
 
-        {
-  originalDetails?.training?.map((item) => {
-    // Safely access properties with optional chaining and provide fallback values
-    const name = item?.name || "Training name not available";
-    const startedYear = item?.started ? new Date(item.started).getFullYear() : "Start year not available";
-    const endedYear = item?.ended ? new Date(item.ended).getFullYear() : "End year not available";
-    const institution = item?.institution || "Institution not available";
+            {
+                originalDetails?.training?.map((item) => {
+                    // Safely access properties with optional chaining and provide fallback values
+                    const name = item?.name || "Training name not available";
+                    const startedYear = item?.started ? new Date(item.started).getFullYear() : "Start year not available";
+                    const endedYear = item?.ended ? new Date(item.ended).getFullYear() : "End year not available";
+                    const institution = item?.institution || "Institution not available";
 
-    return (
-      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
-        <p>
-          <span className="font-bold">{name}:</span> {startedYear} - {endedYear}
-        </p>
-        <span>{institution}</span>
-        <div className="flex justify-end">
-          {candidate?.training?.some((e) => e.id === item?.id) && (
-            <div className="flex space-x-3 mt-3">
-              {/* Edit Icon */}
-              <FontAwesomeIcon
-                icon={faEdit}
-                className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                onClick={() => openEditModal(item)}
-              />
+                    return (
+                        <div
+                            className="p-4 sm:p-5 bg-white border border-gray-200 rounded-lg     transition-all  "
+                            key={item?.id}
+                        >
+                            {/* Name and Year Range */}
+                            <p className="text-lg font-bold text-gray-800">
+                                {name}: <span className="font-normal text-gray-600">{startedYear} - {endedYear}</span>
+                            </p>
 
-              {/* Delete Icon */}
-              <FontAwesomeIcon
-                icon={faTrash}
-                className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                onClick={() => handleRemove(item?.id)}
-              />
+                            {/* Institution */}
+                            <p className="mt-1 text-sm text-gray-600">{institution}</p>
 
-              {/* Hide Icon */}
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                onClick={() => handleHide(item?.id)}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  })
-}
+                            {/* Action Icons (Conditional Rendering) */}
+                            {candidate?.training?.some((e) => e.id === item?.id) && (
+                                <div className="flex justify-end space-x-3 mt-3">
+                                    {/* Edit Icon */}
+                                    <button
+                                        onClick={() => openEditModal(item)}
+                                        className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition-all"
+                                    >
+                                        <FontAwesomeIcon icon={faEdit} className="w-5 h-5" />
+                                    </button>
+
+                                    {/* Delete Icon */}
+                                    <button
+                                        onClick={() => handleRemove(item?.id)}
+                                        className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all"
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+                                    </button>
+
+                                    {/* Hide Icon */}
+                                    <button
+                                        onClick={() => handleHide(item?.id)}
+                                        className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-50 transition-all"
+                                    >
+                                        <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })
+            }
 
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
@@ -497,7 +508,7 @@ const Training = () => {
                                     onChange={(e) => setEditTraining({ ...editTraining, name: e.target.value })}
 
                                     className="form-input w-full text-xs mt-1 border-gray-300 rounded-md shadow-sm"
-                                 
+
                                 />
                                 {errors.name && <p className="text-red-500">{errors.name[0]}</p>}
                                 {/* <small className="text-gray-500 text-xxs">PDF format only. Max size: 5120 KB.</small> */}
@@ -528,7 +539,7 @@ const Training = () => {
                                 <input name="started"
                                     value={editTraining.started}
                                     onChange={(e) => setEditTraining({ ...editTraining, started: e.target.value })}
-                                     type="date" className="form-input w-full text-xs mt-1 border-gray-300 rounded-md shadow-sm" />
+                                    type="date" className="form-input w-full text-xs mt-1 border-gray-300 rounded-md shadow-sm" />
                                 {errors.started && <p className="text-red-500">{errors.started[0]}</p>}
                             </div>
 
@@ -540,7 +551,7 @@ const Training = () => {
                                 <input name="ended"
                                     value={editTraining.ended}
                                     onChange={(e) => setEditTraining({ ...editTraining, ended: e.target.value })}
-                                     type="date" className="form-input w-full text-xs mt-1 border-gray-300 rounded-md shadow-sm" />
+                                    type="date" className="form-input w-full text-xs mt-1 border-gray-300 rounded-md shadow-sm" />
                                 {errors.ended && <p className="text-red-500">{errors.ended[0]}</p>}
                             </div>
 

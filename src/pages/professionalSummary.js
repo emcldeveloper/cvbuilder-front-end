@@ -129,68 +129,98 @@ const ProfessionalSummary = () => {
     if (Objective) saveObjective();
 
   }, [sendData2, uuid]);
-  return (originalDetails == null || candidate == null ? <PageLoader />
-    : <div>
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="font-bold text-3xl">Professional Summary</h1>
-            <p className="text-lg text-gray-500 mt-2">Edit professional summary here</p>
-            <HideInfo uuid={uuid} template={template} />
-          </div>
-          <div>
-            <div className="bg-white rounded-full">
-              <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Step 3</button>
-            </div>
-          </div>
+  return (
+    originalDetails == null || candidate == null ? (
+      <PageLoader />
+    ) : (
+      <div className="p-4 sm:p-6 md:p-8">
+        {/* Header Section */}
+     
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white  rounded-lg mt-3">
+        {/* Left Section: Title & Description */}
+        <div className="text-center sm:text-left">
+          <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Professional Summary</h1>
+          <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+          Edit professional summary here
+          </p>
         </div>
-        <div className="mt-8">
-  <label>Career Objective</label>
-  {originalDetails?.careers?.[0]?.career || candidate?.careers?.[0]?.career ? (
-    <textarea
-      onInput={handleCareerChange}
-      defaultValue={
-        (originalDetails?.careers?.[0]?.career || "Not specified") ===
-        (candidate?.careers?.[0]?.career || "Not specified")
-          ? originalDetails?.careers?.[0]?.career || "Not specified"
-          : candidate?.careers?.[0]?.career || "Not specified"
-      }
-      className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-    />
-  ) : (
-    <p className="text-gray-500 mt-2">No career objective available</p>
-  )}
-</div>
 
+        {/* Right Section: Buttons */}
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+               
+                <div className="bg-white rounded-full">
+                  <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
+                    Step 3
+                  </button>
+                </div>
+              </div>
+        </div>
+      </div>
+        
   
-        <div className="mt-2">
+        {/* Career Objective Section */}
+        <div className="mt-8">
+          <label>Career Objective</label>
+          {originalDetails?.careers?.[0]?.career || candidate?.careers?.[0]?.career ? (
+            <textarea
+              onInput={handleCareerChange}
+              defaultValue={
+                (originalDetails?.careers?.[0]?.career || "Not specified") ===
+                (candidate?.careers?.[0]?.career || "Not specified")
+                  ? originalDetails?.careers?.[0]?.career || "Not specified"
+                  : candidate?.careers?.[0]?.career || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          ) : (
+            <p className="text-gray-500 mt-2">No career objective available</p>
+          )}
+        </div>
+  
+        {/* Main Objective Section */}
+        <div className="mt-8">
           <label>Main Objective</label>
-          {originalDetails.objective?.objective|| candidate?.objective?.[0]?.objective? (
-          <textarea
-            onInput={handleObjectiveChange}
-            defaultValue={
-              (originalDetails.objective?.objective || "Not specified") ===
-              (candidate.objective?.objective || "Not specified")
-                ? originalDetails.objective?.objective || "Not specified"
-                : candidate.objective?.objective || "Not specified"
-            }
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        ) : (
-          <p className="text-gray-500 mt-2">No Main objective available</p>
-        )}
+          {originalDetails.objective?.objective || candidate?.objective?.[0]?.objective ? (
+            <textarea
+              onInput={handleObjectiveChange}
+              defaultValue={
+                (originalDetails.objective?.objective || "Not specified") ===
+                (candidate.objective?.objective || "Not specified")
+                  ? originalDetails.objective?.objective || "Not specified"
+                  : candidate.objective?.objective || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          ) : (
+            <p className="text-gray-500 mt-2">No Main objective available</p>
+          )}
         </div>
   
-        <div className="flex justify-end space-x-2 mt-4 items-center">
-          <h1 onClick={() => {
-            navigate(-1)
-            setCurrentStep(currentStep - 1)
-          }} className="font-bold text-gray-800 cursor-pointer">Prev</h1>
-          <button onClick={() => {
-            navigate(`/educations/${uuid}/${template}`)
-            setCurrentStep(currentStep + 1)
-          }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
+        {/* Footer Buttons */}
+        <div className="flex justify-end space-x-2 mt-8 items-center">
+          <h1
+            onClick={() => {
+              navigate(-1);
+              setCurrentStep(currentStep - 1);
+            }}
+            className="font-bold text-gray-800 cursor-pointer hover:text-primary transition-all"
+          >
+            Prev
+          </h1>
+          <button
+            onClick={() => {
+              navigate(`/educations/${uuid}/${template}`);
+              setCurrentStep(currentStep + 1);
+            }}
+            className="py-3 px-5 bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white"
+          >
+            Continue
+          </button>
         </div>
-      </div>);
+      </div>
+    )
+  );
   }
   
 export default ProfessionalSummary;

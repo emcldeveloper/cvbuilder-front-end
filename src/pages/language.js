@@ -83,11 +83,14 @@ const Languages = () => {
         setIsModelOpen(true);
     }
     const onClose = () => {
-        setIsShown(false);
+        setIsModelOpen(false);
 
     }
     const onCloseEditModel = () => {
         setIsShown(false);
+    }
+    const onOpeEditModel = () => {
+        setIsShown(true);
     }
     const [initialSelection, setInitialSelection] = useState(null);
 
@@ -300,28 +303,33 @@ const Languages = () => {
     // edit languagr
 
     return (originalDetails == null || candidate == null ? <PageLoader /> : <div>
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Language</h1>
-                <p className="text-lg text-gray-500 mt-2">Add or remove language here</p>
-            </div>
-            <div className="flex space-x-4">
-                <div className="bg-white rounded-full">
-                    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                        Step 7
-                    </button>
-                </div>
-                <div className="bg-white rounded-full">
-                    <button className="py-2 px-4 bg-blue-500 font-bold text-white rounded-full" onClick={openModel}>
-                        Add
-                    </button>
-                </div>
-            </div>
+      
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+  {/* Left Section: Title & Description */}
+  <div className="text-center sm:text-left">
+    <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Language</h1>
+    <p classame="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+    Add or remove language here
+    </p>
+  </div>
 
-        </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
-        {
-  originalDetails?.language?.map((item) => {
+  {/* Right Section: Buttons */}
+  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+  <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+      Step 7
+    </button>
+
+    {/* Add Experience Button */}
+    <button
+      className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+      onClick={openModel}
+    >
+      Add 
+    </button>
+  </div>
+</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
+  {originalDetails?.language?.map((item) => {
     // Safely access language properties using optional chaining and provide fallback values
     const languageName = item?.language?.language_name || "Language name not available";
     const readAbility = item?.read?.read_ability || "Not specified";
@@ -330,48 +338,58 @@ const Languages = () => {
     const understandAbility = item?.understand?.understand_ability || "Not specified";
 
     return (
-      <div className="p-3 bg-white border border-gray-200 rounded shadow" key={item?.id}>
-        <p className="flex space-x-2">
-          <strong>{languageName}</strong>
+      <div
+        className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm mb-4 last:mb-0  transition-all "
+        key={item?.id}
+      >
+        {/* Language Name */}
+        <p className="text-lg font-semibold text-gray-800 mb-3">
+          {languageName}
         </p>
-        <p className="flex space-x-2">
-          <span>Read Ability :</span> <span>{readAbility}</span>
-        </p>
-        <p className="flex space-x-2">
-          <span>Write Ability:</span> <span>{writeAbility}</span>
-        </p>
-        <p className="flex space-x-2">
-          <span>Speak Ability:</span> <span>{speakAbility}</span>
-        </p>
-        <p className="flex space-x-2">
-          <span>Understand Ability:</span> <span>{understandAbility}</span>
-        </p>
-        <div className="flex space-x-4 mt-3">
-          <div
+
+        {/* Language Abilities */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
+          {[
+            { label: "Read Ability", value: readAbility },
+            { label: "Write Ability", value: writeAbility },
+            { label: "Speak Ability", value: speakAbility },
+            { label: "Understand Ability", value: understandAbility },
+          ].map((ability, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center p-2 bg-gray-50 rounded-lg"
+            >
+              <span>{ability.label}:</span>
+              <span className="font-medium">{ability.value}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Action Icons */}
+        <div className="flex justify-end space-x-4 mt-4">
+          <button
+            className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition-all"
             onClick={() => openEditModal(item)}
-            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
           >
-            <FontAwesomeIcon icon={faEdit} />
-          </div>
-          <div
+            <FontAwesomeIcon icon={faEdit} className="text-lg" />
+          </button>
+          <button
+            className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all"
             onClick={() => handleRemove(item?.id)}
-            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
           >
-            <FontAwesomeIcon icon={faTrash} />
-          </div>
-          <div
-            onClick={() => handleHide(item?.id)} // Implement handleHide to hide the language item
-            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+            <FontAwesomeIcon icon={faTrash} className="text-lg" />
+          </button>
+          <button
+            className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-50 transition-all"
+            onClick={() => handleHide(item?.id)}
           >
-            <FontAwesomeIcon icon={faEyeSlash} />
-          </div>
+            <FontAwesomeIcon icon={faEyeSlash} className="text-lg" />
+          </button>
         </div>
       </div>
     );
-  })
-}
-
-        </div>
+  })}
+</div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
             <h1 onClick={() => {
                 navigate(-1)
@@ -567,7 +585,7 @@ const Languages = () => {
                         <div className="flex justify-end mt-4 space-x-4">
                             <button
                                 type="button"
-                                onClick={onClose}
+                                onClick={onCloseEditModel}
                                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
                                 Close

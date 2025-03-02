@@ -343,144 +343,72 @@ const Skills = () => {
       }
     });
   };
-
+   {/* Culture Section */}
+   const sections = [
+    { title: "Culture", data: originalDetails?.culture, key: "culture", handler: hideculture },
+    { title: "Tools", data: originalDetails?.tools, key: "tool", handler: hidetool },
+    { title: "Personality", data: originalDetails?.applicant_personality, key: "personality", handler: hidepersonality },
+    { title: "Softwares", data: originalDetails?.software, key: "software", handler: hidesoftware },
+    { title: "Skills & Knowledge", data: originalDetails?.knowledge, key: "knowledge", handler: hideknowledge },
+  ];
+  
 
 
   return (originalDetails == null || candidate == null ? <PageLoader />
     : <div>
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="font-bold text-3xl">Skills</h1>
-          <p className="text-lg text-gray-500 mt-2">Add or remove skills here</p>
+   
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+  {/* Left Section: Title & Description */}
+  <div className="text-center sm:text-left">
+    <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Skills</h1>
+    <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+    Add or remove skills here
+    </p>
+  </div>
+
+  {/* Right Section: Buttons */}
+  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+  <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+      Step 6
+    </button>
+
+    {/* Add Experience Button */}
+    <button
+      className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+      onClick={openeditNodel}
+    >
+      Edit
+    </button>
+  </div>
+</div>
+
+<div className="space-y-6">
+    {sections.map((section) => (
+      <div key={section.key}>
+        <p className="mt-2 font-semibold text-lg">{section.title}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-2">
+          {section.data?.map((item) => {
+            const itemName = item?.[section.key]?.[`${section.key}_name`] || `${section.title} name not available`;
+            return (
+              <div
+                key={item?.id}
+                className="flex items-center justify-between space-x-2 py-2 px-3 bg-white border border-gray-200 rounded-full cursor-pointer hover:scale-105 transition-all"
+              >
+                <h1 className="text-sm">{itemName}</h1>
+                <FontAwesomeIcon
+                  icon={faEyeSlash}
+                  className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
+                  onClick={() => section.handler(item?.id)}
+                />
+              </div>
+            );
+          })}
         </div>
-        <div>
-          <div className="bg-white rounded-full flex space-x-4">
-            <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-              Step 6
-            </button>
-            {/* <button
-              className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all"
-              onClick={openModal}
-            >
-              Add skills
-            </button> */}
-            <button
-              className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all"
-              onClick={openeditNodel}
-            >
-              Edit
-            </button>
-          </div>
-        </div>
       </div>
-   {/* Culture Section */}
-<p className="mt-2">Culture</p>
-<div className="flex flex-wrap mt-1">
-  {originalDetails?.culture?.map((item) => {
-    const cultureName = item?.culture?.culture_name || "Culture name not available";
-    return (
-      <div className="flex items-center space-x-2 py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
-        <h1>{cultureName}</h1>
-        {/* Hide Icon */}
-        <FontAwesomeIcon
-          icon={faEyeSlash}
-          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          onClick={() => {
-            hideculture(item?.id);
-            console.log('Hide clicked');
-          }}
-        />
-      </div>
-    );
-  })}
-</div>
+    ))}
+  </div>
 
-{/* Tools Section */}
-<p className="mt-2">Tools</p>
-<div className="flex flex-wrap mt-1">
-  {originalDetails?.tools?.map((item) => {
-    const toolName = item?.tool?.tool_name || "Tool name not available";
-    return (
-      <div className="flex space-x-2 items-center py-2 rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
-        <h1>{toolName}</h1>
-        {/* Hide Icon */}
-        <FontAwesomeIcon
-          icon={faEyeSlash}
-          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          onClick={() => {
-            hidetool(item?.id);
-          }}
-        />
-      </div>
-    );
-  })}
-</div>
 
-{/* Personality Section */}
-<p className="mt-2">Personality</p>
-<div className="flex flex-wrap mt-1">
-  {originalDetails?.applicant_personality?.map((item) => {
-    const personalityName = item?.personality?.personality_name || "Personality name not available";
-    return (
-      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
-        <h1>{personalityName}</h1>
-        {/* Hide Icon */}
-        <FontAwesomeIcon
-          icon={faEyeSlash}
-          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          onClick={() => {
-            hidepersonality(item?.id);
-            console.log('Hide clicked');
-          }}
-        />
-      </div>
-    );
-  })}
-</div>
-
-{/* Softwares Section */}
-<p className="mt-2">Softwares</p>
-<div className="flex flex-wrap mt-1">
-  {originalDetails?.software?.map((item) => {
-    const softwareName = item?.software?.software_name || "Software name not available";
-    return (
-      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
-        <h1>{softwareName}</h1>
-        {/* Hide Icon */}
-        <FontAwesomeIcon
-          icon={faEyeSlash}
-          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          onClick={() => {
-            hidesoftware(item?.id);
-            console.log('Hide clicked');
-          }}
-        />
-      </div>
-    );
-  })}
-</div>
-
-{/* Skills & Knowledge Section */}
-<p className="mt-2">Skills & knowledge</p>
-<div className="flex flex-wrap mt-1">
-  {originalDetails?.knowledge?.map((item) => {
-    const knowledgeName = item?.knowledge?.knowledge_name || "Knowledge name not available";
-    return (
-      <div className="py-2 space-x-2 flex items-center rounded-full px-3 me-2 mb-2 bg-white border border-gray-200 cursor-pointer hover:scale-105 transition-all" key={item?.id}>
-        <h1>{knowledgeName}</h1>
-        {/* Hide Icon */}
-        <FontAwesomeIcon
-          icon={faEyeSlash}
-          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          onClick={() => {
-            hideknowledge(item?.id);
-            console.log('Hide clicked');
-          }}
-        />
-      </div>
-    );
-  })}
-</div>
 
       <div className="flex justify-end space-x-2 mt-4 items-center">
         <h1 onClick={() => {
@@ -494,11 +422,7 @@ const Skills = () => {
       </div>
 
       
-      {isopenEditModel && (
-        <div
-
-          className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50"
-        >
+      {isopenEditModel && ( <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50" >
           <div className="bg-white rounded-lg shadow-lg w-full max-w-sm max-h-[80vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex justify-between items-center p-2 border-b">
@@ -570,14 +494,7 @@ const Skills = () => {
                 {/* Tools Field */}
                 <div className="mb-2">
                   <label className="block text-xs font-medium text-gray-700 mb-1">Tools</label> {/* Reduced font size */}
-                  {/* <select
-                          className="w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500  text-xs py-[1px] px-2 h-14"  
-                          name="tool[]"
-                          multiple
-                        >
-                        
-                        
-                        </select> */}
+            
                   <Tool
                     onChange={handleChange}
                     onSelect={handleSelectedTool}
@@ -605,10 +522,7 @@ const Skills = () => {
               </form>
             </div>
           </div>
-        </div>
-
-
-      )
+        </div>)
 
       }
     </div>);

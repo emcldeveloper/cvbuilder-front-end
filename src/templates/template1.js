@@ -86,133 +86,118 @@ const processText = (text) => {
       <p className="pt-12 text-gray-300">Oops! No Content</p>
     </div> : ( <div  >
       
-        <div className="">
-        
-        <div ref={cv} id="data" className="px-12 pt-8 pb-12 ">
-          {/* Watermark */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-            {candidate.subscription.length < 1 && ( // Render the image only if length is 1 or less
-              <div style={{ textAlign: 'center' }}>
-                <img
-                  src="/logo.png"
-                  alt="Watermark"
-                  className="opacity-1"
-                  style={{ width: '550px', height: '200px' }}
-                />
-              </div>
-            )}
-          
-         
-          
-        
-        
-           </div>
-          <div className="flex flex-col items-center justify-center">
-  <h1 className="text-2xl font-bold">CURRICULUM VITAE</h1>
-
-  {/* Check if `applicant_profile` exists and has a valid `first_name` */}
-  <h1 className="text-xl font-bold mt-3">
-    {hideFields.name
-      ? " "
-      : `${candidate.applicant_profile?.[0]?.first_name || "No Name Provided"} ${candidate.applicant_profile?.[0]?.middle_name || ""} ${candidate.applicant_profile?.[0]?.last_name || ""}`}
-  </h1>
-
-  {/* Check if `experience` exists, has at least one item, and the position name is valid */}
-  <h1>
-    {candidate.experience?.[0]?.position?.position_name || "No Position Available"}
-  </h1>
-</div>
-
-               <div className="grid grid-cols-12 items-center mt-8">
-            <div className="col-span-5">
-              {[
-                { title: "Location:", value: "Dar es Salaam" },
-                !hideFields.phone && { 
-                  title: "Phone:", 
-                  value: candidate.phone?.phone_number || "Not specified" 
-                },
-                !hideFields.email && { 
-                  title: "Email:", 
-                  value: candidate.applicant_profile?.[0]?.email || "Email not provided" 
-                },
-                { title: "Nationality:", value: "Tanzanian" },
-                {
-                  title: "Date of birth:",
-                  value: candidate.applicant_profile?.[0]?.dob || "Not specified"
-                },
-                {
-                  title: "Gender:",
-                  value: candidate.applicant_profile?.[0]?.gender_name || "Not specified"
-                },
-              ]
-              .filter(Boolean)  // Remove 'false' items from the array
-              .map((item, index) => (
-                <div className="grid grid-cols-2" key={index}>
-                  <div>{item.title}</div>
-                  <div>{item.value}</div>
-                </div>
-              ))}
-              
-</div>
-
-               <div className="col-span-7 flex justify-end">
-  <div>
-    {!hideFields.picture && (
-      <img
-        alt="profile image"
-        src={
-          candidate.applicant_profile?.[0]?.picture
-            ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
-            : "https://ekazi.co.tz/default-placeholder.png"
-        }
-        className="w-48 h-48 object-cover"
-      />
+      <div className="px-4 sm:px-6 md:px-8 lg:px-12 pt-4 sm:pt-6 md:pt-8 pb-8 sm:pb-12">
+  {/* Watermark */}
+  <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+    {candidate.subscription.length < 1 && (
+      <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
+        <img
+          src="/logo.png"
+          alt="Watermark"
+          className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
+        />
+      </div>
     )}
-    
   </div>
-</div>
+  
+  
 
-               </div>
-           <div className="mt-6">
-  <h1 className="font-bold mt-5 mb-1 text-lg">PROFESSIONAL SUMMARY</h1>
-  <div className="h-[2px] bg-gray-100 mb-2"></div>
-  <p>
-    {candidate?.careers?.[0]?.career || "Professional summary not specified"}
-  </p>
-  <h1 className="font-bold mt-2">Career Objective</h1>
-  <p>
-    {candidate?.objective?.objective || "Career objective not specified"}
-  </p>
-</div>
+  {/* Header Section */}
+  <div className="flex flex-col items-center justify-center text-center">
+    <h1 className="text-xl sm:text-2xl font-bold">CURRICULUM VITAE</h1>
+    <h1 className="text-lg sm:text-xl font-bold mt-2">
+      {hideFields.name
+        ? " "
+        : `${candidate.applicant_profile?.[0]?.first_name || "No Name Provided"} ${candidate.applicant_profile?.[0]?.middle_name || ""} ${candidate.applicant_profile?.[0]?.last_name || ""}`}
+    </h1>
+    <h1 className="text-base sm:text-lg">
+      {candidate.experience?.[0]?.position?.position_name || "No Position Available"}
+    </h1>
+  </div>
 
-           {experiences?.length > 0 && (
+  {/* Contact Information Section */}
+  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-6">
+    <div className="col-span-1 sm:col-span-5">
+      {[
+        { title: "Location:", value: "Dar es Salaam" },
+        !hideFields.phone && { 
+          title: "Phone:", 
+          value: candidate.phone?.phone_number || "Not specified" 
+        },
+        !hideFields.email && { 
+          title: "Email:", 
+          value: candidate.applicant_profile?.[0]?.email || "Email not provided" 
+        },
+        { title: "Nationality:", value: "Tanzanian" },
+        {
+          title: "Date of birth:",
+          value: candidate.applicant_profile?.[0]?.dob || "Not specified"
+        },
+        {
+          title: "Gender:",
+          value: candidate.applicant_profile?.[0]?.gender_name || "Not specified"
+        },
+      ]
+      .filter(Boolean)
+      .map((item, index) => (
+        <div className="grid grid-cols-2 gap-2" key={index}>
+          <div className="font-semibold">{item.title}</div>
+          <div>{item.value}</div>
+        </div>
+      ))}
+    </div>
+
+    {/* Profile Picture Section */}
+    <div className="col-span-1 sm:col-span-7 flex justify-center sm:justify-end">
+      {!hideFields.picture && (
+        <img
+          alt="profile image"
+          src={
+            candidate.applicant_profile?.[0]?.picture
+              ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
+              : "https://ekazi.co.tz/default-placeholder.png"
+          }
+          className="w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-full"
+        />
+      )}
+    </div>
+  </div>
+
+  {/* Professional Summary Section */}
   <div className="mt-6">
-    <h1 className="font-bold mt-5 mb-1 text-lg">WORKING EXPERIENCE</h1>
+    <h1 className="font-bold text-lg sm:text-xl">PROFESSIONAL SUMMARY</h1>
     <div className="h-[2px] bg-gray-100 mb-2"></div>
-    <div className="space-y-4">
-      {experiences.map((item, index) => (
-        <div key={index}>
-          <div className="flex"></div>
-          <div>
+    <p className="text-sm sm:text-base">
+      {candidate?.careers?.[0]?.career || "Professional summary not specified"}
+    </p>
+    <h1 className="font-bold mt-2 text-sm sm:text-base">Career Objective</h1>
+    <p className="text-sm sm:text-base">
+      {candidate?.objective?.objective || "Career objective not specified"}
+    </p>
+  </div>
+
+  {/* Working Experience Section */}
+  {experiences?.length > 0 && (
+    <div className="mt-6">
+      <h1 className="font-bold text-lg sm:text-xl">WORKING EXPERIENCE</h1>
+      <div className="h-[2px] bg-gray-100 mb-2"></div>
+      <div className="space-y-4">
+        {experiences.map((item, index) => (
+          <div key={index}>
             <div>
-              <p>
-                <span className="font-bold">
-                  {item?.employer?.employer_name || "Employer name not specified"}
-                </span>
+              <p className="font-bold text-sm sm:text-base">
+                {item?.employer?.employer_name || "Employer name not specified"}
               </p>
-              <span className="capitalize">
+              <span className="capitalize text-sm sm:text-base">
                 {item?.employer?.region?.region_name || "Region not specified"}, {item?.employer?.sub_location || "Sub-location not specified"}
               </span>
             </div>
-          </div>
-          <ul className="list-disc list-outside ml-5 space-y-2">
-            {item?.positions?.map((position, positionIndex) => (
-              <li key={positionIndex}>
-                <div>
+            <ul className="list-disc list-outside ml-5 space-y-2">
+              {item?.positions?.map((position, positionIndex) => (
+                <li key={positionIndex} className="text-sm sm:text-base">
                   <p className="font-bold">
                     {position?.position?.position_name || "Position not specified"}
                   </p>
-          
                   <p>
                     {position?.start_date
                       ? `${new Date(position.start_date).getFullYear()}-${(new Date(position.start_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.start_date).getDate().toString().padStart(2, '0')}`
@@ -222,16 +207,14 @@ const processText = (text) => {
                       ? `${new Date(position.end_date).getFullYear()}-${(new Date(position.end_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.end_date).getDate().toString().padStart(2, '0')}`
                       : "Present"}
                   </p>
-                 
                   <p className="mt-2">
                     <span className="font-semibold">Responsibilities: </span>
                     <ul className="list-disc pl-6 mt-2 space-y-2">
                       {(() => {
                         const text = position.responsibility.trim();
-                        const isNumbered = /^\d+\./.test(text); // Check if it starts with "1.", "2." etc.
-                        
+                        const isNumbered = /^\d+\./.test(text);
                         return text
-                          .split(isNumbered ? /\d+\.\s*/g : /(?<=\.)\s+/g) // Choose splitting method
+                          .split(isNumbered ? /\d+\.\s*/g : /(?<=\.)\s+/g)
                           .filter(item => item.trim().length > 0)
                           .map((item, index) => (
                             <li key={index} className="mb-2">{item.trim()}</li>
@@ -239,221 +222,141 @@ const processText = (text) => {
                       })()}
                     </ul>
                   </p>
-                  
-                  {/* Uncomment and handle null values for these if needed */}
-                  {/* <p className="flex">
-                    <span className="font-bold mt-3">Responsibilities:</span>
-                    <span dangerouslySetInnerHTML={{ __html: position?.responsibility || "Responsibilities not specified" }}></span>
-                  </p> */}
-                  {/* <p>
-                    <span className="font-bold">Reason for leaving:</span> Small pay
-                  </p> */}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {/* Languages Section */}
+  <div className="mt-6">
+    <h1 className="font-bold text-lg sm:text-xl">LANGUAGES</h1>
+    <div className="h-[2px] bg-gray-100 mb-2"></div>
+    <div className="flex flex-wrap gap-2 text-sm sm:text-base">
+      {candidate?.language?.length > 0 ? (
+        candidate.language.map((item, index) => (
+          <p key={index}>
+            {item?.language?.language_name || "Language not specified"}
+            {index + 1 !== candidate.language.length && ","}
+          </p>
+        ))
+      ) : (
+        <p>Not Specified</p>
+      )}
     </div>
   </div>
-)}
 
-        <div className="mt-6">
-  <h1 className="font-bold mt-5 mb-1 text-lg">LANGUAGES</h1>
-  <div className="h-[2px] bg-gray-100 mb-2"></div>
-  <div className="flex space-x-1 flex-wrap">
-    {candidate?.language?.length > 0 ? (
-      candidate.language.map((item, index) => (
-        <p key={index}>
-          {item?.language?.language_name || "Language not specified"}
-          {index + 1 !== candidate.language.length && ","}
-        </p>
-      ))
-    ) : (
-      <p>Not Specified</p>
-    )}
-  </div>
-</div>
-
-<div className="mt-6">
-  <h1 className="font-bold mt-5 mb-1 text-lg">SKILLS</h1>
-  <div className="h-[2px] bg-gray-100 mb-2"></div>
-  
-  <p className="flex space-x-1">
-    <span className="font-bold">Culture:</span>
-    <div className="flex space-x-1 flex-wrap">
-      {candidate?.culture?.length > 0 ? (
-        candidate.culture.map((item, index) => (
-          <p key={index}>
+  {/* Skills Section */}
+  <div className="mt-6">
+    <h1 className="font-bold text-lg sm:text-xl">SKILLS</h1>
+    <div className="h-[2px] bg-gray-100 mb-2"></div>
+    <div className="space-y-2 text-sm sm:text-base">
+      <p>
+        <span className="font-bold">Culture:</span>{" "}
+        {candidate?.culture?.map((item, index) => (
+          <span key={index}>
             {item?.culture?.culture_name || "Culture not specified"}
-            {index + 1 !== candidate.culture.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
-    </div>
-  </p>
-
-  <p className="flex space-x-1">
-    <span className="font-bold">Personality:</span>
-    <div className="flex space-x-1 flex-wrap">
-      {candidate?.culture?.length > 0 ? (
-        candidate.culture.map((item, index) => (
-          <p key={index}>
+            {index + 1 !== candidate.culture.length && ", "}
+          </span>
+        ))}
+      </p>
+      <p>
+        <span className="font-bold">Personality:</span>{" "}
+        {candidate?.culture?.map((item, index) => (
+          <span key={index}>
             {item?.culture?.culture_name || "Personality not specified"}
-            {index + 1 !== candidate.culture.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
-    </div>
-  </p>
-
-  <p className="flex space-x-1 flex-wrap">
-    <span className="font-bold">Skill & Knowledge:</span>
-    <div className="flex space-x-1 flex-wrap">
-      {candidate?.knowledge?.length > 0 ? (
-        candidate.knowledge.map((item, index) => (
-          <p key={index}>
+            {index + 1 !== candidate.culture.length && ", "}
+          </span>
+        ))}
+      </p>
+      <p>
+        <span className="font-bold">Skill & Knowledge:</span>{" "}
+        {candidate?.knowledge?.map((item, index) => (
+          <span key={index}>
             {item?.knowledge?.knowledge_name || "Skill not specified"}
-            {index + 1 !== candidate.knowledge.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
-    </div>
-  </p>
-
-  <p className="flex space-x-1 flex-wrap">
-    <span className="font-bold">Software:</span>
-    <div className="flex space-x-1 flex-wrap">
-      {candidate?.software?.length > 0 ? (
-        candidate.software.map((item, index) => (
-          <p key={index}>
+            {index + 1 !== candidate.knowledge.length && ", "}
+          </span>
+        ))}
+      </p>
+      <p>
+        <span className="font-bold">Software:</span>{" "}
+        {candidate?.software?.map((item, index) => (
+          <span key={index}>
             {item?.software?.software_name || "Software not specified"}
-            {index + 1 !== candidate.software.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
-    </div>
-  </p>
-
-  <p className="flex space-x-1">
-    <span className="font-bold">Tools:</span>
-    <div className="flex space-x-1 flex-wrap">
-      {candidate?.tools?.length > 0 ? (
-        candidate.tools.map((item, index) => (
-          <p key={index}>
+            {index + 1 !== candidate.software.length && ", "}
+          </span>
+        ))}
+      </p>
+      <p>
+        <span className="font-bold">Tools:</span>{" "}
+        {candidate?.tools?.map((item, index) => (
+          <span key={index}>
             {item?.tool?.tool_name || "Tool not specified"}
-            {index + 1 !== candidate.tools.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
+            {index + 1 !== candidate.tools.length && ", "}
+          </span>
+        ))}
+      </p>
     </div>
-  </p>
-</div>
-
-          {candidate?.education?.length > 0 && (
-  <div className="mt-6">
-    <h1 className="font-bold mt-5 mb-1 text-lg">EDUCATION DETAILS</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    {candidate.education.map((item, index) => (
-      <div key={index}>
-        <p>
-          <span className="font-bold">
-            {item?.course?.course_name || "Course not specified"}:
-          </span>{" "}
-          {item?.started
-            ? new Date(item.started).getFullYear()
-            : "Start date not specified"}{" "}
-          -{" "}
-          {item?.ended
-            ? new Date(item.ended).getFullYear()
-            : "End date not specified"}
-        </p>
-        <i>{item?.level?.education_level || "Level not specified"}</i>,{" "}
-        <span>{item?.college?.college_name || "College not specified"}</span>
-      </div>
-    ))}
   </div>
-)}
 
-{candidate?.proficiency?.length > 0 && (
-  <div className="mt-6">
-    <h1 className="font-bold mt-5 mb-1 text-lg">PROFICIENCY QUALIFICATION</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    {candidate.proficiency.map((item, index) => (
-      <div key={index}>
-        <p>
-          {moment(item?.started || 'Unknown Start').format("YYYY-MM-DD")}- {moment(item?.ended || 'Present').format("YYYY-MM-DD")}
-        </p>
-        <p className="flex space-x-2">
-          <i>{item?.proficiency?.proficiency_name || "Proficiency not specified"}</i>,{" "}
-          <span>{item?.organization?.organization_name || "Organization not specified"}</span>
-        </p>
-      </div>
-    ))}
-  </div>
-)}
-{candidate?.training?.length > 0 && (
-  <div className="mt-6">
-    <h1 className="font-bold mt-5 mb-1 text-lg">TRAININGS & WORKSHOPS</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    {candidate.training.map((item, index) => (
-      <div key={index}>
-        <p>
-          <span className="font-bold"> {item?.name || "Training not specified"}:</span>{" "}
-          {item?.started || "Start date not specified"} -{" "}
-          {item?.ended || "End date not specified"}
-        </p>
-        <p className="flex space-x-2">
-   
-          <span> {item?.institution || 'Unknown institution'}</span>
-        </p>
-      </div>
-    ))}
-  </div>
-)}
-
-{candidate?.referees?.length > 0 && !hideFields.referee && ( 
-  <div className="mt-6">
-    <h1 className="font-bold mt-5 mb-1 text-lg">REFEREES</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    <div className="space-y-3">
-      {candidate.referees.map((item, index) => (
-        <div key={index}>
+  {/* Education Section */}
+  {candidate?.education?.length > 0 && (
+    <div className="mt-6">
+      <h1 className="font-bold text-lg sm:text-xl">EDUCATION DETAILS</h1>
+      <div className="h-[2px] bg-gray-100 mb-2"></div>
+      {candidate.education.map((item, index) => (
+        <div key={index} className="text-sm sm:text-base">
           <p>
             <span className="font-bold">
-              {item?.first_name || "First name not specified"}{" "}
-              {item?.middle_name || ""} {item?.last_name || ""}
-            </span>
+              {item?.course?.course_name || "Course not specified"}:
+            </span>{" "}
+            {item?.started
+              ? new Date(item.started).getFullYear()
+              : "Start date not specified"}{" "}
+            -{" "}
+            {item?.ended
+              ? new Date(item.ended).getFullYear()
+              : "End date not specified"}
           </p>
-          <p>{item?.referee_position || "Position not specified"}</p>
-          <p>
-            <span className="font-bold">Phone:</span>{" "}
-            {item?.phone || "Phone not specified"}
-          </p>
-          <p>
-            <span className="font-bold">Email:</span>{" "}
-            {item?.email || "Email not specified"}
-          </p>
+          <i>{item?.level?.education_level || "Level not specified"}</i>,{" "}
+          <span>{item?.college?.college_name || "College not specified"}</span>
         </div>
       ))}
     </div>
-  </div>
-)}
+  )}
 
-
-              </div>
-        </div>
-        
+  {/* Referees Section */}
+  {candidate?.referees?.length > 0 && !hideFields.referee && (
+    <div className="mt-6">
+      <h1 className="font-bold text-lg sm:text-xl">REFEREES</h1>
+      <div className="h-[2px] bg-gray-100 mb-2"></div>
+      <div className="space-y-3 text-sm sm:text-base">
+        {candidate.referees.map((item, index) => (
+          <div key={index}>
+            <p>
+              <span className="font-bold">
+                {item?.first_name || "First name not specified"}{" "}
+                {item?.middle_name || ""} {item?.last_name || ""}
+              </span>
+            </p>
+            <p>{item?.referee_position || "Position not specified"}</p>
+            <p>
+              <span className="font-bold">Phone:</span>{" "}
+              {item?.phone || "Phone not specified"}
+            </p>
+            <p>
+              <span className="font-bold">Email:</span>{" "}
+              {item?.email || "Email not specified"}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
         
     </div> ));
 }

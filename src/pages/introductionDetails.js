@@ -224,123 +224,183 @@ const IntroductionDetails = () => {
 
 
   // }, [sendData, uuid]);
-  return (originalDetails == null || candidate == null ? <PageLoader />
-    : <div>
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="font-bold text-3xl">Introduction Details</h1>
-          <p className="text-lg text-gray-500 mt-2">Edit introduction details here</p>
-        </div>
-        <div>
-        <HideInfo uuid={uuid} template={template} />
+  return (
+    originalDetails == null || candidate == null ? (
+      <PageLoader />
+    ) : (
+      <div className="p-4 sm:p-6 md:p-8">
+        {/* Header Section */}
+     
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+  {/* Left Section: Title & Description */}
+  <div className="text-center sm:text-left">
+    <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Introduction Details</h1>
+   
+  </div>
+
+  {/* Right Section: Buttons */}
+  <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+       
           <div className="bg-white rounded-full">
-            <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full ">Step 2</button>
+            <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
+              Step 2
+            </button>
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-3 gap-4 mt-12">
-        <div className="">
-          <label>Name</label>
-          <input
-            readOnly
-            defaultValue={originalDetails?.applicant_profile?.[0]?.first_name === candidate?.applicant_profile?.[0]?.first_name
-              ? originalDetails?.applicant_profile?.[0]?.first_name
-              : candidate?.applicant_profile?.[0]?.first_name || "Not specified"}
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        </div>
-        <div className="">
-          <label>Position</label>
-          <input
-            readOnly
-            defaultValue={originalDetails?.experience?.[0]?.position?.position_name === candidate?.experience?.[0]?.position?.position_name
-              ? originalDetails?.experience?.[0]?.position?.position_name
-              : candidate?.experience?.[0]?.position?.position_name || "Not specified"}
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        </div>
-        <div className="">
-          <label>Email</label>
-          <input
-            readOnly
-            defaultValue={originalDetails?.applicant_profile?.[0]?.email === candidate?.applicant_profile?.[0]?.email
-              ? originalDetails?.applicant_profile?.[0]?.email
-              : candidate?.applicant_profile?.[0]?.email || "Not specified"}
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        </div>
-        <div className="">
-          <label>Phone Number</label>
-          <input
-            readOnly
-            defaultValue={originalDetails?.phone?.phone_number === candidate?.phone?.phone_number
-              ? originalDetails?.phone?.phone_number
-              : candidate?.phone?.phone_number || "Not specified"}
-            type="number"
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        </div>
-      
-        <div className="">
-          <label>Date of birth</label>
-          <input
-            readOnly
-            defaultValue={originalDetails?.applicant_profile?.[0]?.dob === candidate?.applicant_profile?.[0]?.dob
-              ? originalDetails?.applicant_profile?.[0]?.dob
-              : candidate?.applicant_profile?.[0]?.dob || "Not specified"}
-            type="date"
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          />
-        </div>
-        <div className="">
-          <label>Gender</label>
-          <select
-            readOnly
-            defaultValue={originalDetails?.applicant_profile?.[0]?.gender_name === candidate?.applicant_profile?.[0]?.gender_name
-              ? originalDetails?.applicant_profile?.[0]?.gender_name
-              : candidate?.applicant_profile?.[0]?.gender_name || "Not specified"}
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div className="">
-          <label>Marital Status</label>
-          <select
-            readOnly
-            defaultValue={originalDetails?.applicant_profile?.[0]?.marital_status === candidate?.applicant_profile?.[0]?.marital_status
-              ? originalDetails?.applicant_profile?.[0]?.marital_status
-              : candidate?.applicant_profile?.[0]?.marital_status || "Not specified"}
-            className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-          >
-            <option>Married</option>
-            <option>Single</option>
-          </select>
-        </div>
-        <div className="">
-          <label>Location</label>
-          <input
-            readOnly
-            placeholder="Sublocation ,region,country"
-            defaultValue={`${originalDetails?.address?.[0]?.sub_location || "Not specified"}, ${originalDetails?.address?.[0]?.region_name || "Not specified"}, ${originalDetails?.address?.[0]?.name || "Not specified"}`}
-            className="mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
-            style={{ width: '150%' }}
-          />
-        </div>
-      </div>
+</div>
   
-      <div className="flex justify-end space-x-2 mt-4 items-center">
-        <h1 onClick={() => {
-          navigate(-1)
-          setCurrentStep(currentStep - 1)
-        }} className="font-bold text-gray-800 cursor-pointer">Prev</h1>
-        <button onClick={() => {
-          navigate(`/professional_summary/${uuid}/${template}`)
-          setCurrentStep(currentStep + 1)
-        }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
+        {/* Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+          {/* Name */}
+          <div>
+            <label>Name</label>
+            <input
+              readOnly
+              defaultValue={
+                originalDetails?.applicant_profile?.[0]?.first_name ===
+                candidate?.applicant_profile?.[0]?.first_name
+                  ? originalDetails?.applicant_profile?.[0]?.first_name
+                  : candidate?.applicant_profile?.[0]?.first_name || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+  
+          {/* Position */}
+          <div>
+            <label>Position</label>
+            <input
+              readOnly
+              defaultValue={
+                originalDetails?.experience?.[0]?.position?.position_name ===
+                candidate?.experience?.[0]?.position?.position_name
+                  ? originalDetails?.experience?.[0]?.position?.position_name
+                  : candidate?.experience?.[0]?.position?.position_name || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+  
+          {/* Email */}
+          <div>
+            <label>Email</label>
+            <input
+              readOnly
+              defaultValue={
+                originalDetails?.applicant_profile?.[0]?.email ===
+                candidate?.applicant_profile?.[0]?.email
+                  ? originalDetails?.applicant_profile?.[0]?.email
+                  : candidate?.applicant_profile?.[0]?.email || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+  
+          {/* Phone Number */}
+          <div>
+            <label>Phone Number</label>
+            <input
+              readOnly
+              defaultValue={
+                originalDetails?.phone?.phone_number === candidate?.phone?.phone_number
+                  ? originalDetails?.phone?.phone_number
+                  : candidate?.phone?.phone_number || "Not specified"
+              }
+              type="number"
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+  
+          {/* Date of Birth */}
+          <div>
+            <label>Date of Birth</label>
+            <input
+              readOnly
+              defaultValue={
+                originalDetails?.applicant_profile?.[0]?.dob ===
+                candidate?.applicant_profile?.[0]?.dob
+                  ? originalDetails?.applicant_profile?.[0]?.dob
+                  : candidate?.applicant_profile?.[0]?.dob || "Not specified"
+              }
+              type="date"
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+  
+          {/* Gender */}
+          <div>
+            <label>Gender</label>
+            <select
+              readOnly
+              defaultValue={
+                originalDetails?.applicant_profile?.[0]?.gender_name ===
+                candidate?.applicant_profile?.[0]?.gender_name
+                  ? originalDetails?.applicant_profile?.[0]?.gender_name
+                  : candidate?.applicant_profile?.[0]?.gender_name || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+  
+          {/* Marital Status */}
+          <div>
+            <label>Marital Status</label>
+            <select
+              readOnly
+              defaultValue={
+                originalDetails?.applicant_profile?.[0]?.marital_status ===
+                candidate?.applicant_profile?.[0]?.marital_status
+                  ? originalDetails?.applicant_profile?.[0]?.marital_status
+                  : candidate?.applicant_profile?.[0]?.marital_status || "Not specified"
+              }
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            >
+              <option>Married</option>
+              <option>Single</option>
+            </select>
+          </div>
+  
+          {/* Location */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <label>Location</label>
+            <input
+              readOnly
+              placeholder="Sublocation, Region, Country"
+              defaultValue={`${originalDetails?.address?.[0]?.sub_location || "Not specified"}, ${
+                originalDetails?.address?.[0]?.region_name || "Not specified"
+              }, ${originalDetails?.address?.[0]?.name || "Not specified"}`}
+              className="w-full mt-1 py-2 rounded-lg border-gray-300 bg-transparent"
+            />
+          </div>
+        </div>
+  
+        {/* Footer Buttons */}
+        <div className="flex justify-end space-x-2 mt-8 items-center">
+          <h1
+            onClick={() => {
+              navigate(-1);
+              setCurrentStep(currentStep - 1);
+            }}
+            className="font-bold text-gray-800 cursor-pointer hover:text-primary transition-all"
+          >
+            Prev
+          </h1>
+          <button
+            onClick={() => {
+              navigate(`/professional_summary/${uuid}/${template}`);
+              setCurrentStep(currentStep + 1);
+            }}
+            className="py-3 px-5 bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white"
+          >
+            Continue
+          </button>
+        </div>
       </div>
-    </div>);
+    )
+  );
   }
   
 

@@ -344,29 +344,33 @@ const Educations = () => {
     };
 
     return (originalDetails == null || candidate == null ? <PageLoader /> : <div>
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Education</h1>
-                <p className="text-lg text-gray-500 mt-2">Add or remove education here</p>
-            </div>
-            <div>
-                <div className="bg-white rounded-full flex space-x-4">
-                    {/* Step 4 Button */}
-                    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                        Step 4
-                    </button>
+  
+<div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+  {/* Left Section: Title & Description */}
+  <div className="text-center sm:text-left">
+    <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Education</h1>
+    <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+    Add or remove education here
+    </p>
+  </div>
 
-                    {/* Add Education Button */}
-                    <button
-                        className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all"
-                        onClick={openModel}
-                    >
-                        Add Education
-                    </button>
-                </div>
-            </div>
+  {/* Right Section: Buttons */}
+  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+  <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+      Step 4
+    </button>
 
-        </div>
+    {/* Add Experience Button */}
+    <button
+      className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+      onClick={openModel}
+    >
+      Add Education
+    </button>
+  </div>
+</div>
+
+
         <div className="grid grid-cols-2 gap-5 mt-5">
         {
   originalDetails?.education?.map((item) => {
@@ -378,42 +382,44 @@ const Educations = () => {
     const collegeName = item?.college?.college_name || "College name not specified";
 
     return (
-      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
-        <p>
-          <span className="font-bold">{courseName}:</span> {startedYear} - {endedYear}
-        </p>
-        <i>{educationLevel}</i>, <span>{collegeName}</span>
+<div className="p-5 bg-white border border-gray-200 rounded shadow w-full" key={item?.id}>
+  {/* Education Details */}
+  <p className="text-sm sm:text-base">
+    <span className="font-bold">{courseName}:</span> {startedYear} - {endedYear}
+  </p>
+  <div className="mt-1">
+    <i className="block sm:inline">{educationLevel}</i>,{" "}
+    <span className="block sm:inline">{collegeName}</span>
+  </div>
 
-        <div className="flex justify-end">
-          <div className="flex justify-end">
-            {/* Delete Icon */}
-            {candidate?.education?.some((e) => e.id === item.id) ? (
-              <div className="flex space-x-3 mt-3">
-                {/* Edit Icon */}
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                  onClick={() => openEditModal(item)}
-                />
+  {/* Responsive Icons Section */}
+  <div className="flex justify-end mt-3">
+    {candidate?.education?.some((e) => e.id === item.id) && (
+      <div className="flex space-x-3">
+        {/* Edit Icon */}
+        <FontAwesomeIcon
+          icon={faEdit}
+          className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all text-lg sm:text-xl"
+          onClick={() => openEditModal(item)}
+        />
 
-                {/* Delete Icon */}
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                  onClick={() => handleRemove(item.id)}
-                />
+        {/* Delete Icon */}
+        <FontAwesomeIcon
+          icon={faTrash}
+          className="cursor-pointer text-red-500 hover:text-red-700 transition-all text-lg sm:text-xl"
+          onClick={() => handleRemove(item.id)}
+        />
 
-                {/* Hide Icon */}
-                <FontAwesomeIcon
-                  icon={faEyeSlash}
-                  className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                  onClick={() => handleHide(item.id)}
-                />
-              </div>
-            ) : null}
-          </div>
-        </div>
+        {/* Hide Icon */}
+        <FontAwesomeIcon
+          icon={faEyeSlash}
+          className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all text-lg sm:text-xl"
+          onClick={() => handleHide(item.id)}
+        />
       </div>
+    )}
+  </div>
+</div>
     );
   })
 }

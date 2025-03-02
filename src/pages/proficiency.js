@@ -120,13 +120,13 @@ const Proficiency = () => {
         setEditstart(e.target.value); // `e.target.value` is the selected date
     };
     const handleChangeend = (e) => {
-        setEditended(e.target.value); 
+        setEditended(e.target.value);
     };
     const handleChangeaward = (e) => {
-        seteditaward(e.target.value); 
+        seteditaward(e.target.value);
     };
-    
-    
+
+
     const EditToData = {
         started: EditDatestart,
         ended: EditDataended,
@@ -134,7 +134,7 @@ const Proficiency = () => {
         proficiency: editProficience,
         organization: editOrganization,
         attachment: EditFile,
-        award:editaward,
+        award: editaward,
     }
     console.log('organization proficience edit', EditToData);
     const handleSubmit = async (e) => {
@@ -273,7 +273,7 @@ const Proficiency = () => {
             }
 
 
-             window.location.reload(); // Reloads the entire page
+            window.location.reload(); // Reloads the entire page
         } catch (error) {
             console.error('There was an error hide the referee:', error);
             Swal.fire({
@@ -285,68 +285,81 @@ const Proficiency = () => {
         }
     };
     return (originalDetails == null || candidate == null ? <PageLoader /> : <div>
-        <div className="flex justify-between items-center">
-            <div>
-                <h1 className="font-bold text-3xl">Proficiency</h1>
-                <p className="text-lg text-gray-500 mt-2">Add or remove proficiency here</p>
-            </div>
-            <div className="flex space-x-4">
-                <div className="bg-white rounded-full">
-                    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                        Step 8
-                    </button>
-                </div>
-                <div className="bg-white rounded-full">
-                    <button className="py-2 px-4 bg-blue-500 font-bold text-white rounded-full" onClick={openModel}>
-                        Add
-                    </button>
-                </div>
+      
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+            {/* Left Section: Title & Description */}
+            <div className="text-center sm:text-left">
+                <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Proficiency</h1>
+                <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+                Add or remove proficiency here
+                </p>
             </div>
 
-        </div>
-        <div className="grid grid-cols-2 gap-5 mt-5">
-        {
-  originalDetails?.proficiency?.map((item) => {
-    // Safely access properties and provide fallback values
-    const award = item?.award || "Award not available";
-    const started = item?.started ? moment(item.started).format("YYYY-MM-DD") : "Start date not available";
-    const ended = item?.ended ? moment(item.ended).format("YYYY-MM-DD") : "End date not available";
-    const proficiencyName = item?.proficiency?.proficiency_name || "Proficiency name not available";
-    const organizationName = item?.organization?.organization_name || "Organization name not available";
+            {/* Right Section: Buttons */}
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+                    Step 8
+                </button>
 
-    return (
-      <div className="p-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
-        <p>
-          <span className="font-bold">{award}:</span> {started} - {ended}
-        </p>
-        <p className="flex space-x-2">
-          <i>{proficiencyName}</i>,
-          <p>{organizationName}</p>
-        </p>
-        <div className="flex space-x-4 mt-3">
-          <div
-            onClick={() => openEditModal(item)}
-            className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-          >
-            <FontAwesomeIcon icon={faEdit} />
-          </div>
-          <div
-            onClick={() => handleRemove(item?.id)}
-            className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </div>
-          <div
-            onClick={() => handleHide(item?.id)} // Implement handleHide to hide the proficiency
-            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-          >
-            <FontAwesomeIcon icon={faEyeSlash} />
-          </div>
+                {/* Add Experience Button */}
+                <button
+                    className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+                    onClick={openModel}>
+                
+                    Add 
+                </button>
+            </div>
         </div>
-      </div>
-    );
-  })
-}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
+            {originalDetails?.proficiency?.map((item) => {
+                // Safely access properties and provide fallback values
+                const award = item?.award || "Award not available";
+                const started = item?.started ? moment(item.started).format("YYYY-MM-DD") : "Start date not available";
+                const ended = item?.ended ? moment(item.ended).format("YYYY-MM-DD") : "End date not available";
+                const proficiencyName = item?.proficiency?.proficiency_name || "Proficiency name not available";
+                const organizationName = item?.organization?.organization_name || "Organization name not available";
+
+                return (
+                    <div
+                        className="p-5 bg-white border border-gray-200 rounded-lg   transition-all  "
+                        key={item?.id}
+                    >
+                        {/* Award and Date Range */}
+                        <p className="text-lg font-bold text-gray-800">
+                            {award}: <span className="font-normal text-gray-600">{started} - {ended}</span>
+                        </p>
+
+                        {/* Proficiency and Organization */}
+                        <div className="mt-2 text-gray-600">
+                            <p className="italic">{proficiencyName}</p>
+                            <p className="text-sm">{organizationName}</p>
+                        </div>
+
+                        {/* Action Icons */}
+                        <div className="flex space-x-4 mt-4">
+                            <button
+                                onClick={() => openEditModal(item)}
+                                className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition-all"
+                            >
+                                <FontAwesomeIcon icon={faEdit} className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => handleRemove(item?.id)}
+                                className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all"
+                            >
+                                <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => handleHide(item?.id)}
+                                className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-50 transition-all"
+                            >
+                                <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                );
+            })
+            }
 
         </div>
         <div className="flex justify-end space-x-2 mt-4 items-center">
@@ -429,7 +442,7 @@ const Proficiency = () => {
                             <input
                                 type="text"
                                 name="award"
-                                
+
                                 onChange={handleChange}
                                 className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
                                 required

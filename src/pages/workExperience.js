@@ -19,8 +19,6 @@ import PositionLevel from "./universal/positionLevel";
 import moment from "moment";
 
 
-
-
 const WorksExperiences = () => {
   const { currentStep, setCurrentStep, originalDetails, candidate } = useContext(StepsContext)
   const [experiences, setExperiences] = useState([])
@@ -440,26 +438,32 @@ const WorksExperiences = () => {
   };
   return (originalDetails == null || candidate == null ? <PageLoader />
     : <div>
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="font-bold text-3xl">Work Experience</h1>
-          <p className="text-lg text-gray-500 mt-2">Add or remove experiences here</p>
-        </div>
-        <div className="bg-white rounded-full flex space-x-4">
-          {/* Step 4 Button */}
-          <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-            Step 5
-          </button>
+<div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+  {/* Left Section: Title & Description */}
+  <div className="text-center sm:text-left">
+    <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Work Experience</h1>
+    <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
+      Add or remove experiences here
+    </p>
+  </div>
 
-          {/* Add Education Button */}
-          <button
-            className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all"
-            onClick={openModal}
-          >
-            Add Experience
-          </button>
-        </div>
-      </div>
+  {/* Right Section: Buttons */}
+  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+    {/* Step 5 Button */}
+    <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full shadow-md">
+      Step 5
+    </button>
+
+    {/* Add Experience Button */}
+    <button
+      className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all shadow-md"
+      onClick={openModal}
+    >
+      Add Experience
+    </button>
+  </div>
+</div>
+
       <div className="grid grid-cols-1 gap-2 mt-5">
 
       {
@@ -469,59 +473,61 @@ const WorksExperiences = () => {
     const subLocation = item?.employer?.sub_location || "Sub-location not specified";
     
     return (
-      <div className="py-3 px-5 bg-white border border-gray-200 rounded shadow" key={item?.id}>
-        <div className="flex justify-between">
-          <div>
-            <p><span className="font-bold">{employerName}</span></p>
-            <span className="capitalize">{regionName}, {subLocation}</span>
-          </div>
+      <div className="py-3 px-5 bg-white border border-gray-200 rounded shadow w-full" key={item?.id}>
+      {/* Employer Details */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+        <div>
+          <p className="font-bold text-lg">{employerName}</p>
+          <span className="capitalize text-sm text-gray-600">{regionName}, {subLocation}</span>
         </div>
-
-        <ul className="list-disc list-outside ml-5 space-y-4">
-          {item?.positions?.map((positionItem) => {
-            const positionName = positionItem?.position?.position_name || "Position name not available";
-            const employerPosition = positionItem?.employer?.employer_name || "Employer name not available";
-            const startDate = positionItem?.start_date ? new Date(positionItem.start_date).getFullYear() : "Not specified";
-            const endDate = positionItem?.end_date 
-              ? new Date(positionItem.end_date).getFullYear() 
-              : "Present";
-            
-            return (
-              <li key={positionItem?.id}>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-bold">{positionName}</p>
-                    <i>{employerPosition}</i>
-                    <p>{startDate} - {endDate}</p>
-                  </div>
-
-                  {/* Action Icons */}
-                  <div className="flex space-x-3 text-gray-500">
-                    <button
-                      className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all"
-                      onClick={() => openEditModal(item)} // Add your edit logic here
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button
-                      className="cursor-pointer text-red-500 hover:text-red-700 transition-all"
-                      onClick={() => handleDelete(positionItem?.id)} // Add your delete logic here
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                    <button
-                      className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
-                      onClick={() => handleHide(positionItem?.id)} // Add your hide logic here
-                    >
-                      <FontAwesomeIcon icon={faEyeSlash} />
-                    </button>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
       </div>
+    
+      {/* Positions List */}
+      <ul className="list-disc list-outside ml-5 mt-3 space-y-4">
+        {item?.positions?.map((positionItem) => {
+          const positionName = positionItem?.position?.position_name || "Position name not available";
+          const employerPosition = positionItem?.employer?.employer_name || "Employer name not available";
+          const startDate = positionItem?.start_date ? new Date(positionItem.start_date).getFullYear() : "Not specified";
+          const endDate = positionItem?.end_date ? new Date(positionItem.end_date).getFullYear() : "Present";
+    
+          return (
+            <li key={positionItem?.id} className="bg-gray-50 p-3 rounded-lg shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                {/* Position Details */}
+                <div className="flex-1">
+                  <p className="font-bold text-sm sm:text-base">{positionName}</p>
+                  <i className="text-gray-600 text-sm">{employerPosition}</i>
+                  <p className="text-xs sm:text-sm text-gray-500">{startDate} - {endDate}</p>
+                </div>
+    
+                {/* Action Icons */}
+                <div className="flex space-x-3 mt-2 sm:mt-0">
+                  <button
+                    className="cursor-pointer text-blue-500 hover:text-blue-700 transition-all text-sm sm:text-base"
+                    onClick={() => openEditModal(item)}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                  <button
+                    className="cursor-pointer text-red-500 hover:text-red-700 transition-all text-sm sm:text-base"
+                    onClick={() => handleDelete(positionItem?.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                  <button
+                    className="cursor-pointer text-gray-500 hover:text-gray-700 transition-all text-sm sm:text-base"
+                    onClick={() => handleHide(positionItem?.id)}
+                  >
+                    <FontAwesomeIcon icon={faEyeSlash} />
+                  </button>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+    
     );
   })
 }
