@@ -291,11 +291,15 @@ const MainLayout = () => {
                 </div>
                 {currentStep !== 0 && currentStep !== 11 && <div className="fixed bottom-6 left-0 right-0 py-5">
                     <div className="w-3/12"></div>
+                    {/* <button onClick={() => {
+                                setShowPreview(true)
+                            }} className="bg-green-600 hover:scale-105 transition-all  text-white shadow-2xl font-bold rounded-full py-4 px-8  -mt-20 ml-30">Preview </button> */}
                     <div className="w-9/12 ms-auto flex justify-center">
+
                         <div className="">
                             <button onClick={() => {
                                 setShowPreview(true)
-                            }} className="bg-green-600 hover:scale-105 transition-all  text-white shadow-2xl font-bold rounded-full py-4 px-8">Preview template</button>
+                            }} className="bg-green-600 hover:scale-105 transition-all  text-white shadow-2xl font-bold rounded-full py-4 px-8 mt-20">Preview template</button>
                             {showPreview && <div onClick={() => {
                                 // setShowPreview(false)
                             }} className={`inset-0  bg-translate fixed bg-black bg-opacity-30  transition-all duration-500  `}>
