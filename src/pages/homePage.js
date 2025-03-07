@@ -84,7 +84,7 @@ const HomePage = () => {
                 if (saveResponse.status === 200 && saveResponse.data.success) {
                
                     return axios.get(
-                        ` https://cvtemplate.ekazi.co.tz/proxy/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
+                        ` https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
                     );
                 } else {
                     throw new Error(
