@@ -117,7 +117,7 @@ const processText = (text) => {
 
   {/* Contact Information Section */}
   <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-6">
-    <div className="col-span-1 sm:col-span-5">
+    <div className="col-span-1 sm:col-span-5 break-words">
       {[
         { title: "Location:", value: "Dar es Salaam" },
         !hideFields.phone && { 

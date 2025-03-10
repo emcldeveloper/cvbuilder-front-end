@@ -70,7 +70,7 @@ const Template2 = () => {
     <div className="col-span-8">
       <h1 className="text-lg font-bold mt-3">{candidate.applicant_profile[0]?.first_name}</h1>
       <h1>{candidate.experience.length > 0 && candidate.experience[0]?.position?.position_name}</h1>
-      <div className="space-y-1 mt-2">
+      <div className="space-y-1 mt-2 break-words">
         {[
           {   icon: (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">

@@ -83,7 +83,7 @@ const Template3 = () => {
     <div className="col-span-4">
       {/* Contact Section */}
       <div className="bg-primary py-2 text-white font-bold px-4">CONTACT</div>
-      <div className="space-y-1 mt-2 px-4">
+      <div className="space-y-1 mt-2 px-4 break-words">
         {[
           {  icon: (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
