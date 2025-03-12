@@ -57,7 +57,7 @@ const Template3 = () => {
       {/* Candidate Info */}
       <div className="col-span-8 text-center sm:text-left">
         <h1 className="text-2xl sm:text-3xl font-bold mt-3 text-white">
-          {candidate?.applicant_profile?.[0]?.first_name || 'No Name Provided'}
+          {candidate?.applicant_profile?.[0]?.first_name || 'No Name Provided'}    {candidate?.applicant_profile?.[0]?.last_name || 'No Name Provided'}
         </h1>
         {candidate?.experience?.length > 0 && candidate?.experience[0]?.position?.position_name ? (
           <h1 className="text-white text-lg">

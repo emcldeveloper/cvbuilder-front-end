@@ -177,13 +177,13 @@ const Template9 = () => {
                   {experience.positions.map((position) => (
                     <div className="flex space-x-2 mb-4" key={position.position?.id || position.id}>
                       <div className="flex flex-col items-center">
-                        <div className="h-3 w-3 rounded-full bg-orange-500"></div>
+                        <div className="h-3 w-3 rounded-full "></div>
                         <div className="h-10 w-1 bg-gray-200"></div>
                       </div>
                       <div className="flex-grow">
                         <div className="flex justify-between items-center">
                           <div className="flex-1 pr-4">
-                            <p className="text-orange-500 text-sm sm:text-base">
+                            <p className=" text-sm sm:text-base">
                               {position.position?.position_name || "Position not specified"}
                             </p>
                           </div>
@@ -227,7 +227,7 @@ const Template9 = () => {
                   {item.ended ? new Date(item.ended).getFullYear() : "Present"}
                 </p>
                 <p className="text-sm sm:text-base">
-                  <span className="text-orange-500">{item.level?.education_level || "Level not specified"}</span>,{" "}
+                  <span className="">{item.level?.education_level || "Level not specified"}</span>,{" "}
                   <span>{item.college?.college_name || "College not specified"}</span>
                 </p>
               </div>
@@ -324,7 +324,7 @@ const Template9 = () => {
               <p>
                 <span className="font-bold">{item.award}</span>
               </p>
-              <p className="text-orange-500">{item.organization?.organization_name}</p>
+              <p className="">{item.organization?.organization_name}</p>
               <p className="flex space-x-2">
                 <span className="font-bold">Proficiency:</span>
                 <span>{item.proficiency?.proficiency_name || "Not specified"}</span>
@@ -382,7 +382,7 @@ const Template9 = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {candidate.referees?.length > 0 ? (
           candidate.referees.map((referee, index) => (
-            <div key={referee.id || index} className="mb-4 p-4 border rounded-lg shadow-sm bg-white">
+            <div key={referee.id || index} className="mb-4 p-4  bg-white">
               {/* Referee Name */}
               <p className="font-bold text-gray-800">
                 {`${referee.first_name || ''} ${referee.middle_name || ''} ${referee.last_name || ''}`.trim()}

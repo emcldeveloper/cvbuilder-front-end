@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import axios from 'axios';
 import moment from "moment";
+import { useHideFields } from '../layouts/HideFieldsContext';
+import HideInfo from '../layouts/useHideFields';
 
 const Template2 = () => {
     const cv  = useRef()
@@ -12,6 +14,7 @@ const Template2 = () => {
     const [show, setShow] = useState(false);
     const [pages, setPages] = useState(false);
     const [experiences,setExperiences] = useState([])
+    const { hideFields } = useHideFields();
   
     
     useEffect(() => {
@@ -68,7 +71,7 @@ const Template2 = () => {
 
     {/* Candidate Info */}
     <div className="col-span-8">
-      <h1 className="text-lg font-bold mt-3">{candidate.applicant_profile[0]?.first_name}</h1>
+      <h1 className="text-lg font-bold mt-3">{candidate.applicant_profile[0]?.first_name} {candidate.applicant_profile[0]?.last_name} </h1>
       <h1>{candidate.experience.length > 0 && candidate.experience[0]?.position?.position_name}</h1>
       <div className="space-y-1 mt-2 break-words">
         {[
