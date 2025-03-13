@@ -46,7 +46,8 @@ const MainLayout = () => {
     const [showPaymentModal, setShowPaymentModal] = useState(false); // Toggle payment modal
     const [cvSubscription, setCvSubscription] = useState([]);
     const [MySubscription, setSubscription] = useState('');
-
+    const cvSubscriptionArray = Object.values(cvSubscription);
+ 
 
     const steps = [
         { title: "Preview" },
@@ -106,23 +107,34 @@ const MainLayout = () => {
  
   
 
-    useEffect(() => {
-        axios
-            .get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-            .then((response) => {
-                console.log("API Response:", response); // Debug API response
-                if (response) {
-                    const data = response.data.cv_plan_subscription
-                    setCvSubscription(data);
-                    console.log("Data set to cvSubscription:", data);
-                } else {
-                    console.error("Unexpected response structure:", response);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching CV Subscription data:", error.message);
-            });
-    }, []); // Empty dependency array means this runs only once on component mount
+   useEffect(() => {
+  axios
+    .get(`https://ekazi.co.tz/api/applicant/CvSubscription`)
+    .then((response) => {
+      console.log("API Response:", response); // Debug API response
+
+      // Check if the response and its data exist
+      if (response && response.data) {
+        const data = response.cv_plan_subscription;
+
+        // Ensure data is an array before setting it to state
+        if (Array.isArray(data)) {
+          setCvSubscription(data);
+          console.log("Data set to cvSubscription:", data);
+        } else {
+          console.error("Expected an array but got:", data);
+          setCvSubscription([]); // Set to an empty array to avoid errors
+        }
+      } else {
+        console.error("Unexpected response structure:", response);
+        setCvSubscription([]); // Set to an empty array to avoid errors
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching CV Subscription data:", error.message);
+      setCvSubscription([]); // Set to an empty array to avoid errors
+    });
+}, []); // Empty dependency array means this runs only once on component mount
 
     useEffect(() => {
         axios
@@ -240,7 +252,8 @@ const MainLayout = () => {
         }
     };
 
-
+console.log('ceck sub mosft vp',cvSubscriptionArray,"cheu",cvSubscription
+);
 
 
 
@@ -251,7 +264,8 @@ const MainLayout = () => {
         <div className="">
          <Sidebar steps={steps} currentStep={currentStep} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> 
       
-        <NavBar openModal={() => {}} />
+     {/* <NavBar openModal={() => {}} />  */}
+        <NavBar openModal={openModal} />
             {/* <div className=" w-3/12 fixed bg-primary h-screen text-white px-12 py-5">
                 <div className="">
                     <h1 className=" text-white text-2xl font-bold ">CV Builder (eKazi)</h1>
@@ -356,40 +370,39 @@ const MainLayout = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-96 h-auto max-h-100 p-6 rounded-lg shadow-lg overflow-y-auto">
-                        <h2 className="text-lg font-semibold mb-4">Choose a CV Template Subscription</h2>
+                        <h2 className="text-lg font-semibold mb-4">Choose a CV Template Subscription {cvSubscription}</h2>
                         <ul className="space-y-4">
-                            {/* Premium Subscription */}
-                            {cvSubscription.map((sub) => (
-                                <li
-                                    key={sub.id}
-                                    onClick={() => handleSubscriptionSelect(sub.id)} // Open payment modal
-                                    className={`border-b pb-4 flex items-start space-x-4 cursor-pointer ${selected === sub.id ? "bg-yellow-100" : ""
-                                        }`} // Highlight selected item
-                                >
-                                    <img
-                                        src='/cv5.jpg'
-                                        alt={sub.name}
-                                        className="w-16 h-16 object-cover rounded-md"
-                                    />
-                                    <div>
-                                        <strong className="block text-lg">{sub.name}</strong>
-                                        <p className="text-sm text-gray-600">{sub.description}</p>
-                                        <div className="mt-2 text-sm text-gray-700">
-                                            <p>
-                                                <strong>Price:</strong> {sub.price} Tsh
-                                            </p>
-                                            <p>
-                                                <strong>CV Limit:</strong> {sub.cv_limit} CVs
-                                            </p>
-                                            <p>
-                                                <strong>Duration:</strong> {sub.duration} Days
-                                            </p>
-                                           
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+    {cvSubscriptionArray?.map((sub) => (
+        <li
+            key={sub.id}
+            onClick={() => handleSubscriptionSelect(sub.id)}
+            className={`border-b pb-4 flex items-start space-x-4 cursor-pointer ${selected === sub.id ? "bg-yellow-100" : ""}`}
+        >
+            <img
+                src='/cv5.jpg'
+                alt={sub.name || 'Subscription Image'}
+                className="w-16 h-16 object-cover rounded-md"
+            />
+            <div>
+                <strong className="block text-lg">{sub.name || 'No Name'}</strong>
+                <p className="text-sm text-gray-600">{sub.description || 'No Description'}</p>
+                <div className="mt-2 text-sm text-gray-700">
+                    <p>
+                        <strong>Price:</strong> {sub.price} Tsh
+                    </p>
+                    <p>
+                        <strong>CV Limit:</strong> {sub.cv_limit} CVs
+                    </p>
+                    <p>
+                        <strong>Duration:</strong> {sub.duration} Days
+                    </p>
+                </div>
+            </div>
+        </li>
+    ))}
+</ul>
+
+
                         <div className="flex justify-end mt-4">
                    
                             <button

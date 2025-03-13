@@ -84,7 +84,9 @@ const NavBar = ({ openModal }) => {
                     </a>
                 </nav>
             </div>
+            
         </div>
+        
     );
 };
 
