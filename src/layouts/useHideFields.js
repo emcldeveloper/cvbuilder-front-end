@@ -6,6 +6,7 @@ import axios from "axios";
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEyeSlash, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaEyeSlash } from "react-icons/fa"; // FontAwesome icon
 
 // Reusable Modal Component
 const HideModal = ({ hideFields, onFieldChange, onApply, onCancel, onHide }) => {
@@ -13,7 +14,7 @@ const HideModal = ({ hideFields, onFieldChange, onApply, onCancel, onHide }) => 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-lg">
-        <h2 className="text-lg font-bold mb-4">Select Fields to Hide 3</h2>
+        <h2 className="text-lg font-bold mb-4">Select Fields to Hide </h2>
         <div className="space-y-2">
           <label className="flex items-center">
             <input
@@ -185,12 +186,21 @@ const MyComponent = ({ uuid, template }) => {
 
   return (
     <div>
-      <button
-        onClick={handleHideClick}
-        className="py-2 px-2 bg-red-500 font-bold text-secondary bg-opacity-20 rounded-full"
-      >
-        Hide
-      </button>
+  
+
+ 
+  
+    <div
+      onClick={handleHideClick}
+      className="flex items-center gap-3 bg-red-100 border border-red-300 text-red-700 font-semibold px-4 py-3 rounded-xl cursor-pointer hover:bg-red-200 transition"
+    >
+      <FaEyeSlash className="text-red-500 text-xl" />
+      <span className="text-base sm:text-lg">
+      Click to hide personal information
+      </span>
+    </div>
+  
+
 
       {modalOpen && (
         <HideModal

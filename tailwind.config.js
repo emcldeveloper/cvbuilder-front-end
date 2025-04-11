@@ -10,7 +10,16 @@ module.exports = {
         secondary:"#D36314",
         darkShadow:'#3C414F',
         dark:'#111729'
-      }
+      },
+      animation: {
+        marquee: "marquee 10s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(-100%)" },
+        },
+      },
     },
     fontFamily:{
       aeonik:[
@@ -22,4 +31,4 @@ module.exports = {
     require('@tailwindcss/forms'),
   ],
 }
-
+ 

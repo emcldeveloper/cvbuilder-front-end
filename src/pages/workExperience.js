@@ -90,7 +90,7 @@ const WorksExperiences = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    setCurrentStep(4)
+    setCurrentStep(5)
   }, [])
   const openModal = () => {
     setIsOpenModel(true);
@@ -533,16 +533,35 @@ const WorksExperiences = () => {
 }
 
       </div>
-      <div className="flex justify-end space-x-2 mt-4 items-center z-50">
-        <h1 onClick={() => {
-          navigate(-1)
-          setCurrentStep(currentStep - 1)
-        }} className="font-bold text-gray-800 cursor-pointer">Prev</h1>
-        <button onClick={() => {
-          navigate(`/skills/${uuid}/${template}`)
-          setCurrentStep(currentStep + 1)
-        }} className="py-3 px-5  bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white">Continue</button>
-      </div>
+    
+      <div className="relative z-10 w-full mt-10 px-4">
+          <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
+            {/* Prev Button */}
+            <button
+              type="button"
+              onClick={() => {
+                console.log("Prev clicked");
+                navigate(-1);
+                setCurrentStep(currentStep - 1);
+              }}
+              className="w-full sm:w-auto text-gray-700 font-semibold hover:text-primary transition-all"
+            >
+              ← Prev
+            </button>
+
+            {/* Continue Button */}
+            <button
+              type="button"
+              onClick={() => {
+                navigate(`/skills/${uuid}/${template}`)
+                setCurrentStep(currentStep + 1)
+              }}
+              className="w-full sm:w-auto py-3 px-6 bg-primary text-white font-bold rounded-full hover:scale-105 transition-all"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
       {isopenModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-3"> {/* Reduced width and padding */}

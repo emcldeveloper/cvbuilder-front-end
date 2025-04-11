@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { StepsContext } from "../layouts/mainLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FaEye } from "react-icons/fa";
 import Template1 from "../templates/template1";
 import Template2 from "../templates/template2";
 import Template3 from "../templates/template3";
@@ -13,12 +14,16 @@ import Template8 from "../templates/template8";
 import Template9 from "../templates/template9";
 import Template10 from "../templates/template10";
 
+import axios from "axios";
+
 const SampleTemplate = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
     const { currentStep, setCurrentStep } = useContext(StepsContext);
     const navigate = useNavigate();
     const { uuid } = useParams();
+    const [templateViews, setTemplateViews] = useState({});
+
 
     const templates = [
         { id: 1, name: "Template 1", image: "/cv1.png", component: <Template1 /> },
@@ -55,6 +60,50 @@ const SampleTemplate = () => {
     const goBackToTemplates = () => {
         setShowPreview(false); // Close the modal and return to template list
     };
+    const handleSubmit = async (templateId) => {
+        try {
+            const formData = new FormData();
+            formData.append('template_id', templateId);
+            formData.append('view_count', 1);
+
+            await axios.post('http://127.0.0.1:8000/api/applicant/countcv', formData);
+
+            // Refresh views after submit
+            const response = await axios.get("http://127.0.0.1:8000/api/applicant/getcvno");
+            const viewCounts = response.data.view_count;
+            const mappedViews = {};
+            viewCounts.forEach((item) => {
+                mappedViews[item.template_no] = item.view;
+            });
+            setTemplateViews(mappedViews);
+
+        } catch (error) {
+            console.error("Failed to track view or fetch updated views:", error.message);
+        }
+    };
+
+    useEffect(() => {
+        axios
+            .get("http://127.0.0.1:8000/api/applicant/getcvno")
+            .then((response) => {
+                const viewCounts = response.data.view_count;
+                if (Array.isArray(viewCounts)) {
+                    const mappedViews = {};
+                    viewCounts.forEach((item) => {
+                        mappedViews[item.template_no] = item.view;
+                    });
+
+                    setTemplateViews(mappedViews); // set all views at once
+                } else {
+                    console.error("Invalid view_count format:", response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching CV view counts:", error.message);
+            });
+    }, []);
+
+
 
     const selectedTemplateData = templates.find((template) => template.id === selectedTemplate);
 
@@ -64,25 +113,39 @@ const SampleTemplate = () => {
 
             {/* Template Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {templates.map((template) => (
-                    <div
-                        key={template.id}
-                        className={`p-4 border rounded-md cursor-pointer ${
-                            selectedTemplate === template.id ? "border-blue-500 bg-blue-100" : "border-gray-300"
-                        }`}
-                        onClick={() => handleTemplateSelect(template.id)}
-                    >
-                        <div className="h-40 w-full overflow-hidden flex justify-center items-center bg-gray-100 rounded-md">
-                            <img
-                                src={template.image}
-                                alt={template.name}
-                                className="h-full object-contain rounded-md"
-                            />
+                {templates.map((template) => {
+                    const viewCount = templateViews[template.id] ?? template.views ?? 0;
+
+                    return (
+                        <div
+                            key={template.id}
+                            className={`p-4 border rounded-md cursor-pointer ${selectedTemplate === template.id
+                                ? "border-blue-500 bg-blue-100"
+                                : "border-gray-300"
+                                }`}
+                            onClick={() => {
+                                const selectedTemplateId = template.id;
+                                handleTemplateSelect(selectedTemplateId);
+                                handleSubmit(selectedTemplateId);
+                            }}
+                        >
+                            <div className="h-40 w-full overflow-hidden flex justify-center items-center bg-gray-100 rounded-md">
+                                <img
+                                    src={template.image}
+                                    alt={template.name}
+                                    className="h-full object-contain rounded-md"
+                                />
+                            </div>
+                            <h2 className="text-center font-semibold mt-2">{template.name}</h2>
+                            <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mt-1">
+                                <FaEye className="text-gray-400 mr-1" />
+                                <span>{viewCount}</span>
+                            </div>
                         </div>
-                        <h2 className="text-center font-semibold mt-2">{template.name}</h2>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
+
 
             {/* Preview Modal */}
             {showPreview && selectedTemplateData && (

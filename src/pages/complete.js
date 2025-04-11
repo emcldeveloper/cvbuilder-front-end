@@ -4,6 +4,7 @@ import { StepsContext } from "../layouts/mainLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../widgets/pageLoader";
 import Swal from 'sweetalert2';
+import HideInfo from '../layouts/useHideFields';
 
 const Complete = () => {
     const [downloading, setDownloading] = useState(false)
@@ -129,10 +130,11 @@ const Complete = () => {
                         <h2 className="text-lg font-bold mb-4">Enter CV Name</h2>
                          {/* Informational description */}
                          <p className="mb-2 text-gray-700 max-w-xs">
-                            Your CV will be saved to the Ekazi platform and will be available in your personal account. 
-                            You can view  your saved CVs at any time by going to the <strong>My CV</strong> section on Ekazi.
-            
-                            </p>
+                            <HideInfo uuid={uuid} template={template} > </HideInfo>
+                            Your CV will be saved to the Ekazi platform and will be available in your personal account.
+                            You can view  your saved CVs at any time by going to the <strong>My CV</strong>.
+
+                        </p>
                         <input
                         type="text"
                         className="border p-2 w-full"

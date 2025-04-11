@@ -198,25 +198,35 @@ const ProfessionalSummary = () => {
         </div>
   
         {/* Footer Buttons */}
-        <div className="flex justify-end space-x-2 mt-8 items-center">
-          <h1
-            onClick={() => {
-              navigate(-1);
-              setCurrentStep(currentStep - 1);
-            }}
-            className="font-bold text-gray-800 cursor-pointer hover:text-primary transition-all"
-          >
-            Prev
-          </h1>
-          <button
-            onClick={() => {
-              navigate(`/educations/${uuid}/${template}`);
-              setCurrentStep(currentStep + 1);
-            }}
-            className="py-3 px-5 bg-primary hover:scale-105 transition-all rounded-full font-bold cursor-pointer text-white"
-          >
-            Continue
-          </button>
+       
+        {/*  */}
+        <div className="relative z-10 w-full mt-10 px-4">
+          <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
+            {/* Prev Button */}
+            <button
+              type="button"
+              onClick={() => {
+                console.log("Prev clicked");
+                navigate(-1);
+                setCurrentStep(currentStep - 1);
+              }}
+              className="w-full sm:w-auto text-gray-700 font-semibold hover:text-primary transition-all"
+            >
+              ← Prev
+            </button>
+
+            {/* Continue Button */}
+            <button
+              type="button"
+              onClick={() => {
+                navigate(`/educations/${uuid}/${template}`);
+                setCurrentStep(currentStep + 1);
+              }}
+              className="w-full sm:w-auto py-3 px-6 bg-primary text-white font-bold rounded-full hover:scale-105 transition-all"
+            >
+              Continue
+            </button>
+          </div>
         </div>
       </div>
     )

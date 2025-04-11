@@ -34,7 +34,7 @@ const HomePage = () => {
     const [cvName, setCvName] = useState(""); // To store the user-entered CV name
     const [error, setError] = useState(null);
 
-    
+
 
     useEffect(() => {
 
@@ -56,7 +56,15 @@ const HomePage = () => {
     };
 
 
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
 
+
+    };
 
     const handleSaveAndDownload = () => {
         if (!cvName || !sendToData || !template || !uuid) {
@@ -76,15 +84,17 @@ const HomePage = () => {
         const newTab = window.open("", "_blank"); // Open a blank tab immediately
         setDownloading(true); // Start loading indicator
         // Step 1: Save the CV
+
         axios
             .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
             .then((saveResponse) => {
                 console.log("Save Response:", saveResponse);
 
                 if (saveResponse.status === 200 && saveResponse.data.success) {
-               
+
+                    // https://cvtemplate.ekazi.co.tz
                     return axios.get(
-                        ` https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
+                        `   http://localhost:5001/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`, options
                     );
                 } else {
                     throw new Error(
@@ -143,36 +153,36 @@ const HomePage = () => {
             .catch((error) => {
                 console.error("Error fetching CV Subscription data:", error.message);
             });
-    }, []); 
-    console.log("check download",donwload);
-    
+    }, []);
+    console.log("check download", donwload);
+
     let templateCount = {};
     let uniqueTemplateCount = 0;
     let totalUsageSum = 0;
-    
+
     if (Array.isArray(donwload)) {
-      donwload.forEach(item => {
-        const templateNo = item.template_no;
-        if (templateNo != null) {  // Skip if template_no is null or undefined
-          templateCount[templateNo] = (templateCount[templateNo] || 0) + 1;
-        }
-      });
-    
-      // Step 2: Count unique templates (avoid redundancy)
-      uniqueTemplateCount = Object.keys(templateCount).length;
-  
-      totalUsageSum = Object.values(templateCount).reduce((sum, count) => sum + count, 0);
+        donwload.forEach(item => {
+            const templateNo = item.template_no;
+            if (templateNo != null) {  // Skip if template_no is null or undefined
+                templateCount[templateNo] = (templateCount[templateNo] || 0) + 1;
+            }
+        });
+
+        // Step 2: Count unique templates (avoid redundancy)
+        uniqueTemplateCount = Object.keys(templateCount).length;
+
+        totalUsageSum = Object.values(templateCount).reduce((sum, count) => sum + count, 0);
     } else {
-     
-      templateCount = {};
-      uniqueTemplateCount = 0;
-      totalUsageSum = 0;
+
+        templateCount = {};
+        uniqueTemplateCount = 0;
+        totalUsageSum = 0;
     }
-    
+
     console.log("Template Usage:", templateCount);
     console.log("Unique Template Count:", uniqueTemplateCount);
     console.log("Total Template Usage Count:", totalUsageSum);
-    
+
 
 
 
@@ -180,45 +190,64 @@ const HomePage = () => {
 
 
     return (<div className=" min-h-screen overflow-x-hidden  ">
-<div className="bg-white p-5 rounded-lg shadow-md w-full mt-3">
-  {/* Dashboard Header */}
-  <div className="flex flex-col md:flex-row justify-between items-center">
-    <div className="text-center md:text-left">
-      <h2 className="font-bold text-2xl sm:text-3xl">CV Dashboard</h2>
-      <p className="text-gray-500 text-sm sm:text-base">Manage your CV templates and downloads</p>
+        <div className="bg-white p-5 rounded-lg shadow-md w-full mt-3">
+            {/* Dashboard Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white rounded-xl shadow-md p-6">
+  {/* Left Section: Heading + Marquee */}
+  <div className="text-center md:text-left w-full overflow-hidden">
+    {/* Animated Info Text */}
+    <div className="overflow-hidden whitespace-nowrap mb-2">
+      <p className="animate-marquee text-sm md:text-base font-medium text-primary">
+        Explore more options by clicking 'CV Templates' in the navigation bar.
+      </p>
     </div>
-    
-    {/* CV Statistics */}
-    <div className="flex justify-between w-full md:w-auto mt-4 md:mt-0 space-x-4">
-      <div className="bg-gray-100 p-4 rounded-lg text-center shadow-sm w-1/2 md:w-auto">
-        <h3 className="text-xl font-bold"> {totalUsageSum != null ? totalUsageSum : 'N/A'}</h3>
-        <p className="text-xs text-gray-500">Downloads</p>
-      </div>
-      <div className="bg-gray-100 p-4 rounded-lg text-center shadow-sm w-1/2 md:w-auto">
-        <h3 className="text-xl font-bold">{uniqueTemplateCount}</h3>
-        <p className="text-xs text-gray-500">Templates Used</p>
-      </div>
-       
-    </div>
+
+    {/* Dashboard Title */}
+    <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">CV Dashboard</h2>
+    <p className="text-gray-500 text-sm sm:text-base mt-1">
+      Manage your CV templates, usage, and downloads efficiently
+    </p>
   </div>
 
-  {/* Action Buttons */}
-  <div className="flex flex-col md:flex-row mt-6 space-y-4 md:space-y-0 md:space-x-4 w-full">
-    <HideInfo uuid={uuid} template={template} />
-    <button
-      onClick={() => navigate(`/introduction/${uuid}/${template}`)}
-      className="w-full md:w-auto py-2 px-4 bg-primary font-bold text-white rounded-full hover:bg-primary-dark transition"
-    >
-      Edit before downloading
-    </button>
-    <button
-      onClick={handleDownloadClick}
-      className="w-full md:w-auto py-2 px-4 bg-green-500 font-bold text-white rounded-full hover:bg-green-600 transition"
-    >
-      {downloading ? <Spinner /> : "Save & Download"}
-    </button>
+  {/* Right Section: Stats */}
+  <div className="flex flex-col sm:flex-row justify-center md:justify-end w-full md:w-auto mt-6 md:mt-0 gap-4">
+    {/* Downloads Card */}
+    <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl px-6 py-4 shadow-sm text-center hover:shadow-md transition">
+      <h3 className="text-2xl font-bold text-gray-800">
+        {totalUsageSum != null ? totalUsageSum : 'N/A'}
+      </h3>
+      <p className="text-sm text-gray-500 mt-1">Downloads</p>
+    </div>
+
+    {/* Templates Used Card */}
+    <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl px-6 py-4 shadow-sm text-center hover:shadow-md transition">
+      <h3 className="text-2xl font-bold text-gray-800">
+        {uniqueTemplateCount}
+      </h3>
+      <p className="text-sm text-gray-500 mt-1">Templates Used</p>
+    </div>
   </div>
 </div>
+
+
+
+            {/* Action Buttons */}
+            {/* <div className="flex flex-col md:flex-row mt-6 space-y-4 md:space-y-0 md:space-x-4 w-full">
+                
+                <button
+                    onClick={() => navigate(`/introduction/${uuid}/${template}`)}
+                    className="w-full md:w-auto py-2 px-4 bg-primary font-bold text-white rounded-full hover:bg-primary-dark transition"
+                >
+                    Edit before downloading
+                </button>
+                <button
+                    onClick={handleDownloadClick}
+                    className="w-full md:w-auto py-2 px-4 bg-green-500 font-bold text-white rounded-full hover:bg-green-600 transition"
+                >
+                    {downloading ? <Spinner /> : "Save & Download"}
+                </button>
+            </div> */}
+        </div>
 
         <div className="flex pt-4">
             <div className=" w-full ms-auto bg-dark">
@@ -236,6 +265,20 @@ const HomePage = () => {
                         { template: <Template10 /> }].map((item, index) => {
                             return index + 1 == template && <div>{item.template}</div>
                         })}
+                    <div className="w-full flex flex-col md:flex-row md:justify-end md:space-x-4 space-y-3 md:space-y-0 mt-4 pr-4">
+                        <button
+                            onClick={() => navigate(`/introduction/${uuid}/${template}`)}
+                            className="w-full md:w-auto py-2 px-4 bg-primary font-bold text-white rounded-full hover:bg-primary-dark transition"
+                        >
+                            Edit before downloading
+                        </button>
+                        <button
+                            onClick={handleDownloadClick}
+                            className="w-full md:w-auto py-2 px-4 bg-green-500 font-bold text-white rounded-full hover:bg-green-600 transition"
+                        >
+                            {downloading ? <Spinner /> : "Save & Download"}
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -243,11 +286,12 @@ const HomePage = () => {
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-8 rounded shadow-lg">
-                        <h2 className="text-lg font-bold mb-4">Enter CV Name</h2>
+                        <h2 className="text-lg font-bold mb-4">Cv Save & Download Form</h2>
                         {/* Informational description */}
                         <p className="mb-2 text-gray-700 max-w-xs">
+                            <HideInfo uuid={uuid} template={template} > </HideInfo>
                             Your CV will be saved to the Ekazi platform and will be available in your personal account.
-                            You can view  your saved CVs at any time by going to the <strong>My CV</strong> section on Ekazi.
+                            You can view  your saved CVs at any time by going to the <strong>My CV</strong>.
 
                         </p>
                         <input
