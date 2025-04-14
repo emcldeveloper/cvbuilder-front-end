@@ -66,10 +66,10 @@ const SampleTemplate = () => {
             formData.append('template_id', templateId);
             formData.append('view_count', 1);
 
-            await axios.post('http://127.0.0.1:8000/api/applicant/countcv', formData);
+            await axios.post('https://ekazi.co.tz/api/applicant/countcv', formData);
 
             // Refresh views after submit
-            const response = await axios.get("http://127.0.0.1:8000/api/applicant/getcvno");
+            const response = await axios.get("https://ekazi.co.tz/api/applicant/getcvno");
             const viewCounts = response.data.view_count;
             const mappedViews = {};
             viewCounts.forEach((item) => {
@@ -84,7 +84,7 @@ const SampleTemplate = () => {
 
     useEffect(() => {
         axios
-            .get("http://127.0.0.1:8000/api/applicant/getcvno")
+            .get("https://ekazi.co.tz/api/applicant/getcvno")
             .then((response) => {
                 const viewCounts = response.data.view_count;
                 if (Array.isArray(viewCounts)) {

@@ -94,7 +94,7 @@ const HomePage = () => {
 
                     // https://cvtemplate.ekazi.co.tz
                     return axios.get(
-                        `   http://localhost:5001/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`, options
+                        `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`, options
                     );
                 } else {
                     throw new Error(

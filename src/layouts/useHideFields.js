@@ -120,7 +120,7 @@ const MyComponent = ({ uuid, template }) => {
     // navigate(`/introduction/${uuid}/${template}`, { state: { hideFields: newHideFields } });
     e.preventDefault();
     console.log('send data :', CvToData);
-    const response = await axios.post(' http://127.0.0.1:8000/api/applicant/Hidepersoninfo', CvToData, {
+    const response = await axios.post('https://ekazi.co.tz/api/applicant/Hidepersoninfo', CvToData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
