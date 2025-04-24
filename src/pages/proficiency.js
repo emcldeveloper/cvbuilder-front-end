@@ -18,8 +18,6 @@ import moment from "moment";
 
 
 
-
-
 const Proficiency = () => {
 
     const [selectedOrganization, setSelectedOrganization] = useState('');

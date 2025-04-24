@@ -10,6 +10,7 @@ import moment from "moment";
 import HideInfo from '../layouts/useHideFields';
 import { useLocation } from 'react-router-dom';
  
+ 
 import { useHideFields } from '../layouts/HideFieldsContext';
 
 
@@ -23,6 +24,9 @@ const Template1 = () => {
   const [experiences,setExperiences] = useState([])
   // Access hideFields from the navigation state
   const { hideFields } = useHideFields();
+  const location = useLocation();
+
+  const isAdminTemplatePath = /^\/Admin\/[^/]+\/[^/]+$/.test(location.pathname);
 
   const isVerified = candidate?.subscription?.verify === 1;
   console.log("checjk verifcation:",isVerified);
@@ -89,15 +93,27 @@ const processText = (text) => {
       <div className="px-4 sm:px-6 md:px-8 lg:px-12 pt-4 sm:pt-6 md:pt-8 pb-8 sm:pb-12">
   {/* Watermark */}
   <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-    {candidate.subscription.length < 1 && (
-      <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
-        <img
-          src="/logo.png"
-          alt="Watermark"
-          className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
-        />
-      </div>
-    )}
+    
+        {isAdminTemplatePath && (
+          <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
+            <img
+              src="/logo.png"
+              alt="Watermark"
+              className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
+            />
+          </div>
+        )}
+  
+        {!isAdminTemplatePath && candidate.subscription.length < 1 && (
+          <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
+            <img
+              src="/logo.png"
+              alt="Watermark"
+              className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
+            />
+          </div>
+        )}
+   
   </div>
   
   

@@ -35,6 +35,7 @@ import Template7 from './templates/template7';
 import Template8 from './templates/template8';
 import Template9 from './templates/template9';
 import Template10 from './templates/template10';
+import AdminPage from './pages/admin';
 
  
 
@@ -60,6 +61,7 @@ function App() {
     <Route path='my-cv/:uuid/:template' index element={<MyCv />}/>
     <Route path='sample-template/:uuid/:template' index element={<Samplemplate/>}/>
     <Route path='cover-letter/:uuid/:template' index element={< CoverLetterGenerator />}/>
+    <Route path='Admin/:uuid/:template' index element={< AdminPage />}/>
    
  
    </Route>

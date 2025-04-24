@@ -13,6 +13,8 @@ import Template7 from "../templates/template7";
 import Template8 from "../templates/template8";
 import Template9 from "../templates/template9";
 import Template10 from "../templates/template10";
+import { FaFileAlt } from 'react-icons/fa'; // CV icon + View icon
+
 
 import axios from "axios";
 
@@ -23,6 +25,7 @@ const SampleTemplate = () => {
     const navigate = useNavigate();
     const { uuid } = useParams();
     const [templateViews, setTemplateViews] = useState({});
+    const [totalview, setotalview] = useState("");
 
 
     const templates = [
@@ -71,6 +74,9 @@ const SampleTemplate = () => {
             // Refresh views after submit
             const response = await axios.get("https://ekazi.co.tz/api/applicant/getcvno");
             const viewCounts = response.data.view_count;
+            const totalview = response.data.count;
+            setotalview(totalview);
+
             const mappedViews = {};
             viewCounts.forEach((item) => {
                 mappedViews[item.template_no] = item.view;
@@ -87,12 +93,15 @@ const SampleTemplate = () => {
             .get("https://ekazi.co.tz/api/applicant/getcvno")
             .then((response) => {
                 const viewCounts = response.data.view_count;
+                const totalview = response.data.count;
+                console.log("view total", totalview);
+                setotalview(totalview);
                 if (Array.isArray(viewCounts)) {
                     const mappedViews = {};
                     viewCounts.forEach((item) => {
                         mappedViews[item.template_no] = item.view;
                     });
-
+                    console.log('no of view total', viewCounts);
                     setTemplateViews(mappedViews); // set all views at once
                 } else {
                     console.error("Invalid view_count format:", response.data);
@@ -109,7 +118,19 @@ const SampleTemplate = () => {
 
     return (
         <div className="p-6">
-            <h1 className="font-bold text-3xl mb-6">Select Your CV Template</h1>
+
+
+
+            <h1 className="font-bold text-3xl mb-6 flex items-center gap-3">
+                <FaFileAlt className="text-blue-600" />
+                <span>Select Your CV Template</span>
+                <div className="flex items-center gap-1 text-gray-600 text-lg">
+                    <FaEye />
+                    <span>{totalview}</span>
+                </div>
+            </h1>
+
+
 
             {/* Template Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

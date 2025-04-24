@@ -370,7 +370,7 @@ console.log('ceck sub mosft vp',cvSubscriptionArray,"cheu",cvSubscription
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-96 h-auto max-h-100 p-6 rounded-lg shadow-lg overflow-y-auto">
-                        <h2 className="text-lg font-semibold mb-4">Choose a CV Template Subscription {cvSubscription}</h2>
+                        <h2 className="text-lg font-semibold mb-4">Choose a CV Template Subscription  {cvSubscription}</h2>
                         <ul className="space-y-4">
     {cvSubscriptionArray?.map((sub) => (
         <li
