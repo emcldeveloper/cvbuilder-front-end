@@ -151,7 +151,7 @@ const Languages = () => {
 
         e.preventDefault();
         console.log('send data for language purpose :', sendTOdata);
-        const response = await axios.post('https://ekazi.co.tz/api/applicant/storeLanguage', sendTOdata, {
+        const response = await axios.post('http://127.0.0.1:8000/api/applicant/storeLanguage', sendTOdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -199,7 +199,7 @@ const Languages = () => {
                 if (result.isConfirmed) {
                     try {
 
-                        const response = await axios.delete(`https://ekazi.co.tz/api/applicant/languagedelete/${id}`);
+                        const response = await axios.delete(`http://127.0.0.1:8000/api/applicant/languagedelete/${id}`);
 
                         if (response.status === 200) {
                             Swal.fire({
@@ -239,7 +239,7 @@ const Languages = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidelanguage/${id}`);
+                    const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hidelanguage/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -266,7 +266,7 @@ const Languages = () => {
     const handleUpdate = async (id, updateData) => {
         try {
             console.log('update data for Lnaguage ',updateData);
-            const response = await axios.post(`https://ekazi.co.tz/api/applicant/languageupdate/${id}`, updateData,
+            const response = await axios.post(`http://127.0.0.1:8000/api/applicant/languageupdate/${id}`, updateData,
                 {
                     
                     headers: {

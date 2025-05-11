@@ -71,88 +71,88 @@ const MainLayout = () => {
         setSelected(null);
     }
 
-    // useEffect(() => {
-    //     console.log(uuid);
-    //     axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
+    useEffect(() => {
+        console.log(uuid);
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
 
-    //         if (response != null) {
-    //             const data = response.data.data
-    //              console.log("all data",data);
-    //             setOriginalDetails(data);
-    //             // checkIfExists({ uuid }).then((value) => {
-    //             //     // if(value == false){
-    //             //     //     setDoc(doc(collection(firestore,"apis"),`${uuid}`),data) 
-    //             //     // }
-    //             // });
-    //         }
-    //     }).catch((error) => {
-    //         console.log(error);
-    //         throw error;
-    //     })
-    // }, [])
-    // useEffect(() => {
-    //     console.log(uuid);
-    //     axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
-    //         if (response != null) {
-    //             const data = response.data.data
+            if (response != null) {
+                const data = response.data.data
+                 console.log("all data",data);
+                setOriginalDetails(data);
+                // checkIfExists({ uuid }).then((value) => {
+                //     // if(value == false){
+                //     //     setDoc(doc(collection(firestore,"apis"),`${uuid}`),data) 
+                //     // }
+                // });
+            }
+        }).catch((error) => {
+            console.log(error);
+            throw error;
+        })
+    }, [])
+    useEffect(() => {
+        console.log(uuid);
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
+            if (response != null) {
+                const data = response.data.data
 
-    //             setCandidate(data);
+                setCandidate(data);
 
-    //         }
-    //     }).catch((error) => {
-    //         console.log(error);
-    //         throw error;
-    //     })
-    // }, [])
+            }
+        }).catch((error) => {
+            console.log(error);
+            throw error;
+        })
+    }, [])
 
 
 
-    // useEffect(() => {
-    //     axios
-    //         .get(`http://127.0.0.1:8000/api/applicant/CvSubscription`)
-    //         .then((response) => {
-    //             console.log("subscription data msoft:", response); // Debug API response
+    useEffect(() => {
+        axios
+            .get(`http://127.0.0.1:8000/api/applicant/CvSubscription`)
+            .then((response) => {
+                console.log("subscription data msoft:", response); // Debug API response
 
-    //             // Check if the response and its data exist
-    //             if (response && response.data) {
-    //                 const data = response.data.cv_plan_subscription;
+                // Check if the response and its data exist
+                if (response && response.data) {
+                    const data = response.data.cv_plan_subscription;
 
-    //                 // Ensure data is an array before setting it to state
-    //                 if (Array.isArray(data)) {
-    //                     setCvSubscription(data);
-    //                     console.log("Data set to cvSubscription:", data);
-    //                 } else {
-    //                     console.error("Expected an array but got:", data);
-    //                     setCvSubscription([]); // Set to an empty array to avoid errors
-    //                 }
-    //             } else {
-    //                 console.error("Unexpected response structure:", response);
-    //                 setCvSubscription([]); // Set to an empty array to avoid errors
-    //             }
-    //         })
-    //         .catch((error) => {
+                    // Ensure data is an array before setting it to state
+                    if (Array.isArray(data)) {
+                        setCvSubscription(data);
+                        console.log("Data set to cvSubscription:", data);
+                    } else {
+                        console.error("Expected an array but got:", data);
+                        setCvSubscription([]); // Set to an empty array to avoid errors
+                    }
+                } else {
+                    console.error("Unexpected response structure:", response);
+                    setCvSubscription([]); // Set to an empty array to avoid errors
+                }
+            })
+            .catch((error) => {
                
-    //             setCvSubscription([]); // Set to an empty array to avoid errors
-    //         });
-    // }, []); // Empty dependency array means this runs only once on component mount
+                setCvSubscription([]); // Set to an empty array to avoid errors
+            });
+    }, []); // Empty dependency array means this runs only once on component mount
     
-    // useEffect(() => {
-    //     axios
-    //         .get(`http://127.0.0.1:8000/api/applicant/CvSubscriptiondata/${uuid}`)
-    //         .then((response) => {
-    //             console.log("API Response:", response); // Debug API response
-    //             if (response) {
-    //                 const data = response.data.subscription
-    //                 setSubscription(data);
-    //                 console.log("test cv sub", data);
-    //             } else {
-    //                 console.error("Unexpected response structure:", response);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching CV Subscription data:", error.message);
-    //         });
-    // }, []); // Empty dependency array means this runs only once on component mount
+    useEffect(() => {
+        axios
+            .get(`http://127.0.0.1:8000/api/applicant/CvSubscriptiondata/${uuid}`)
+            .then((response) => {
+                console.log("API Response:", response); // Debug API response
+                if (response) {
+                    const data = response.data.subscription
+                    setSubscription(data);
+                    console.log("test cv sub", data);
+                } else {
+                    console.error("Unexpected response structure:", response);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching CV Subscription data:", error.message);
+            });
+    }, []); // Empty dependency array means this runs only once on component mount
 
 
     const handleSubscriptionSelect = (subId) => {
@@ -365,7 +365,6 @@ const MainLayout = () => {
 
             </div>
             
-
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-96 h-auto max-h-100 p-6 rounded-lg shadow-lg overflow-y-auto">

@@ -14,7 +14,7 @@ const HideModal = ({ hideFields, onFieldChange, onApply, onCancel, onHide }) => 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-lg">
-        <h2 className="text-lg font-bold mb-4">Select Fields to Hide </h2>
+        <h2 className="text-lg font-bold mb-4">Select Fields to Hide un select for Un hide then click apply </h2>
         <div className="space-y-2">
           <label className="flex items-center">
             <input
@@ -69,12 +69,12 @@ const HideModal = ({ hideFields, onFieldChange, onApply, onCancel, onHide }) => 
           >
             Cancel
           </button>
-          <button
+          {/* <button
             onClick={onHide}
             className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-blue-600"
           >
             Un hide
-          </button>
+          </button> */}
           <button
             onClick={onApply}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -119,8 +119,8 @@ const MyComponent = ({ uuid, template }) => {
     // setModalOpen(false);
     // navigate(`/introduction/${uuid}/${template}`, { state: { hideFields: newHideFields } });
     e.preventDefault();
-    console.log('send data :', CvToData);
-    const response = await axios.post('https://ekazi.co.tz/api/applicant/Hidepersoninfo', CvToData, {
+   
+    const response = await axios.post('http://127.0.0.1:8000/api/applicant/Hidepersoninfo', CvToData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -128,8 +128,10 @@ const MyComponent = ({ uuid, template }) => {
 
     );
     try {
+      console.log('send data  to hide is reach:', CvToData);
+      
         if (response.status === 200) {
-            console.log(response.data.success);
+            console.log('data imerud ',response.data.success);
             Swal.fire({
                 title: 'Success!',
                 text: response.data.success,
@@ -138,6 +140,7 @@ const MyComponent = ({ uuid, template }) => {
             });
            // window.location.reload(); // Reloads the entire page
         }
+        window.location.reload();
     } catch (error) {
         Swal.fire({
             title: 'Error!',
@@ -153,7 +156,7 @@ const MyComponent = ({ uuid, template }) => {
   };
 
   useEffect(() => {
-    console.log("hideFields updated:", hideFields);
+    
   }, [hideFields]);
   const handleHideClick = () => {
     setModalOpen(true);
@@ -174,7 +177,7 @@ const MyComponent = ({ uuid, template }) => {
       referee: false,
       picture : false,
     };
-    console.log("Unhide clicked - Check if name is unhidden:", newHideFields.name);
+    
     setHideFields(newHideFields);
     setModalOpen(false);
     navigate(`/${uuid}/${template}`, { state: { hideFields: newHideFields } });

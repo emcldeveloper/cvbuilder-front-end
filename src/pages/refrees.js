@@ -86,7 +86,7 @@ const Refrees = () => {
 
         try {
 
-            const response = await axios.post(`https://ekazi.co.tz/api/applicant/refereestore/`, dataToSend,
+            const response = await axios.post(`http://127.0.0.1:8000/api/applicant/refereestore/`, dataToSend,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const Refrees = () => {
             //  alert('Referee added successfully!'); // Notify the user of success
         } catch (error) {
             // Handle any errors that occur during the request
-            console.error('There was an error submitting the form:', error);
+         
             Swal.fire({
                 title: 'Error!',
                 text: 'Something went wrong. Please try again.',
@@ -120,7 +120,7 @@ const Refrees = () => {
                 confirmButtonText: 'OK'
             });
         }
-        console.log('Form data submitted:', formData);
+   
         closeModal();
     };
     const handleRemove = (id) => {
@@ -135,7 +135,7 @@ const Refrees = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`https://ekazi.co.tz/api/applicant/refereedelete/${id}`);
+                    const response = await axios.delete(`http://127.0.0.1:8000/api/applicant/refereedelete/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -149,7 +149,7 @@ const Refrees = () => {
                     }
 
                 } catch (error) {
-                    console.error('There was an error removing the referee:', error);
+                   
 
                     Swal.fire({
                         title: 'Error!',
@@ -175,7 +175,7 @@ const Refrees = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hide/${id}`);
+                    const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hide/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -188,7 +188,7 @@ const Refrees = () => {
 
                     window.location.reload(); // Reloads the entire page
                 } catch (error) {
-                    console.error('There was an error hide the referee:', error);
+                 
                     Swal.fire({
                         title: 'Error!',
                         text: 'Something went wrong. Please try again.',
@@ -201,7 +201,7 @@ const Refrees = () => {
     };
     const handleUpdate =async (id,updateData) => {
         try {
-            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updatereferee/${id}`,updateData ,
+            const response = await axios.post(`http://127.0.0.1:8000/api/applicant/updatereferee/${id}`,updateData ,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -221,7 +221,7 @@ const Refrees = () => {
 
             window.location.reload(); // Reloads the entire page
         } catch (error) {
-            console.error('There was an error hide the referee:', error);
+    
             Swal.fire({
                 title: 'Error!',
                 text: 'Something went wrong. Please try again.',

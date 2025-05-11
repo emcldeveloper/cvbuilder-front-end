@@ -36,7 +36,7 @@ const Training = () => {
         attachment: null // To store the file
 
     });
-    console.log('edit data for training ', editTraining);
+    
     // Handle file input change
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0],);
@@ -96,7 +96,7 @@ const Training = () => {
         try {
 
             // Submit form data without manually setting the Content-Type
-            const response = await axios.post('https://ekazi.co.tz/api/applicant/storetraining', sendToData, {
+            const response = await axios.post('http://127.0.0.1:8000/api/applicant/storetraining', sendToData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -155,7 +155,7 @@ const Training = () => {
             if (result.isConfirmed) {
                 try {
                     console.log(id);
-                    const response = await axios.delete(`https://ekazi.co.tz/api/applicant/trainingdelete/${id}`);
+                    const response = await axios.delete(`http://127.0.0.1:8000/api/applicant/trainingdelete/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -193,7 +193,7 @@ const Training = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidetraining/${id}`);
+                    const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hidetraining/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -220,7 +220,7 @@ const Training = () => {
     const handleUpdate = async (id, updateData) => {
         try {
             console.log('update data for training ', updateData);
-            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updatetraining/${id}`, updateData,
+            const response = await axios.post(`http://127.0.0.1:8000/api/applicant/updatetraining/${id}`, updateData,
                 {
 
                     headers: {

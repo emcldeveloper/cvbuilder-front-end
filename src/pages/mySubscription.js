@@ -25,7 +25,7 @@ const MySubscription = () => {
 
     useEffect(() => {
         axios
-            .get(`https://ekazi.co.tz/api/applicant/CvSubscriptiondata/${uuid}`)
+            .get(`http://127.0.0.1:8000/api/applicant/CvSubscriptiondata/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response); // Debug API response
                 if (response) {

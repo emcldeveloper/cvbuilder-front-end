@@ -62,9 +62,9 @@ const Proficiency = () => {
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0],);
-        console.log('receive file :', selectedFile);
+        
     };
-    console.log('receive file :', selectedFile);
+ 
 
     const sendTOdata = {
         ...formData,
@@ -106,7 +106,7 @@ const Proficiency = () => {
     }
     const handleFileEditChange = (e) => {
         setEditFile(e.target.files[0],);
-        console.log('receive file :', selectedFile);
+      
     };
     const handlechangeorganization = (value) => {
         seteditOrganization(value);
@@ -134,12 +134,12 @@ const Proficiency = () => {
         attachment: EditFile,
         award: editaward,
     }
-    console.log('organization proficience edit', EditToData);
+   
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         console.log('send data :', sendTOdata);
-        const response = await axios.post('https://ekazi.co.tz/api/applicant/proficiencystore', sendTOdata, {
+        const response = await axios.post('http://127.0.0.1:8000/api/applicant/proficiencystore', sendTOdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -148,7 +148,7 @@ const Proficiency = () => {
         );
         try {
             if (response.status === 200) {
-                console.log(response.data.success);
+          
                 Swal.fire({
                     title: 'Success!',
                     text: response.data.success,
@@ -186,7 +186,7 @@ const Proficiency = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const response = await axios.delete(`https://ekazi.co.tz/api/applicant/deleteproficiency/${id}`);
+                        const response = await axios.delete(`http://127.0.0.1:8000/api/applicant/deleteproficiency/${id}`);
 
                         if (response.status === 200) {
                             Swal.fire({
@@ -200,7 +200,7 @@ const Proficiency = () => {
                         }
 
                     } catch (error) {
-                        console.error('There was an error removing the referee:', error);
+                         
 
                         Swal.fire({
                             title: 'Error!',
@@ -226,7 +226,7 @@ const Proficiency = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideproficiency/${id}`);
+                    const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hideproficiency/${id}`);
 
                     if (response.status === 200) {
                         Swal.fire({
@@ -239,7 +239,7 @@ const Proficiency = () => {
 
                     window.location.reload(); // Reloads the entire page
                 } catch (error) {
-                    console.error('There was an error hide the referee:', error);
+                   
                     Swal.fire({
                         title: 'Error!',
                         text: 'Something went wrong. Please try again.',
@@ -252,8 +252,8 @@ const Proficiency = () => {
     };
     const handleUpdate = async (id, updateData) => {
         try {
-            console.log("update proficience  ", updateData);
-            const response = await axios.post(`https://ekazi.co.tz/api/applicant/updateproficiency/${id}`, updateData,
+          
+            const response = await axios.post(`http://127.0.0.1:8000/api/applicant/updateproficiency/${id}`, updateData,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -273,7 +273,7 @@ const Proficiency = () => {
 
             window.location.reload(); // Reloads the entire page
         } catch (error) {
-            console.error('There was an error hide the referee:', error);
+            
             Swal.fire({
                 title: 'Error!',
                 text: 'Something went wrong. Please try again.',

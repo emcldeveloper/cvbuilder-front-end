@@ -15,7 +15,7 @@ const Course = ({ label, onSelect, onOptionsLoad, initialValue }) => {
 
     setLoading(true);
     try {
-      const response = await fetch(`https://ekazi.co.tz/api/applicant/course?page=${pageNum}`);
+      const response = await fetch(`http://127.0.0.1:8000/api/applicant/course?page=${pageNum}`);
       const data = await response.json();
 
       if (data.course && Array.isArray(data.course)) {
@@ -37,7 +37,7 @@ const Course = ({ label, onSelect, onOptionsLoad, initialValue }) => {
         setSelected(initialOption || null);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+     
       setError('Failed to load options');
     } finally {
       setLoading(false);

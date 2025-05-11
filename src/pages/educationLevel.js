@@ -12,7 +12,7 @@ const EducationLevel = ({ label, onSelect }) => {
     const fetchOptions = async () => {
       setLoading(true);
       try {
-        const response = await fetch('https://ekazi.co.tz/api/applicant/education_level');
+        const response = await fetch('http://127.0.0.1:8000/api/applicant/education_level');
         const data = await response.json();
 
         // Convert data to the format needed for react-select

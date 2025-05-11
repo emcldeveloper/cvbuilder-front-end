@@ -75,7 +75,7 @@ const MyCv = () => {
     useEffect(() => {
         axios
         // https://ekazi.co.tz
-            .get(`https://ekazi.co.tz/api/applicant/mycv/${uuid}`)
+            .get(`http://127.0.0.1:8000/api/applicant/mycv/${uuid}`)
             .then((response) => {
                 console.log("API Response:", response);
                 if (response) {
@@ -104,11 +104,11 @@ const MyCv = () => {
     // Add this function to handle deletion
     const handleDeletey = (id) => {
         // Implement your delete logic here
-        console.log('Delete item with id:', id);
+       
         // Typically you would make an API call to delete the item
         // and then update your state to remove the deleted item
        
-        axios.delete(`https://ekazi.co.tz/api/applicant/deletecv/${id}`)
+        axios.delete(`http://127.0.0.1:8000/api/applicant/deletecv/${id}`)
             .then((response) => {
           
                 const data = response.data;
@@ -140,7 +140,7 @@ const MyCv = () => {
                 if (result.isConfirmed) {
                     try {
 
-                        const response = await axios.delete(`https://ekazi.co.tz/api/applicant/deletecv/${id}`);
+                        const response = await axios.delete(`http://127.0.0.1:8000/api/applicant/deletecv/${id}`);
 
                         if (response.status === 200) {
                             Swal.fire({
@@ -153,7 +153,7 @@ const MyCv = () => {
                         setSubscription(prev => prev.filter(item => item.id !== id));
 
                     } catch (error) {
-                        console.error('There was an error removing the referee:', error);
+                       
 
                         Swal.fire({
                             title: 'Error!',
@@ -166,7 +166,7 @@ const MyCv = () => {
             });
         };
     };
-    console.log('cv selection is done', selectedCv);
+    
 
     return (
         <div>

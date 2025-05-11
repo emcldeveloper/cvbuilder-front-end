@@ -36,6 +36,11 @@ import Template8 from './templates/template8';
 import Template9 from './templates/template9';
 import Template10 from './templates/template10';
 import AdminPage from './pages/admin';
+import FeactursJob from './pages/job';
+import JobListing from './pages/job';
+import JobApply from './pages/applijob';
+import CoverLetterForm from './pages/applijob';
+import ApplicantProfile from './pages/profile';
 
  
 
@@ -47,6 +52,7 @@ function App() {
    <Route path='/a4'  element={<A4Paper/>}/>
    <Route path='/' element={<MainLayout/>}>
    <Route path='/:uuid/:template' index element={<HomePage/>}/>
+   <Route path='/edit-profile' index element={<ApplicantProfile/>}/>
     <Route path='introduction/:uuid/:template' index element={<IntroductionDetails/>}/>
     <Route path='professional_summary/:uuid/:template' index element={<ProfessionalSummary/>}/>
     <Route path='educations/:uuid/:template' index element={<Educations/>}/>
@@ -62,6 +68,8 @@ function App() {
     <Route path='sample-template/:uuid/:template' index element={<Samplemplate/>}/>
     <Route path='cover-letter/:uuid/:template' index element={< CoverLetterGenerator />}/>
     <Route path='Admin/:uuid/:template' index element={< AdminPage />}/>
+    <Route path='find-job/:uuid/:template' index element={<JobListing />}/>
+    <Route path='apply-job/:uuid/:template' index element={<CoverLetterForm />}/>
    
  
    </Route>

@@ -8,13 +8,13 @@ export const SubscriptionProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`https://ekazi.co.tz/api/applicant/CvSubscription`)
+      .get(`http://127.0.0.1:8000/api/applicant/CvSubscription`)
       .then((response) => {
         console.log("API Response:", response); // Debug API response
         if (response ) {
           const data = response.data.cv_plan_subscription
           setSubscription(data);
-          console.log("test cv sub", data);
+        
         } else {
           console.error("Unexpected response structure:", response);
         }

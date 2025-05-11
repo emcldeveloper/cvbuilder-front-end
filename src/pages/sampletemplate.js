@@ -51,7 +51,7 @@ const SampleTemplate = () => {
     };
 
     const handleSave = () => {
-        console.log("Selected Template:", selectedTemplate);
+        
         navigate(`/${uuid}/${selectedTemplate}`); // Navigate to the next step
     };
 
@@ -69,10 +69,10 @@ const SampleTemplate = () => {
             formData.append('template_id', templateId);
             formData.append('view_count', 1);
 
-            await axios.post('https://ekazi.co.tz/api/applicant/countcv', formData);
+            await axios.post('http://127.0.0.1:8000/api/applicant/countcv', formData);
 
             // Refresh views after submit
-            const response = await axios.get("https://ekazi.co.tz/api/applicant/getcvno");
+            const response = await axios.get("http://127.0.0.1:8000/api/applicant/getcvno");
             const viewCounts = response.data.view_count;
             const totalview = response.data.count;
             setotalview(totalview);
@@ -90,7 +90,7 @@ const SampleTemplate = () => {
 
     useEffect(() => {
         axios
-            .get("https://ekazi.co.tz/api/applicant/getcvno")
+            .get("http://127.0.0.1:8000/api/applicant/getcvno")
             .then((response) => {
                 const viewCounts = response.data.view_count;
                 const totalview = response.data.count;

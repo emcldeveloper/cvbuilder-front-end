@@ -41,7 +41,7 @@ const ProfileLayout = () => {
     
 
 useEffect(()=>{
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response)=>{
+    axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response)=>{
          if(response != null){
           const data = response.data.data
           setOriginalDetails(data);

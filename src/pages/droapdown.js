@@ -15,7 +15,7 @@ const Dropdown = ({ label, onSelect ,onOptionsLoad, initialValue }) => {
     const fetchOptions = async () => {
       setLoading(true);
       try {
-        const response = await fetch('https://ekazi.co.tz/api/applicant/organization');
+        const response = await fetch('http://127.0.0.1:8000/api/applicant/organization');
         const data = await response.json();
 
         // Convert data to the format needed for react-select

@@ -10,7 +10,7 @@ const Major = ({ label, onSelect,onOptionsLoad, initialValue}) => {
   // Fetch options from API once when component mounts
   const fetchOptions = async () => {
     try {
-      const response = await fetch('https://ekazi.co.tz/api/applicant/major');
+      const response = await fetch('http://127.0.0.1:8000/api/applicant/major');
       const data = await response.json();
 
       // Format options for react-select

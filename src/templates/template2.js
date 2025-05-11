@@ -19,9 +19,10 @@ const Template2 = () => {
     
     useEffect(() => {
         // Fetch data from the API
-        axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`)
           .then((response) => {
             if (response?.data?.data) {
+              console.log('view all data',response.data.data)
               setCandidate(response.data.data);  // Set the candidate data from the API response
               setShow(true);  // Display the content
             }
@@ -62,9 +63,10 @@ const Template2 = () => {
   <div className="grid grid-cols-1 sm:grid-cols-12 mt-8 items-center gap-4">
     {/* Profile Image */}
     <div className="col-span-4 flex justify-center sm:justify-start">
+    
       <img
         alt="profile image"
-        src={`https://ekazi.co.tz/${candidate.applicant_profile[0]?.picture}`}
+        src={`http://127.0.0.1:8000/${candidate.applicant_profile[0]?.picture}`}
         className="w-48 h-48 object-cover"
       />
     </div>
@@ -75,32 +77,57 @@ const Template2 = () => {
       <h1>{candidate.experience.length > 0 && candidate.experience[0]?.position?.position_name}</h1>
       <div className="space-y-1 mt-2 break-words">
         {[
-          {   icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
+          { 
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
               </svg>
-          ), title: "Location:", value: "Dar es salaam" },
-          {  icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
+            ), 
+            title: "Location:", 
+            value: "Dar es salaam" 
+          },
+          {  
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
               </svg>
-          ), title: "Phone:", value: candidate.phone?.phone_number },
-          {  icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-              <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+            ), 
+            title: "Phone:", 
+            value: candidate.phone?.phone_number 
+          },
+          
+          // Corrected email section
+          ...(parseInt(candidate.user[0]?.hide) !== 1 ? [
+            {
+              icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                  <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                  <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                </svg>
+              ),
+              title: "Email:",
+              value: candidate.applicant_profile[0]?.email
+            }
+          ] : []),
+          
+          {  
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM8.547 4.505a8.25 8.25 0 1 0 11.672 8.214l-.46-.46a2.252 2.252 0 0 1-.422-.586l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.211.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.654-.261a2.25 2.25 0 0 1-1.384-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.279-2.132Z" clipRule="evenodd" />
               </svg>
-          ), title: "Email:", value: candidate.applicant_profile[0]?.email },
-          {  icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM8.547 4.505a8.25 8.25 0 1 0 11.672 8.214l-.46-.46a2.252 2.252 0 0 1-.422-.586l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.211.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.654-.261a2.25 2.25 0 0 1-1.384-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.279-2.132Z" clipRule="evenodd" />
+            ), 
+            title: "Nationality:", 
+            value: candidate.address[0].name 
+          },
+          {   
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                <path fillRule="evenodd" d="M1.5 7.125c0-1.036.84-1.875 1.875-1.875h6c1.036 0 1.875.84 1.875 1.875v3.75c0 1.036-.84 1.875-1.875 1.875h-6A1.875 1.875 0 0 1 1.5 10.875v-3.75Zm12 1.5c0-1.036.84-1.875 1.875-1.875h5.25c1.035 0 1.875.84 1.875 1.875v8.25c0 1.035-.84 1.875-1.875 1.875h-5.25a1.875 1.875 0 0 1-1.875-1.875v-8.25ZM3 16.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875v2.25c0 1.035-.84 1.875-1.875 1.875h-5.25A1.875 1.875 0 0 1 3 18.375v-2.25Z" clipRule="evenodd" />
               </svg>
-          ), title: "Nationality:", value: "Tanzanian" },
-          {   icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" d="M1.5 7.125c0-1.036.84-1.875 1.875-1.875h6c1.036 0 1.875.84 1.875 1.875v3.75c0 1.036-.84 1.875-1.875 1.875h-6A1.875 1.875 0 0 1 1.5 10.875v-3.75Zm12 1.5c0-1.036.84-1.875 1.875-1.875h5.25c1.035 0 1.875.84 1.875 1.875v8.25c0 1.035-.84 1.875-1.875 1.875h-5.25a1.875 1.875 0 0 1-1.875-1.875v-8.25ZM3 16.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875v2.25c0 1.035-.84 1.875-1.875 1.875h-5.25A1.875 1.875 0 0 1 3 18.375v-2.25Z" clipRule="evenodd" />
-              </svg>
-          ), title: "Gender:", value: candidate.applicant_profile[0]?.gender_name },
+            ), 
+            title: "Gender:", 
+            value: candidate.applicant_profile[0]?.gender_name 
+          }
         ].map((item, index) => (
           <div key={index} className="flex space-x-2 items-center">
             <div className="text-orange-500">{item.icon}</div>
@@ -124,10 +151,12 @@ const Template2 = () => {
 
     <div className="grid grid-cols-1 sm:grid-cols-12 mt-2 gap-4">
       <div className="col-span-4 pr-8">
-        <h1 className="font-bold text-lg">PROFESSIONAL SUMMARY</h1>
+        <h1 className="font-bold text-lg">PROFESSIONAL SUMMARY </h1>
       </div>
       <div className="col-span-8">
         <p>{candidate.careers[0]?.career}</p>
+      
+        
         <h1 className="font-bold mt-2">Career Objective</h1>
         <p>{candidate.objective?.objective}</p>
       </div>
@@ -437,46 +466,48 @@ const Template2 = () => {
   </div>
 
   {/* References Section */}
-  <div className="mt-8">
-    <div>
-      <div className="grid grid-cols-12">
-        <div className="col-span-4">
-          <div className="py-[4px] bg-orange-500"></div>
+  {candidate?.referees?.filter(item => item.hide2 !== 1).length > 0 && (
+    <div className="mt-8">
+      <div>
+        <div className="grid grid-cols-12">
+          <div className="col-span-4">
+            <div className="py-[4px] bg-orange-500"></div>
+          </div>
+        </div>
+        <div className="py-[2px] bg-gray-100"></div>
+      </div>
+  
+      <div className="grid grid-cols-1 sm:grid-cols-12 mt-2 gap-4">
+        <div className="col-span-4 pr-8">
+          <h1 className="font-bold text-lg">REFERENCES</h1>
+        </div>
+        <div className="col-span-8">
+          {candidate.referees
+            .filter(item => item.hide2 !== 1)
+            .map((item, index) => (
+              <div key={index} className="grid grid-cols-1 sm:grid-cols-2">
+                <div>
+                  <p>
+                    <span className="font-bold">
+                      {item?.first_name || 'Unknown'} {item?.middle_name || ''} {item?.last_name || 'Unknown'}
+                    </span>
+                  </p>
+                  <p>{item?.referee_position || 'Unknown Position'}</p>
+                  <p>
+                    <span className="font-bold">Phone:</span> {item?.phone || 'N/A'}
+                  </p>
+                  <p>
+                    <span className="font-bold">Email:</span> {item?.email || 'N/A'}
+                  </p>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
-      <div className="py-[2px] bg-gray-100"></div>
     </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-12 mt-2 gap-4">
-      <div className="col-span-4 pr-8">
-        <h1 className="font-bold text-lg">REFERENCES</h1>
-      </div>
-      <div className="col-span-8">
-        {candidate?.referees?.length > 0 ? (
-          candidate.referees.map((item, index) => (
-            <div key={index} className="grid grid-cols-1 sm:grid-cols-2">
-              <div>
-                <p>
-                  <span className="font-bold">
-                    {item?.first_name || 'Unknown'} {item?.middle_name || ''} {item?.last_name || 'Unknown'}
-                  </span>
-                </p>
-                <p>{item?.referee_position || 'Unknown Position'}</p>
-                <p>
-                  <span className="font-bold">Phone:</span> {item?.phone || 'N/A'}
-                </p>
-                <p>
-                  <span className="font-bold">Email:</span> {item?.email || 'N/A'}
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No references available</p>
-        )}
-      </div>
-    </div>
-  </div>
+  )}
+  
+  
 </div>
     </div> );
 }

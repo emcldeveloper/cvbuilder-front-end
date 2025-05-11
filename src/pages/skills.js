@@ -55,11 +55,11 @@ const Skills = () => {
     setOpenEditModel(true);
     setFormData(originalDetails);
   }
-  console.log('check skill to edit', formData);
+ 
 
 
   const handlecultureChange = (selectedValues) => {
-    console.log('Received Selected Cultures:', selectedValues);
+   
     setSelectedCultures(selectedValues);
   };
 
@@ -68,15 +68,15 @@ const Skills = () => {
     setseletedPersonality(selectedValues);
   }
   const handleSelectSkill = (skill) => {
-    console.log('Received Selected skill:', skill);
+ 
     setSelectedSkills(skill)
   }
   const handleselectedSoftware = (software) => {
-    console.log('Received Selected software:', software);
+   
     setSelectedSoftware(software)
   }
   const handleSelectedTool = (tool) => {
-    console.log('tool received :', tool);
+   
     setSelectedTool(tool)
   }
 
@@ -97,7 +97,7 @@ const Skills = () => {
     const cultureData = selectedCultures?.length > 0
       ? selectedCultures
       : formData.culture.map((item) => item.culture.id)
-    console.log('send data  skills to skills:', cultureData)
+ 
     const personalityData = selectpersonalities?.length > 0
       ? selectpersonalities
       : formData.applicant_personality.map((item) => item.personality.id)
@@ -109,10 +109,10 @@ const Skills = () => {
       software: softwareData,
       user_id: uuid,
     };
-    console.log('send data  skills to skills:', personalityData)
+    
     try {
 
-      const response = await axios.post(`https://ekazi.co.tz/api/applicant/generalskills`, dataToSend,
+      const response = await axios.post(`http://127.0.0.1:8000/api/applicant/generalskills`, dataToSend,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ const Skills = () => {
       //  alert('Referee added successfully!'); // Notify the user of success
     } catch (error) {
       // Handle any errors that occur during the request
-      console.error('There was an error submitting the form:', error);
+   
       Swal.fire({
         title: 'Error!',
         text: 'Something went wrong. Please try again.',
@@ -160,8 +160,8 @@ const Skills = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log('delete culture :', id);
-          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideculture/${id}`);
+        
+          const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hideculture/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -175,7 +175,7 @@ const Skills = () => {
           }
 
         } catch (error) {
-          console.error('There was an error removing the referee:', error);
+        
 
           Swal.fire({
             title: 'Error!',
@@ -199,8 +199,8 @@ const Skills = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log('delete culture :', id);
-          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidetool/${id}`);
+         
+          const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hidetool/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -214,7 +214,7 @@ const Skills = () => {
           }
 
         } catch (error) {
-          console.error('There was an error removing the referee:', error);
+        
 
           Swal.fire({
             title: 'Error!',
@@ -238,8 +238,8 @@ const Skills = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log('delete culture :', id);
-          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidepersonality/${id}`);
+       
+          const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hidepersonality/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -253,7 +253,7 @@ const Skills = () => {
           }
 
         } catch (error) {
-          console.error('There was an error removing the referee:', error);
+         
 
           Swal.fire({
             title: 'Error!',
@@ -277,8 +277,8 @@ const Skills = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log('delete culture :', id);
-          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hidesoftware/${id}`);
+          
+          const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hidesoftware/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -292,7 +292,7 @@ const Skills = () => {
           }
 
         } catch (error) {
-          console.error('There was an error removing the referee:', error);
+       
 
           Swal.fire({
             title: 'Error!',
@@ -316,8 +316,8 @@ const Skills = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log('delete culture :', id);
-          const response = await axios.post(`https://ekazi.co.tz/api/applicant/hideknowledge/${id}`);
+         
+          const response = await axios.post(`http://127.0.0.1:8000/api/applicant/hideknowledge/${id}`);
 
           if (response.status === 200) {
             Swal.fire({
@@ -331,7 +331,7 @@ const Skills = () => {
           }
 
         } catch (error) {
-          console.error('There was an error removing the referee:', error);
+          
 
           Swal.fire({
             title: 'Error!',

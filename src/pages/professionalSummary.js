@@ -22,7 +22,7 @@ const ProfessionalSummary = () => {
   console.log('objective current', Objective);
   useEffect(() => {
     console.log(uuid);
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`).then((response) => {
+    axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
       if (response != null) {
         const data = response.data.data
 
@@ -80,7 +80,7 @@ const ProfessionalSummary = () => {
   useEffect(() => {
     const saveCareerObjective = async () => {
       try {
-        const response = await axios.put(`https://ekazi.co.tz/api/applicant/storecareerobjective/${uuid}`, sendData,
+        const response = await axios.put(`http://127.0.0.1:8000/api/applicant/storecareerobjective/${uuid}`, sendData,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ const ProfessionalSummary = () => {
     const saveObjective = async () => {
       try {
         console.log('send data three',sendData2);
-        const response = await axios.put(`https://ekazi.co.tz/api/applicant/storeObjective/${uuid}`, sendData2,
+        const response = await axios.put(`http://127.0.0.1:8000/api/applicant/storeObjective/${uuid}`, sendData2,
           {
             headers: {
               'Content-Type': 'application/json',

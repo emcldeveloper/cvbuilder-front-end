@@ -67,8 +67,14 @@ const NavBar = ({ openModal }) => {
                     >
                         CV Building
                     </a>
-                    <a
+                    {/* <a
                         onClick={() => { window.location.href = "https://ekazi.co.tz/find-job"; }}
+                        className="block text-black font-semibold hover:text-blue-600 transition py-2 md:py-0"
+                    >
+                        Find Job
+                    </a> */}
+                    <a
+                                 onClick={() => navigate(`/find-job/${uuid}/${template}`)}
                         className="block text-black font-semibold hover:text-blue-600 transition py-2 md:py-0"
                     >
                         Find Job

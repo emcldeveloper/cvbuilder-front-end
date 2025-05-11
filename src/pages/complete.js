@@ -45,7 +45,7 @@ const Complete = () => {
     
         // Step 1: Save the CV
         axios
-            .post("https://ekazi.co.tz/api/applicant/savedCv", sendToData)
+            .post("http://127.0.0.1:8000/api/applicant/savedCv", sendToData)
             .then((saveResponse) => {
                 // Ensure the save operation was successful
                 if (saveResponse.status === 200) {
@@ -58,7 +58,7 @@ const Complete = () => {
     
                     // Step 2: Generate the PDF and get the link
                     return axios.get(
-                        `https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
+                        `http://127.0.0.1:8000/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`
                     );
                 } else {
                     throw new Error("Failed to save CV. Please try again.");
