@@ -41,6 +41,7 @@ import JobListing from './pages/job';
 import JobApply from './pages/applijob';
 import CoverLetterForm from './pages/applijob';
 import ApplicantProfile from './pages/profile';
+import HomePage2 from './pages/HomePage2';
 
  
 
@@ -50,7 +51,8 @@ function App() {
    <BrowserRouter>
    <Routes>
    <Route path='/a4'  element={<A4Paper/>}/>
-   <Route path='/' element={<MainLayout/>}>
+   
+   <Route path='/' element={<HomePage2/>}>
    <Route path='/:uuid/:template' index element={<HomePage/>}/>
    <Route path='/edit-profile' index element={<ApplicantProfile/>}/>
     <Route path='introduction/:uuid/:template' index element={<IntroductionDetails/>}/>
