@@ -40,6 +40,7 @@ import CoverLetterForm from './pages/applijob';
 import ApplicantProfile from './pages/profile';
 
 import Home from './pages/Home';
+import JobSeekerDashboard from './pages/JobSeeker/JobSeekerDashboard';
 
  
 
@@ -52,7 +53,7 @@ function App() {
   <Routes>
   
     <Route path="/" element={<Home />}>
-      {/* <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} /> */}
+      <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
       <Route path="edit-profile" element={<ApplicantProfile />} />
       <Route path="introduction/:uuid/:template" element={<IntroductionDetails />} />
       <Route path="professional_summary/:uuid/:template" element={<ProfessionalSummary />} />
