@@ -17,6 +17,7 @@ import Template10 from "../templates/template10";
 import HideInfo from '../layouts/useHideFields';
 import { useLocation } from 'react-router-dom';
 import { FaDownload } from "react-icons/fa";
+import MainLayout1 from "../layouts/MainLayout1";
 
 const HomePage = () => {
     const [downloading, setDownloading] = useState(false)
@@ -197,6 +198,7 @@ const HomePage = () => {
 
 
     return (
+        
         <div className="min-h-screen overflow-x-hidden bg-gray-50 p-4">
             {/* Your existing dashboard content */}
             {showManual && (
@@ -801,6 +803,7 @@ const HomePage = () => {
                 </div>
             </div>
         </div>
+   
 
     );
 }

@@ -3,7 +3,7 @@ import './index.css';
 import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import { HideFieldsProvider } from './layouts/HideFieldsContext';
 import MainLayout from './layouts/mainLayout';
-import ChooseTemplate from './pages/homePage';
+import ChooseTemplate from './pages/HomePage';
 import IntroductionDetails from './pages/introductionDetails';
 import Template1 from './templates/template1';
 import ProfessionalSummary from './pages/professionalSummary';
@@ -17,7 +17,7 @@ import Complete from './pages/complete';
 import AboutUs from './samples/aboutUs';
 import Proficiency from './pages/proficiency';
 import A4Paper from './samples/a4Paper';
-import HomePage from './pages/homePage';
+import HomePage from './pages/HomePage';
 import Template2 from './templates/template2';
 import Template3 from './templates/template3';
 import ProfileLayout from './layouts/profileLayout';
@@ -41,7 +41,8 @@ import JobListing from './pages/job';
 import JobApply from './pages/applijob';
 import CoverLetterForm from './pages/applijob';
 import ApplicantProfile from './pages/profile';
-import HomePage2 from './pages/HomePage2';
+// import HomePage2 from './pages/HomePage2';
+ 
 
  
 
@@ -52,7 +53,7 @@ function App() {
    <Routes>
    <Route path='/a4'  element={<A4Paper/>}/>
    
-   {/* <Route path='/' element={<HomePage2/>}> */}
+   {/* <Route path='/' element={<HomePage2/>}>  */}
    <Route path='/' element={<MainLayout/>}>
    <Route path='Applicant-Dashbaord' index element={<HomePage/>}/>
    <Route path='/edit-profile' index element={<ApplicantProfile/>}/>
