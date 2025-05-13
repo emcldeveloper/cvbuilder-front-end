@@ -149,6 +149,9 @@ const LoginModal = ({ show, onHide }) => {
               </Button>
             </Col>
           </Row>
+          <Row>
+            <Col>Hello</Col>
+          </Row>
         </Modal.Body>
       </Modal>
     </>

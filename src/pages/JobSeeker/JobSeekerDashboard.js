@@ -1,34 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { StepsContext } from "../layouts/mainLayout";
-import Template1 from "../templates/template1";
-import axios from "axios";
-import Swal from 'sweetalert2';
-import Spinner from "../widgets/spinner";
-import Template2 from "../templates/template2";
-import Template3 from "../templates/template3";
-import Template4 from "../templates/template4";
-import Template5 from "../templates/template5";
-import Template6 from "../templates/template6";
-import Template7 from "../templates/template7";
-import Template8 from "../templates/template8";
-import Template9 from "../templates/template9";
-import Template10 from "../templates/template10";
-import HideInfo from '../layouts/useHideFields';
-import { useLocation } from 'react-router-dom';
-import { FaDownload } from "react-icons/fa";
-import MainLayout1 from "../layouts/MainLayout1";
+import MainLayout1 from "../../layouts/MainLayout1";
 
-const HomePage = () => {
+const JobSeekerDashboard = () => {
     const [downloading, setDownloading] = useState(false)
     const [selectedTemplate, setselectedTemplate] = useState(null)
     const [donwload, setSub] = useState(null)
-    const { currentStep, setCurrentStep, originalDetails, candidate } = useContext(StepsContext)
+  
+    
     const { uuid, template } = useParams()
     const navigate = useNavigate();
+
     useEffect(() => {
-        setCurrentStep(0)
+      
     }, [])
+
     const [margin, setMargin] = useState("mt-32 opacity-0 ")
 
     const [showModal, setShowModal] = useState(false);
@@ -40,7 +26,7 @@ const HomePage = () => {
 
     useEffect(() => {
 
-        setCurrentStep(11)
+   
     }, [])
    
 
@@ -59,7 +45,7 @@ const HomePage = () => {
    
  
     const UserManualPopup = ({ onClose }) => {
-        const [currentStep, setCurrentStep] = useState(0);
+   
 
         const steps = [
             {
@@ -85,70 +71,13 @@ const HomePage = () => {
         ];
 
         const handleNext = () => {
-            if (currentStep < steps.length - 1) {
-                setCurrentStep(currentStep + 1);
-            } else {
-                onClose();
-            }
+           
         };
 
         const handleSkip = () => {
             onClose();
         };
 
-        return (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-xl font-bold">{steps[currentStep].title}</h3>
-                        <button onClick={handleSkip} className="text-gray-500 hover:text-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div className="mb-4">
-                        <img
-                            src={steps[currentStep].image}
-                            alt={steps[currentStep].title}
-                            className="w-full h-48 object-cover rounded"
-                        />
-                    </div>
-
-                    <p className="mb-6">{steps[currentStep].content}</p>
-
-                    <div className="flex justify-between items-center">
-                        <div>
-                            {currentStep > 0 && (
-                                <button
-                                    onClick={() => setCurrentStep(currentStep - 1)}
-                                    className="text-blue-500 hover:text-blue-700 mr-4"
-                                >
-                                    Back
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="flex items-center">
-                            {steps.map((_, index) => (
-                                <div
-                                    key={index}
-                                    className={`w-2 h-2 rounded-full mx-1 ${currentStep === index ? 'bg-blue-500' : 'bg-gray-300'}`}
-                                />
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={handleNext}
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                            {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
     };
 
 
@@ -195,9 +124,7 @@ const HomePage = () => {
     ];
 
 
-
-
-    return (
+     return (
         
         <div className="min-h-screen overflow-x-hidden bg-gray-50 p-4">
             {/* Your existing dashboard content */}
@@ -806,6 +733,9 @@ const HomePage = () => {
    
 
     );
+
+
+   
 }
 
-export default HomePage;
+export default JobSeekerDashboard;
