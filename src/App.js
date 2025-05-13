@@ -51,48 +51,52 @@ function App() {
     <HideFieldsProvider>
  <BrowserRouter>
   <Routes>
-  
-    <Route path="/" element={<Home />}>
-      <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
-      <Route path="edit-profile" element={<ApplicantProfile />} />
-      <Route path="introduction/:uuid/:template" element={<IntroductionDetails />} />
-      <Route path="professional_summary/:uuid/:template" element={<ProfessionalSummary />} />
-      <Route path="educations/:uuid/:template" element={<Educations />} />
-      <Route path="experiences/:uuid/:template" element={<WorksExperiences />} />
-      <Route path="skills/:uuid/:template" element={<Skills />} />
-      <Route path="Languages/:uuid/:template" element={<Languages />} />
-      <Route path="proficiency/:uuid/:template" element={<Proficiency />} />
-      <Route path="Training/:uuid/:template" element={<Training />} />
-      <Route path="refrees/:uuid/:template" element={<Refrees />} />
-      <Route path="complete/:uuid/:template" element={<Complete />} />
-      <Route path="my-subscription/:uuid/:template" element={<MySubscription />} />
-      <Route path="my-cv/:uuid/:template" element={<MyCv />} />
-      <Route path="sample-template/:uuid/:template" element={<Samplemplate />} />
-      <Route path="cover-letter/:uuid/:template" element={<CoverLetterGenerator />} />
-      <Route path="Admin/:uuid/:template" element={<AdminPage />} />
-      <Route path="find-job/:uuid/:template" element={<JobListing />} />
-      <Route path="apply-job/:uuid/:template" element={<CoverLetterForm />} />
-    </Route>
+  {/* Root route */}
+  <Route path="/" element={<Home />} />
 
-          {/* Profile layout with nested routes */}
-          <Route path="profile" element={<ProfileLayout />}>
-            <Route path="primaryInfo/:uuid" element={<ManagePrimaryInformations />} />
-          </Route>
+  {/* Jobseeker dashboard */}
+  <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
+  <Route path="edit-profile" element={<ApplicantProfile />} />
 
-          {/* Standalone template routes */}
-          <Route path="template1/:uuid" element={<Template1 />} />
-          <Route path="template2/:uuid" element={<Template2 />} />
-          <Route path="template3/:uuid" element={<Template3 />} />
-          <Route path="template4/:uuid" element={<Template4 />} />
-          <Route path="template5/:uuid" element={<Template5 />} />
-          <Route path="template6/:uuid" element={<Template6 />} />
-          <Route path="template7/:uuid" element={<Template7 />} />
-          <Route path="template8/:uuid" element={<Template8 />} />
-          <Route path="template9/:uuid" element={<Template9 />} />
-          <Route path="template10/:uuid" element={<Template10 />} />
-        </Routes>
-      </BrowserRouter>
-    </HideFieldsProvider>
+  {/* CV building sections */}
+  <Route path="introduction/:uuid/:template" element={<IntroductionDetails />} />
+  <Route path="professional_summary/:uuid/:template" element={<ProfessionalSummary />} />
+  <Route path="educations/:uuid/:template" element={<Educations />} />
+  <Route path="experiences/:uuid/:template" element={<WorksExperiences />} />
+  <Route path="skills/:uuid/:template" element={<Skills />} />
+  <Route path="Languages/:uuid/:template" element={<Languages />} />
+  <Route path="proficiency/:uuid/:template" element={<Proficiency />} />
+  <Route path="Training/:uuid/:template" element={<Training />} />
+  <Route path="refrees/:uuid/:template" element={<Refrees />} />
+  <Route path="complete/:uuid/:template" element={<Complete />} />
+  <Route path="my-subscription/:uuid/:template" element={<MySubscription />} />
+  <Route path="my-cv/:uuid/:template" element={<MyCv />} />
+  <Route path="sample-template/:uuid/:template" element={<Samplemplate />} />
+  <Route path="cover-letter/:uuid/:template" element={<CoverLetterGenerator />} />
+  <Route path="Admin/:uuid/:template" element={<AdminPage />} />
+  <Route path="find-job/:uuid/:template" element={<JobListing />} />
+  <Route path="apply-job/:uuid/:template" element={<CoverLetterForm />} />
+
+  {/* Profile layout with nested routes */}
+  <Route path="profile" element={<ProfileLayout />}>
+    <Route path="primaryInfo/:uuid" element={<ManagePrimaryInformations />} />
+  </Route>
+
+  {/* Standalone templates */}
+  <Route path="template1/:uuid" element={<Template1 />} />
+  <Route path="template2/:uuid" element={<Template2 />} />
+  <Route path="template3/:uuid" element={<Template3 />} />
+  <Route path="template4/:uuid" element={<Template4 />} />
+  <Route path="template5/:uuid" element={<Template5 />} />
+  <Route path="template6/:uuid" element={<Template6 />} />
+  <Route path="template7/:uuid" element={<Template7 />} />
+  <Route path="template8/:uuid" element={<Template8 />} />
+  <Route path="template9/:uuid" element={<Template9 />} />
+  <Route path="template10/:uuid" element={<Template10 />} />
+</Routes>
+
+</BrowserRouter>
+   </HideFieldsProvider>
   );
 }
 
