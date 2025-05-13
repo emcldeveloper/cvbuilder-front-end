@@ -1,23 +1,12 @@
 import React from "react";
-
+import MainLayout1 from "../layouts/MainLayout1";
 
 const Home= () => {
   return (
-    <div style={{ backgroundColor: "#DFE3E2" }}>
-    
-        jjj
-        {/* <HeroSection />
-        <JobSearchSection/>
-        <BannerCarousel/>
-        <UserStatistics/>
-        <FeaturedEmployerList/>
-        <JobCategoriesTabs/>
-        <FeaturedJobs/>
-        <FeaturedCandidateList/> */}
-        
-
-    
-    </div>
+    <MainLayout1>
+  
+    </MainLayout1>
+  
   );
 };
 
