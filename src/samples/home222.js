@@ -34,16 +34,28 @@ const HomePage = () => {
     const [cvName, setCvName] = useState(""); // To store the user-entered CV name
     const [error, setError] = useState(null);
     const profileCompletion = 75; // Profile completion percentage
-    
+
 
 
     useEffect(() => {
 
         setCurrentStep(11)
     }, [])
-   
+    useEffect(() => {
+        setMargin("mt-0 opacity-100")
+    }, [originalDetails])
+    const sendToData = {
+        'template': template,
+        'applicant_id': uuid,
+        'cv_name': cvName,
 
-   
+
+    }
+
+    const handleDownloadClick = () => {
+        setShowModal(true); // Show the modal when the button is clicked
+    };
+
 
     const options = {
         method: 'GET',
@@ -55,8 +67,123 @@ const HomePage = () => {
 
     };
 
-   
- 
+    const handleSaveAndDownload = () => {
+        if (!cvName || !sendToData || !template || !uuid) {
+            console.error("Missing required data: cvName, sendToData, template, or uuid.");
+            Swal.fire({
+                title: "Error!",
+                text: "Required data is missing. Please fill in all fields.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+
+
+        console.log("CV Name:", cvName);
+        const newTab = window.open("", "_blank"); // Open a blank tab immediately
+        setDownloading(true); // Start loading indicator
+        // Step 1: Save the CV
+
+        axios
+            .post("http://127.0.0.1:8000/api/applicant/savedCv", sendToData)
+            .then((saveResponse) => {
+                console.log("Save Response:", saveResponse);
+
+                if (saveResponse.status === 200 && saveResponse.data.success) {
+
+                    // https://cvtemplate.ekazi.co.tz
+                    return axios.get(
+                        `http://127.0.0.1:8000/generatePdf/?template=${template}&uuid=${uuid}&name=${cvName}`, options
+                    );
+                } else {
+                    throw new Error(
+                        saveResponse.data.message || "Failed to save CV. Please try again."
+                    );
+                }
+            })
+            .then((generateResponse) => {
+                console.log("Generate Response:", generateResponse);
+
+                const link = generateResponse?.data?.body?.link;
+                if (link) {
+
+
+                    // const newTab = window.open("", "_blank"); // Open a blank tab immediately
+                    // window.open(link, "_blank"); // Open the link in a new tab
+                    if (newTab) {
+                        newTab.location.href = link; // Update URL after fetching the link
+                        setDownloading(false); // Stop loading indicator
+                    } else {
+                        alert("Pop-up blocked! Please allow pop-ups for this site.");
+                    }
+                } else {
+                    throw new Error("Failed to generate PDF link. Please try again.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error during save or download process:", error);
+                Swal.fire({
+                    title: "Error!",
+                    text: error.message || "An unexpected error occurred. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            })
+            .finally(() => {
+                setDownloading(false); // Stop loading indicator
+                if (showModal) {
+                    setShowModal(false); // Close modal
+                }
+            });
+    };
+    useEffect(() => {
+        axios
+            .get(`http://127.0.0.1:8000/api/applicant/mycv/${uuid}`)
+            .then((response) => {
+                console.log("API Response:", response); // Debug API response
+                if (response) {
+                    const data = response.data.mycv
+                    setSub(data);
+                    console.log("test cv sub", data);
+                } else {
+                    console.error("Unexpected response structure:", response);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching CV Subscription data:", error.message);
+            });
+    }, []);
+    console.log("check download", donwload);
+
+    let templateCount = {};
+    let uniqueTemplateCount = 0;
+    let totalUsageSum = 0;
+
+    if (Array.isArray(donwload)) {
+        donwload.forEach(item => {
+            const templateNo = item.template_no;
+            if (templateNo != null) {  // Skip if template_no is null or undefined
+                templateCount[templateNo] = (templateCount[templateNo] || 0) + 1;
+            }
+        });
+
+        // Step 2: Count unique templates (avoid redundancy)
+        uniqueTemplateCount = Object.keys(templateCount).length;
+
+        totalUsageSum = Object.values(templateCount).reduce((sum, count) => sum + count, 0);
+    } else {
+
+        templateCount = {};
+        uniqueTemplateCount = 0;
+        totalUsageSum = 0;
+    }
+
+    console.log("Template Usage:", templateCount);
+    console.log("Unique Template Count:", uniqueTemplateCount);
+    console.log("Total Template Usage Count:", totalUsageSum);
+
     const UserManualPopup = ({ onClose }) => {
         const [currentStep, setCurrentStep] = useState(0);
 

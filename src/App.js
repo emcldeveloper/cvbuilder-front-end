@@ -52,8 +52,9 @@ function App() {
    <Routes>
    <Route path='/a4'  element={<A4Paper/>}/>
    
-   <Route path='/' element={<HomePage2/>}>
-   <Route path='/:uuid/:template' index element={<HomePage/>}/>
+   {/* <Route path='/' element={<HomePage2/>}> */}
+   <Route path='/' element={<MainLayout/>}>
+   <Route path='Applicant-Dashbaord' index element={<HomePage/>}/>
    <Route path='/edit-profile' index element={<ApplicantProfile/>}/>
     <Route path='introduction/:uuid/:template' index element={<IntroductionDetails/>}/>
     <Route path='professional_summary/:uuid/:template' index element={<ProfessionalSummary/>}/>
