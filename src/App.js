@@ -49,30 +49,30 @@ import JobSeekerDashboard from './pages/JobSeeker/JobSeekerDashboard';
 function App() {
   return (
     <HideFieldsProvider>
-      <BrowserRouter>
-        <Routes>
-
-          <Route path="/" element={<Home />}>
-            <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} /> 
-            <Route path="edit-profile" element={<ApplicantProfile />} />
-            <Route path="introduction/:uuid/:template" element={<IntroductionDetails />} />
-            <Route path="professional_summary/:uuid/:template" element={<ProfessionalSummary />} />
-            <Route path="educations/:uuid/:template" element={<Educations />} />
-            <Route path="experiences/:uuid/:template" element={<WorksExperiences />} />
-            <Route path="skills/:uuid/:template" element={<Skills />} />
-            <Route path="Languages/:uuid/:template" element={<Languages />} />
-            <Route path="proficiency/:uuid/:template" element={<Proficiency />} />
-            <Route path="Training/:uuid/:template" element={<Training />} />
-            <Route path="refrees/:uuid/:template" element={<Refrees />} />
-            <Route path="complete/:uuid/:template" element={<Complete />} />
-            <Route path="my-subscription/:uuid/:template" element={<MySubscription />} />
-            <Route path="my-cv/:uuid/:template" element={<MyCv />} />
-            <Route path="sample-template/:uuid/:template" element={<Samplemplate />} />
-            <Route path="cover-letter/:uuid/:template" element={<CoverLetterGenerator />} />
-            <Route path="Admin/:uuid/:template" element={<AdminPage />} />
-            <Route path="find-job/:uuid/:template" element={<JobListing />} />
-            <Route path="apply-job/:uuid/:template" element={<CoverLetterForm />} />
-          </Route>
+ <BrowserRouter>
+  <Routes>
+  
+    <Route path="/" element={<Home />}>
+      <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
+      <Route path="edit-profile" element={<ApplicantProfile />} />
+      <Route path="introduction/:uuid/:template" element={<IntroductionDetails />} />
+      <Route path="professional_summary/:uuid/:template" element={<ProfessionalSummary />} />
+      <Route path="educations/:uuid/:template" element={<Educations />} />
+      <Route path="experiences/:uuid/:template" element={<WorksExperiences />} />
+      <Route path="skills/:uuid/:template" element={<Skills />} />
+      <Route path="Languages/:uuid/:template" element={<Languages />} />
+      <Route path="proficiency/:uuid/:template" element={<Proficiency />} />
+      <Route path="Training/:uuid/:template" element={<Training />} />
+      <Route path="refrees/:uuid/:template" element={<Refrees />} />
+      <Route path="complete/:uuid/:template" element={<Complete />} />
+      <Route path="my-subscription/:uuid/:template" element={<MySubscription />} />
+      <Route path="my-cv/:uuid/:template" element={<MyCv />} />
+      <Route path="sample-template/:uuid/:template" element={<Samplemplate />} />
+      <Route path="cover-letter/:uuid/:template" element={<CoverLetterGenerator />} />
+      <Route path="Admin/:uuid/:template" element={<AdminPage />} />
+      <Route path="find-job/:uuid/:template" element={<JobListing />} />
+      <Route path="apply-job/:uuid/:template" element={<CoverLetterForm />} />
+    </Route>
 
           {/* Profile layout with nested routes */}
           <Route path="profile" element={<ProfileLayout />}>
