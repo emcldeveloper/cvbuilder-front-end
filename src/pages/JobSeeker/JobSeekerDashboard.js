@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MainLayout1 from "../../layouts/MainLayout1";
+import { useProfileData } from "../../hooks/Candidate/profile";
 
 const JobSeekerDashboard = () => {
     const [downloading, setDownloading] = useState(false)
@@ -8,12 +9,12 @@ const JobSeekerDashboard = () => {
     const [donwload, setSub] = useState(null)
   
     
-    const { uuid, template } = useParams()
+    
     const navigate = useNavigate();
 
-    useEffect(() => {
-      
-    }, [])
+    const uuid = "28820"; // Can come from props, state, or route params
+    const { data, loading, errors } = useProfileData(uuid);
+    console.log('data ya kwanza',data);
 
     const [margin, setMargin] = useState("mt-32 opacity-0 ")
 
@@ -23,11 +24,7 @@ const JobSeekerDashboard = () => {
     const profileCompletion = 75; // Profile completion percentage
     
 
-
-    useEffect(() => {
-
-   
-    }, [])
+ 
    
 
    

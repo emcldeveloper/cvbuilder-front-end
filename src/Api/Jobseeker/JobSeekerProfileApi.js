@@ -1,15 +1,9 @@
 import axios from 'axios';
 
-export const checkIfExists = async ({ uuid }) => {
+export const profile = async ({ uuid }) => {
     try {
-        // Replace the URL with your Laravel API endpoint
         const response = await axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`);
-       
-        // Assuming the Laravel API returns a JSON response with a boolean `exists` field
-        if (response.data.exists) {
-            return true;
-        }
-        return false;
+        return response.data;
     } catch (error) {
         console.log(error);
         throw error;
