@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import { Card, Button, ProgressBar, Accordion, Image, ListGroup } from 'react-bootstrap';
 
 const LeftSideBar = () => {
-  const [profileCompletion] = useState(75); // Static value for now
+  const [profileCompletion] = useState(75);
   const [showModalPay, setShowModalPay] = useState(false);
 
   return (
-    <div className="col-12 col-lg-3 d-flex flex-column gap-3">
+    <div className="d-flex flex-column gap-3">
       <Card className="shadow-sm">
         {/* Cover image */}
         <div className="position-relative">
-          <Card.Img variant="top" src="/maneno.jpeg" className="object-fit-cover" style={{ height: '100px' }} />
+          <Card.Img
+            variant="top"
+            src="/maneno.jpeg"
+            className="object-fit-cover"
+            style={{ height: '100px', objectFit: 'cover' }}
+          />
 
           {/* Profile image */}
           <div className="position-absolute" style={{ bottom: '-40px', left: '16px' }}>
@@ -33,7 +38,6 @@ const LeftSideBar = () => {
           </div>
         </div>
 
-        {/* Card body */}
         <Card.Body className="text-center mt-5">
           <h5 className="fw-bold">Halidi Maneno</h5>
           <p className="text-muted mb-1">Machine Learning Engineering</p>
@@ -48,76 +52,40 @@ const LeftSideBar = () => {
             <ProgressBar now={profileCompletion} variant="success" />
           </div>
 
-          {/* Upgrade button */}
+          {/* Upgrade Button */}
           <Button
-            variant="gradient"
-            className="w-100 mb-3 bg-gradient bg-purple text-white fw-semibold"
+            className="w-100 mb-3 text-white fw-semibold"
+            style={{ background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)' }}
             onClick={() => setShowModalPay(true)}
           >
             🚀 Upgrade to Premium
           </Button>
 
           {/* Dashboard Section */}
-          <h6 className="border-top pt-3 text-start fw-semibold">
-            📊 Dashboard
-          </h6>
+          <h6 className="border-top pt-3 text-start fw-semibold">📊 Dashboard</h6>
 
           {/* Accordions */}
           <Accordion flush className="border-top pt-3 text-start mb-3">
-            {/* Resume Manager */}
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>📄 Resume Manager</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item><a href="#">Add Resume</a></ListGroup.Item>
-                  <ListGroup.Item><a href="#">My Resume</a></ListGroup.Item>
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
-
-            {/* My Jobs */}
-            <Accordion.Item eventKey="1">
-              <Accordion.Header>💼 My Jobs</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item><a href="#">My Applications</a></ListGroup.Item>
-                  <ListGroup.Item><a href="#">Saved Jobs</a></ListGroup.Item>
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
-
-            {/* My Account */}
-            <Accordion.Item eventKey="2">
-              <Accordion.Header>👤 My Account</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item><a href="#">Account Settings</a></ListGroup.Item>
-                  <ListGroup.Item><a href="#">Change Password</a></ListGroup.Item>
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
-
-            {/* My Job Search */}
-            <Accordion.Item eventKey="3">
-              <Accordion.Header>🔍 My Job Search</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item><a href="#">Saved Searches</a></ListGroup.Item>
-                  <ListGroup.Item><a href="#">Recent Searches</a></ListGroup.Item>
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
-
-            {/* Resources */}
-            <Accordion.Item eventKey="4">
-              <Accordion.Header>📚 Resources</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup variant="flush">
-                  <ListGroup.Item><a href="#">Resume Tips</a></ListGroup.Item>
-                  <ListGroup.Item><a href="#">Interview Tips</a></ListGroup.Item>
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
+            {[
+              { key: "0", title: "📄 Resume Manager", items: ["Add Resume", "My Resume"] },
+              { key: "1", title: "💼 My Jobs", items: ["My Applications", "Saved Jobs"] },
+              { key: "2", title: "👤 My Account", items: ["Account Settings", "Change Password"] },
+              { key: "3", title: "🔍 My Job Search", items: ["Saved Searches", "Recent Searches"] },
+              { key: "4", title: "📚 Resources", items: ["Resume Tips", "Interview Tips"] },
+            ].map(section => (
+              <Accordion.Item eventKey={section.key} key={section.key}>
+                <Accordion.Header>{section.title}</Accordion.Header>
+                <Accordion.Body>
+                  <ListGroup variant="flush">
+                    {section.items.map((item, index) => (
+                      <ListGroup.Item key={index}>
+                        <a href="#">{item}</a>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
           </Accordion>
         </Card.Body>
       </Card>

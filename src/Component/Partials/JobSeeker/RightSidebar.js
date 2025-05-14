@@ -1,54 +1,46 @@
 import React from "react";
+import { Card, Button, Image } from "react-bootstrap";
 
+const RightSideBar = () => {
+  return (
+    <div className="d-flex flex-column gap-3">
+      {/* Featured Companies Section */}
+      <Card className="shadow-sm">
+        <Card.Body>
+          <h5 className="fw-bold mb-3">Featured Companies</h5>
+          {[1, 2, 3, 4].map((company) => (
+            <div key={company} className="d-flex align-items-center gap-3 p-2 hover-shadow-sm rounded">
+              <div className="bg-light rounded-circle overflow-hidden" style={{ width: '48px', height: '48px' }}>
+                <Image
+                  src="/a.jpg"
+                  alt="Company Logo"
+                  roundedCircle
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div>
+                <h6 className="mb-0 fw-semibold">TechCorp Inc.</h6>
+                <small className="text-muted">12 Jobs</small>
+              </div>
+            </div>
+          ))}
+        </Card.Body>
+      </Card>
 
-const RightSideBar=()=>{
+      {/* Job Alerts Section */}
+      <Card className="shadow-sm">
+        <Card.Body>
+          <h6 className="fw-bold mb-2">Job Alerts</h6>
+          <p className="text-muted small mb-3">
+            Get notified when new jobs match your profile.
+          </p>
+          <Button variant="primary" className="w-100">
+            Create Job Alert
+          </Button>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};
 
-
-    return (
-        <>
-         <div className="w-full lg:w-1/4">
-                            <div className="bg-white rounded-lg shadow-md p-4">
-                                <h2 className="text-xl font-bold mb-4">Featured Companies</h2>
-
-
-
-                            </div>
-                            <div className="bg-white rounded-lg shadow-md p-4 mt-2">
-                                <h2 className="text-xl font-bold mb-4">Featured Companies</h2>
-
-                                <div className="space-y-4">
-                                    {[1, 2, 3, 4].map((company) => (
-                                        <div key={company} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded">
-                                            <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-                                                <img
-                                                    src="/a.jpg"
-                                                    alt="Company Logo"
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold">TechCorp Inc.</h4>
-                                                <p className="text-sm text-gray-500">12 Jobs</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-6">
-                                    <h3 className="font-bold mb-2">Job Alerts</h3>
-                                    <div className="bg-blue-50 p-3 rounded-lg">
-                                        <p className="text-sm">Get notified when new jobs match your profile</p>
-                                        <button className="mt-2 bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600 w-full">
-                                            Create Job Alert
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-        </>
-    )
-
-}
-
-
-export default RightSideBar
+export default RightSideBar;
