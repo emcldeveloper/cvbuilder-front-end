@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button ,Image} from "react-bootstrap";
 
 const SearchModalForm = ({
   showModal,
@@ -31,10 +31,9 @@ const SearchModalForm = ({
                 <div className="card p-3">
                   <div className="row">
                     <div className="col-md-3">
-                      <img
-                        src={
-                          job.logo ||
-                          job.client?.logo ||
+                      <Image
+                        src={`https://ekazi.co.tz/${job.client.logo}`
+                          ||
                           "/images/nodata.png"
                         }
                         alt="Logo"

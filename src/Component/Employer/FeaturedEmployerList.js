@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FeaturedEmployers from './FeaturedEmployers';
+import { getListOfEmployers } from '../../Api/Employer/ListOfEmployerApi';
 
 const FeaturedEmployerList = () => {
-  const jobCompanies = [
-    { id: 1, client_name: 'Company A', logo: '/path/to/logoA.png' },
-    { id: 2, client_name: 'Company B', logo: '/path/to/logoB.png' },
-    { id: 3, client_name: 'Company C', logo: 'logo.png' },
-  ];
+  const [jobCompanies, setJobCompanies] = useState([]);
+
+  useEffect(() => {
+    const fetchEmployers = async () => {
+      try {
+        const response = await getListOfEmployers(1,20); // Defaults to page=1
+        setJobCompanies(response.data); // response.data contains the array of employers
+      } catch (error) {
+        console.error('Failed to fetch employer list:', error);
+      }
+    };
+
+    fetchEmployers();
+  }, []);
 
   return (
     <div>

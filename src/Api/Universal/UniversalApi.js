@@ -27,3 +27,8 @@ export const getEducationLevel = () => axios.get(`${UNIVERSAL_API}/education_lev
 export const gePosition = () => axios.get(`${UNIVERSAL_API}/position`);
 
 export const getPositionLevel = () => axios.get(`${UNIVERSAL_API}/position_level`);
+
+//get site statistics
+export const getSiteStatic=()=> axios.get(`${API_BASE_URL}site-statistics`).then((res) => ({
+    data: res.data
+  }));;
