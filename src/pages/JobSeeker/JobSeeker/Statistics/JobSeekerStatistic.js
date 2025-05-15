@@ -1,7 +1,15 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import { BsArrowRight } from 'react-icons/bs';
+// import { BsArrowRight } from 'react-icons/bs';
 import { FaBuilding, FaClock, FaFileAlt, FaSearch } from 'react-icons/fa';
+import { 
+  BsArrowRight, 
+  BsFileEarmarkText, 
+  BsBriefcase, 
+  BsClock, 
+  BsSearch,
+  BsBuilding
+} from 'react-icons/bs';
 
 const JobSeekerStatistic = () => {
   return (
@@ -9,18 +17,18 @@ const JobSeekerStatistic = () => {
       <Card className="mb-4 shadow-sm">
         <Card.Body>
           {/* Statistic Cards */}
-          <Row className="mb-4">
+          <Row className="mb-3 g-2">
             {/* Resume */}
-            <Col xs={12} sm={6} md={3} className="mb-3 mb-md-0">
+            <Col xs={12} sm={6} md={3}>
               <Card className="text-center border-0 shadow-sm h-100">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Body className="p-2">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <h3 className="text-primary fw-bold mb-0">5</h3>
+                      <h5 className="text-primary fw-bold mb-0">5</h5>
                       <small className="text-muted">Resume</small>
                     </div>
-                    <div className="bg-primary text-white rounded-circle p-2">
-                      <FaFileAlt />
+                    <div className="bg-primary bg-opacity-10 text-primary rounded-circle p-2">
+                      <BsFileEarmarkText size={18} />
                     </div>
                   </div>
                 </Card.Body>
@@ -28,16 +36,16 @@ const JobSeekerStatistic = () => {
             </Col>
 
             {/* Applications */}
-            <Col xs={12} sm={6} md={3} className="mb-3 mb-md-0">
+            <Col xs={12} sm={6} md={3}>
               <Card className="text-center border-0 shadow-sm h-100">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Body className="p-2">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <h3 className="text-success fw-bold mb-0">12</h3>
+                      <h5 className="text-success fw-bold mb-0">12</h5>
                       <small className="text-muted">Applications</small>
                     </div>
-                    <div className="bg-success text-white rounded-circle p-2">
-                      <FaSearch />
+                    <div className="bg-success bg-opacity-10 text-success rounded-circle p-2">
+                      <BsBriefcase size={18} />
                     </div>
                   </div>
                 </Card.Body>
@@ -45,16 +53,16 @@ const JobSeekerStatistic = () => {
             </Col>
 
             {/* Saved Jobs */}
-            <Col xs={12} sm={6} md={3} className="mb-3 mb-md-0">
+            <Col xs={12} sm={6} md={3}>
               <Card className="text-center border-0 shadow-sm h-100">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Body className="p-2">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <h3 className="text-info fw-bold mb-0">8</h3>
+                      <h5 className="text-info fw-bold mb-0">8</h5>
                       <small className="text-muted">Saved Jobs</small>
                     </div>
-                    <div className="bg-info text-white rounded-circle p-2">
-                      <FaBuilding />
+                    <div className="bg-info bg-opacity-10 text-info rounded-circle p-2">
+                      <BsBuilding size={18} />
                     </div>
                   </div>
                 </Card.Body>
@@ -64,14 +72,14 @@ const JobSeekerStatistic = () => {
             {/* Saved Search */}
             <Col xs={12} sm={6} md={3}>
               <Card className="text-center border-0 shadow-sm h-100">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Body className="p-2">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <h3 className="text-warning fw-bold mb-0">3</h3>
+                      <h5 className="text-warning fw-bold mb-0">3</h5>
                       <small className="text-muted">Saved Search</small>
                     </div>
-                    <div className="bg-warning text-white rounded-circle p-2">
-                      <FaClock />
+                    <div className="bg-warning bg-opacity-10 text-warning rounded-circle p-2">
+                      <BsClock size={18} />
                     </div>
                   </div>
                 </Card.Body>
@@ -99,7 +107,7 @@ const JobSeekerStatistic = () => {
                   <Col xs={3} md={2}>
                     <div className="bg-light rounded overflow-hidden" style={{ width: '64px', height: '64px' }}>
                       <img
-                        src="/b.jpg"
+                        src="/job.jpg"
                         alt="Company Logo"
                         className="img-fluid h-100 w-100 object-fit-cover"
                       />

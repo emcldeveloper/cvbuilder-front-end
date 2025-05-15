@@ -12,7 +12,7 @@ const RightSideBar = () => {
             <div key={company} className="d-flex align-items-center gap-3 p-2 hover-shadow-sm rounded">
               <div className="bg-light rounded-circle overflow-hidden" style={{ width: '48px', height: '48px' }}>
                 <Image
-                  src="/a.jpg"
+                  src="/company.jpg"
                   alt="Company Logo"
                   roundedCircle
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}

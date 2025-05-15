@@ -3,12 +3,11 @@ import axios from 'axios';
 
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
-// https://ekazi.co.tz/api/applicant/featuredJobs?limit=10&page=${pageNum}
-
+ 
 export const fetchFeaturedJobs = async (page = 1) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/applicant/featuredJobs?limit=10&page=${1}`
+      `${API_BASE_URL}/applicant/featuredJobs?limit=10&page=${page}`
     );
     return {
       success: true,
