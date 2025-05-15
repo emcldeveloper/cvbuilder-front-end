@@ -5,15 +5,18 @@ import {
   getCountries,
   getRegions,
   getIndustry,
-  geMajor,
+  getMajor,
   getCourse,
   getEducationLevel,
-  gePosition,
-  getPositionLevel
+  getPosition,
+  getPositionLevel,
+  getSiteStatistics
 } from '../Api/Universal/UniversalApi';
-
+import { getListOfEmployers } from '../Api/Employer/ListOfEmployerApi';
+// Create context
 export const UniversalContext = createContext();
 
+// Provider component
 export const UniversalProvider = ({ children }) => {
   const [universalData, setUniversalData] = useState({
     maritalStatuses: [],
@@ -25,7 +28,9 @@ export const UniversalProvider = ({ children }) => {
     courses: [],
     educationLevels: [],
     positions: [],
-    positionLevels: []
+    positionLevels: [],
+    siteStatistics: [],
+    employers:[],
   });
 
   const [loading, setLoading] = useState(true);
@@ -43,18 +48,23 @@ export const UniversalProvider = ({ children }) => {
           course,
           educationLevel,
           position,
-          positionLevel
+          positionLevel,
+          siteStatistic,
+          employer
         ] = await Promise.all([
           getMaritalStatuses(),
           getGenders(),
           getCountries(),
           getRegions(),
           getIndustry(),
-          geMajor(),
+          getMajor(),
           getCourse(),
           getEducationLevel(),
-          gePosition(),
-          getPositionLevel()
+          getPosition(),
+          getPositionLevel(),
+          getSiteStatistics(),
+          getListOfEmployers()
+
         ]);
 
         setUniversalData({
@@ -67,7 +77,9 @@ export const UniversalProvider = ({ children }) => {
           courses: course.data,
           educationLevels: educationLevel.data,
           positions: position.data,
-          positionLevels: positionLevel.data
+          positionLevels: positionLevel.data,
+          siteStatistics: siteStatistic.data ,
+          employers: employer.data ,
         });
       } catch (error) {
         console.error('UniversalContext error:', error);

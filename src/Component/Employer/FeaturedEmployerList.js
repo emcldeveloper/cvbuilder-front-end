@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Container, Row, Spinner, Alert } from 'react-bootstrap';
 import FeaturedEmployers from './FeaturedEmployers';
-import { getListOfEmployers } from '../../Api/Employer/ListOfEmployerApi';
+import useEmployer from '../../hooks/Employer/useEmployer';
 
 const FeaturedEmployerList = () => {
-  const [jobCompanies, setJobCompanies] = useState([]);
-
-  useEffect(() => {
-    const fetchEmployers = async () => {
-      try {
-        const response = await getListOfEmployers(1,20); // Defaults to page=1
-        setJobCompanies(response.data); // response.data contains the array of employers
-      } catch (error) {
-        console.error('Failed to fetch employer list:', error);
-      }
-    };
-
-    fetchEmployers();
-  }, []);
+  const { jobCompanies, loading, error } = useEmployer(1, 20); // Using the hook with default page size of 20
 
   return (
-    <div>
-      <FeaturedEmployers jobCompanies={jobCompanies} />
-    </div>
+    <Container>
+      <h4 className="text-center" style={{ color: '#2E58A6', marginTop: '2%' }}>
+        Featured Employers
+      </h4>
+      <br />
+
+      {error && <Alert variant="danger">{error}</Alert>} {/* Show error message if failed to fetch */}
+
+      {loading ? (
+        <div className="text-center my-3">
+          <Spinner animation="border" />
+        </div>
+      ) : (
+        <Row>
+          <FeaturedEmployers jobCompanies={jobCompanies} />
+        </Row>
+      )}
+    </Container>
   );
 };
 

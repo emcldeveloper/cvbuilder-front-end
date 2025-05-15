@@ -1,27 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import { getSiteStatic } from '../Api/Universal/UniversalApi';
+import { UniversalContext } from "../context/UniversalContext";
 
 const UserStatistics = () => {
-  const [stats, setStats] = useState({
-    employers: 0,
-    job_seekers: 0,
-    job_posts: 0
-  });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await getSiteStatic();
-        setStats(response.data); 
-      
-      } catch (error) {
-        console.error("Failed to fetch site statistics:", error);
-      }
-    };
-
-    fetchStats();
-  }, []);
+  const { siteStatistics, loading } = useContext(UniversalContext); // ✅ Updated key
 
   const styles = {
     container: {
@@ -52,6 +34,8 @@ const UserStatistics = () => {
     },
   };
 
+  if (loading || !siteStatistics) return null; // ✅ Added fallback for missing data
+
   return (
     <div style={styles.container}>
       <div style={styles.jumboFooter}>
@@ -63,7 +47,7 @@ const UserStatistics = () => {
                 <div className="col-md-4 mb-4 mb-md-0">
                   <div style={styles.statSection}>
                     <FaCheckCircle size="2em" style={styles.icon} />
-                    <b style={styles.statTitle}>{stats.employers}</b>
+                    <b style={styles.statTitle}>{siteStatistics.employers}</b>
                     <p style={styles.statDescription}>Employers have recruited with us</p>
                   </div>
                 </div>
@@ -72,7 +56,7 @@ const UserStatistics = () => {
                 <div className="col-md-4 mb-4 mb-md-0">
                   <div style={styles.statSection}>
                     <FaCheckCircle size="2em" style={styles.icon} />
-                    <b style={styles.statTitle}>{stats.job_seekers}</b>
+                    <b style={styles.statTitle}>{siteStatistics.job_seekers}</b>
                     <p style={styles.statDescription}>Job Seekers</p>
                   </div>
                 </div>
@@ -81,7 +65,7 @@ const UserStatistics = () => {
                 <div className="col-md-4">
                   <div style={styles.statSection}>
                     <FaCheckCircle size="2em" style={styles.icon} />
-                    <b style={styles.statTitle}>{stats.job_posts}</b>
+                    <b style={styles.statTitle}>{siteStatistics.job_posts}</b>
                     <p style={styles.statDescription}>Job Posts</p>
                   </div>
                 </div>

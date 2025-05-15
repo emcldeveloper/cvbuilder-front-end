@@ -1,34 +1,66 @@
 import axios from 'axios';
 
+// Base URLs
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const UNIVERSAL_API = `${API_BASE_URL}universal`;
 
-export const getMaritalStatuses = () => axios.get(`${UNIVERSAL_API}/marital`);
+// Simple in-memory cache
+const cache = {};
 
-export const getGenders = () => axios.get(`${UNIVERSAL_API}/gender`);
+const fetchWithCache = (key, url, transform) => {
+  if (cache[key]) {
+    return Promise.resolve(cache[key]);
+  }
 
-export const getCountries = () => axios.get(`${UNIVERSAL_API}/country`);
+  return axios.get(url)
+    .then((res) => {
+      const data = transform ? transform(res) : res.data;
+      cache[key] = data;
+      return data;
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 429) {
+        console.warn(`Rate limited on ${url}. Try again later.`);
+      }
+      throw error;
+    });
+};
 
-export const getRegions = () => axios.get(`${UNIVERSAL_API}/regions`);
+// Universal API calls
+export const getMaritalStatuses = () =>
+  fetchWithCache('marital', `${UNIVERSAL_API}/marital`);
+
+export const getGenders = () =>
+  fetchWithCache('gender', `${UNIVERSAL_API}/gender`);
+
+export const getCountries = () =>
+  fetchWithCache('country', `${UNIVERSAL_API}/country`);
+
+export const getRegions = () =>
+  fetchWithCache('regions', `${UNIVERSAL_API}/regions`);
 
 export const getIndustry = () =>
-  axios.get(`${UNIVERSAL_API}/industry`).then((res) => ({
-    data: res.data.industry, // ✅ Fix: extract the actual array
+  fetchWithCache('industry', `${UNIVERSAL_API}/industry`, res => ({
+    data: res.data.industry
   }));
 
+export const getMajor = () =>
+  fetchWithCache('major', `${UNIVERSAL_API}/marital`);
 
+export const getCourse = () =>
+  fetchWithCache('course', `${UNIVERSAL_API}/course`);
 
-export const geMajor = () => axios.get(`${UNIVERSAL_API}/marital`);
+export const getEducationLevel = () =>
+  fetchWithCache('education_level', `${UNIVERSAL_API}/education_level`);
 
-export const getCourse = () => axios.get(`${UNIVERSAL_API}/course`);
+export const getPosition = () =>
+  fetchWithCache('position', `${UNIVERSAL_API}/position`);
 
-export const getEducationLevel = () => axios.get(`${UNIVERSAL_API}/education_level`);
+export const getPositionLevel = () =>
+  fetchWithCache('position_level', `${UNIVERSAL_API}/position_level`);
 
-export const gePosition = () => axios.get(`${UNIVERSAL_API}/position`);
-
-export const getPositionLevel = () => axios.get(`${UNIVERSAL_API}/position_level`);
-
-//get site statistics
-export const getSiteStatic=()=> axios.get(`${API_BASE_URL}site-statistics`).then((res) => ({
+// Site statistics
+export const getSiteStatistics = () =>
+  fetchWithCache('site_statistics', `${API_BASE_URL}site-statistics`, res => ({
     data: res.data
-  }));;
+  }));
