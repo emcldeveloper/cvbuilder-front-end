@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import {Container} from 'react-bootstrap';
 import { UniversalContext } from '../../context/UniversalContext';
-import { getJobs } from '../../Api/Job/FeactureJob'; // 🔁 New import
+import { getJobs } from '../../Api/Job/FeactureJob';
+import SearchModalForm from '../Forms/Job/SearchModalForm';
 
 const JobSearchSection = () => {
   const { industries, loading } = useContext(UniversalContext);
@@ -11,37 +12,80 @@ const JobSearchSection = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const modalBodyRef = useRef(null);
+  const LIMIT = 10;
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await getJobs();
-        setJobs(response.data.jobs || response.data); // depends on your API shape
+        const response = await getJobs(LIMIT, 1);
+        setJobs(response);
       } catch (error) {
         console.error('Error fetching jobs:', error);
       }
     };
-
     fetchJobs();
   }, []);
 
   const handleSearch = () => {
     const filtered = jobs.filter((job) => {
-      const matchTitle = job.title?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchTitle = job.job_position?.position_name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
       const matchIndustry = selectedIndustry
         ? job.industry_id === parseInt(selectedIndustry)
         : true;
+
       return matchTitle && matchIndustry;
     });
 
     setFilteredJobs(filtered);
+    setPage(2); // Next page will be 2
+    setHasMore(true);
     setShowModal(true);
   };
 
-  const handleClose = () => setShowModal(false);
+  const loadMoreJobs = async () => {
+    if (!hasMore || loadingMore) return;
+
+    setLoadingMore(true);
+    try {
+      const moreJobs = await getJobs(LIMIT, page);
+      if (moreJobs.length < LIMIT) {
+        setHasMore(false);
+      }
+      setFilteredJobs(prev => [...prev, ...moreJobs]);
+      setPage(prev => prev + 1);
+    } catch (err) {
+      console.error('Failed to load more jobs', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleScroll = () => {
+    const el = modalBodyRef.current;
+    if (!el) return;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
+      loadMoreJobs();
+    }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setFilteredJobs([]);
+    setPage(1);
+    setHasMore(true);
+  };
 
   return (
-    <div className="w-100">
+    <Container>
+       <div className="w-100">
       <style>{`
         .customForm {
           border: 1px solid #D7D8DA50;
@@ -95,64 +139,19 @@ const JobSearchSection = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      <Modal show={showModal} onHide={handleClose} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Search Results</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="row" style={{ zIndex: 9998, overflow: 'visible', marginTop: '12px' }}>
-            {filteredJobs.length === 0 ? (
-              <div className="col-md-12">
-                <p>No jobs found.</p>
-              </div>
-            ) : (
-              filteredJobs.map((job) => (
-                <div className="col-md-6 mb-2" key={job.id}>
-                  <div className="card p-3">
-                    <div className="row">
-                      <div className="col-md-3">
-                        <img
-                          src={
-                            job.logo ||
-                            job.client?.logo ||
-                            '/images/nodata.png'
-                          }
-                          alt="Logo"
-                          style={{ maxWidth: '120px', maxHeight: '75px' }}
-                        />
-                      </div>
-                      <div className="col-md-9 text-truncate">
-                        <a
-                          className="text-decoration-none"
-                          href={`/job/show/${job.id}`}
-                          title={job.title}
-                        >
-                          {job.job_position?.position_name || job.title} - View
-                        </a>
-                        <br />
-                        <span>{job.client?.client_name}</span>
-                        <br />
-                        <span>
-                          {new Date(job.dead_line) < new Date()
-                            ? `Expired: ${new Date(job.dead_line).toLocaleDateString()}`
-                            : new Date(job.dead_line).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Modal with infinite scroll */}
+     <SearchModalForm
+  showModal={showModal}
+  handleClose={handleClose}
+  modalBodyRef={modalBodyRef}
+  handleScroll={handleScroll}
+  filteredJobs={filteredJobs}
+  loadingMore={loadingMore}
+  hasMore={hasMore}
+/>
     </div>
+    </Container>
+
   );
 };
 
