@@ -1,25 +1,24 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import JobSeekerDashboard from './pages/JobSeeker/JobSeekerDashboard';
 
-
-
+import { UniversalProvider } from './context/UniversalContext';
 
 function App() {
   return (
-   
- <BrowserRouter>
-  <Routes>
-  {/* Root route */}
-  <Route path="/" element={<Home />} />
+    <UniversalProvider> {/* Wrap everything in the provider */}
+      <BrowserRouter>
+        <Routes>
+          {/* Root route */}
+          <Route path="/" element={<Home />} />
 
-  {/* Jobseeker dashboard */}
-  <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
- 
-  </Routes>
-</BrowserRouter>
-  
+          {/* Jobseeker dashboard */}
+          <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
+          
+        </Routes>
+      </BrowserRouter>
+    </UniversalProvider>
   );
 }
 
