@@ -11,7 +11,7 @@ const JobSeekerLayout = ({ children }) => {
     <>
       <AppHeader />
 
-      <Container fluid>
+      <Container fluid   >
         <Row>
           {/* Left Sidebar */}
           <Col xs={12} md={3} className="bg-light p-3">
@@ -19,7 +19,7 @@ const JobSeekerLayout = ({ children }) => {
           </Col>
 
           {/* Main Content */}
-          <Col xs={12} md={6} className="p-3">
+          <Col xs={12} md={6} className=" bg-light p-3">
             {children}
           </Col>
 

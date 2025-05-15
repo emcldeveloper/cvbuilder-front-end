@@ -23,7 +23,12 @@ export const fetchFeaturedJobs = async (page = 1) => {
 };
 
 
-export const getJobs = async () => {
-  const response = await axios.get(`${API_BASE_URL}jobs`);
+export const getJobs = async (limit , page) => {
+  const response = await axios.get(`${API_BASE_URL}jobs`, {
+    params: {
+      limit,
+      page,
+    },
+  });
   return response.data.data; 
-};
+}
