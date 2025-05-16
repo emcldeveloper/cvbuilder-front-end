@@ -10,10 +10,10 @@ import {
   getEducationLevel,
   getPosition,
   getPositionLevel,
-  getSiteStatistics
+  getSiteStatistics,
 } from '../Api/Universal/UniversalApi';
-import { getListOfEmployers } from '../Api/Employer/ListOfEmployerApi';
-// Create context
+
+// Create the context
 export const UniversalContext = createContext();
 
 // Provider component
@@ -29,28 +29,28 @@ export const UniversalProvider = ({ children }) => {
     educationLevels: [],
     positions: [],
     positionLevels: [],
-    siteStatistics: [],
-    employers:[],
+    siteStatistics:{},
+ 
   });
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAll = async () => {
+    const fetchUniversalData = async () => {
       try {
         const [
-          marital,
-          gender,
-          country,
-          region,
-          industry,
-          major,
-          course,
-          educationLevel,
-          position,
-          positionLevel,
-          siteStatistic,
-          employer
+          maritalRes,
+          genderRes,
+          countryRes,
+          regionRes,
+          industryRes,
+          majorRes,
+          courseRes,
+          educationLevelRes,
+          positionRes,
+          positionLevelRes,
+          siteStatsRes,
+        
         ] = await Promise.all([
           getMaritalStatuses(),
           getGenders(),
@@ -63,32 +63,33 @@ export const UniversalProvider = ({ children }) => {
           getPosition(),
           getPositionLevel(),
           getSiteStatistics(),
-          getListOfEmployers()
-
+       
         ]);
 
         setUniversalData({
-          maritalStatuses: marital.data,
-          genders: gender.data,
-          countries: country.data,
-          regions: region.data,
-          industries: industry.data,
-          majors: major.data,
-          courses: course.data,
-          educationLevels: educationLevel.data,
-          positions: position.data,
-          positionLevels: positionLevel.data,
-          siteStatistics: siteStatistic.data ,
-          employers: employer.data ,
+          maritalStatuses: maritalRes?.data || [],
+          genders: genderRes?.data || [],
+          countries: countryRes?.data || [],
+          regions: regionRes?.data || [],
+          industries: industryRes?.data || [],
+          majors: majorRes?.data || [],
+          courses: courseRes?.data || [],
+          educationLevels: educationLevelRes?.data || [],
+          positions: positionRes?.data || [],
+          positionLevels: positionLevelRes?.data || [],
+          siteStatistics: siteStatsRes?.data || {},
+          
         });
+          console.log('📊 siteStatistics:', siteStatsRes.data);
+        console.log('Universal data loaded successfully');
       } catch (error) {
-        console.error('UniversalContext error:', error);
+        console.error('Failed to load universal data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAll();
+    fetchUniversalData();
   }, []);
 
   return (

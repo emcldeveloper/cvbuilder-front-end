@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Spinner, Alert, Button } from 'react-bootstrap';
-import useJobs from '../../hooks/Jobs/useJobs'; // ✅ Make sure the path is correct
+import useJobs from '../../hooks/Jobs/useJobs'; //  Make sure the path is correct
 import JobCard from './JobCard';
 
 const FeaturedJobs = () => {
@@ -11,7 +11,7 @@ const FeaturedJobs = () => {
     hasMore,
     loadMore,
     loadingMore, // Track the "Load More" loading state
-  } = useJobs(); // ✅ Use the custom hook
+  } = useJobs(); //  Use the custom hook
 
   return (
     <Container>

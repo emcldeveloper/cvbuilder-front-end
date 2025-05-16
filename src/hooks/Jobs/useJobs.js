@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getJobs } from '../../Api/Job/FeactureJob'; // Make sure the path is correct
 
-const JOBS_PER_PAGE = 10;
+const JOBS_PER_PAGE = 12;
 
 const useJobs = () => {
   const [allJobs, setAllJobs] = useState([]); // All jobs (including cached and fetched)

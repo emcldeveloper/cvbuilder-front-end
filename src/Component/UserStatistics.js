@@ -5,6 +5,8 @@ import { UniversalContext } from "../context/UniversalContext";
 const UserStatistics = () => {
   const { siteStatistics, loading } = useContext(UniversalContext); // ✅ Updated key
 
+  console.log("Check if Exist",siteStatistics);
+
   const styles = {
     container: {
       backgroundColor: "#DFE3E2",
