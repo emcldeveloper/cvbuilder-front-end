@@ -130,7 +130,7 @@ const JobCard = ({ job, onViewDetails }) => {
     <div className="job-card">
       <div className="job-header"> {/* New container for logo and job type */}
         <img
-          src={`https://ekazi.co.tz/${job.client?.logo || 'https://via.placeholder.com/150'}`}
+          src={`https://ekazi.co.tz/${img|| 'https://via.placeholder.com/150'}`}
           alt="Company logo"
           className="company-logo"
         />
