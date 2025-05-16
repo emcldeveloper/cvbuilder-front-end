@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import MainLayout1 from '../../layouts/MainLayout1';
 import { useLocation } from 'react-router-dom';
+import PageHeader from '../Pages/PageHeader';
 
 const JobDetails = () => {
 
@@ -21,6 +22,7 @@ const JobDetails = () => {
 
   return (
     <MainLayout1>
+      <PageHeader title={job?.job_position?.position_name || 'Untitled Job'} />
       <Container fluid className="py-3">
         <Row>
           <Col md={9}>

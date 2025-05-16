@@ -5,7 +5,7 @@ const HeroSection = () => {
   const styles = {
     container: {
       backgroundColor: "#DFE3E2",
-      marginTop: "-78px", // Small top margin
+      marginTop: "0", // Small top margin
     },
     banner: {
       backgroundImage: "url('/banner.jpg')",
