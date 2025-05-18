@@ -14,7 +14,8 @@ const JobCategoriesTabs = () => {
         </h4>
         <br />
 
-        <Tabs
+        <Container>
+           <Tabs
           defaultActiveKey="industry"
           id="job-category-tabs"
           className="mb-3 justify-content-center"
@@ -31,6 +32,7 @@ const JobCategoriesTabs = () => {
             <Locations />
           </Tab>
         </Tabs>
+        </Container>
      
     </Container>
   );

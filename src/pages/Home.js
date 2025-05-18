@@ -7,7 +7,7 @@ import BannerCarousel from "../Component/Banner/BannerCarousel";
 import FeaturedJobs from "../Component/Jobs/FeaturedJobs";
 import FeaturedCandidateList from "../Component/FeatureCandidate/FeaturedCandidateList";
 import FeaturedEmployerList from "../Component/Employer/FeaturedEmployerList";
-import JobCategoriesTabs from "../Component/JobCategory/JobCategoriesTabs";
+import JobCategoriesTabs from "../Component/Jobs/JobCategory/JobCategoriesTabs";
 
 
 const Home= () => {

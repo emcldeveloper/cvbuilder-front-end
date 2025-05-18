@@ -4,28 +4,19 @@ import {
   FaEye, FaUsers, FaBriefcase, FaMoneyBill, FaCalendar,
   FaFacebook, FaTwitter, FaWhatsapp, FaLinkedin
 } from 'react-icons/fa';
-import MainLayout1 from '../../layouts/MainLayout1';
-import { useLocation } from 'react-router-dom';
-import PageHeader from '../Pages/PageHeader';
 
-const JobDetails = () => {
-
-   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-
-  const { state } = useLocation();
-  const { job } = state;
-
-  const isExpired = job?.dead_line ? new Date(job.dead_line) < new Date() : false;
-
+const JobDetails = ({job}) => {
+    const isExpired = job?.dead_line ? new Date(job.dead_line) < new Date() : false;
+   // Construct share content
+    const shareTitle = `Job Opening: ${job?.job_position?.position_name ?? 'Untitled Job'} at ${job?.client?.client_name ?? ''}`;
+    const currentUrl = window.location.href;
+    const encodedUrl = encodeURIComponent(currentUrl);
+    const encodedTitle = encodeURIComponent(shareTitle);
+  
   return (
-    <MainLayout1>
-      <PageHeader title={job?.job_position?.position_name || 'Untitled Job'} />
-      <Container fluid className="py-3">
-        <Row>
-          <Col md={9}>
+ 
+   
+         <div>
             <Card className="mb-4">
               <Card.Body>
 
@@ -83,11 +74,11 @@ const JobDetails = () => {
                     <h6><b>{job.job_position?.position_name || 'Untitled'}</b></h6>
                     <p>{job.client?.client_name}</p>
                   </Col>
-                  <Col md={2}>
+                  {/* <Col md={2}>
                     <Button style={{ borderRadius: '30px' }} className="bg-orange text-white">
                       {job.job_type?.type_name ?? 'N/A'}
                     </Button>
-                  </Col>
+                  </Col> */}
                 </Row>
 
                 <hr />
@@ -136,36 +127,60 @@ const JobDetails = () => {
                 </p>
 
                 {/* Social Icons */}
-                <Row className="mt-3 justify-content-between text-center">
-                  <Col><FaFacebook size={30} /></Col>
-                  <Col><FaTwitter size={30} /></Col>
-                  <Col><FaWhatsapp size={30} /></Col>
-                  <Col><FaLinkedin size={30} /></Col>
-                </Row>
+               <Row className="mt-4 justify-content-center text-center">
+        <Col xs="auto">
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Share on Facebook"
+          >
+            <FaFacebook size={30} color="#3b5998" />
+          </a>
+        </Col>
+        <Col xs="auto">
+          <a
+            href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Share on Twitter"
+          >
+            <FaTwitter size={30} color="#1DA1F2" />
+          </a>
+        </Col>
+        <Col xs="auto">
+          <a
+            href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Share on WhatsApp"
+          >
+            <FaWhatsapp size={30} color="#25D366" />
+          </a>
+        </Col>
+        <Col xs="auto">
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Share on LinkedIn"
+          >
+            <FaLinkedin size={30} color="#0077b5" />
+          </a>
+        </Col>
+      </Row>
 
                 <div className="text-center mt-4">
-                  <Button variant="success" size="lg" onClick={() => alert('Apply functionality here')}>
+                  <Button variant="primary" size="lg" onClick={() => alert('Apply functionality here')}>
                     Apply Now
                   </Button>
                 </div>
 
               </Card.Body>
             </Card>
-          </Col>
+         </div>
 
-          {/* Right Ad Column */}
-          <Col md={3}>
-            <Card className="h-100">
-              <Card.Body className="d-flex align-items-center justify-content-center">
-                <div style={{ width: '100%', height: 600, backgroundColor: '#f1f1f1', textAlign: 'center' }}>
-                  Google Ad Space
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </MainLayout1>
+ 
   );
 };
 

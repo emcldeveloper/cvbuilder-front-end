@@ -1,5 +1,16 @@
 import React from "react";
 import { Modal, Button, Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
+// Helper slugify function
+const slugify = (text) =>
+  text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
 
 const SearchModalForm = ({
   showModal,
@@ -10,7 +21,6 @@ const SearchModalForm = ({
   loadingMore,
   hasMore,
 }) => {
-  // Inline styles
   const styles = {
     card: {
       transition: "all 0.3s ease-in-out",
@@ -63,64 +73,79 @@ const SearchModalForm = ({
               <p className="text-muted">No jobs found.</p>
             </div>
           ) : (
-            filteredJobs.map((job) => (
-              <div className="col-md-6 mb-3" key={job.id}>
-                <div
-                  className="card h-100"
-                  style={styles.card}
-                  onMouseEnter={(e) =>
-                    Object.assign(e.currentTarget.style, styles.cardHover)
-                  }
-                  onMouseLeave={(e) =>
-                    Object.assign(e.currentTarget.style, styles.card)
-                  }
-                >
-                  <div className="row g-2 align-items-center">
-                    <div className="col-4 text-center">
-                      <Image
-                        src={
-                          job.client?.logo
-                            ? `https://ekazi.co.tz/${job.client.logo}`
-                            : "/images/nodata.png"
-                        }
-                        alt="Company Logo"
-                        style={styles.logo}
-                        rounded
-                      />
-                    </div>
-                    <div className="col-8">
-                      <a
-                        href={`/job/show/${job.id}`}
-                        style={styles.jobTitle}
-                        title={job.title}
-                      >
-                        {job.job_position?.position_name || job.title}
-                      </a>
-                      <div style={styles.companyName}>
-                        {job.client?.client_name}
+            filteredJobs.map((job) => {
+              const jobTitle = job.job_position?.position_name || "job";
+              const region = job.job_addresses?.[0]?.region?.region_name || "";
+              const country =
+                job.job_addresses?.[0]?.region?.country?.name || "";
+              const jobId = job.id;
+
+              const jobSlug = [
+                slugify(jobTitle),
+                slugify(region),
+                country.toLowerCase() !== "remote" ? slugify(country) : null,
+                jobId,
+              ]
+                .filter(Boolean)
+                .join("-");
+
+              const jobUrl = `/jobs/${jobSlug}`;
+
+              return (
+                <div className="col-md-6 mb-3" key={job.id}>
+                  <div
+                    className="card h-100"
+                    style={styles.card}
+                    onMouseEnter={(e) =>
+                      Object.assign(e.currentTarget.style, styles.cardHover)
+                    }
+                    onMouseLeave={(e) =>
+                      Object.assign(e.currentTarget.style, styles.card)
+                    }
+                  >
+                    <div className="row g-2 align-items-center">
+                      <div className="col-4 text-center">
+                        <Image
+                          src={
+                            job.client?.logo
+                              ? `https://ekazi.co.tz/${job.client.logo}`
+                              : "/images/nodata.png"
+                          }
+                          alt="Company Logo"
+                          style={styles.logo}
+                          rounded
+                        />
                       </div>
-                      <div
-                        style={{
-                          ...styles.deadline,
-                          color:
-                            new Date(job.dead_line) < new Date()
-                              ? "red"
-                              : "green",
-                        }}
-                      >
-                        {new Date(job.dead_line) < new Date()
-                          ? `Expired: ${new Date(
-                              job.dead_line
-                            ).toLocaleDateString()}`
-                          : `Deadline: ${new Date(
-                              job.dead_line
-                            ).toLocaleDateString()}`}
+                      <div className="col-8">
+                        <Link to={jobUrl} style={styles.jobTitle}   state={{ job }}>
+                          {job.job_position?.position_name || job.title}
+                        </Link>
+                        <div style={styles.companyName}>
+                          {job.client?.client_name}
+                        </div>
+                        <div
+                          style={{
+                            ...styles.deadline,
+                            color:
+                              new Date(job.dead_line) < new Date()
+                                ? "red"
+                                : "green",
+                          }}
+                        >
+                          {new Date(job.dead_line) < new Date()
+                            ? `Expired: ${new Date(
+                                job.dead_line
+                              ).toLocaleDateString()}`
+                            : `Deadline: ${new Date(
+                                job.dead_line
+                              ).toLocaleDateString()}`}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
 
           {loadingMore && (

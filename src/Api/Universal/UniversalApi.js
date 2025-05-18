@@ -1,32 +1,48 @@
+// src/api/universalApi.js
 import axios from 'axios';
 
-// Base URLs
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const UNIVERSAL_API = `${API_BASE_URL}universal`;
 
-// Simple in-memory cache
 const cache = {};
+const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
 
-const fetchWithCache = (key, url, transform) => {
-  if (cache[key]) {
-    return Promise.resolve(cache[key]);
+const fetchWithCache = async (key, url, transform, retries = 3, delay = 1000) => {
+  const now = Date.now();
+
+  // Check if cached data exists and hasn't expired
+  if (cache[key] && (now - cache[key].timestamp < CACHE_EXPIRATION_TIME)) {
+    return Promise.resolve(cache[key].data);
   }
 
-  return axios.get(url)
-    .then((res) => {
+  const fetchData = async (attempt = 0) => {
+    try {
+      const res = await axios.get(url);
       const data = transform ? transform(res) : res.data;
-      cache[key] = data;
+
+      // Save data and timestamp
+      cache[key] = {
+        data,
+        timestamp: Date.now()
+      };
+
       return data;
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 429) {
-        console.warn(`Rate limited on ${url}. Try again later.`);
+    } catch (error) {
+      if (error.response?.status === 429 && attempt < retries) {
+        const backoff = delay * Math.pow(2, attempt);
+        console.warn(`Rate limited on ${url}. Retrying in ${backoff}ms...`);
+        await new Promise(resolve => setTimeout(resolve, backoff));
+        return fetchData(attempt + 1);
       }
       throw error;
-    });
+    }
+  };
+
+  return fetchData();
 };
 
-// Universal API calls
+
+// Exported API calls
 export const getMaritalStatuses = () =>
   fetchWithCache('marital', `${UNIVERSAL_API}/marital`);
 
@@ -45,7 +61,7 @@ export const getIndustry = () =>
   }));
 
 export const getMajor = () =>
-  fetchWithCache('major', `${UNIVERSAL_API}/marital`);
+  fetchWithCache('major', `${UNIVERSAL_API}/major`);
 
 export const getCourse = () =>
   fetchWithCache('course', `${UNIVERSAL_API}/course`);
@@ -59,7 +75,7 @@ export const getPosition = () =>
 export const getPositionLevel = () =>
   fetchWithCache('position_level', `${UNIVERSAL_API}/position_level`);
 
-// Site statistics
+
 export const getSiteStatistics = () =>
   fetchWithCache('site_statistics', `${API_BASE_URL}site-statistics`, res => ({
     data: res.data
