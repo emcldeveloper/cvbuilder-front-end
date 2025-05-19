@@ -10,7 +10,9 @@ import MyProfile from './pages/MyProfile/MyProfile';
 import ApplyLetter from './pages/MyApplicantion/Applyletter';
 import SavedJob from './pages/MyApplicantion/SavedJob';
 import JobMatch from './pages/MyApplicantion/JobMatch';
- import JobDetails from './Component/Jobs/JobDetails';
+ import JobPreview from './pages/Jobs/JobPreview';
+ import FindJobs from './pages/Jobs/FindJobs';
+ import StickyPage from './pages/Jobs/StickyPage';
  
 function App() {
   return (
@@ -20,7 +22,10 @@ function App() {
           {/* Root route */}
           <Route path="/" element={<Home />} />
            {/* Job Routes */}
-          <Route path="/jobs/:jobSlug" element={<JobDetails />} />
+          <Route path="/jobs/:jobSlug" element={<JobPreview />} />
+          <Route path="/jobs" element={<FindJobs/>}/>
+          <Route path="/sticky" element={<StickyPage/>}/>
+
 
           {/* Jobseeker dashboard */}
           <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
@@ -30,6 +35,7 @@ function App() {
           <Route path="jobseeker/apply-letter" element={<ApplyLetter />} />
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
+
           
         </Routes>
       </BrowserRouter>

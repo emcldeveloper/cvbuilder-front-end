@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getJobCategorySummary } from '../../Api/Job/JobCategoriesApi';
+import { getJobCategorySummary } from '../../../Api/Job/JobCategoriesApi';
 import { Link } from 'react-router-dom'; // If you're using React Router
 
 // Helper function to get cached data from localStorage

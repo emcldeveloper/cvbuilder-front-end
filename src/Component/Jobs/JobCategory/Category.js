@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getClientsJobCountByIndustry } from '../../Api/Job/JobCategoriesApi';
+import { getClientsJobCountByIndustry } from '../../../Api/Job/JobCategoriesApi';
 import { Link } from 'react-router-dom'; // Optional: if using React Router
 
 // Helper function to get cached data from localStorage
