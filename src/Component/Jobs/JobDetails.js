@@ -12,12 +12,12 @@ const JobDetails = ({job}) => {
     const currentUrl = window.location.href;
     const encodedUrl = encodeURIComponent(currentUrl);
     const encodedTitle = encodeURIComponent(shareTitle);
-  
+        
   return (
  
    
          <div>
-            <Card className="mb-4">
+             <Card>
               <Card.Body>
 
                 {/* Top Info Section */}

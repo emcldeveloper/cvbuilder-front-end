@@ -12,6 +12,7 @@ import SavedJob from './pages/MyApplicantion/SavedJob';
 import JobMatch from './pages/MyApplicantion/JobMatch';
  import JobPreview from './pages/Jobs/JobPreview';
  import FindJobs from './pages/Jobs/FindJobs';
+ import StickyPage from './pages/Jobs/StickyPage';
  
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>
+          <Route path="/sticky" element={<StickyPage/>}/>
 
 
           {/* Jobseeker dashboard */}
@@ -33,6 +35,7 @@ function App() {
           <Route path="jobseeker/apply-letter" element={<ApplyLetter />} />
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
+
           
         </Routes>
       </BrowserRouter>

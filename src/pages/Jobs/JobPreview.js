@@ -15,15 +15,16 @@ const JobPreview = () => {
   const { state } = useLocation();
   const { job } = state;
 
-  // Inline styles for the sticky effect
   const stickyStyle = {
-    position: "sticky",
-    top: "80px", // Adjust this value based on your header height (80px is an example)
-    zIndex: 10,
-    backgroundColor: "white",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Optional shadow for visual clarity
-    paddingTop: "20px", // Optional padding for visual spacing
-  };
+  position: 'sticky',
+  top: '90px',
+  zIndex: 10,
+  backgroundColor: 'lightgray',
+  padding: '20px',
+  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+};
+
+
 
   return (
     <MainLayout1>
@@ -47,7 +48,7 @@ const JobPreview = () => {
         <Row>
           <Col md={9}>
             {/* Apply stickyStyle directly to the JobDetails wrapper */}
-            <div style={stickyStyle}>
+            <div >
               <JobDetails job={job} />
             </div>
           </Col>

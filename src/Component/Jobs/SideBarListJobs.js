@@ -40,7 +40,7 @@ const SideBarListJobs = ({ setSelectedJob, setActiveJob, activeJob }) => {
       <Row>
         <Col md={12}>
           {/* Wrapper Card for job listings */}
-          <Card className="p-3" style={{ minHeight: '600px' }}> {/* Increased height of card */}
+          <Card className="sticky-card"> {/* Applying the sticky class here */}
             <Card.Body>
               <h5 className="mb-3">{jobs.total} Jobs Found.</h5>
               <hr className="full-width" />
@@ -48,7 +48,7 @@ const SideBarListJobs = ({ setSelectedJob, setActiveJob, activeJob }) => {
               {/* Scrollable container for job list */}
               <div
                 style={{
-                  maxHeight: '400px', // Keep this value for scrollable container
+                  maxHeight: '1200px', // Keep this value for scrollable container
                   overflowY: 'auto',
                   marginBottom: '10px',
                   paddingRight: '10px',
