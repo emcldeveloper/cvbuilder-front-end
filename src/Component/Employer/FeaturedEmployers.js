@@ -22,15 +22,19 @@ const FeaturedEmployers = ({ jobCompanies }) => {
                 >
                   <Card className="border-0 shadow-sm">
                     <Card.Body className="text-center py-3">
-                      <a href={`/featured/employer/details/${employer.id}`}>
-                        <Image
-                          height="60"
-                          src={employer.logo || '/img/default.png'}
-                          alt={employer.client_name}
-                          roundedCircle
-                          className="img-fluid"
-                        />
-                      </a>
+                     <a href={`/featured/employer/details/${employer.id}`}>
+      <Image
+        src={employer.logo ? `https://ekazi.co.tz/${employer.logo}` : '/img/default.png'}
+        alt={employer.client_name}
+        roundedCircle
+        style={{
+          width: '60px',
+          height: '60px',
+          objectFit: 'contain', // Keeps entire logo visible
+          backgroundColor: 'white', // Optional for transparent PNGs
+        }}
+      />
+    </a>
                     </Card.Body>
                   </Card>
                 </div>

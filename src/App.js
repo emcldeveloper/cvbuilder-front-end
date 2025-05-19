@@ -10,8 +10,8 @@ import MyProfile from './pages/MyProfile/MyProfile';
 import ApplyLetter from './pages/MyApplicantion/Applyletter';
 import SavedJob from './pages/MyApplicantion/SavedJob';
 import JobMatch from './pages/MyApplicantion/JobMatch';
+ import JobDetails from './Component/Jobs/JobDetails';
  
-
 function App() {
   return (
     <UniversalProvider> {/* Wrap everything in the provider */}
@@ -19,6 +19,8 @@ function App() {
         <Routes>
           {/* Root route */}
           <Route path="/" element={<Home />} />
+           {/* Job Routes */}
+          <Route path="/jobs/:jobSlug" element={<JobDetails />} />
 
           {/* Jobseeker dashboard */}
           <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />

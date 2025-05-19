@@ -1,37 +1,31 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import {Container} from 'react-bootstrap';
-import { UniversalContext } from '../../context/UniversalContext';
-import { getJobs } from '../../Api/Job/FeactureJob';
-import SearchModalForm from '../Forms/Job/SearchModalForm';
+import React, { useState, useRef, useContext } from 'react';  // Import useContext from React
+import { Container, Button, Modal } from 'react-bootstrap';
+import useJobs from '../../hooks/Jobs/useJobs'; // Hook to get jobs
+import SearchModalForm from '../Forms/Job/SearchModalForm'; // Modal component
+import { UniversalContext } from '../../context/UniversalContext';  // Import UniversalContext
 
 const JobSearchSection = () => {
-  const { industries, loading } = useContext(UniversalContext);
+  const {
+    jobs,
+    loading,
+    hasMore,
+    loadMore,
+    searchTerm,
+    setSearchTerm,
+    selectedIndustry,
+    setSelectedIndustry,
+    loadingMore,
+  } = useJobs(); // Using the hook for job-related data
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedIndustry, setSelectedIndustry] = useState('');
-  const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const { industries } = useContext(UniversalContext);  // Access industries from context
 
-  const modalBodyRef = useRef(null);
-  const LIMIT = 10;
+  const [showModal, setShowModal] = useState(false);  // Modal visibility state
+  const [filteredJobs, setFilteredJobs] = useState([]);  // Filtered jobs to show in the modal
+  const modalBodyRef = useRef(null);  // To handle the modal body scroll
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await getJobs(LIMIT, 1);
-        setJobs(response);
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-      }
-    };
-    fetchJobs();
-  }, []);
-
+  // Show the modal and set filtered jobs
   const handleSearch = () => {
+    // Filter jobs based on search term and selected industry
     const filtered = jobs.filter((job) => {
       const matchTitle = job.job_position?.position_name
         ?.toLowerCase()
@@ -45,113 +39,95 @@ const JobSearchSection = () => {
     });
 
     setFilteredJobs(filtered);
-    setPage(2); // Next page will be 2
-    setHasMore(true);
-    setShowModal(true);
-  };
-
-  const loadMoreJobs = async () => {
-    if (!hasMore || loadingMore) return;
-
-    setLoadingMore(true);
-    try {
-      const moreJobs = await getJobs(LIMIT, page);
-      if (moreJobs.length < LIMIT) {
-        setHasMore(false);
-      }
-      setFilteredJobs(prev => [...prev, ...moreJobs]);
-      setPage(prev => prev + 1);
-    } catch (err) {
-      console.error('Failed to load more jobs', err);
-    } finally {
-      setLoadingMore(false);
-    }
-  };
-
-  const handleScroll = () => {
-    const el = modalBodyRef.current;
-    if (!el) return;
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
-      loadMoreJobs();
-    }
+    setShowModal(true);  // Show modal with search results
   };
 
   const handleClose = () => {
     setShowModal(false);
-    setFilteredJobs([]);
-    setPage(1);
-    setHasMore(true);
+    setFilteredJobs([]);  // Reset filtered jobs when closing the modal
+  };
+
+  const handleScroll = () => {
+    // Infinite scroll handling logic
+    const el = modalBodyRef.current;
+    if (!el) return;
+
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
+      loadMore();  // Call to load more jobs when reaching the bottom
+    }
   };
 
   return (
     <Container>
-       <div className="w-100">
-      <style>{`
-        .customForm {
-          border: 1px solid #D7D8DA50;
-        }
-        .customForm:focus {
-          border: 2px solid #2E58A6;
-        }
-      `}</style>
+      <div className="search-container">
+        <style>{`
+          .customForm {
+            border: 1px solid #D7D8DA50;
+          }
+          .customForm:focus {
+            border: 2px solid #2E58A6;
+          }
+        `}</style>
 
-      <div className="row">
-        <div className="col-md-12">
-          <div className="row d-flex align-items-center justify-content-between">
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control rounded customForm"
-                placeholder="What are you looking for..."
-                style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="row d-flex align-items-center justify-content-between">
+              <div className="col-md-6">
+                <input
+                  type="text"
+                  className="form-control rounded customForm"
+                  placeholder="What are you looking for..."
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
 
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                style={{ background: 'rgba(255, 255, 255, 0.9)' }}
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-              >
-                <option value="">Select Category</option>
-                {!loading &&
-                  industries?.map((ind) => (
-                    <option key={ind.id} value={ind.id}>
-                      {ind.industry_name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              <div className="col-md-4">
+                <select
+                  className="form-select"
+                  style={{ background: 'rgba(255, 255, 255, 0.9)' }}
+                  value={selectedIndustry}
+                  onChange={(e) => setSelectedIndustry(e.target.value)}
+                >
+                  <option value="">Select Category</option>
+                  {industries && industries.length > 0 ? (
+                    industries.map((ind) => (
+                      <option key={ind.id} value={ind.id}>
+                        {ind.industry_name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">Loading industries...</option>
+                  )}
+                </select>
+              </div>
 
-            <div className="col-md-2">
-              <button
-                className="btn btn-warning text-white"
-                style={{ border: 'none', backgroundColor: '#D36314', width: '100%' }}
-                onClick={handleSearch}
-              >
-                Search
-              </button>
+              <div className="col-md-2">
+                <button
+                  className="btn btn-warning text-white"
+                  style={{ border: 'none', backgroundColor: '#D36314', width: '100%' }}
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal with infinite scroll */}
-     <SearchModalForm
-  showModal={showModal}
-  handleClose={handleClose}
-  modalBodyRef={modalBodyRef}
-  handleScroll={handleScroll}
-  filteredJobs={filteredJobs}
-  loadingMore={loadingMore}
-  hasMore={hasMore}
-/>
-    </div>
+      {/* Modal with filtered job results */}
+      <SearchModalForm
+        showModal={showModal}
+        handleClose={handleClose}
+        modalBodyRef={modalBodyRef}
+        handleScroll={handleScroll}
+        filteredJobs={filteredJobs}  // Pass filtered jobs here
+        loadingMore={loadingMore}
+        hasMore={hasMore}
+      />
     </Container>
-
   );
 };
 
