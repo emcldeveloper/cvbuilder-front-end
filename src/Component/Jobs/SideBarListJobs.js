@@ -48,10 +48,11 @@ const SideBarListJobs = ({ setSelectedJob, setActiveJob, activeJob }) => {
               {/* Scrollable container for job list */}
               <div
                 style={{
-                  maxHeight: '1200px', // Keep this value for scrollable container
+                  maxHeight: '400px', // Keep this value for scrollable container
                   overflowY: 'auto',
                   marginBottom: '10px',
                   paddingRight: '10px',
+                  
                 }}
               >
                 {/* Mapping through the job list */}

@@ -16,7 +16,6 @@ const FindJobs = () => {
     top: '130px', // Adjust the top offset as needed
     zIndex: 999, 
     padding: '20px',
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
     height: 'calc(100vh - 130px)', // Make it take the full height, but subtract the top offset
     overflowY: 'auto', // Enable vertical scrolling when content overflows
   };
