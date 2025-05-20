@@ -1,17 +1,25 @@
-import React from "react";
-import { Container, Row, Col, Card } from 'react-bootstrap';
-const PersonalData= ()=>{
- return (
-    <Row className="justify-content-center mb-3">
-    <Col>
-        <Card className="shadow-sm">
-            <Card.Body className="p-4">
-                <h5 className="card-title text-primary">Personal Data</h5>
-                {/* Add personal data content here */}
-            </Card.Body>
-        </Card>
-    </Col>
-</Row>
- )
-}
-export default PersonalData;
+import React, { useState } from 'react';
+import { Container, Row, Col, Button, Modal, Form, Badge, Image } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faPlus, faMapMarkerAlt, faPhone, faEnvelope ,faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
+const ProfileSection = ({ applicant, isApplicant }) => {
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
+  const [showUploadImageModal, setShowUploadImageModal] = useState(false);
+  const [showBackgroundImageModal, setShowBackgroundImageModal] = useState(false);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Present';
+    const options = { year: 'numeric', month: 'short' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  return (
+    <div className="profile-section">
+    
+    </div>
+  );
+};
+
+export default ProfileSection;

@@ -50,9 +50,9 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
 
             <div className="d-flex justify-content-between align-items-center">
                 <Card.Title className="mb-0">
-                    <h5 className="card-title text-primary">
-                        Work Experience ({totalExperience.text})
-                    </h5>
+                    <h6 className="card-title ">
+                         WORK EXPERIENCE ({totalExperience.text})
+                    </h6>
                 </Card.Title>
 
                 <div className="d-flex gap-2">
@@ -132,7 +132,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                             }
                                             return acc;
                                         }, []).map(employerGroup => (
-                                            <ListGroup.Item key={employerGroup.employer_id} className="border-0 px-0 py-3">
+                                            <ListGroup.Item key={employerGroup.employer_id} className="border-0 px-0 py-1">
                                                 <div className="d-flex justify-content-between">
                                                     <div>
                                                         {/* Display all positions for this employer */}

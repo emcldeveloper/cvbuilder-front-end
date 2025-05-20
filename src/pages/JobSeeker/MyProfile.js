@@ -8,6 +8,16 @@ import ApplicantSkillsSection from "../../Component/Profile/Skill";
 import CareerObjectivesSection from "../../Component/Profile/Objective";
 import WorksExperiences from "../../Component/Profile/Experience";
 import WorkExperienceSection from "../../Component/Profile/Experience";
+import EducationDetails from "../../Component/Profile/Education";
+import ProficiencyQualifications from "../../Component/Profile/Proficience";
+import TrainingWorkshops from "../../Component/Profile/Training";
+import RefereesSection from "../../Component/Profile/Referee";
+import PersonalitiesSection from "../../Component/Profile/Personality";
+import KnowledgesSection from "../../Component/Profile/Knowledge";
+import SoftwareSection from "../../Component/Profile/SoftwareAndTools";
+import CulturesSection from "../../Component/Profile/Culture";
+import LanguagesSection from "../../Component/Profile/Language";
+import CvVideoCard from "../../Component/Profile/CvVideo";
 const MyProfile = () => {
 
 
@@ -48,51 +58,35 @@ const MyProfile = () => {
                     display: none;
                     }`}
                 </style> */}
-                <PersonalData />
+       
 
 
 
                 {/* Career Objective */}
                 <Row className="justify-content-center mb-3">
                     <Col >
-                        <Card className="shadow-sm">
+                        <Card className="shadow-smy">
                             <Card.Body className="p-4">
                                 <ApplicantCareerSection applicant={applicant} />
                                 <CareerObjectivesSection applicant={applicant} />
-                                {/* work experince */}
-                                {/* <WorksExperiences applicant={applicant}/> */}
                                 <WorkExperienceSection applicant={applicant}/>
+                                <EducationDetails applicant={applicant}/>
+                                <KnowledgesSection  applicant={applicant}/>
+                                <SoftwareSection applicant={applicant}/>
+                                <PersonalitiesSection  applicant={applicant}/>
+                                 <CulturesSection applicant={applicant}/>
+                                 <LanguagesSection  applicant={applicant}/>
+                                <ProficiencyQualifications  applicant={applicant}/>
+                                <TrainingWorkshops applicant={applicant}/>
+                                 <RefereesSection  applicant={applicant}/>
+                                 <CvVideoCard applicant={applicant}/>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-
-                {/* Work Experience */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Work Experience</h5>
-                                {/* Add work experience content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
-                {/* Education */}
-                <Row className="justify-content-center mb-3">
-                    <Col>
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Education</h5>
-                                {/* Add education content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
+                <PersonalData applicant={applicant} />
                 {/* Career Skills */}
-                <ApplicantSkillsSection applicant={applicant} />
+                {/* <ApplicantSkillsSection applicant={applicant} /> */}
 
                 {/* Job Fit */}
                 <Row className="justify-content-center mb-3">
@@ -107,53 +101,12 @@ const MyProfile = () => {
                     </Col>
                 </Row>
 
-                {/* Languages */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Languages</h5>
-                                {/* Add languages content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+               
 
-                {/* Proficiency */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Proficiency</h5>
-                                {/* Add proficiency content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+              
 
-                {/* Training */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Training</h5>
-                                {/* Add training content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
-                {/* References */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">References</h5>
-                                {/* Add references content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+            
+ 
             </Container>
         </JobSeekerLayout>
 

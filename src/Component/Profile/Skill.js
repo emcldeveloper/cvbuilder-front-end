@@ -14,7 +14,9 @@ const ApplicantSkillsSection = ({ applicant, isApplicant }) => {
         softwares: [],
         tools: []
     });
-
+    // const profile = applicant?.applicant_profile?.[0];
+    // const address = applicant?.address?.[0];
+    // console.log("first_name",profile.first_name)
     // Extract unique values from applicant data
     const uniqueCultures = [...new Set(applicant?.culture?.map(item => item.culture?.culture_name))].filter(Boolean);
     const uniquePersonalities = [...new Set(applicant?.applicant_personality ?.map(item => item.personality?.personality_name))].filter(Boolean);

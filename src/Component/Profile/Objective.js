@@ -26,55 +26,54 @@ const CareerObjectivesSection = ({ applicant, isApplicant }) => {
   const handleShowDelete = () => setShowDeleteModal(true);
   const handleCloseDelete = () => setShowDeleteModal(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsSubmitting(true);
+//     setError(null);
     
-    try {
-      const response = await axios.post('/api/applicant/objectives/add', {
-        objective: objective
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-      });
+//     try {
+//       const response = await axios.post('/api/applicant/objectives/add', {
+//         objective: objective
+//       }, {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+//         }
+//       });
+ 
+//       console.log('Success:', response.data);
+   
+//       handleCloseEdit();
+//     } catch (err) {
+//       setError(err.response?.data?.message || 'An error occurred');
+//       console.error('Error:', err);
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
 
-      // Handle success
-      console.log('Success:', response.data);
-      // You would typically update the parent state here or refetch data
-      handleCloseEdit();
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred');
-      console.error('Error:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    setIsSubmitting(true);
-    try {
-      const response = await axios.delete(`/api/applicant/objectives/${applicant?.objective?.id}`);
-      // Handle success
-      console.log('Deleted:', response.data);
-      // Update parent state or refetch data
-      handleCloseDelete();
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred');
-      console.error('Error:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+//   const handleDelete = async () => {
+//     setIsSubmitting(true);
+//     try {
+//       const response = await axios.delete(`/api/applicant/objectives/${applicant?.objective?.id}`);
+//       // Handle success
+//       console.log('Deleted:', response.data);
+//       // Update parent state or refetch data
+//       handleCloseDelete();
+//     } catch (err) {
+//       setError(err.response?.data?.message || 'An error occurred');
+//       console.error('Error:', err);
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
 
   return (
     <>
       
           <div className="d-flex justify-content-between align-items-center mb-3 mt-5">
-            <Card.Title className="text-primary mb-0">
-              <h5>Career Objectives</h5>
+            <Card.Title className="mb-0">
+              <h6>CAREER OBJECTIVES </h6>
             </Card.Title>
             
            
