@@ -1,82 +1,114 @@
-import React, { useState } from 'react';
-import { Dropdown, Form, Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { Dropdown, Form, Row, Col,Container } from 'react-bootstrap';
+import { UniversalContext } from '../../context/UniversalContext';
 
-const FilterJobs = () => {
-  // States for filters
-  const [selectedTime, setSelectedTime] = useState('Any Time');
-  const [selectedJobType, setSelectedJobType] = useState('Any Type');
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedSubLocation, setSelectedSubLocation] = useState('');
-  const [selectedPositionLevel, setSelectedPositionLevel] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState("");
+const FilterJobs = ({
+  searchKeyword, setSearchKeyword,
+  selectedTime, setSelectedTime,
+  selectedJobType, setSelectedJobType,
+  selectedCountry, setSelectedCountry,
+  selectedRegion, setSelectedRegion,
+  selectedSubLocation, setSelectedSubLocation,
+  selectedPositionLevel, setSelectedPositionLevel
+}) => {
+  const {
+    types = [],
+    countries = [],
+    regions = [],
+    positionLevels = []
+  } = useContext(UniversalContext);
 
-  // Filter options
-  const timeOptions = [{ label: 'Any Time', value: ' ' }, { label: 'Past 24 Hours', value: '1' }, { label: 'Past Week', value: '7' }];
+  const timeOptions = [
+    { label: 'Any Time', value: '' },
+    { label: 'Past 24 Hours', value: '1' },
+    { label: 'Past Week', value: '7' }
+  ];
+
   const jobTypeOptions = [
-    { label: 'Any Type', value: '', color: '#ff6600' },
-    { label: 'Contract', value: '3', color: '#0170c1' },
-    { label: 'Full-time', value: '1', color: '#33ff00' },
+    { label: 'Any Type', value: '' },
+    ...types.map(type => ({
+      label: type?.type_name || 'Unknown',
+      value: String(type?.id)
+    }))
   ];
-  const positionLevelOptions = [
-    { label: 'Any Level', value: '' }, { label: 'Junior', value: 'Junior' }, { label: 'Mid-Level', value: 'Mid-Level' },
-  ];
-  const countryOptions = [
-    { label: 'USA', value: 'USA' }, { label: 'Canada', value: 'Canada' }, { label: 'UK', value: 'UK' },
-  ];
-  const regionOptions = { USA: [{ label: 'California', value: 'California' }], Canada: [{ label: 'Ontario', value: 'Ontario' }] };
-  const subLocationOptions = { California: ['San Francisco', 'Los Angeles'], Ontario: ['Toronto', 'Ottawa'] };
 
-  // Handlers
+  const positionLevelOptions = [
+    { label: 'Any Level', value: '' },
+    ...positionLevels.map(level => ({
+      label: level?.position_name || 'Unknown',
+      value: String(level?.id)
+    }))
+  ];
+
+  const countryOptions = countries.map(country => ({
+    label: country?.name || 'Unknown',
+    value: String(country?.id)
+  }));
+
+  const regionOptions = regions
+    .filter(region => String(region?.country_id) === String(selectedCountry))
+    .map(region => ({
+      label: region?.region_name || 'Unknown',
+      value: String(region?.id),
+      sub_locations: region?.sub_locations || []
+    }));
+
+  const selectedRegionObj = regionOptions.find(r => r.value === selectedRegion);
+  const subLocationOptions = selectedRegionObj?.sub_locations || [];
+
   const handleSearchChange = (e) => setSearchKeyword(e.target.value);
-  const handleCountryChange = (country) => { setSelectedCountry(country); setSelectedRegion(''); setSelectedSubLocation(''); };
-  const handleRegionChange = (region) => { setSelectedRegion(region); setSelectedSubLocation(''); };
+  const handleCountryChange = (countryId) => {
+    setSelectedCountry(countryId);
+    setSelectedRegion('');
+    setSelectedSubLocation('');
+  };
+  const handleRegionChange = (regionId) => {
+    setSelectedRegion(regionId);
+    setSelectedSubLocation('');
+  };
 
   return (
-    <div className="container-fluid border-bottom filters-bar-job-result py-4">
+    <Container>
+      {/* First Row */}
       <Row className="d-flex align-items-center">
-        {/* Time Filter */}
-        <Col md={3} xs={12} className="mb-3">
+        <Col md={3} className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Search jobs"
+            value={searchKeyword}
+            onChange={handleSearchChange}
+          />
+        </Col>
+
+        <Col md={3} className="mb-3">
           <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-time" className="w-100">
-              {selectedTime}
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {timeOptions.find(t => t.value === selectedTime)?.label || 'Any Time'}
             </Dropdown.Toggle>
             <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {timeOptions.map((option) => (
-                <Form.Check key={option.value} type="radio" name="job_post_day" label={option.label} value={option.value} checked={selectedTime === option.label} onChange={() => setSelectedTime(option.label)} />
+              {timeOptions.map(option => (
+                <Form.Check
+                  key={option.value}
+                  type="radio"
+                  name="job_post_day"
+                  label={option.label}
+                  value={option.value}
+                  checked={selectedTime === option.value}
+                  onChange={() => setSelectedTime(option.value)}
+                />
               ))}
             </Dropdown.Menu>
           </Dropdown>
         </Col>
 
-        {/* Job Type Filter */}
-        <Col md={3} xs={12} className="mb-3">
+        <Col md={3} className="mb-3">
           <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-job-type" className="w-100">
-              {selectedJobType}
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {jobTypeOptions.find(t => t.value === selectedJobType)?.label || 'Any Type'}
             </Dropdown.Toggle>
             <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {jobTypeOptions.map((option) => (
-                <Dropdown.Item key={option.value} onClick={() => setSelectedJobType(option.label)}>
-                  <div className="d-flex mb-2 align-items-center">
-                    <div className="box_job_type me-2" style={{ backgroundColor: option.color }} />
-                    <span className="job-type text-dark">{option.label}</span>
-                  </div>
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-
-        {/* Position Level Filter */}
-        <Col md={3} xs={12} className="mb-3">
-          <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-position-level" className="w-100">
-              {selectedPositionLevel || 'Select Position Level'}
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {positionLevelOptions.map((option) => (
-                <Dropdown.Item key={option.value} onClick={() => setSelectedPositionLevel(option.label)}>
+              {jobTypeOptions.map(option => (
+                <Dropdown.Item key={option.value} onClick={() => setSelectedJobType(option.value)}>
                   <span className="text-dark">{option.label}</span>
                 </Dropdown.Item>
               ))}
@@ -84,15 +116,17 @@ const FilterJobs = () => {
           </Dropdown>
         </Col>
 
-        {/* Country Filter */}
-        <Col md={3} xs={12} className="mb-3">
+        <Col md={3} className="mb-3">
           <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-country" className="w-100">
-              {selectedCountry || 'Select Country'}
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {positionLevelOptions.find(p => p.value === selectedPositionLevel)?.label || 'Select Position Level'}
             </Dropdown.Toggle>
             <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {countryOptions.map((option) => (
-                <Dropdown.Item key={option.value} onClick={() => handleCountryChange(option.value)}>
+              {positionLevelOptions.map(option => (
+                <Dropdown.Item
+                  key={option.value}
+                  onClick={() => setSelectedPositionLevel(option.value)}
+                >
                   <span className="text-dark">{option.label}</span>
                 </Dropdown.Item>
               ))}
@@ -101,15 +135,30 @@ const FilterJobs = () => {
         </Col>
       </Row>
 
+      {/* Second Row */}
       <Row className="d-flex align-items-center">
-        {/* Region Filter */}
-        <Col md={3} xs={12} className="mb-3">
+        <Col md={3} className="mb-3">
           <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-region" className="w-100">
-              {selectedRegion || 'Select Region'}
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {countryOptions.find(c => c.value === selectedCountry)?.label || 'Select Country'}
             </Dropdown.Toggle>
             <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {selectedCountry && regionOptions[selectedCountry]?.map((option) => (
+              {countryOptions.map(option => (
+                <Dropdown.Item key={option.value} onClick={() => handleCountryChange(option.value)}>
+                  <span className="text-dark">{option.label}</span>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+
+        <Col md={3} className="mb-3">
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {regionOptions.find(r => r.value === selectedRegion)?.label || 'Select Region'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="py-3 px-3 shadow-lg">
+              {regionOptions.map(option => (
                 <Dropdown.Item key={option.value} onClick={() => handleRegionChange(option.value)}>
                   <span className="text-dark">{option.label}</span>
                 </Dropdown.Item>
@@ -118,25 +167,22 @@ const FilterJobs = () => {
           </Dropdown>
         </Col>
 
-        {/* Sub-location Filter */}
-        <Col md={3} xs={12} className="mb-3">
+        {/* <Col md={3} className="mb-3">
           <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" id="dropdown-sublocation" className="w-100">
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
               {selectedSubLocation || 'Select Sub-location'}
             </Dropdown.Toggle>
             <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {selectedRegion && subLocationOptions[selectedRegion]?.map((subLocation, index) => (
-                <Dropdown.Item key={index} onClick={() => setSelectedSubLocation(subLocation)}>
-                  <span className="text-dark">{subLocation}</span>
+              {subLocationOptions.map((sub, index) => (
+                <Dropdown.Item key={index} onClick={() => setSelectedSubLocation(sub)}>
+                  <span className="text-dark">{sub}</span>
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        </Col>
-
-      
+        </Col> */}
       </Row>
-    </div>
+    </Container>
   );
 };
 

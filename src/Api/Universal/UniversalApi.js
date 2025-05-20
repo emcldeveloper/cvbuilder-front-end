@@ -50,10 +50,14 @@ export const getGenders = () =>
   fetchWithCache('gender', `${UNIVERSAL_API}/gender`);
 
 export const getCountries = () =>
-  fetchWithCache('country', `${UNIVERSAL_API}/country`);
+  fetchWithCache('country', `${UNIVERSAL_API}/country`, res => ({
+    data: res.data.country
+  }));
 
 export const getRegions = () =>
-  fetchWithCache('regions', `${UNIVERSAL_API}/regions`);
+  fetchWithCache('regions', `${UNIVERSAL_API}/regions`, res => ({
+    data: res.data.region
+  }));
 
 export const getIndustry = () =>
   fetchWithCache('industry', `${UNIVERSAL_API}/industry`, res => ({
@@ -61,22 +65,35 @@ export const getIndustry = () =>
   }));
 
 export const getMajor = () =>
-  fetchWithCache('major', `${UNIVERSAL_API}/major`);
+  fetchWithCache('major', `${UNIVERSAL_API}/major`, res => ({
+    data: res.data
+  }));
 
 export const getCourse = () =>
-  fetchWithCache('course', `${UNIVERSAL_API}/course`);
+  fetchWithCache('course', `${UNIVERSAL_API}/course`, res => ({
+    data: res.data
+  }));
 
 export const getEducationLevel = () =>
-  fetchWithCache('education_level', `${UNIVERSAL_API}/education_level`);
+  fetchWithCache('education_level', `${UNIVERSAL_API}/education_level`, res => ({
+    data: res.data
+  }));
 
 export const getPosition = () =>
   fetchWithCache('position', `${UNIVERSAL_API}/position`);
 
 export const getPositionLevel = () =>
-  fetchWithCache('position_level', `${UNIVERSAL_API}/position_level`);
+  fetchWithCache('position_level', `${UNIVERSAL_API}/position_level`, res => ({
+    data: res.data.position_level
+  }));
 
 
 export const getSiteStatistics = () =>
   fetchWithCache('site_statistics', `${API_BASE_URL}site-statistics`, res => ({
     data: res.data
+  }));
+
+  export const getJobTypes = () =>
+  fetchWithCache('jobType', `${UNIVERSAL_API}/job-type`, res => ({
+    data: res.data.type
   }));
