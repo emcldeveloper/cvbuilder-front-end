@@ -13,6 +13,7 @@ import JobMatch from './pages/MyApplicantion/JobMatch';
  import FindJobs from './pages/Jobs/FindJobs';
  import StickyPage from './pages/Jobs/StickyPage';
 import MyProfile from './pages/JobSeeker/MyProfile';
+import CvBuilder from './pages/CvBuilder';
  
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Routes>
           {/* Root route */}
           <Route path="/" element={<Home />} />
+           <Route path="/cv-builder" element={<CvBuilder />} />
+          
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>

@@ -94,11 +94,13 @@ const applyFilters = (jobs) => {
   }
 
   return (
-    <Container>
+    <Container >
       <Row>
         <Col md={12}>
           {/* Wrapper Card for job listings */}
-          <Card className="sticky-card">
+         <Card
+           
+          >
             <Card.Body>
               <h5 className="mb-3">{filteredJobs.length} Jobs Found.</h5>
               <hr className="full-width" />
