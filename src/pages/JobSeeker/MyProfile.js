@@ -1,8 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import JobSeekerLayout from "../../layouts/JobSeekerLayout";
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import PersonalData from "../../Component/Profile/PersonalData";
+import ApplicantCareerSection from "../../Component/Profile/About";
+import { profile } from "../../Api/Jobseeker/JobSeekerProfileApi";
+import ApplicantSkillsSection from "../../Component/Profile/Skill";
+import CareerObjectivesSection from "../../Component/Profile/Objective";
+import WorksExperiences from "../../Component/Profile/Experience";
+import WorkExperienceSection from "../../Component/Profile/Experience";
 const MyProfile = () => {
+
+
+    const [applicant, setApplicant] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const applicant_id = 31;
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await profile(applicant_id); // Note: removed the object wrapper if your API expects direct ID
+                console.log('Response data:', response.data);
+                setApplicant(response.data); // Assuming the data is in response.data
+                setError(null);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching profile:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [applicant_id]);
+    console.log("data za profile zimefika sawa", applicant)
     return (
         <JobSeekerLayout>
             <Container fluid style={{
@@ -17,27 +48,20 @@ const MyProfile = () => {
                     display: none;
                     }`}
                 </style> */}
-             <PersonalData/>
+                <PersonalData />
 
-                {/* Career Profile */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Career Profile</h5>
-                                {/* Add career profile content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+
 
                 {/* Career Objective */}
                 <Row className="justify-content-center mb-3">
                     <Col >
                         <Card className="shadow-sm">
                             <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Career Objective</h5>
-                                {/* Add career objective content here */}
+                                <ApplicantCareerSection applicant={applicant} />
+                                <CareerObjectivesSection applicant={applicant} />
+                                {/* work experince */}
+                                {/* <WorksExperiences applicant={applicant}/> */}
+                                <WorkExperienceSection applicant={applicant}/>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -68,17 +92,7 @@ const MyProfile = () => {
                 </Row>
 
                 {/* Career Skills */}
-                <Row className="justify-content-center mb-3">
-                    <Col >
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Skills & Tools</h5>
-                                {/* Include your career skills component here */}
-                                {/* <CareerSkills /> */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+                <ApplicantSkillsSection applicant={applicant} />
 
                 {/* Job Fit */}
                 <Row className="justify-content-center mb-3">

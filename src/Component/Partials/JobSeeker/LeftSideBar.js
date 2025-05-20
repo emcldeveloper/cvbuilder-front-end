@@ -45,7 +45,7 @@ const LeftSideBar = () => {
                 variant="primary"
                 size="sm"
                 className="position-absolute bottom-0 end-0 rounded-circle p-1"
-                onClick={() => window.location.href = '/edit-profiles'}
+                onClick={() => window.location.href = '/jobseeker/profile-preview'}
               >
                 <PencilFill size={12} />
               </Button>
