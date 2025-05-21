@@ -1,20 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-// import { BsArrowRight } from 'react-icons/bs';
 import { FaBuilding, FaClock, FaFileAlt, FaSearch } from 'react-icons/fa';
-import { 
-  BsArrowRight, 
-  BsFileEarmarkText, 
-  BsBriefcase, 
-  BsClock, 
+import {
+  BsArrowRight,
+  BsFileEarmarkText,
+  BsBriefcase,
+  BsClock,
   BsSearch,
   BsBuilding
 } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import useJobs from '../../../../hooks/Jobs/useJobs';
+import { formatDistanceToNow } from 'date-fns';
+import JobDetailModal from '../../../../Component/Jobs/JobDetailModel/JobModelDetail';
 
 const JobSeekerStatistic = () => {
+
+ const navigate = useNavigate()
+  const [page, setPage] = useState(1);
+  const {
+    jobs,
+    loading,
+    error,
+    hasMore,
+    loadMore,
+    loadingMore, // Track the "Load More" loading state
+  } = useJobs(page); // Use the custom hook, passing the current page
+  console.log('job zote hapa', jobs)
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleJobClick = (job) => {
+    setSelectedJob(job);
+    setShowModal(true);
+  };
   return (
     <div className="w-100">
-      <Card className="mb-4 shadow-sm">
+      <Card className="mb-4 shadow-smy">
         <Card.Body>
           {/* Statistic Cards */}
           <Row className="mb-3 g-2">
@@ -93,41 +115,81 @@ const JobSeekerStatistic = () => {
               <h5 className="fw-bold mb-0">Recommended jobs for you</h5>
             </Col>
             <Col className="text-end">
-              <a href="/jobs" className="text-decoration-none text-primary d-flex align-items-center justify-content-end">
+              <a href="/jobs" className="text-decoration-none text-primary d-flex align-items-center justify-content-end"
+                onClick={() => navigate('/jobs')}
+              >
                 View all jobs <BsArrowRight className="ms-2" />
               </a>
             </Col>
           </Row>
 
           {/* Job Listings */}
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="mb-3 shadow-sm">
+          {jobs.slice(0, 5).map((job) => (
+            <Card key={job.id} className="mb-3 shadow-smy job-item"
+            onClick={() => handleJobClick(job)}
+            style={{ cursor: 'pointer' }}
+            >
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs={3} md={2}>
-                    <div className="bg-light rounded overflow-hidden" style={{ width: '64px', height: '64px' }}>
+                    <div className="bg-light rounded overflow-hidden" style={{ width: '100%', height: '100%' }}>
                       <img
-                        src="/job.jpg"
-                        alt="Company Logo"
+                        src={job.client?.logo ? `https://ekazi.co.tz/${job.client.logo}` : '/default-logo.png'}
+                        alt={job.client?.name || 'Company Logo'}
                         className="img-fluid h-100 w-100 object-fit-cover"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                        onError={(e) => {
+                          e.target.src = '/default-logo.png';
+                        }}
                       />
                     </div>
                   </Col>
                   <Col>
-                    <h6 className="fw-bold mb-1">Senior Frontend Developer</h6>
+                    <h6 className="fw-bold mb-1"> {job.job_position?.position_name || 'Untitled'}</h6>
                     <div className="text-muted d-flex align-items-center mb-1">
-                      <FaBuilding className="me-2" /> TechCorp Inc.
+                      <FaBuilding className="me-2" />  {job.client?.client_name || 'N/A'}
                     </div>
-                    <div className="text-muted mb-1">Dar Es Salaam, Tanzania</div>
-                    <small className="text-muted">Posted: 2 days ago</small>
+                    <div className="text-muted mb-1">{job.job_addresses?.[0]?.region?.region_name || ''},  {job.job_addresses?.[0]?.region?.country?.name || 'N/A'}</div>
+
+
+                    <small className="text-muted">
+                      Posted: {job.created_at ? formatDistanceToNow(new Date(job.created_at), { addSuffix: true }) : 'Not specified'}
+                    </small>
+
+                    {/* <p>{job.created_at ? new Date(job.created_at).toDateString() : 'Not specified'}</p> */}
+
                   </Col>
                 </Row>
-                
+
               </Card.Body>
             </Card>
+            //   <JobDetailModal 
+            //   job={selectedJob} 
+            //   show={showModal} 
+            //   onHide={() => setShowModal(false)} 
+            // />
+            
           ))}
         </Card.Body>
       </Card>
+      <JobDetailModal 
+        job={selectedJob} 
+        show={showModal} 
+       
+        onHide={() => setShowModal(false)} 
+      />
+      
+      <style>{`
+    
+        .job-item:hover {
+          background-color: rgba(0, 0, 0, 0.03);
+        }
+      `}</style>
     </div>
   );
 };
