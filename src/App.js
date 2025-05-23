@@ -14,6 +14,7 @@ import JobMatch from './pages/MyApplicantion/JobMatch';
  import StickyPage from './pages/Jobs/StickyPage';
 import MyProfile from './pages/JobSeeker/MyProfile';
 import CvBuilder from './pages/CvBuilder';
+import SampleTemplate from './pages/JobSeeker/Cv/SampleTemplate';
  
 function App() {
   return (
@@ -38,8 +39,8 @@ function App() {
           <Route path="jobseeker/apply-letter" element={<ApplyLetter />} />
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
-
-          
+          <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
+         
         </Routes>
       </BrowserRouter>
     </UniversalProvider>

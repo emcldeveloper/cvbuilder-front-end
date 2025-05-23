@@ -18,6 +18,11 @@ import SoftwareSection from "../../Component/Profile/SoftwareAndTools";
 import CulturesSection from "../../Component/Profile/Culture";
 import LanguagesSection from "../../Component/Profile/Language";
 import CvVideoCard from "../../Component/Profile/CvVideo";
+import ApplicantProfile from "../../Component/Profile/PersonalData";
+import ProfileSection from "../../Component/Profile/PersonalData";
+import JobsFitSection from "../../Component/Profile/JobFit";
+// Create a simple cache object outside the component
+const profileCache = {};
 const MyProfile = () => {
 
 
@@ -28,10 +33,22 @@ const MyProfile = () => {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            // Check cache first
+            if (profileCache[applicant_id]) {
+                setApplicant(profileCache[applicant_id]);
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await profile(applicant_id); // Note: removed the object wrapper if your API expects direct ID
+                setLoading(true);
+                const response = await profile(applicant_id);
+                
+                // Update cache
+                profileCache[applicant_id] = response.data;
+                
                 console.log('Response data:', response.data);
-                setApplicant(response.data); // Assuming the data is in response.data
+                setApplicant(response.data);
                 setError(null);
             } catch (err) {
                 setError(err.message);
@@ -58,7 +75,7 @@ const MyProfile = () => {
                     display: none;
                     }`}
                 </style> */}
-       
+
 
 
 
@@ -67,46 +84,32 @@ const MyProfile = () => {
                     <Col >
                         <Card className="shadow-smy">
                             <Card.Body className="p-4">
+                                {(applicant?.applicant_profile?.length > 0 || applicant?.address?.length > 0) ? (
+                                    <ProfileSection
+                                        profile={applicant?.applicant_profile?.[0] || null}
+                                        address={applicant?.address?.[0] || null}
+                                    />
+                                ) : (
+                                    <div className="text-muted">No profile or address information available.</div>
+                                )}
                                 <ApplicantCareerSection applicant={applicant} />
                                 <CareerObjectivesSection applicant={applicant} />
-                                <WorkExperienceSection applicant={applicant}/>
-                                <EducationDetails applicant={applicant}/>
-                                <KnowledgesSection  applicant={applicant}/>
-                                <SoftwareSection applicant={applicant}/>
-                                <PersonalitiesSection  applicant={applicant}/>
-                                 <CulturesSection applicant={applicant}/>
-                                 <LanguagesSection  applicant={applicant}/>
-                                <ProficiencyQualifications  applicant={applicant}/>
-                                <TrainingWorkshops applicant={applicant}/>
-                                 <RefereesSection  applicant={applicant}/>
-                                 <CvVideoCard applicant={applicant}/>
+                                <WorkExperienceSection applicant={applicant} />
+                                <EducationDetails applicant={applicant} />
+                                <KnowledgesSection applicant={applicant} />
+                                <SoftwareSection applicant={applicant} />
+                                <PersonalitiesSection applicant={applicant} />
+                                <JobsFitSection  applicant={applicant}/>
+                                <CulturesSection applicant={applicant} />
+                                <LanguagesSection applicant={applicant} />
+                                <ProficiencyQualifications applicant={applicant} />
+                                <TrainingWorkshops applicant={applicant} />
+                                <RefereesSection applicant={applicant} />
+                                <CvVideoCard applicant={applicant} />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                <PersonalData applicant={applicant} />
-                {/* Career Skills */}
-                {/* <ApplicantSkillsSection applicant={applicant} /> */}
-
-                {/* Job Fit */}
-                <Row className="justify-content-center mb-3">
-                    {/* <Col xs={12} md={10} lg={8} xl={6}> */}
-                    <Col>
-                        <Card className="shadow-sm">
-                            <Card.Body className="p-4">
-                                <h5 className="card-title text-primary">Job Fit</h5>
-                                {/* Add job fit content here */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
-               
-
-              
-
-            
- 
             </Container>
         </JobSeekerLayout>
 

@@ -14,17 +14,17 @@ const ApplicantCareerSection = ({ applicant }) => {
         
                     < div>
                         {careerData?.career && (
-                            <div className="position-relative">
+                            <div className="position-relative mt-10">
                                 {/* Header with edit button */}
                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 className="card-title text-primary mb-0">Career Profile</h5>
+                                    <h6 className="card-title   mb-0">CAREER PROFILE</h6>
                                     <Pencil
                                         style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                                         onClick={() => console.log('Edit clicked')}
                                         className="text-muted"
                                     />
                                 </div>
-
+                                <div className="mb-3 divider" />
                                 {/* Career summary */}
                                 <div className="mb-4">
                                     <p style={{ fontSize: '1.1rem', whiteSpace: 'pre-line' }}>
@@ -73,6 +73,15 @@ const ApplicantCareerSection = ({ applicant }) => {
                                 )}
                             </div>
                         )}
+                                 <style jsx>{`
+        .divider {
+          height: 1px;
+          width: 100%;
+          background-color: rgb(235, 235, 235);
+        }
+     
+        }
+      `}</style>
                      </div>
           
     );
