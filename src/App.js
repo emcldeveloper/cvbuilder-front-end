@@ -14,6 +14,8 @@ import JobMatch from './pages/MyApplicantion/JobMatch';
  import StickyPage from './pages/Jobs/StickyPage';
 import MyProfile from './pages/JobSeeker/MyProfile';
 import CvBuilder from './pages/CvBuilder';
+import Employer from './pages/Employer/Employer';
+import EmployerDetails from './pages/Employer/EmployerDetails';
  
 function App() {
   return (
@@ -27,7 +29,8 @@ function App() {
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>
-          <Route path="/sticky" element={<StickyPage/>}/>
+          <Route path="/employers" element={<Employer/>}/>
+            <Route path="/employer/details" element={<EmployerDetails/>}/>
 
 
           {/* Jobseeker dashboard */}

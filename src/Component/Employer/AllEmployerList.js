@@ -1,18 +1,14 @@
 import React from 'react';
 import { Container, Row, Spinner, Alert } from 'react-bootstrap';
-import FeaturedEmployers from './FeaturedEmployers';
+import AllEmployerCard from './AllEmployerCard';
 import useEmployer from '../../hooks/Employer/useEmployer';
 
-const FeaturedEmployerList = () => {
-  const { jobCompanies, loading, error } = useEmployer(1, 20); // Using the hook with default page size of 20
+const AllEmployerList = ({ filters, page, perPage }) => {
+  // Pass filters, page, and perPage to the useEmployer hook
+  const { jobCompanies, loading, error } = useEmployer(page, perPage, filters);
 
   return (
     <Container>
-      <h4 className="text-center" style={{ color: '#2E58A6', marginTop: '2%' }}>
-        Featured Employers
-      </h4>
-      <br />
-
       {error && <Alert variant="danger">{error}</Alert>} {/* Show error message if failed to fetch */}
 
       {loading ? (
@@ -21,12 +17,11 @@ const FeaturedEmployerList = () => {
         </div>
       ) : (
         <Row>
-        
-          <FeaturedEmployers jobCompanies={jobCompanies} />
+          <AllEmployerCard jobCompanies={jobCompanies} />
         </Row>
       )}
     </Container>
   );
 };
 
-export default FeaturedEmployerList;
+export default AllEmployerList;
