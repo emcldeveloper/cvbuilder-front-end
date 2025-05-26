@@ -30,40 +30,52 @@ const RightSideBar = () => {
   return (
     <div className="d-flex flex-column gap-3">
       {/* Featured Companies Section */}
-      <Card className="shadow-sm">
-        <Card.Body>
-          <h5 className="fw-bold mb-3">Featured Companies</h5>
-          {employers?.data?.map((company) => (
-            <div key={company.id} className="d-flex align-items-center gap-3 p-2 hover-shadow-sm rounded">
-              <div
-                className="bg-light rounded-circle overflow-hidden"
-                style={{ width: '48px', height: '48px' }}
-              >
-                              <a href={`/featured/employer/details/${company.id}`}>
-                   <Image
-                     src={company.logo ? `http://127.0.0.1:8000/${company.logo}` : '/employer.png'}
-                     alt={company.client_name}
-                     roundedCircle
-                     style={{
-                       width: '60px',
-                       height: '60px',
-                       objectFit: 'contain', // Keeps entire logo visible
-                       backgroundColor: 'white', // Optional for transparent PNGs
-                     }}
-                   />
-                 </a>
-              </div>
-              <div>
-                <h6 className="mb-0 fw-semibold">{company.client_name}</h6>
-                {/* <small className="text-muted">12 Jobs</small> */}
-              
-
-              </div>
-            </div>
-          ))}
-
-        </Card.Body>
-      </Card>
+    <Card className="shadow-sm">
+  <Card.Body>
+    <h5 className="fw-bold mb-3">Featured Companies</h5>
+    <div style={{ 
+      maxHeight: '400px', 
+      overflowY: 'auto',
+      paddingRight: '8px' // Prevents content from touching scrollbar
+    }}>
+      {employers?.data?.map((company) => (
+        <div 
+          key={company.id} 
+          className="d-flex align-items-center gap-3 p-2 hover-shadow-sm rounded mb-2"
+          style={{
+            transition: 'all 0.2s ease',
+            ':hover': {
+              backgroundColor: '#f8f9fa'
+            }
+          }}
+        >
+          <div className="bg-light rounded-circle overflow-hidden" style={{ width: '48px', height: '48px' }}>
+            <a href={`/featured/employer/details/${company.id}`}>
+              <Image
+                src={company.logo ? `https://ekazi.co.tz/${company.logo}` : '/employer.png'}
+                alt={company.client_name}
+                roundedCircle
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  backgroundColor: 'white',
+                }}
+              />
+            </a>
+          </div>
+          <div className="flex-grow-1">
+            <h6 className="mb-0 fw-semibold text-truncate" style={{ maxWidth: '200px' }}>
+              {company.client_name}
+            </h6>
+            {/* Optional job count */}
+            {/* <small className="text-muted">12 Jobs</small> */}
+          </div>
+        </div>
+      ))}
+    </div>
+  </Card.Body>
+</Card>
 
       {/* Job Alerts Section */}
       <Card className="shadow-sm">

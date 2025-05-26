@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { 
-  Container, 
-  Row, 
-  Col, 
-  Card, 
-  Modal, 
-  Button,
-  Badge
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    Modal,
+    Button,
+    Badge
 } from 'react-bootstrap';
 import { FaEye, FaFileAlt } from "react-icons/fa";
 
@@ -59,37 +59,37 @@ const SampleTemplate = () => {
             <Container className="py-4">
                 <Row className="mb-4">
                     <Col>
-                        <h1 className="d-flex align-items-center gap-3">
+                        <h4 className="d-flex align-items-center gap-3">
                             <FaFileAlt className="text-primary" />
                             <span className="fw-bold">Select Your CV Template</span>
                             <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
                                 <FaEye className="me-1" />
                                 {totalview}
                             </Badge>
-                        </h1>
+                        </h4>
                     </Col>
                 </Row>
 
                 <Row xs={2} md={3} lg={4} className="g-4">
                     {templates.map((template) => {
                         const viewCount = templateViews[template.id] ?? template.views ?? 0;
-                        
+
                         return (
                             <Col key={template.id}>
-                                <Card 
+                                <Card
                                     className={`h-100 cursor-pointer ${selectedTemplate === template.id ? 'border-primary border-2' : ''}`}
                                     onClick={() => handleTemplateSelect(template.id)}
                                 >
-                                    <Card.Img 
-                                        variant="top" 
-                                        src={template.image} 
+                                    <Card.Img
+                                        variant="top"
+                                        src={template.image}
                                         className="p-3 bg-light object-fit-contain"
                                         style={{ height: '200px' }}
                                     />
-                                    <Card.Body className="text-center">
-                                        <Card.Title>{template.name}</Card.Title>
-                                        <div className="d-flex justify-content-center align-items-center text-muted small">
-                                            <FaEye className="me-1" />
+                                    <Card.Body className="text-center p-2">
+                                        <Card.Title className="fs-6 mb-1">{template.name}</Card.Title>
+                                        <div className="d-flex justify-content-center align-items-center text-muted" style={{ fontSize: '0.75rem' }}>
+                                            <FaEye className="me-1" size={12} />
                                             <span>{viewCount}</span>
                                         </div>
                                     </Card.Body>
@@ -100,8 +100,8 @@ const SampleTemplate = () => {
                 </Row>
 
                 {/* Preview Modal */}
-                <Modal 
-                    show={showPreview} 
+                <Modal
+                    show={showPreview}
                     onHide={handleClosePreview}
                     size="xl"
                     centered

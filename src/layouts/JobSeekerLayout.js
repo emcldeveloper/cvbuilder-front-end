@@ -11,24 +11,21 @@ const JobSeekerLayout = ({ children }) => {
     <>
       <AppHeader />
 
-      <Container fluid   >
-        <Row>
-          {/* Left Sidebar */}
-          <Col xs={12} md={3} className="bg-light p-3">
-            <LeftSideBar />
-          </Col>
+<Container fluid>
+  <Row className="d-flex">
+    <Col xs={12} md style={{ flex: 2.5 }} className="bg-light p-3">
+      <LeftSideBar />
+    </Col>
 
-          {/* Main Content */}
-          <Col xs={12} md={6} className=" bg-light p-3">
-            {children}
-          </Col>
+    <Col xs={12} md style={{ flex: 6.5 }} className="bg-light p-3">
+      {children}
+    </Col>
 
-          {/* Right Sidebar */}
-          <Col xs={12} md={3} className="bg-light p-3">
-            <RightSidebar />
-          </Col>
-        </Row>
-      </Container>
+    <Col xs={12} md={3}  className="bg-light p-3">
+      <RightSidebar />
+    </Col>
+  </Row>
+</Container>
 
       <AppFooter />
     </>

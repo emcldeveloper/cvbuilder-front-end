@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
- 
+
 export const fetchFeaturedJobs = async (page = 1) => {
   try {
     const response = await axios.get(
@@ -23,12 +23,20 @@ export const fetchFeaturedJobs = async (page = 1) => {
 };
 
 
-export const getJobs = async (limit , page) => {
+export const getJobs = async (limit, page) => {
   const response = await axios.get(`${API_BASE_URL}jobs`, {
     params: {
       limit,
       page,
     },
   });
-  return response.data.data; 
+  return response.data.data;
+}
+
+export const appliedjob = async (applicant_id) => {
+  const response = await axios.get('${API_BASE_URL}applied_job', {
+    param: {
+      applicant_id
+    }
+  })
 }
