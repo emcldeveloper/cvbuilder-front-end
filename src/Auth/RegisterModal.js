@@ -1,43 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal, Button, Form, Col, Row } from 'react-bootstrap';
 import { FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
-
+import { UniversalContext } from '../context/UniversalContext';
 import { registerUser } from '../Api/Auth/Auth';
 
 const RegisterModal = ({ show, onHide }) => {
   const [showCandidateForm, setShowCandidateForm] = useState(false);
-
-  // Static dropdown data
-  const educationLevels = [
-    "Certificate",
-    "Diploma",
-    "Bachelor's Degree",
-    "Master's Degree",
-    "PhD",
-  ];
-
-  const courses = [
-    "Computer Science",
-    "Business Administration",
-    "Education",
-    "Engineering",
-    "Law",
-  ];
-
-  const specializations = [
-    "Software Development",
-    "Finance",
-    "Human Resource",
-    "Marketing",
-    "Civil Engineering",
-  ];
-
-  const countryList = ["Tanzania", "Kenya", "Uganda"];
-  const regionList = {
-    Tanzania: ["Dar es Salaam", "Arusha", "Mwanza", "Mbeya"],
-    Kenya: ["Nairobi", "Mombasa", "Kisumu"],
-    Uganda: ["Kampala", "Gulu", "Entebbe"]
-  };
+  
+  // Accessing data from the context
+  const {
+    genders = [],
+    countries = [],
+    regions = [],
+    majors = [],
+    educationLevels = [],
+    courses = [],
+    maritalStatuses = [],
+  } = useContext(UniversalContext);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -55,6 +34,8 @@ const RegisterModal = ({ show, onHide }) => {
     specialization: '',
     yearOfCompletion: '',
   });
+  
+console.log("Gender is ",genders);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,22 +55,21 @@ const RegisterModal = ({ show, onHide }) => {
     }
   };
 
- const handleCandidateRegister = async (e) => {
-  e.preventDefault();
-  console.log('Submitted data:', formData);
+  const handleCandidateRegister = async (e) => {
+    e.preventDefault();
+    console.log('Submitted data:', formData);
 
-  try {
-    const result = await registerUser(formData); // Wait for API response
-
-    if (result) {
-      alert('Candidate registered successfully!');
-      setShowCandidateForm(false);
-      onHide();
+    try {
+      const result = await registerUser(formData); // Wait for API response
+      if (result) {
+        alert('Candidate registered successfully!');
+        setShowCandidateForm(false);
+        onHide();
+      }
+    } catch (error) {
+      alert(`Registration failed: ${error.message}`);
     }
-  } catch (error) {
-    alert(`Registration failed: ${error.message}`);
-  }
-};
+  };
 
   const handleSocialRegister = (provider) => {
     alert(`Register with ${provider} clicked`);
@@ -155,9 +135,9 @@ const RegisterModal = ({ show, onHide }) => {
                   <Form.Label>Gender</Form.Label>
                   <Form.Select name="gender" value={formData.gender} onChange={handleChange} required>
                     <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                    {genders.map((gender, idx) => (
+                      <option key={idx} value={gender}>{gender}</option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -166,7 +146,7 @@ const RegisterModal = ({ show, onHide }) => {
                   <Form.Label>Country</Form.Label>
                   <Form.Select name="country" value={formData.country} onChange={handleChange} required>
                     <option value="">Select Country</option>
-                    {countryList.map((country, idx) => (
+                    {countries.map((country, idx) => (
                       <option key={idx} value={country}>{country}</option>
                     ))}
                   </Form.Select>
@@ -180,7 +160,7 @@ const RegisterModal = ({ show, onHide }) => {
                   <Form.Label>Region</Form.Label>
                   <Form.Select name="region" value={formData.region} onChange={handleChange} required>
                     <option value="">Select Region</option>
-                    {(regionList[formData.country] || []).map((region, idx) => (
+                    {(regions[formData.country] || []).map((region, idx) => (
                       <option key={idx} value={region}>{region}</option>
                     ))}
                   </Form.Select>
@@ -233,8 +213,8 @@ const RegisterModal = ({ show, onHide }) => {
                   <Form.Label>Specialized In</Form.Label>
                   <Form.Select name="specialization" value={formData.specialization} onChange={handleChange} required>
                     <option value="">Select Specialization</option>
-                    {specializations.map((spec, idx) => (
-                      <option key={idx} value={spec}>{spec}</option>
+                    {majors.map((major, idx) => (
+                      <option key={idx} value={major}>{major}</option>
                     ))}
                   </Form.Select>
                 </Form.Group>

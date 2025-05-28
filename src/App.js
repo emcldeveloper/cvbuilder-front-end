@@ -16,6 +16,7 @@ import MyProfile from './pages/JobSeeker/MyProfile';
 import CvBuilder from './pages/CvBuilder';
 import Employer from './pages/Employer/Employer';
 import EmployerDetails from './pages/Employer/EmployerDetails';
+import FeaturedProfile from './pages/JobSeeker/FeaturedProfile';
  
 function App() {
   return (
@@ -30,7 +31,10 @@ function App() {
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>
           <Route path="/employers" element={<Employer/>}/>
-            <Route path="/employer/details" element={<EmployerDetails/>}/>
+          <Route path="/employer/details" element={<EmployerDetails/>}/>
+
+          {/* Featured Profile will be here */}
+          <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/>
 
 
           {/* Jobseeker dashboard */}
