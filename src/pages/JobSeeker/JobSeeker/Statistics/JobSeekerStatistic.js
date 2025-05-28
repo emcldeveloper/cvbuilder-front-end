@@ -124,7 +124,7 @@ const JobSeekerStatistic = () => {
           </Row>
 
           {/* Job Listings */}
-          {jobs.slice(0, 5).map((job) => (
+          {jobs.slice(0, 8).map((job) => (
             <Card key={job.id} className="mb-3 shadow-smy job-item"
             onClick={() => handleJobClick(job)}
             style={{ cursor: 'pointer' }}
