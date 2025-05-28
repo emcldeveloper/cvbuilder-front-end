@@ -1,4 +1,3 @@
-// src/api/universalApi.js
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -7,7 +6,8 @@ const UNIVERSAL_API = `${API_BASE_URL}universal`;
 const cache = {};
 const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
 
-const fetchWithCache = async (key, url, transform, retries = 3, delay = 1000) => {
+// Modified fetchWithCache function to avoid retries and handle rate-limiting
+const fetchWithCache = async (key, url, transform) => {
   const now = Date.now();
 
   // Check if cached data exists and hasn't expired
@@ -15,39 +15,38 @@ const fetchWithCache = async (key, url, transform, retries = 3, delay = 1000) =>
     return Promise.resolve(cache[key].data);
   }
 
-  const fetchData = async (attempt = 0) => {
-    try {
-      const res = await axios.get(url);
-      const data = transform ? transform(res) : res.data;
+  try {
+    // Make the API request
+    const res = await axios.get(url);
+    const data = transform ? transform(res) : res.data;
 
-      // Save data and timestamp
-      cache[key] = {
-        data,
-        timestamp: Date.now()
-      };
+    // Save data and timestamp in cache
+    cache[key] = {
+      data,
+      timestamp: Date.now()
+    };
 
-      return data;
-    } catch (error) {
-      if (error.response?.status === 429 && attempt < retries) {
-        const backoff = delay * Math.pow(2, attempt);
-        console.warn(`Rate limited on ${url}. Retrying in ${backoff}ms...`);
-        await new Promise(resolve => setTimeout(resolve, backoff));
-        return fetchData(attempt + 1);
-      }
-      throw error;
+    return data;
+  } catch (error) {
+    // Handle 429 error (rate-limited)
+    if (error.response?.status === 429) {
+      console.error(`Rate limit exceeded for ${url}. No retry will occur.`);
     }
-  };
-
-  return fetchData();
+    // Re-throw other errors
+    throw error;
+  }
 };
-
 
 // Exported API calls
 export const getMaritalStatuses = () =>
-  fetchWithCache('marital', `${UNIVERSAL_API}/marital`);
+  fetchWithCache('marital', `${UNIVERSAL_API}/marital`, res => ({
+    data: res.data.marital
+  }));
 
 export const getGenders = () =>
-  fetchWithCache('gender', `${UNIVERSAL_API}/gender`);
+  fetchWithCache('gender', `${UNIVERSAL_API}/gender`, res => ({
+    data: res.data.gender
+  }));
 
 export const getCountries = () =>
   fetchWithCache('country', `${UNIVERSAL_API}/country`, res => ({
@@ -66,17 +65,17 @@ export const getIndustry = () =>
 
 export const getMajor = () =>
   fetchWithCache('major', `${UNIVERSAL_API}/major`, res => ({
-    data: res.data
+    data: res.data.major
   }));
 
 export const getCourse = () =>
   fetchWithCache('course', `${UNIVERSAL_API}/course`, res => ({
-    data: res.data
+    data: res.data.course
   }));
 
 export const getEducationLevel = () =>
   fetchWithCache('education_level', `${UNIVERSAL_API}/education_level`, res => ({
-    data: res.data
+    data: res.data.education_category
   }));
 
 export const getPosition = () =>
@@ -87,13 +86,12 @@ export const getPositionLevel = () =>
     data: res.data.position_level
   }));
 
-
 export const getSiteStatistics = () =>
   fetchWithCache('site_statistics', `${API_BASE_URL}site-statistics`, res => ({
     data: res.data
   }));
 
-  export const getJobTypes = () =>
+export const getJobTypes = () =>
   fetchWithCache('jobType', `${UNIVERSAL_API}/job-type`, res => ({
     data: res.data.type
   }));

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card, Form, Button } from "react-bootstrap";
+import { UniversalContext } from '../../context/UniversalContext';
+import toTitleCase from "../../utils/toTitleCase"; // Import the utility function
 
 const EmployerFilter = ({ filters, onChange }) => {
   // Static A–Z characters
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  // Fetching context data
+  const {
+    industries = [],  // Assuming 'industries' is an array from context
+    countries = [],   // Assuming 'countries' is an array from context
+    jobCountByRegion = []      // Assuming 'regions' is an array from context
+  } = useContext(UniversalContext);
 
   return (
     <Card className="shadow-sm border-light">
@@ -30,7 +39,11 @@ const EmployerFilter = ({ filters, onChange }) => {
             onChange={(e) => onChange("industry", e.target.value)}
           >
             <option value="">Select Industry</option>
-            {/* Your industry options here */}
+            {industries.map((industry) => (
+              <option key={industry.id} value={industry.name}>
+                {toTitleCase(industry.industry_name)}  {/* Applying toTitleCase here */}
+              </option>
+            ))}
           </Form.Select>
         </div>
 
@@ -42,7 +55,11 @@ const EmployerFilter = ({ filters, onChange }) => {
             onChange={(e) => onChange("country", e.target.value)}
           >
             <option value="">Select Country</option>
-            {/* Your country options here */}
+            {countries.map((country) => (
+              <option key={country.id} value={country.name}>
+                {toTitleCase(country.name)}  {/* Applying toTitleCase here */}
+              </option>
+            ))}
           </Form.Select>
         </div>
 
@@ -54,7 +71,11 @@ const EmployerFilter = ({ filters, onChange }) => {
             onChange={(e) => onChange("region", e.target.value)}
           >
             <option value="">Select Region</option>
-            {/* Your region options here */}
+            {jobCountByRegion.map((region) => (
+              <option key={region.id} value={region.name}>
+                {toTitleCase(region.region_name)}  {/* Applying toTitleCase here */}
+              </option>
+            ))}
           </Form.Select>
         </div>
 

@@ -32,7 +32,10 @@ function App() {
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>
           <Route path="/employers" element={<Employer/>}/>
-            <Route path="/employer/details" element={<EmployerDetails/>}/>
+          <Route path="/employer/details" element={<EmployerDetails/>}/>
+
+          {/* Featured Profile will be here */}
+          <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/>
 
 
           {/* Jobseeker dashboard */}
