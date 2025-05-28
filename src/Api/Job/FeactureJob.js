@@ -37,6 +37,24 @@ export const appliedjob = async (applicant_id) => {
   const response = await axios.get('${API_BASE_URL}applied_job', {
     param: {
       applicant_id
-    }
-  })
+    },
+  });
+  return response.data;
 }
+
+
+export const getAppliedJobs = async (applicant_id) => {
+  try {
+ 
+    const response = await axios.get(` http://127.0.0.1:8000/api/applicant/appliedjob`, {
+      params: {
+        applicant_id: applicant_id
+      },
+    });
+  
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching applied jobs:', error);
+    throw error;
+  }
+};

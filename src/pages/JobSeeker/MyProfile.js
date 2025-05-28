@@ -29,7 +29,7 @@ const MyProfile = () => {
     const [applicant, setApplicant] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const applicant_id = 31;
+    const applicant_id = 48;
 
     useEffect(() => {
         const fetchProfile = async () => {
