@@ -50,7 +50,7 @@ function App() {
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
           <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
-            {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
+          {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
          
         </Routes>
       </BrowserRouter>
