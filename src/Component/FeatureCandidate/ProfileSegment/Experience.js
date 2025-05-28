@@ -1,92 +1,91 @@
 import React from 'react';
+import { Container, Row, Col, Image } from 'react-bootstrap';
 
 const Experience = ({ candidate }) => {
-  // Function to calculate the duration between two dates
   const calculateDuration = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = endDate ? new Date(endDate) : new Date();
-    const diffInTime = end.getTime() - start.getTime();
-    const diffInMonths = diffInTime / (1000 * 3600 * 24 * 30);
+    const diffInMonths = (end - start) / (1000 * 3600 * 24 * 30);
     const years = Math.floor(diffInMonths / 12);
     const months = Math.round(diffInMonths % 12);
     return `${years} yrs - ${months} mos`;
   };
 
+  const employers = candidate?.applicant?.employers || [];
+
+  if (!employers.length) {
+    return (
+      <Container className="border p-4 bg-white rounded mb-4">
+        <p className="text-muted">No experience data available.</p>
+      </Container>
+    );
+  }
+
   return (
-    <div className="col-md-12 bg-white" style={{ padding: '5%' }}>
-      <p className="font-weight-bold text-blue" style={{ fontSize: '18px' }}>
-        Experience <span className="text-secondary icon">{candidate.experiencePeriod}</span>
+    <Container className="border p-4 bg-white rounded mb-4">
+      <p className="fw-bold text-primary mb-3" style={{ fontSize: '18px' }}>
+        Experience{' '}
+        <span className="text-secondary">
+          {candidate.applicant.experiencePeriod || ''}
+        </span>
       </p>
       <hr />
-      <div className="row">
-        <table>
-          <tbody>
-            {candidate.employers.map((posEmployer) => (
-              <tr key={posEmployer.id}>
-                <td style={{ verticalAlign: 'top', textAlign: 'left', maxWidth: '96px' }}>
-                  <img
-                    src="images/company.png"
-                    alt="avatar"
-                    style={{
-                      border: 'none',
-                      maxHeight: '55px',
-                      marginLeft: '30%',
-                      maxWidth: '55px',
-                      borderColor: 'white',
-                      marginTop: '-10%',
-                      paddingRight: '20%',
-                    }}
-                  />
-                </td>
-                <td style={{ paddingLeft: '3%', maxWidth: '945px', width: '945px' }}>
-                  <strong>{posEmployer.employer.employer_name}</strong>
-                  <div>
-                    {posEmployer.employer.sub_location}, {posEmployer.employer.region.region_name} -{' '}
-                    {posEmployer.employer.region.country.name}
-                  </div>
-                  <ul className="experiences">
-                    {posEmployer.positions.map((position) => (
-                      <li key={position.id} className="green dotPosition">
-                        <div className="row">
-                          <div className="col-md-9 phone_font" align="left" style={{ color: '#2E58A6' }}>
-                            {position.position_name}
-                          </div>
-                          <div className="col-md-3 icon" align="right"></div>
-                          <div className="col-md-12">
-                            {position.industry && position.industry.industry_name} Industry
-                          </div>
-                          <div className="col-md-12">
-                            {new Date(position.start_date).toLocaleDateString('en-GB')} -{' '}
-                            {(position.end_date ? new Date(position.end_date).toLocaleDateString('en-GB') : 'Present')}{' '}
-                            . {position.duration}
-                          </div>
-                          <div className="col-md-12" style={{ paddingTop: '0.7%', color: '#707070' }}>
-                            <div>
-                              <strong>Responsibility: </strong>
-                              <p>{position.responsibility}</p>
-                            </div>
-                            <div>
-                              <strong>Reason for Leaving: </strong>
-                              <p>{position.remark}</p>
-                            </div>
-                            {position.salaryRange && candidate.salaryVisibleStatus.status && (
-                              <div>
-                                <strong>Salary: </strong>
-                                <span>{position.salaryRange.name}</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              </tr>
+
+      {employers.map((employerRecord) => (
+        <Row key={employerRecord.id} className="mb-4">
+          <Col md={1} className="text-center">
+            <Image
+              src="/images/company.png"
+              alt="Company"
+              style={{ height: '55px', width: '55px' }}
+              rounded
+              fluid
+            />
+          </Col>
+          <Col md={11}>
+            <h6 className="fw-bold mb-1">
+              {employerRecord.employer?.employer_name || 'Unknown Company'}
+            </h6>
+            <p className="text-muted mb-2" style={{ fontSize: '14px' }}>
+              {employerRecord.employer?.sub_location}, {employerRecord.employer?.region?.region_name},{' '}
+              {employerRecord.employer?.region?.country?.name}
+            </p>
+
+            {employerRecord.positions.map((position) => (
+              <div key={position.id} className="mb-3">
+                <h6 className="text-primary">{position.position_name}</h6>
+                <p className="mb-1">
+                  {position.industry?.industry_name} Industry
+                </p>
+                <p className="mb-1 text-secondary" style={{ fontSize: '14px' }}>
+                  {new Date(position.start_date).toLocaleDateString('en-GB')} -{' '}
+                  {position.end_date
+                    ? new Date(position.end_date).toLocaleDateString('en-GB')
+                    : 'Present'}{' '}
+                  · {position.duration || calculateDuration(position.start_date, position.end_date)}
+                </p>
+
+                <div className="text-muted" style={{ fontSize: '14px' }}>
+                  <strong>Responsibility:</strong>
+                  <p>{position.responsibility || 'N/A'}</p>
+
+                  <strong>Reason for Leaving:</strong>
+                  <p>{position.remark || 'N/A'}</p>
+
+                  {position.salaryRange &&
+                    candidate.salaryVisibleStatus?.status && (
+                      <p>
+                        <strong>Salary: </strong>
+                        {position.salaryRange.name}
+                      </p>
+                    )}
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </Col>
+        </Row>
+      ))}
+    </Container>
   );
 };
 

@@ -4,39 +4,40 @@ import { FaStar, FaEye, FaThumbsUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import toTitleCase from '../../utils/toTitleCase';
 
-const FeatureCandidate = ({ candidate }) => {
+const AllFeatureCandidateCard = ({ candidate }) => {
   const navigate = useNavigate();
 
   const defaultImage = 'https://ekazi.co.tz/uploads/picture/sample-candidate.jpg';
-const rawNameParts = [
-  candidate.applicant.first_name,
-  candidate.applicant.middle_name,
-  candidate.applicant.last_name,
-];
+  
+  const rawNameParts = [
+    candidate.applicant.first_name,
+    candidate.applicant.middle_name,
+    candidate.applicant.last_name,
+  ];
 
-const name = rawNameParts
-  .map(part => part?.trim())              // trim whitespace
-  .filter(part => part && part !== '0')   // remove null/undefined/"0"
-  .join(' ') || 'No Name';
+  const name = rawNameParts
+    .map(part => part?.trim())
+    .filter(part => part && part !== '0')
+    .join(' ') || 'No Name';
 
   const position = candidate.applicant.positions?.[0]?.position?.position_name?.trim() || 'No Position Records';
-const locationParts = [
-  candidate.applicant.address?.sub_location,
-  candidate.applicant.address?.region?.region_name,
-  candidate.applicant.address?.region?.country?.name
-];
 
-const location = locationParts
-  .filter(Boolean) // removes undefined/null/empty values
-  .map(part => part.trim())
-  .join(', ') || 'Location not specified';
+  const locationParts = [
+    candidate.applicant.address?.sub_location,
+    candidate.applicant.address?.region?.region_name,
+    candidate.applicant.address?.region?.country?.name,
+  ];
+
+  const location = locationParts
+    .filter(Boolean)
+    .map(part => part.trim())
+    .join(', ') || 'Location not specified';
 
   const availability = candidate.applicant.available === '0' ? 'Available for Job Vacancies' : 'Not Currently Available';
   const image = candidate.applicant.picture ? `https://ekazi.co.tz/${candidate.applicant.picture.trim()}` : defaultImage;
   const views = candidate.applicant.featured_views?.length || 0;
   const likes = candidate.applicant.likes || 0;
 
-  // Example score logic: basic engagement metric
   const score = views + likes > 0 ? ((likes / (views + likes)) * 5).toFixed(1) : 'N/A';
 
   const handleViewProfile = () => {
@@ -47,7 +48,7 @@ const location = locationParts
   };
 
   return (
-    <Col md={4} className="mb-4">
+    <Col md={6} className="mb-4"> {/* <-- Changed from md={4} to md={6} for two columns */}
       <Card className="h-100 shadow-sm border-0 rounded-lg hover-shadow">
         <Card.Body>
           <Row className="align-items-center">
@@ -124,4 +125,4 @@ const location = locationParts
   );
 };
 
-export default FeatureCandidate;
+export default AllFeatureCandidateCard;
