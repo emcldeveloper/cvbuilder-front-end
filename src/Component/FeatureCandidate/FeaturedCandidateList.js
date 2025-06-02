@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Container, Spinner, Alert } from 'react-bootstrap';
+import { Row, Container, Spinner, Alert,Button } from 'react-bootstrap';
 import FeatureCandidate from './FeatureCandidate';
 import useFeaturedJobSeekers from '../../hooks/Candidate/FeaturedJobSeeker';
+import { Link } from 'react-router-dom';
 
 const FeaturedCandidateList = () => {
   const { jobSeekers, loading, error } = useFeaturedJobSeekers();
@@ -22,9 +23,14 @@ const FeaturedCandidateList = () => {
         ))}
       </Row>
 
-      <h4 className="text-center" style={{ color: '#2E58A6' }}>
-        Browse All
-      </h4>
+       <div className="text-center mt-4">
+        <Link to="/featured-jobseeker" style={{ textDecoration: 'none' }}>
+           <Button variant="primary" className="btn-md">
+           Browse All
+          </Button>
+</Link>
+
+      </div>
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useLocation } from "react-router-dom";
 import MainLayout1 from "../../layouts/MainLayout1";
 import PageHeader from "../../Component/Pages/PageHeader";
@@ -15,9 +15,14 @@ const FeaturedProfile = () => {
 
   const name = candidate?.first_name?.trim() || "Candidate Profile";
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <MainLayout1>
     <PageHeader title={name} />
+     < div style={{ backgroundColor: "#cccccc", paddingBottom: "20px" }}>
       <Container className="py-4">
 
         <Row className="mt-4">
@@ -39,6 +44,7 @@ const FeaturedProfile = () => {
           </Col>
         </Row>
       </Container>
+      </div>
     </MainLayout1>
   );
 };

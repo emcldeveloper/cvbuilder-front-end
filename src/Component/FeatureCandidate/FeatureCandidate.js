@@ -8,33 +8,45 @@ const FeatureCandidate = ({ candidate }) => {
   const navigate = useNavigate();
 
   const defaultImage = 'https://ekazi.co.tz/uploads/picture/sample-candidate.jpg';
-const rawNameParts = [
-  candidate.applicant.first_name,
-  candidate.applicant.middle_name,
-  candidate.applicant.last_name,
-];
 
-const name = rawNameParts
-  .map(part => part?.trim())              // trim whitespace
-  .filter(part => part && part !== '0')   // remove null/undefined/"0"
-  .join(' ') || 'No Name';
+  // Handling name (first_name, middle_name, last_name)
+  const rawNameParts = [
+    candidate?.applicant?.first_name,
+    candidate?.applicant?.middle_name,
+    candidate?.applicant?.last_name,
+  ];
 
-  const position = candidate.applicant.positions?.[0]?.position?.position_name?.trim() || 'No Position Records';
-const locationParts = [
-  candidate.applicant.address?.sub_location,
-  candidate.applicant.address?.region?.region_name,
-  candidate.applicant.address?.region?.country?.name
-];
+  const name = rawNameParts
+    .map(part => part?.trim()) // trim whitespace
+    .filter(part => part && part !== '0') // remove null/undefined/"0"
+    .join(' ') || 'No Name';
 
-const location = locationParts
-  .filter(Boolean) // removes undefined/null/empty values
-  .map(part => part.trim())
-  .join(', ') || 'Location not specified';
+  // Handling position (position_name)
+  const position = candidate?.applicant?.positions?.[0]?.position?.position_name?.trim() || 'No Position Records';
 
-  const availability = candidate.applicant.available === '0' ? 'Available for Job Vacancies' : 'Not Currently Available';
-  const image = candidate.applicant.picture ? `https://ekazi.co.tz/${candidate.applicant.picture.trim()}` : defaultImage;
-  const views = candidate.applicant.featured_views?.length || 0;
-  const likes = candidate.applicant.likes || 0;
+  // Handling location (sub_location, region_name, country_name)
+  const locationParts = [
+    candidate?.applicant?.address?.sub_location,
+    candidate?.applicant?.address?.region?.region_name,
+    candidate?.applicant?.address?.region?.country?.name,
+  ];
+
+  const location = locationParts
+    .filter(Boolean) // removes undefined/null/empty values
+    .map(part => part.trim())
+    .join(', ') || 'Location not specified';
+
+  // Handling availability (available field)
+  const availability = candidate?.applicant?.available === '0' ? 'Available for Job Vacancies' : 'Not Currently Available';
+
+  // Handling image URL (if picture exists)
+  const image = candidate?.applicant?.picture
+    ? `https://ekazi.co.tz/${candidate?.applicant?.picture.trim()}`
+    : defaultImage; // Fallback to default image
+
+  // Handling engagement metrics (views and likes)
+  const views = candidate?.applicant?.featured_views?.length || 0;
+  const likes = candidate?.applicant?.likes || 0;
 
   // Example score logic: basic engagement metric
   const score = views + likes > 0 ? ((likes / (views + likes)) * 5).toFixed(1) : 'N/A';
@@ -94,7 +106,7 @@ const location = locationParts
               </button>
             </Col>
             <Col xs={6} className="mb-2">
-              <a href={`/get_featured_candidate/${candidate.id}`} className="btn btn-primary btn-sm w-100">
+              <a href={`/get_featured_candidate/${candidate?.id}`} className="btn btn-primary btn-sm w-100">
                 Hire Me
               </a>
             </Col>
