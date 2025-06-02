@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, ProgressBar, Accordion, Image, ListGroup } from 'react-bootstrap';
+import { Card, Button, ProgressBar, Accordion, Image, ListGroup, Badge, Modal } from 'react-bootstrap';
 import {
   PencilFill,
   RocketFill,
@@ -9,13 +9,16 @@ import {
   BriefcaseFill,
   PersonFill,
   Search,
-  BookFill
+  BookFill,
+  PeopleFill, InfoCircleFill,
+
 } from 'react-bootstrap-icons';
 
 
 const LeftSideBar = () => {
   const [profileCompletion] = useState(75);
   const [showModalPay, setShowModalPay] = useState(false);
+  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   // Inside your component:
   const navigate = useNavigate();
 
@@ -57,6 +60,16 @@ const LeftSideBar = () => {
           <h5 className="fw-bold mb-1">Halidi Maneno</h5>
           <p className="text-muted small mb-1">Machine Learning Engineering</p>
           <p className="text-muted small">Exactmanpower Consult LTD</p>
+          {/* Status: Available for Work */}
+          <Button
+            variant="outline-success"
+            className="w-100 mb-3 fw-semibold py-1"
+            style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+            onClick={() => setShowAvailabilityModal(true)}
+          >
+            <Badge bg="success" className="me-2" pill>•</Badge>
+            Status: Available for Work
+          </Button>
 
           {/* Profile Completion */}
           <div className="text-start mb-3">
@@ -80,7 +93,7 @@ const LeftSideBar = () => {
           </Button>
 
           {/* Dashboard Section */}
-          <h6 className="border-top pt-2 text-start fw-semibold small"  onClick={() => navigate('/jobseeker/dashboard')}>
+          <h6 className="border-top pt-2 text-start fw-semibold small" onClick={() => navigate('/jobseeker/dashboard')}>
 
             <BarChartFill className="me-2" /> Dashboard
           </h6>
@@ -100,7 +113,7 @@ const LeftSideBar = () => {
                   { name: "create cover letter", path: "/jobseeker/my-resume" }
                 ]
               },
-         
+
               {
                 key: "1",
                 title: "My Account",
@@ -118,14 +131,14 @@ const LeftSideBar = () => {
                 title: "My Application",
                 icon: <BriefcaseFill className="me-2" />,
                 items: [
-                 
+
                   { name: "My Application", path: "/jobseeker/My-application", count: 8 },
                   { name: "Employer Correspondence", path: "/jobseeker/employer-correspondence", count: 2 },
                   { name: "History", path: "/jobseeker/history", count: 2 },
-                  { name: "Apply Letter", path: "/jobseeker/apply-letter", count: 7 },
+                  // { name: "Apply Letter", path: "/jobseeker/apply-letter", count: 7 },
                   { name: "Saved Jobs", path: "/jobseeker/saved-jobs", count: 20 },
                   { name: "Job Match", path: "/jobseeker/job-match", count: 3 },
-                  
+
                 ]
               },
               {
@@ -160,16 +173,16 @@ const LeftSideBar = () => {
                         action
                         onClick={() => navigate(item.path)}
                       >
-                        
+
                         <span className="text-decoration-none cursor-pointer">{item.name}</span>
                         {item.count !== undefined && (
                           <span className="badge bg-secondary rounded-pill ms-2">
                             {item.count}
                           </span>
                         )}
-                      
+
                       </ListGroup.Item>
-                      
+
                     ))}
                   </ListGroup>
                 </Accordion.Body>
@@ -178,6 +191,46 @@ const LeftSideBar = () => {
           </Accordion>
         </Card.Body>
       </Card>
+      <Modal show={showAvailabilityModal} onHide={() => setShowAvailabilityModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Make Your Profile Public</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center mb-3">
+            <PeopleFill className="text-primary" size={48} />
+          </div>
+          <p>To make your profile visible to employers and appear in search results, you need a Premium account.</p>
+
+          <div className="alert alert-info small">
+            <InfoCircleFill className="me-2" />
+            Premium members get:
+            <ul className="mt-2 mb-0">
+              <li>Profile visibility to top employers</li>
+              <li>Higher ranking in search results</li>
+              <li>Access to exclusive job opportunities</li>
+              <li>Priority application processing</li>
+            </ul>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAvailabilityModal(false)}>
+            Not Now
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              setShowAvailabilityModal(false);
+              setShowModalPay(true);
+            }}
+            style={{
+              background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
+              border: 'none'
+            }}
+          >
+            Upgrade to Premium
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

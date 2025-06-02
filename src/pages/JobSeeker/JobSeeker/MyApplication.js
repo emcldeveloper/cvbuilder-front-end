@@ -10,7 +10,7 @@ const AppliedJob = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const applicant_id = 48;
-    
+     
     useEffect(() => {
         const myApplication = async () => {
             try {

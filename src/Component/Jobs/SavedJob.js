@@ -18,7 +18,7 @@ import JobDetailModal from './JobDetailModel/JobModelDetail';
 
 
 
-const AppliedJobsList = ({ applicant }) => {
+const SavedJobsList = ({ application }) => {
     const handleContractUpload = (jobId, file) => {
         // Your API upload logic here
         console.log(`Uploading contract for job ${jobId}`, file);
@@ -33,17 +33,17 @@ const AppliedJobsList = ({ applicant }) => {
     };
 
 
-    console.log("my application is msoft one", applicant)
+    console.log("my application is msoft one", application)
     return (
         <Container fluid className="px-4 py-3">
             <Card className="border-0 shadow-sm">
                 <Card.Header style={{ backgroundColor: '#D36314' }} className=" text-white d-flex justify-content-between align-items-center">
                     <div className="d-flex align-items-center">
                         <FaBriefcase className="me-2" />
-                        <h4 className="m-0">My Job Applications</h4>
+                        <h4 className="m-0">Saved Jobs </h4>
                     </div>
                     <Badge pill bg="light" text="dark">
-                        {applicant?.length || 0} Applications
+                        {application?.length || 0} jobs
                     </Badge>
                 </Card.Header>
 
@@ -53,15 +53,15 @@ const AppliedJobsList = ({ applicant }) => {
                             <thead className="table-light">
                                 <tr>
                                     <th className="ps-4">Position & Company</th>
-                                    <th><FaCalendarAlt className="me-1" /> Posted</th>
-                                    <th><FaCalendarAlt className="me-1" /> Applied</th>
-                                    <th>Status</th>
-                                    <th className="text-center">Documents</th>
+                                    <th>  Posted On</th>
+                                    <th>  Expired on</th>
+                               
+                                    <th className="text-center">Apply</th>
                                     <th className="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {applicant?.map((app, idx) => {
+                                {application?.map((app, idx) => {
                                     const job = app.job || {};
                                     const client = job.client?.name || 'Exact Manpower Consulting Ltd';
                                     const jobPosition = job.job_position?.position_name || '';
@@ -127,33 +127,7 @@ const AppliedJobsList = ({ applicant }) => {
                                                 {getStatusBadge()}
                                             </td>
 
-                                            <td className="text-center">
-                                                <ButtonGroup size="sm">
-                                                    <OverlayTrigger overlay={<Tooltip>Cover Letter</Tooltip>}>
-                                                        <Button
-                                                            variant="outline-secondary"
-                                                            href={`/applicant/cover-letter/download/${job.id}/${app.applicant_id}`}
-                                                            target="_blank"
-                                                        >
-                                                            <FaFileDownload />
-                                                        </Button>
-                                                    </OverlayTrigger>
-
-                                                    {job.applicant_contract ? (
-                                                        <OverlayTrigger overlay={<Tooltip>View Contract</Tooltip>}>
-                                                            <Button
-                                                                variant="outline-primary"
-                                                                href={`/applicant/view/contract/${job.applicant_contract.id}`}
-                                                                target="_blank"
-                                                            >
-                                                                <FaFilePdf />
-                                                            </Button>
-                                                        </OverlayTrigger>
-                                                    ) : (
-                                                        <ContractCell job={job} onUpload={handleContractUpload} />
-                                                    )}
-                                                </ButtonGroup>
-                                            </td>
+                                          
 
                                             <td className="text-center">
                                                 <Dropdown>
@@ -193,7 +167,7 @@ const AppliedJobsList = ({ applicant }) => {
 
                 <Card.Footer className="bg-light d-flex justify-content-between align-items-center">
                     <div className="text-muted small">
-                        Showing {applicant?.length || 0} applications
+                        Showing {application?.length || 0} jobs
                     </div>
                     {/* Pagination would go here */}
                 </Card.Footer>
@@ -208,4 +182,4 @@ const AppliedJobsList = ({ applicant }) => {
     );
 };
 
-export default AppliedJobsList;
+export default SavedJobsList;

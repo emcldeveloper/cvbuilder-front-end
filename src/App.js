@@ -7,7 +7,7 @@ import { UniversalProvider } from './context/UniversalContext';
 import MyApplication from './pages/MyApplicantion/MyApplication';
 import EmployerCorrespondence from './pages/MyApplicantion/EmployerCorrespondence';
 import ApplyLetter from './pages/MyApplicantion/Applyletter';
-import SavedJob from './pages/MyApplicantion/SavedJob';
+// import SavedJob from './pages/MyApplicantion/SavedJob';
 import JobMatch from './pages/MyApplicantion/JobMatch';
  import JobPreview from './pages/Jobs/JobPreview';
  import FindJobs from './pages/Jobs/FindJobs';
@@ -18,6 +18,9 @@ import Employer from './pages/Employer/Employer';
 import EmployerDetails from './pages/Employer/EmployerDetails';
 import SampleTemplate from './pages/JobSeeker/Cv/SampleTemplate';
 import AppliedJob from './pages/JobSeeker/JobSeeker/MyApplication';
+import SavedJob from './pages/JobSeeker/Jobs/SavedJob';
+import SavedSearchJob from './pages/JobSeeker/Jobs/SavedSearchJob';
+
  
 function App() {
   return (
@@ -35,7 +38,7 @@ function App() {
           <Route path="/employer/details" element={<EmployerDetails/>}/>
 
           {/* Featured Profile will be here */}
-          <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/>
+          {/* <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/> */}
 
 
           {/* Jobseeker dashboard */}
@@ -43,12 +46,12 @@ function App() {
           <Route path="jobseeker/My-application" element={<AppliedJob />} />
           <Route path="jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
           <Route path="jobseeker/profile-preview" element={<MyProfile/>} />
-          <Route path="jobseeker/apply-letter" element={<ApplyLetter />} />
+          <Route path="jobseeker/saved-searches" element={<SavedSearchJob />} />
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
           <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
-         
+        
         </Routes>
       </BrowserRouter>
     </UniversalProvider>

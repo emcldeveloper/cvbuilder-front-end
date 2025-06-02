@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Button, Image } from "react-bootstrap";
 import { getListOfEmployers } from "../../../Api/Employer/ListOfEmployerApi";
+import ChatApp from "../../../pages/ChatSystem/ChatMessage";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 
@@ -89,6 +90,7 @@ const RightSideBar = () => {
           </Button>
         </Card.Body>
       </Card>
+      {/* <ChatApp /> */}
     </div>
   );
 };

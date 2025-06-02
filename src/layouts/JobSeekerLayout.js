@@ -13,11 +13,11 @@ const JobSeekerLayout = ({ children }) => {
 
 <Container fluid>
   <Row className="d-flex">
-    <Col xs={12} md style={{ flex: 2.5 }} className="bg-light p-3">
+    <Col xs={12} md style={{ flex: 3}} className="bg-light p-3">
       <LeftSideBar />
     </Col>
 
-    <Col xs={12} md style={{ flex: 6.5 }} className="bg-light p-3">
+    <Col xs={12} md style={{ flex: 6 }} className="bg-light p-3">
       {children}
     </Col>
 
