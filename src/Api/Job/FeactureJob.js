@@ -46,7 +46,7 @@ export const appliedjob = async (applicant_id) => {
 export const getAppliedJobs = async (applicant_id) => {
   try {
  
-    const response = await axios.get(`https://ekazi.co.tz/api/applicant/appliedjob`, {
+    const response = await axios.get(`http://127.0.0.1:8000/api/applicant/appliedjob`, {
       params: {
         applicant_id: applicant_id
       },

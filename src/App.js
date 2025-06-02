@@ -23,6 +23,9 @@ import SavedJob from './pages/JobSeeker/Jobs/SavedJob';
 import SavedSearchJob from './pages/JobSeeker/Jobs/SavedSearchJob';
 
 import AllFeaturedJobSeeker from './pages/JobSeeker/AllFeaturedJobSeeker';
+import MyAccount from './pages/JobSeeker/MyAccount';
+import ChangePassword from './pages/JobSeeker/Auth/ChangePassword';
+import Privatepolicy from './pages/JobSeeker/PrivatePolicy';
  
 function App() {
   return (
@@ -55,7 +58,12 @@ function App() {
           <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
           <Route path="jobseeker/job-match" element={<JobMatch />} />
           <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
+          <Route path="jobseeker/account-settings" element={<MyAccount />} />
+          <Route path="jobseeker/change-password" element={<ChangePassword />} />
+          <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
+
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
+      
         
         </Routes>
       </BrowserRouter>
