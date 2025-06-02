@@ -25,7 +25,7 @@ const FeaturedProfile = () => {
           <Col xs={12} lg={9}>
           <PersonalDetails candidate={candidate}/>
            <About candidate={candidate}/>
-           {/* <Experience candidate={candidate}/> */}
+           <Experience candidate={candidate}/>
            <Education  candidate={candidate} />
            <Language candidate={candidate} />
           </Col>

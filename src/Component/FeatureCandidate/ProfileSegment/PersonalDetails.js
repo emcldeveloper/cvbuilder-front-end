@@ -1,82 +1,107 @@
 import React from "react";
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
 
+const defaultImage = "/pre_profile/pre_photo.jpg";
+
+const styles = {
+ 
+  image: {
+    height: "100px",
+    width: "80px",
+    objectFit: "cover",
+    marginTop:"12px"
+  },
+  headerRow: {
+    backgroundColor: "#2E58A6",
+   
+   
+  },
+  nameText: {
+    fontWeight: "bold",
+    fontSize: "18px",
+  },
+  hireButton: {
+    backgroundColor: "#f57c00",
+    border: "none",
+  },
+};
+
 const PersonalDetails = ({ candidate }) => {
-  if (!candidate) return <p>No candidate data available.</p>;
+  if (!candidate || !candidate.applicant) return <p>No candidate data available.</p>;
 
-  const fullName = `${candidate.first_name || ""} ${candidate.middle_name !== "0" ? candidate.middle_name : ""} ${candidate.last_name !== "0" ? candidate.last_name : ""}`.trim();
+  const applicant = candidate.applicant;
 
-  const position =
-    candidate.positions && candidate.positions.length > 0
-      ? candidate.positions[0].position?.position_name?.trim()
-      : "No Position Record";
+  // Full name
+  const rawNameParts = [applicant.first_name, applicant.middle_name, applicant.last_name];
+  const fullName =
+    rawNameParts.map(part => part?.trim()).filter(part => part && part !== "0").join(" ") || "No Name Record";
 
-  const regionName = candidate.address?.region?.region_name;
-  const countryName = candidate.address?.region?.country?.name;
-  const location = regionName
-    ? `${regionName}${countryName ? " - " + countryName : ""}`
-    : "No Region Record";
+  // Position
+  const position = applicant.positions?.[0]?.position?.position_name?.trim() || "No Position Record";
 
-  const collegeName =
-    candidate.educations && candidate.educations.length > 0
-      ? candidate.educations[0].college?.college_name || "No College Records"
-      : "No College Records";
+  // Location
+  const locationParts = [
+    applicant.address?.sub_location,
+    applicant.address?.region?.region_name,
+    applicant.address?.region?.country?.name,
+  ];
+  const location =
+    locationParts.filter(Boolean).map(part => part.trim()).join(", ") || "Location not specified";
 
-  const pictureSrc = candidate.picture
-    ? candidate.picture
-    : "/pre_profile/pre_photo.jpg";
+  // Availability
+  const availabilityText =
+    applicant.available === "1" ? "Available for Job Vacancies" : "Not Currently Available";
 
-  const isAvailable = candidate.available === "1";
+  // Profile Image
+  const image = applicant.picture
+    ? `https://ekazi.co.tz/${applicant.picture.trim()}`
+    : defaultImage;
 
   return (
-    <Container className="border  mb-4">
-      {/* Picture */}
-      <Row className="text-white"style={{ backgroundColor:'#2E58A6'}}>
+    <Container className="border mb-4 bg-white" style={styles.container}>
+      {/* Header / Picture */}
+      <Row style={styles.headerRow} className="align-items-center ">
         <Col md={3}>
-          <Image
-            height="80"
-            width="100"
-            src={pictureSrc}
-            alt="Profile"
-            rounded
-          />
+          <Image src={image} alt="Profile" rounded style={styles.image} fluid />
         </Col>
       </Row>
 
-      {/* Name and Position */}
-      <Row className="pt-3">
+      {/* Name & Position */}
+      <Row className="pt-2">
         <Col md={9}>
-          <p style={{ fontWeight: "bold", fontSize: 18 }} className="text-primary">
-            {fullName || "No Name Record"}
+          <p className="text-primary" style={styles.nameText}>
+            {fullName}
           </p>
-          <p className="text-secondary">{position}</p>
+          <p className="text-secondary mb-2">{position}</p>
         </Col>
       </Row>
 
-      {/* Buttons and Info */}
+      {/* Info Row */}
       <Row className="pt-2 align-items-center">
-        <Col md={2}>
+        <Col md={2} className="mb-2">
           <Button
-            className="text-white"
-            style={{ backgroundColor: "#f57c00", border: "none" }}
-            disabled={!isAvailable}
+            className="text-white w-100"
+            style={styles.hireButton}
+            disabled={availabilityText !== "Available for Job Vacancies"}
           >
-            {isAvailable ? "Hire Me" : "Unavailable for hire"}
+            {availabilityText === "Available " ? "Hire Me" : "Unavailable"}
           </Button>
         </Col>
 
-        <Col md={3} className="d-flex justify-content-center">
-          <p className="text-primary">{location}</p>
+        <Col md={3} className="text-center mb-2">
+          <p className="text-primary mb-0">{location}</p>
         </Col>
 
-        <Col md={3}>
-          <p className="text-primary" style={{ cursor: "pointer" }}>
+        <Col md={3} className="mb-2">
+          <p className="text-primary mb-0" style={{ cursor: "pointer" }}>
             Contact Info
           </p>
         </Col>
 
-        <Col md={4}>
-          <p className="text-primary">{collegeName}</p>
+        <Col md={4} className="mb-2">
+          <p className="text-primary mb-0">
+            {applicant.educations?.[0]?.college?.college_name || "No College Records"}
+          </p>
         </Col>
       </Row>
     </Container>

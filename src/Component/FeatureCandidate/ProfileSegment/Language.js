@@ -2,36 +2,34 @@ import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 const Language = ({ candidate }) => {
-  const languages = candidate?.language_abilities || [];  // Extract language abilities
-
-  // Debugging: Log the languages to check the structure
-  console.log('Languages:', languages);
+  const languages = candidate?.applicant?.language_abilities || [];
 
   if (languages.length === 0) {
-    return <p>No languages available</p>;
+    return (
+      <Container className="border p-4 bg-white rounded mb-4">
+        <p className="text-muted">No languages available.</p>
+      </Container>
+    );
   }
 
   return (
-    <Container className="bg-white" style={{ padding: "5%", height: "150px", fontSize: "14px", lineHeight: 1.3, overflow: "hidden" }}>
-      <p className="font-weight-bold text-blue" style={{ fontSize: "18px" }}>
+    <Container className="border p-4 bg-white rounded mb-4">
+      <p className="fw-bold text-primary mb-3" style={{ fontSize: "18px" }}>
         Language
       </p>
       <hr />
       <Row>
         {languages.map((ability) => (
-          <Col key={ability.id} md={2} className="mb-2">
+          <Col key={ability.id} xs={6} sm={4} md={3} lg={2} className="mb-3">
             <Button
-              className="border bg-white text-secondary"
+              variant="light"
+              className="w-100 text-secondary border"
               style={{
                 borderWidth: 2,
-                paddingTop: "7%",
-                paddingBottom: "7%",
-                paddingLeft: "20%",
-                paddingRight: "20%",
-                width: "100%",
-                textOverflow: "ellipsis",
+                fontSize: "14px",
+                overflow: "hidden",
                 whiteSpace: "nowrap",
-                overflow: "hidden"
+                textOverflow: "ellipsis",
               }}
             >
               {ability.language?.language_name || "No Record"}

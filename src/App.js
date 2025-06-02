@@ -16,11 +16,13 @@ import MyProfile from './pages/JobSeeker/MyProfile';
 import CvBuilder from './pages/CvBuilder';
 import Employer from './pages/Employer/Employer';
 import EmployerDetails from './pages/Employer/EmployerDetails';
+import FeaturedProfile from './pages/JobSeeker/FeaturedProfile';
 import SampleTemplate from './pages/JobSeeker/Cv/SampleTemplate';
 import AppliedJob from './pages/JobSeeker/JobSeeker/MyApplication';
 import SavedJob from './pages/JobSeeker/Jobs/SavedJob';
 import SavedSearchJob from './pages/JobSeeker/Jobs/SavedSearchJob';
 
+import AllFeaturedJobSeeker from './pages/JobSeeker/AllFeaturedJobSeeker';
  
 function App() {
   return (
@@ -40,6 +42,9 @@ function App() {
           {/* Featured Profile will be here */}
           {/* <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/> */}
 
+          <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/>
+          {/* All Featured Job Seekers AllFeaturedJobSeeker*/}
+          <Route path="/featured-jobseeker" element={<AllFeaturedJobSeeker/>}/>
 
           {/* Jobseeker dashboard */}
           <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
