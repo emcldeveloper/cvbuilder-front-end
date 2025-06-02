@@ -34,7 +34,10 @@ const AllFeatureCandidateCard = ({ candidate }) => {
     .join(', ') || 'Location not specified';
 
   const availability = candidate.applicant.available === '0' ? 'Available for Job Vacancies' : 'Not Currently Available';
-  const image = candidate.applicant.picture ? `https://ekazi.co.tz/${candidate.applicant.picture.trim()}` : defaultImage;
+const image = candidate.applicant.picture 
+  ? `https://ekazi.co.tz/${candidate.applicant.picture.trim()}` 
+  : '/default_user.jpeg';  // Corrected here
+
   const views = candidate.applicant.featured_views?.length || 0;
   const likes = candidate.applicant.likes || 0;
 
