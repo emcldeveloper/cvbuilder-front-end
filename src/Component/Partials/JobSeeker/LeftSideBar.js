@@ -137,7 +137,7 @@ const LeftSideBar = () => {
                   { name: "Build Cv", path: "/jobseeker/sample-selection" },
                   { name: "My Resume", path: "/jobseeker/my-resume", count: 5 },
                   { name: "My subscription", path: "/jobseeker/my-resume", count: 5 },
-                  { name: "create cover letter", path: "/jobseeker/my-resume" }
+                  { name: "create cover letter", path: "/jobseeker/cover-letter" }
                 ]
               },
 
@@ -150,7 +150,7 @@ const LeftSideBar = () => {
                   { name: "Account Settings", path: "/jobseeker/account-settings" },
                   { name: "Change Password", path: "/jobseeker/change-password" },
                   { name: "Privacy Policy", path: "/jobseeker/Privacy-policy" },
-                  { name: "Consert Form", path: "/jobseeker/conser-form" }
+                  // { name: "Consert Form", path: "/jobseeker/conser-form" }
                 ]
               },
               {

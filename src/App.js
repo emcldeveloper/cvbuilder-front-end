@@ -26,6 +26,8 @@ import AllFeaturedJobSeeker from './pages/JobSeeker/AllFeaturedJobSeeker';
 import MyAccount from './pages/JobSeeker/MyAccount';
 import ChangePassword from './pages/JobSeeker/Auth/ChangePassword';
 import Privatepolicy from './pages/JobSeeker/PrivatePolicy';
+import CoverLetter from './pages/JobSeeker/CoverLetter';
+import Mycv from './pages/JobSeeker/MyCv';
  
 function App() {
   return (
@@ -61,6 +63,8 @@ function App() {
           <Route path="jobseeker/account-settings" element={<MyAccount />} />
           <Route path="jobseeker/change-password" element={<ChangePassword />} />
           <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
+          <Route path="jobseeker/cover-letter" element={<CoverLetter />} />
+          <Route path="jobseeker/my-resume" element={<Mycv />} />
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
       
