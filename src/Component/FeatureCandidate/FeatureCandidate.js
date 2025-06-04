@@ -42,7 +42,7 @@ const FeatureCandidate = ({ candidate }) => {
   // Handling image URL (if picture exists)
   const image = candidate?.applicant?.picture
     ? `https://ekazi.co.tz/${candidate?.applicant?.picture.trim()}`
-    : defaultImage; // Fallback to default image
+    : '/default_user.jpeg'; // Fallback to default image
 
   // Handling engagement metrics (views and likes)
   const views = candidate?.applicant?.featured_views?.length || 0;

@@ -22,33 +22,37 @@ const LoginModal = ({ show, onHide }) => {
   };
 
   // Handle the candidate login form submission
-  const handleLogin = async (e) => {
-    e.preventDefault();
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    if (userType === 'candidate') {
-      setIsLoading(true); // Set loading state to true
+  if (userType === 'candidate') {
+    setIsLoading(true);
 
-      try {
-        const data = await loginUser(email, password);
+    try {
+      const data = await loginUser(email, password);
 
-        if (data.token) {
-          localStorage.setItem('auth_token', data.token);
-          alert('Login successful!');
-          setShowCandidateForm(false);
-          onHide(); // Close modal
-          
-          // Redirect to candidate dashboard
-          window.location.href = '/applicant/dashboard'; 
-        } else {
-          alert('Invalid login credentials');
-        }
-      } catch (error) {
-        alert(`Login failed: ${error.message}`);
-      } finally {
-        setIsLoading(false); // Set loading state back to false after the login attempt
+      if (data.access_token) {
+        // 🔐 Store all necessary user data in localStorage
+        localStorage.setItem('auth_token', data.access_token);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('role_id', data.role_id);
+
+      
+        setShowCandidateForm(false);
+        onHide();
+        window.location.href = '/jobseeker/dashboard';
+      } else {
+        alert('Invalid login credentials');
       }
+    } catch (error) {
+      alert(`Login failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
+};
+
+
 
   // Handle social login (Google, LinkedIn, Twitter)
   const handleSocialLogin = (provider) => {

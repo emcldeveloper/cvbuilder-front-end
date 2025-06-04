@@ -1,49 +1,81 @@
 import React, { useState, useContext } from 'react';
 import { Modal, Button, Form, Col, Row } from 'react-bootstrap';
-import { FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import { UniversalContext } from '../context/UniversalContext';
 import { registerUser } from '../Api/Auth/Auth';
 
 const RegisterModal = ({ show, onHide }) => {
   const [showCandidateForm, setShowCandidateForm] = useState(false);
-  
-  // Accessing data from the context
+
   const {
     genders = [],
     countries = [],
     regions = [],
-    majors = [],
     educationLevels = [],
-    courses = [],
     maritalStatuses = [],
+    courses = [],
+    majors = [],
   } = useContext(UniversalContext);
 
-  // Form state
   const [formData, setFormData] = useState({
     firstName: '',
-    lastName: '',
     middleName: '',
+    lastName: '',
     dob: '',
     gender: '',
     country: '',
     region: '',
-    city: '',
     address: '',
     educationLevel: '',
     course: '',
-    specialization: '',
+    major: '',
+    maritalStatus: '',
     yearOfCompletion: '',
   });
-  
-console.log("Gender is ",genders);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Reset region if country changes
-    if (name === 'country') {
-      setFormData(prev => ({ ...prev, country: value, region: '' }));
+  const genderOptions = genders.map((item) => ({
+    value: item.id,
+    label: item.gender_name,
+  }));
+
+  const maritalStatusOptions = maritalStatuses.map((item) => ({
+    value: item.id,
+    label: item.marital_status,
+  }));
+
+  const educationLevelOptions = educationLevels.map((item) => ({
+    value: item.id,
+    label: item.education_level,
+  }));
+
+  const countryOptions = countries.map((country) => ({
+    value: country.id,
+    label: country.name,
+  }));
+
+  const regionOptions = (countryId) =>
+    regions
+      .filter((region) => region.country_id === countryId)
+      .map((region) => ({ value: region.id, label: region.region_name }));
+
+  const courseOptions = courses.map((course) => ({
+    value: course.course_name,
+    label: course.course_name,
+  }));
+
+  const majorOptions = majors.map((major) => ({
+    value: major.name,
+    label: major.name,
+  }));
+
+  const handleChange = (e, field) => {
+    if (e?.target) {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    } else if (field === 'country') {
+      setFormData((prev) => ({ ...prev, country: e?.value || '', region: '' }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [field]: e?.value || '' }));
     }
   };
 
@@ -57,12 +89,25 @@ console.log("Gender is ",genders);
 
   const handleCandidateRegister = async (e) => {
     e.preventDefault();
-    console.log('Submitted data:', formData);
-
     try {
-      const result = await registerUser(formData); // Wait for API response
+      const result = await registerUser(formData);
       if (result) {
         alert('Candidate registered successfully!');
+        setFormData({
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          dob: '',
+          gender: '',
+          country: '',
+          region: '',
+          address: '',
+          educationLevel: '',
+          course: '',
+          major: '',
+          maritalStatus: '',
+          yearOfCompletion: '',
+        });
         setShowCandidateForm(false);
         onHide();
       }
@@ -71,13 +116,9 @@ console.log("Gender is ",genders);
     }
   };
 
-  const handleSocialRegister = (provider) => {
-    alert(`Register with ${provider} clicked`);
-  };
-
   return (
     <>
-      {/* User Type Selection Modal */}
+      {/* User Type Modal */}
       <Modal show={show && !showCandidateForm} onHide={onHide} centered>
         <Modal.Header closeButton>
           <Modal.Title>Select Registration Type</Modal.Title>
@@ -100,164 +141,129 @@ console.log("Gender is ",genders);
         <Modal.Body>
           <Form onSubmit={handleCandidateRegister}>
             <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Group className="mb-3">
                   <Form.Label>First Name</Form.Label>
-                  <Form.Control type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                  <Form.Control
+                    type="text"
+                    value={formData.firstName}
+                    onChange={(e) => handleChange(e, 'firstName')}
+                    required
+                  />
                 </Form.Group>
               </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Group className="mb-3">
                   <Form.Label>Middle Name</Form.Label>
-                  <Form.Control type="text" name="middleName" value={formData.middleName} onChange={handleChange} />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Date of Birth</Form.Label>
-                  <Form.Control type="date" name="dob" value={formData.dob} onChange={handleChange} required />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Gender</Form.Label>
-                  <Form.Select name="gender" value={formData.gender} onChange={handleChange} required>
-                    <option value="">Select Gender</option>
-                    {genders.map((gender, idx) => (
-                      <option key={idx} value={gender}>{gender}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Select name="country" value={formData.country} onChange={handleChange} required>
-                    <option value="">Select Country</option>
-                    {countries.map((country, idx) => (
-                      <option key={idx} value={country}>{country}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Region</Form.Label>
-                  <Form.Select name="region" value={formData.region} onChange={handleChange} required>
-                    <option value="">Select Region</option>
-                    {(regions[formData.country] || []).map((region, idx) => (
-                      <option key={idx} value={region}>{region}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control type="text" name="city" value={formData.city} onChange={handleChange} required />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text" name="address" value={formData.address} onChange={handleChange} required />
-            </Form.Group>
-
-            <hr />
-            <h5>Education</h5>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Education Level</Form.Label>
-                  <Form.Select name="educationLevel" value={formData.educationLevel} onChange={handleChange} required>
-                    <option value="">Select Education Level</option>
-                    {educationLevels.map((level, idx) => (
-                      <option key={idx} value={level}>{level}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Course Name</Form.Label>
-                  <Form.Select name="course" value={formData.course} onChange={handleChange} required>
-                    <option value="">Select Course</option>
-                    {courses.map((course, idx) => (
-                      <option key={idx} value={course}>{course}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Specialized In</Form.Label>
-                  <Form.Select name="specialization" value={formData.specialization} onChange={handleChange} required>
-                    <option value="">Select Specialization</option>
-                    {majors.map((major, idx) => (
-                      <option key={idx} value={major}>{major}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Year of Completion</Form.Label>
                   <Form.Control
-                    type="number"
-                    name="yearOfCompletion"
-                    value={formData.yearOfCompletion}
-                    onChange={handleChange}
-                    placeholder="e.g. 2022"
+                    type="text"
+                    value={formData.middleName}
+                    onChange={(e) => handleChange(e, 'middleName')}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) => handleChange(e, 'lastName')}
                     required
                   />
                 </Form.Group>
               </Col>
             </Row>
 
-            <Button type="submit" variant="primary" className="w-100 mt-2">
-              Register
+            <Form.Group className="mb-3">
+              <Form.Label>Course</Form.Label>
+              <CreatableSelect
+                isClearable
+                value={formData.course ? { value: formData.course, label: formData.course } : null}
+                options={courseOptions}
+                onChange={(e) => setFormData((prev) => ({ ...prev, course: e ? e.value : '' }))}
+                placeholder="Select or create course"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Major</Form.Label>
+              <CreatableSelect
+                isClearable
+                value={formData.major ? { value: formData.major, label: formData.major } : null}
+                options={majorOptions}
+                onChange={(e) => setFormData((prev) => ({ ...prev, major: e ? e.value : '' }))}
+                placeholder="Select or create major"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Gender</Form.Label>
+              <Select
+                value={genderOptions.find((opt) => opt.value === formData.gender)}
+                options={genderOptions}
+                onChange={(e) => handleChange(e, 'gender')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Marital Status</Form.Label>
+              <Select
+                value={maritalStatusOptions.find((opt) => opt.value === formData.maritalStatus)}
+                options={maritalStatusOptions}
+                onChange={(e) => handleChange(e, 'maritalStatus')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Education Level</Form.Label>
+              <Select
+                value={educationLevelOptions.find((opt) => opt.value === formData.educationLevel)}
+                options={educationLevelOptions}
+                onChange={(e) => handleChange(e, 'educationLevel')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Year of Completion</Form.Label>
+              <Form.Control
+                type="number"
+                value={formData.yearOfCompletion}
+                onChange={(e) => handleChange(e, 'yearOfCompletion')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.address}
+                onChange={(e) => handleChange(e, 'address')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Country</Form.Label>
+              <Select
+                value={countryOptions.find((opt) => opt.value === formData.country)}
+                options={countryOptions}
+                onChange={(e) => handleChange(e, 'country')}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Region</Form.Label>
+              <Select
+                value={regionOptions(formData.country).find((opt) => opt.value === formData.region)}
+                options={regionOptions(formData.country)}
+                onChange={(e) => handleChange(e, 'region')}
+              />
+            </Form.Group>
+
+            <Button type="submit" variant="primary">
+              Submit
             </Button>
           </Form>
-
-          <hr />
-          <div className="text-center mb-2">Or register with</div>
-          <Row className="text-center mb-3">
-            <Col>
-              <Button variant="outline-danger" onClick={() => handleSocialRegister('Google')} className="w-100 mb-2">
-                <FaGoogle className="me-2" /> Google
-              </Button>
-            </Col>
-            <Col>
-              <Button variant="outline-primary" onClick={() => handleSocialRegister('LinkedIn')} className="w-100 mb-2">
-                <FaLinkedin className="me-2" /> LinkedIn
-              </Button>
-            </Col>
-            <Col>
-              <Button variant="outline-info" onClick={() => handleSocialRegister('Twitter')} className="w-100">
-                <FaTwitter className="me-2" /> Twitter
-              </Button>
-            </Col>
-          </Row>
         </Modal.Body>
       </Modal>
     </>
