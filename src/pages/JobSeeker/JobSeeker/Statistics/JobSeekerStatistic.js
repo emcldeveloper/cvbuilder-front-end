@@ -124,7 +124,7 @@ const JobSeekerStatistic = () => {
           </Row>
 
           {/* Job Listings */}
-          {jobs.slice(0, 8).map((job) => (
+          {jobs.slice(0, 7).map((job) => (
             <Card key={job.id} className="mb-3 shadow-smy job-item"
             onClick={() => handleJobClick(job)}
             style={{ cursor: 'pointer' }}
@@ -158,7 +158,7 @@ const JobSeekerStatistic = () => {
 
 
                     <small className="text-muted">
-                      Posted: {job.created_at ? formatDistanceToNow(new Date(job.created_at), { addSuffix: true }) : 'Not specified'}
+                      Posted: {job.created_at ? formatDistanceToNow(new Date(job.publish_date), { addSuffix: true }) : 'Not specified'}
                     </small>
 
                     {/* <p>{job.created_at ? new Date(job.created_at).toDateString() : 'Not specified'}</p> */}

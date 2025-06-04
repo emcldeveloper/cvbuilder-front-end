@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, ProgressBar, Accordion, Image, ListGroup, Badge, Modal } from 'react-bootstrap';
+import { Card, Button, ProgressBar, Accordion, Image, ListGroup, Badge, Modal, } from 'react-bootstrap';
 import {
   PencilFill,
   RocketFill,
@@ -11,14 +11,18 @@ import {
   Search,
   BookFill,
   PeopleFill, InfoCircleFill,
+  ClipboardCheck
 
 } from 'react-bootstrap-icons';
+import { colors } from '@mui/material';
+import ConsentFormModal from '../../Forms/JobSeeker/ConsertForm';
 
 
 const LeftSideBar = () => {
   const [profileCompletion] = useState(75);
   const [showModalPay, setShowModalPay] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
+  const [showConsentModal, setShowConsentModal] = useState(false);
   // Inside your component:
   const navigate = useNavigate();
 
@@ -98,6 +102,29 @@ const LeftSideBar = () => {
             <BarChartFill className="me-2" /> Dashboard
           </h6>
 
+
+          <div
+            className="p-3 mb-3  text-dark rounded-lg shadow-sm cursor-pointer hover:bg-warning-dark transition-colors
+             border border-2 border-danger"  style={{ color: '#D36314' }}
+            onClick={() => setShowConsentModal(true)}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <ClipboardCheck className="me-3 text-lg text-danger" />
+                <div>
+                  <span className="font-bold">CONSENT FORM</span>
+                  <p className="text-sm mt-1">Click to authorize your background verification</p>
+                </div>
+              </div>
+              <span className="text-xs bg-danger text-white px-2 py-1 rounded-full animate-pulse">
+                ACTION REQUIRED
+              </span>
+            </div>
+          </div>
+          <ConsentFormModal
+            show={showConsentModal}
+            onClose={() => setShowConsentModal(false)}
+          />
           {/* Accordions */}
 
           <Accordion flush className=" pt-2 text-start mb-2">
@@ -110,7 +137,7 @@ const LeftSideBar = () => {
                   { name: "Build Cv", path: "/jobseeker/sample-selection" },
                   { name: "My Resume", path: "/jobseeker/my-resume", count: 5 },
                   { name: "My subscription", path: "/jobseeker/my-resume", count: 5 },
-                  { name: "create cover letter", path: "/jobseeker/my-resume" }
+                  { name: "create cover letter", path: "/jobseeker/cover-letter" }
                 ]
               },
 
@@ -122,8 +149,8 @@ const LeftSideBar = () => {
                   { name: "My Profile", path: "/jobseeker/profile-preview" },
                   { name: "Account Settings", path: "/jobseeker/account-settings" },
                   { name: "Change Password", path: "/jobseeker/change-password" },
-                  { name: "Set Privacy", path: "/jobseeker/set-Privacy" },
-                  { name: "Consert Form", path: "/jobseeker/conser-form" }
+                  { name: "Privacy Policy", path: "/jobseeker/Privacy-policy" },
+                  // { name: "Consert Form", path: "/jobseeker/conser-form" }
                 ]
               },
               {
