@@ -130,10 +130,10 @@ const MyCv = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     return (
-        <Container fluid className="p-4">
+        <Container fluid >
             <Row className="mb-4">
                 <Col>
-                    <h1 className="fw-bold">My Downloaded CV</h1>
+                    <h5 className="fw-bold">My Downloaded CV</h5>
                 </Col>
             </Row>
 

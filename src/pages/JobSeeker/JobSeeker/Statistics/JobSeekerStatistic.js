@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import useJobs from '../../../../hooks/Jobs/useJobs';
 import { formatDistanceToNow } from 'date-fns';
 import JobDetailModal from '../../../../Component/Jobs/JobDetailModel/JobModelDetail';
+import ApplicantPipeline from '../../../../Component/Profile/ApplicantPipeline';
 
 const JobSeekerStatistic = () => {
 
@@ -39,6 +40,7 @@ const JobSeekerStatistic = () => {
       <Card className="mb-4 shadow-smy">
         <Card.Body>
           {/* Statistic Cards */}
+          <h5 className=" fw-bold mb-2">Applicant Dashboard</h5>
           <Row className="mb-3 g-2">
             {/* Resume */}
             <Col xs={12} sm={6} md={3}>
@@ -107,6 +109,7 @@ const JobSeekerStatistic = () => {
                 </Card.Body>
               </Card>
             </Col>
+              <ApplicantPipeline />
           </Row>
 
           {/* Recommended Jobs */}
@@ -121,6 +124,7 @@ const JobSeekerStatistic = () => {
                 View all jobs <BsArrowRight className="ms-2" />
               </a>
             </Col>
+          
           </Row>
 
           {/* Job Listings */}

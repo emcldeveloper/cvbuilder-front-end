@@ -60,14 +60,14 @@ const LeftSideBar = () => {
           </div>
         </div>
 
-        <Card.Body className="text-center mt-4">
+        <Card.Body className="text-center mt-2">
           <h5 className="fw-bold mb-1">Halidi Maneno</h5>
           <p className="text-muted small mb-1">Machine Learning Engineering</p>
-          <p className="text-muted small">Exactmanpower Consult LTD</p>
+          <p className="text-muted small mb-2">Exactmanpower Consult LTD</p>
           {/* Status: Available for Work */}
           <Button
             variant="outline-success"
-            className="w-100 mb-3 fw-semibold py-1"
+            className="w-100 mb-2 fw-semibold py-1"
             style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
             onClick={() => setShowAvailabilityModal(true)}
           >
@@ -76,7 +76,7 @@ const LeftSideBar = () => {
           </Button>
 
           {/* Profile Completion */}
-          <div className="text-start mb-3">
+          <div className="text-start mb-2">
             <div className="d-flex justify-content-between small text-muted mb-1">
               <span>Profile Completion</span>
               <span>{profileCompletion}%</span>
@@ -86,14 +86,14 @@ const LeftSideBar = () => {
 
           {/* Upgrade Button */}
           <Button
-            className="w-100 mb-3 text-white fw-semibold py-1"
+            className="w-100 mb-2 text-white fw-semibold py-1"
             style={{
               background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
-              fontSize: '0.9rem'
+              fontSize: '0.875r 2vw ,1rem'
             }}
             onClick={() => setShowModalPay(true)}
           >
-            <RocketFill className="me-1" /> Upgrade to Premium
+            <RocketFill className="me-2" /> Upgrade to Premium
           </Button>
 
           {/* Dashboard Section */}
@@ -103,7 +103,7 @@ const LeftSideBar = () => {
           </h6>
 
 
-          <div
+          {/* <div
             className="p-3 mb-3  text-dark rounded-lg shadow-sm cursor-pointer hover:bg-warning-dark transition-colors
              border border-2 border-danger"  style={{ color: '#D36314' }}
             onClick={() => setShowConsentModal(true)}
@@ -120,14 +120,14 @@ const LeftSideBar = () => {
                 ACTION REQUIRED
               </span>
             </div>
-          </div>
+          </div> */}
           <ConsentFormModal
             show={showConsentModal}
             onClose={() => setShowConsentModal(false)}
           />
           {/* Accordions */}
 
-          <Accordion flush className=" pt-2 text-start mb-2">
+          <Accordion flush className="text-start mb-1" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             {[
               {
                 key: "0",
@@ -140,7 +140,6 @@ const LeftSideBar = () => {
                   { name: "create cover letter", path: "/jobseeker/cover-letter" }
                 ]
               },
-
               {
                 key: "1",
                 title: "My Account",
@@ -150,7 +149,7 @@ const LeftSideBar = () => {
                   { name: "Account Settings", path: "/jobseeker/account-settings" },
                   { name: "Change Password", path: "/jobseeker/change-password" },
                   { name: "Privacy Policy", path: "/jobseeker/Privacy-policy" },
-                  // { name: "Consert Form", path: "/jobseeker/conser-form" }
+                  { name: "Consent Form", onClick: () => setShowConsentModal(true) }
                 ]
               },
               {
@@ -158,14 +157,11 @@ const LeftSideBar = () => {
                 title: "My Application",
                 icon: <BriefcaseFill className="me-2" />,
                 items: [
-
                   { name: "My Application", path: "/jobseeker/My-application", count: 8 },
                   { name: "Employer Correspondence", path: "/jobseeker/employer-correspondence", count: 2 },
                   { name: "History", path: "/jobseeker/history", count: 2 },
-                  // { name: "Apply Letter", path: "/jobseeker/apply-letter", count: 7 },
                   { name: "Saved Jobs", path: "/jobseeker/saved-jobs", count: 20 },
                   { name: "Job Match", path: "/jobseeker/job-match", count: 3 },
-
                 ]
               },
               {
@@ -187,29 +183,33 @@ const LeftSideBar = () => {
                 ]
               },
             ].map(section => (
-              <Accordion.Item eventKey={section.key} key={section.key} className="border-0">
-                <Accordion.Header className="small  border-top py-2">
-                  {section.icon}{section.title}
+              <Accordion.Item
+                eventKey={section.key}
+                key={section.key}
+                className="border-0"
+              >
+                <Accordion.Header className="small py-1   border-top px-0" >
+                  <div className="d-flex align-items-center">
+                    {section.icon}
+                    <span>{section.title}</span>
+                  </div>
                 </Accordion.Header>
-                <Accordion.Body className="py-1 ">
+                <Accordion.Body className="py-1 px-0">
                   <ListGroup variant="flush">
                     {section.items.map((item, index) => (
                       <ListGroup.Item
                         key={index}
                         className="small py-1 px-0 border-0 d-flex justify-content-between align-items-center"
                         action
-                        onClick={() => navigate(item.path)}
+                        onClick={item.onClick || (() => navigate(item.path))}
                       >
-
                         <span className="text-decoration-none cursor-pointer">{item.name}</span>
                         {item.count !== undefined && (
-                          <span className="badge bg-secondary rounded-pill ms-2">
+                          <span className="badge bg-secondary rounded-pill" style={{ fontSize: '0.65rem' }}>
                             {item.count}
                           </span>
                         )}
-
                       </ListGroup.Item>
-
                     ))}
                   </ListGroup>
                 </Accordion.Body>
