@@ -28,6 +28,8 @@ import ChangePassword from './pages/JobSeeker/Auth/ChangePassword';
 import Privatepolicy from './pages/JobSeeker/PrivatePolicy';
 import CoverLetter from './pages/JobSeeker/CoverLetter';
 import Mycv from './pages/JobSeeker/MyCv';
+import NotVerifiedPage from './pages/Auth/NotVerifiedPage';
+import RequireVerification from './Auth/RequireVerification';
  
 function App() {
   return (
@@ -35,9 +37,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Root route */}
-          <Route path="/" element={<Home />} />
+           <Route path="/" element={<Home />} />
            <Route path="/cv-builder" element={<CvBuilder />} />
-          
+           <Route path="/not-verified" element={<NotVerifiedPage />} />
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
           <Route path="/jobs" element={<FindJobs/>}/>
@@ -52,7 +54,8 @@ function App() {
           <Route path="/featured-jobseeker" element={<AllFeaturedJobSeeker/>}/>
 
           {/* Jobseeker dashboard */}
-          <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
+           <Route element={<RequireVerification />}>
+              <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
           <Route path="jobseeker/My-application" element={<AppliedJob />} />
           <Route path="jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
           <Route path="jobseeker/profile-preview" element={<MyProfile/>} />
@@ -65,6 +68,8 @@ function App() {
           <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
           <Route path="jobseeker/cover-letter" element={<CoverLetter />} />
           <Route path="jobseeker/my-resume" element={<Mycv />} />
+          </Route>
+        
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
       
