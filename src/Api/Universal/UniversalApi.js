@@ -37,15 +37,15 @@ const fetchWithCache = async (key, url, transform) => {
   }
 };
 
-// Exported API calls
-export const getMaritalStatuses = () =>
-  fetchWithCache('marital', `${UNIVERSAL_API}/marital`, res => ({
-    data: res.data.marital
-  }));
+
 
 export const getGenders = () =>
   fetchWithCache('gender', `${UNIVERSAL_API}/gender`, res => ({
     data: res.data.gender
+  }));
+export const getMaritalStatuses = () =>
+  fetchWithCache('marital', `${UNIVERSAL_API}/marital`, res => ({
+    data: res.data.marital
   }));
 
 export const getCountries = () =>
@@ -95,3 +95,6 @@ export const getJobTypes = () =>
   fetchWithCache('jobType', `${UNIVERSAL_API}/job-type`, res => ({
     data: res.data.type
   }));
+
+
+

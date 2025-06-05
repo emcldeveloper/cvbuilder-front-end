@@ -1,5 +1,5 @@
 // src/components/Header.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import RegisterModal from '../../Auth/RegisterModal';
 import LoginModal from '../../Auth/LoginModal';
@@ -7,6 +7,27 @@ import LoginModal from '../../Auth/LoginModal';
 const AppHeader = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check login status on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    // Remove auth data
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('role_id');
+
+    // Update login state
+    setIsLoggedIn(false);
+
+    // Redirect to homepage
+    window.location.href = '/';
+  };
 
   return (
     <>
@@ -36,9 +57,17 @@ const AppHeader = () => {
             </Nav>
 
             <Nav className="ms-auto align-items-center">
-              <Nav.Link onClick={() => setShowRegisterModal(true)} className="text-primary">Register</Nav.Link>
-              <span className="mx-2">|</span>
-              <Nav.Link onClick={() => setShowLoginModal(true)} className="text-primary">Login</Nav.Link>
+              {isLoggedIn ? (
+                <>
+                  <Nav.Link onClick={handleLogout} className="text-danger">Logout</Nav.Link>
+                </>
+              ) : (
+                <>
+                  <Nav.Link onClick={() => setShowRegisterModal(true)} className="text-primary">Register</Nav.Link>
+                  <span className="mx-2">|</span>
+                  <Nav.Link onClick={() => setShowLoginModal(true)} className="text-primary">Login</Nav.Link>
+                </>
+              )}
               <Nav.Link href="/post-job">
                 <a
                   href="/post-job"
@@ -59,8 +88,16 @@ const AppHeader = () => {
         </Container>
       </Navbar>
 
+      {/* Modals */}
       <RegisterModal show={showRegisterModal} onHide={() => setShowRegisterModal(false)} />
-      <LoginModal show={showLoginModal} onHide={() => setShowLoginModal(false)} />
+      <LoginModal
+        show={showLoginModal}
+        onHide={() => {
+          setShowLoginModal(false);
+          // Check token again after modal closes to see if user logged in
+          setIsLoggedIn(!!localStorage.getItem('auth_token'));
+        }}
+      />
     </>
   );
 };

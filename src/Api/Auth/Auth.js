@@ -2,9 +2,8 @@
 // Define the base URL
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-// Login Function
 export async function loginUser(email, password) {
-  const url = `${API_BASE_URL}auth/login`; // Dynamically build the URL
+  const url = `${API_BASE_URL}auth/login`;
 
   try {
     const response = await fetch(url, {
@@ -19,14 +18,25 @@ export async function loginUser(email, password) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.email || data?.error || 'Login failed');
+      // Handle structured errors from Laravel
+      const message =
+        typeof data?.email === 'string'
+          ? data.email
+          : Array.isArray(data?.email)
+          ? data.email[0]
+          : data?.error || 'Login failed';
+
+      throw new Error(message);
     }
 
-    return data; // Should contain token
+    // ✅ This means login was successful, return token
+    return data;
+
   } catch (error) {
     throw new Error(error.message || 'Network error');
   }
 }
+
 
 // Register Function
 export async function registerUser(formData) {
