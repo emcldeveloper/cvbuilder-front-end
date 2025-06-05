@@ -1,78 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, Button, Form, Row, Col, Spinner } from 'react-bootstrap';
 import { FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
-
-import { loginUser } from '../Api/Auth/Auth';
+import useLoginForm from '../hooks/Auth/useLoginForm';
 
 const LoginModal = ({ show, onHide }) => {
-  const [userType, setUserType] = useState('candidate');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showCandidateForm, setShowCandidateForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-
-  // Handles the user's choice of login type (candidate or employer)
-  const handleUserChoice = (type) => {
-    if (type === 'employer') {
-      window.location.href = 'https://ekazi.co.tz/login'; // Redirect to Ekazi login page
-      onHide(); // Close the modal when redirecting to the employer login page
-    } else {
-      setShowCandidateForm(true); // Show the candidate login form
-    }
-  };
-
-  // Handle the candidate login form submission
-const handleLogin = async (e) => {
-  e.preventDefault();
-
-  if (userType === 'candidate') {
-    setIsLoading(true);
-
-    try {
-      const data = await loginUser(email, password);
-
-      if (data.access_token) {
-        // 🔐 Store all necessary user data in localStorage
-        localStorage.setItem('auth_token', data.access_token);
-        localStorage.setItem('user_id', data.user_id);
-        localStorage.setItem('role_id', data.role_id);
-
-      
-        setShowCandidateForm(false);
-        onHide();
-        window.location.href = '/jobseeker/dashboard';
-      } else {
-        alert('Invalid login credentials');
-      }
-    } catch (error) {
-      alert(`Login failed: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-};
-
-
-
-  // Handle social login (Google, LinkedIn, Twitter)
-  const handleSocialLogin = (provider) => {
-    alert(`Login with ${provider} clicked`);
-  };
+  const {
+    email,
+    password,
+    isLoading,
+    showCandidateForm,
+    setEmail,
+    setPassword,
+    setShowCandidateForm,
+    handleUserChoice,
+    handleLogin,
+    handleSocialLogin,
+  } = useLoginForm(onHide);
 
   return (
     <>
-      {/* User Type Selection Modal */}
       <Modal show={show && !showCandidateForm} onHide={onHide} centered>
         <Modal.Header closeButton>
           <Modal.Title>Select Login Type</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <Button
-            variant="primary"
-            onClick={() => handleUserChoice('candidate')}
-            className="me-2"
-          >
-            Login as Candidate
+          <Button variant="primary" onClick={() => handleUserChoice('candidate')} className="me-2">
+            Login as JobSeeker
           </Button>
           <Button variant="secondary" onClick={() => handleUserChoice('employer')}>
             Login as Employer
@@ -80,10 +33,9 @@ const handleLogin = async (e) => {
         </Modal.Body>
       </Modal>
 
-      {/* Candidate Login Form Modal */}
       <Modal show={showCandidateForm} onHide={() => setShowCandidateForm(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Candidate Login</Modal.Title>
+          <Modal.Title>JobSeeker Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleLogin}>
@@ -108,19 +60,13 @@ const handleLogin = async (e) => {
             </Form.Group>
 
             <Button type="submit" variant="primary" className="w-100" disabled={isLoading}>
-              {isLoading ? (
-                <Spinner animation="border" size="sm" className="me-2" />
-              ) : (
-                'Login'
-              )}
+              {isLoading ? <Spinner animation="border" size="sm" className="me-2" /> : 'Login'}
               {isLoading && ' Logging in...'}
             </Button>
           </Form>
 
           <hr />
-
           <div className="text-center mb-2">Or login with</div>
-
           <Row className="mb-3 text-center">
             <Col>
               <Button
@@ -152,9 +98,6 @@ const handleLogin = async (e) => {
                 Twitter
               </Button>
             </Col>
-          </Row>
-          <Row>
-            <Col>Hello</Col>
           </Row>
         </Modal.Body>
       </Modal>
