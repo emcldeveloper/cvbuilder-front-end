@@ -28,6 +28,8 @@ import ChangePassword from './pages/JobSeeker/Auth/ChangePassword';
 import Privatepolicy from './pages/JobSeeker/PrivatePolicy';
 import CoverLetter from './pages/JobSeeker/CoverLetter';
 import Mycv from './pages/JobSeeker/MyCv';
+import SalaryCalculator from './pages/TaxCalculator';
+ 
 import NotVerifiedPage from './pages/Auth/NotVerifiedPage';
 import RequireVerification from './Auth/RequireVerification';
  import AboutPage from './pages/AboutPage';
@@ -39,6 +41,9 @@ function App() {
           {/* Root route */}
            <Route path="/" element={<Home />} />
            <Route path="/cv-builder" element={<CvBuilder />} />
+             <Route path="/salary-calculator" element={<SalaryCalculator/>} />
+          
+          
            <Route path="/not-verified" element={<NotVerifiedPage />} />
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
