@@ -28,6 +28,8 @@ import ChangePassword from './pages/JobSeeker/Auth/ChangePassword';
 import Privatepolicy from './pages/JobSeeker/PrivatePolicy';
 import CoverLetter from './pages/JobSeeker/CoverLetter';
 import Mycv from './pages/JobSeeker/MyCv';
+import SalaryCalculator from './pages/TaxCalculator';
+ 
  
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           {/* Root route */}
           <Route path="/" element={<Home />} />
            <Route path="/cv-builder" element={<CvBuilder />} />
+             <Route path="/salary-calculator" element={<SalaryCalculator/>} />
+          
           
            {/* Job Routes */}
           <Route path="/jobs/:jobSlug" element={<JobPreview />} />
