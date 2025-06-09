@@ -47,32 +47,38 @@ const Category = () => {
 
   return (
     <div>
-      <h4 className="mb-3">Industries with Job Listings</h4>
-      {loading ? (
-        <p>Loading...</p>
-      ) : industryCounts.length === 0 ? (
-        <p>No industries found.</p>
-      ) : (
-        <div className="row">
-          {industryCounts.map((industry) => (
-            <div key={industry.industry_id} className="col-md-4 mb-3">
-              <li className="list-group-item d-flex justify-content-between align-items-center">
-                <Link to={`/industry/${industry.industry_id}`} className="text-decoration-none text-dark">
-                  {industry.industry_name
-                    .toLowerCase()
-                    .split(' ')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
-                </Link>
-                <span className="badge bg-primary rounded-pill">
-                  {industry.job_count}
-                </span>
-              </li>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+  <h4 className="mb-3">Industries with Job Listings</h4>
+  {loading ? (
+    <p>Loading...</p>
+  ) : industryCounts.length === 0 ? (
+    <p>No industries found.</p>
+  ) : (
+    <ul className="list-group">
+      <div className="row">
+        {industryCounts.map((industry) => (
+          <div key={industry.industry_id} className="col-md-4 mb-3">
+            <li className="list-group-item d-flex align-items-center">
+              <span className="badge bg-primary rounded-pill">
+                {industry.job_count}
+              </span>
+              <Link
+                to={`/industry/${industry.industry_id}`}
+                className="text-decoration-none text-dark ms-2"
+              >
+                {industry.industry_name
+                  .toLowerCase()
+                  .split(' ')
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
+              </Link>
+            </li>
+          </div>
+        ))}
+      </div>
+    </ul>
+  )}
+</div>
+
   );
 };
 

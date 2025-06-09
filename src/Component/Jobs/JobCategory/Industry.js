@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { getJobCategorySummary } from '../../../Api/Job/JobCategoriesApi';
-import { Link } from 'react-router-dom'; // If you're using React Router
+import { Link } from 'react-router-dom';
 
-// Helper function to get cached data from localStorage
+// Helper: Get cached categories from localStorage
 const getCachedCategories = () => {
-  const cachedData = localStorage.getItem('categories');
-  return cachedData ? JSON.parse(cachedData) : null;
+  const cached = localStorage.getItem('categories');
+  return cached ? JSON.parse(cached) : null;
 };
 
-// Helper function to set data in localStorage
+// Helper: Set categories in localStorage
 const setCachedCategories = (data) => {
   localStorage.setItem('categories', JSON.stringify(data));
 };
@@ -18,21 +18,17 @@ const Industries = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if the categories data is cached
     const cachedData = getCachedCategories();
 
     if (cachedData) {
-      // If cached data exists, use it and stop loading
       setCategories(cachedData);
       setLoading(false);
     } else {
-      // If no cache, fetch data from the API
       const fetchCategories = async () => {
         try {
           const response = await getJobCategorySummary();
           if (response) {
             setCategories(response);
-            // Cache the response data
             setCachedCategories(response);
           }
         } catch (error) {
@@ -48,6 +44,7 @@ const Industries = () => {
   return (
     <div>
       <h4 className="mb-3">Job Categories</h4>
+
       {loading ? (
         <p>Loading...</p>
       ) : categories.length === 0 ? (
@@ -56,18 +53,23 @@ const Industries = () => {
         <div className="row">
           {categories.map((category) => (
             <div key={category.category_id} className="col-md-4 mb-3">
-              <li className="list-group-item d-flex justify-content-between align-items-center">
-                <Link to={`/category/${category.category_id}`} className="text-decoration-none text-dark">
-                  {category.category_name
-                    .toLowerCase()
-                    .split(' ')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
-                </Link>
-                <span className="badge bg-primary rounded-pill">
-                  {category.total_positions}
-                </span>
-              </li>
+              <ul className="list-group">
+                <li className="list-group-item d-flex align-items-center">
+                  <span className="badge bg-primary rounded-pill">
+                    {category.total_positions}
+                  </span>
+                  <Link
+                    to={`/category/${category.category_id}`}
+                    className="text-decoration-none text-dark ms-2"
+                  >
+                    {category.category_name
+                      .toLowerCase()
+                      .split(' ')
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ')}
+                  </Link>
+                </li>
+              </ul>
             </div>
           ))}
         </div>
