@@ -4,7 +4,7 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { FaEye, FaEyeSlash, FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import useRegisterForm from '../hooks/Auth/useRegisterForm';
-
+import SocialLogin from './SocialLogin';
 const RegisterModal = ({ show, onHide }) => {
   const {
     formData,
@@ -355,36 +355,7 @@ const RegisterModal = ({ show, onHide }) => {
             </section>
 
  
- <div className="text-center mb-2">Or login with</div>
-            <Row className="mb-3 text-center">
-              <Col>
-                <Button
-                  variant="outline-danger"
-                  onClick={() => handleSocialLogin('Google')}
-                  className="w-100 mb-2"
-                >
-                  <FaGoogle className="me-2" /> Google
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  variant="outline-primary"
-                  onClick={() => handleSocialLogin('LinkedIn')}
-                  className="w-100 mb-2"
-                >
-                  <FaLinkedin className="me-2" /> LinkedIn
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  variant="outline-info"
-                  onClick={() => handleSocialLogin('Twitter')}
-                  className="w-100"
-                >
-                  <FaTwitter className="me-2" /> Twitter
-                </Button>
-              </Col>
-            </Row>
+            <SocialLogin/>
             <Row className="mt-4">
               <Col className="text-end">
                 <Button variant="secondary" onClick={() => setShowCandidateForm(false)} className="me-2">

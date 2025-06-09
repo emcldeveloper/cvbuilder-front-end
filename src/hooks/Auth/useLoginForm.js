@@ -18,33 +18,38 @@ const useLoginForm = (onHide) => {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    if (userType === 'candidate') {
-      setIsLoading(true);
-      try {
-        const data = await loginUser(email, password);
+  if (userType === 'candidate') {
+    setIsLoading(true);
+    try {
+      const data = await loginUser(email, password);
 
-        if (data.access_token) {
-          localStorage.setItem('auth_token', data.access_token);
-          localStorage.setItem('user_id', data.user_id);
-          localStorage.setItem('role_id', data.role_id);
+      if (data.access_token) {
+        localStorage.setItem('auth_token', data.access_token);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('role_id', data.role_id);
+        localStorage.setItem('verified', data.verified);
 
-          setShowCandidateForm(false);
-          onHide();
-          window.location.href = '/jobseeker/dashboard';
+        setShowCandidateForm(false);
+        onHide();
+
+        if (data.verified !== 0) {
+          window.location.href = '/not-verified';
         } else {
-          alert('Invalid login credentials');
+          window.location.href = '/jobseeker/dashboard';
         }
-      } catch (error) {
-        alert(`Login failed: ${error.message}`);
-      } finally {
-        setIsLoading(false);
+      } else {
+        alert('Invalid login credentials');
       }
+    } catch (error) {
+      alert(`Login failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
+  }
+};
   const handleSocialLogin = (provider) => {
     alert(`Login with ${provider} clicked`);
   };
