@@ -42,9 +42,7 @@ const Skills = () => {
     });
   };
   const navigate = useNavigate();
-  useEffect(() => {
-    setCurrentStep(6)
-  }, [])
+
   const openModal = () => {
     setOpenModel(true);
   }
