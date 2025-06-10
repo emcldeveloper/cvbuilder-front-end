@@ -18,7 +18,7 @@ const AppFooter1 = () => {
 
   return (
     <footer className="bg-white text-dark py-4 mt-4 border-top">
-      <Container>
+      <Container fluid>
         <SubFooter />
 
         <Row xs={2} sm={2} md={4} className="g-3 mt-2">

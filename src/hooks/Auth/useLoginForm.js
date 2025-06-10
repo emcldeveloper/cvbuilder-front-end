@@ -31,11 +31,12 @@ const handleLogin = async (e) => {
         localStorage.setItem('user_id', data.user_id);
         localStorage.setItem('role_id', data.role_id);
         localStorage.setItem('verified', data.verified);
+        localStorage.setItem('applicantId', data.applicant_id);
 
         setShowCandidateForm(false);
         onHide();
 
-        if (data.verified !== 0) {
+        if (data.verified !== 1) {
           window.location.href = '/not-verified';
         } else {
           window.location.href = '/jobseeker/dashboard';
