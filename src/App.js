@@ -32,7 +32,7 @@ import SalaryCalculator from './pages/TaxCalculator';
  
 import NotVerifiedPage from './pages/Auth/NotVerifiedPage';
 import RequireVerification from './Auth/RequireVerification';
- 
+ import AboutPage from './pages/AboutPage';
 function App() {
   return (
     <UniversalProvider> {/* Wrap everything in the provider */}
@@ -50,6 +50,7 @@ function App() {
           <Route path="/jobs" element={<FindJobs/>}/>
           <Route path="/employers" element={<Employer/>}/>
           <Route path="/employer/details" element={<EmployerDetails/>}/>
+          <Route path="/about" element={<AboutPage/>}/>
 
           {/* Featured Profile will be here */}
           {/* <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/> */}
