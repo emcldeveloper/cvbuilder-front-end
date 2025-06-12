@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Modal, Table } from 'react-bootstrap';
 import { FaCalculator, FaUser, FaWhatsapp, FaEye } from 'react-icons/fa';
 import html2pdf from 'html2pdf.js';
+import "../../css/jobseeker/Tax.css"; // Import your CSS file
+import { CalculatorApi } from '../../Api/Calculator/SalaryApi';
 
 const SalaryEstimation = () => {
     // State variables
@@ -18,19 +20,24 @@ const SalaryEstimation = () => {
     const [usageCount, setUsageCount] = useState(0);
     const [taxableAmount, setTaxableAmount] = useState(0);
     const [showTaxModal, setShowTaxModal] = useState(false);
-    const [taxData, setTaxData] = useState({
-        payone_reduction: 270000,
-        paytwo_reduction: 520000,
-        paythree_reduction: 760000,
-        payfour_reduction: 1000000,
-        payone_percentage: 0.08,
-        paytwo_percentage: 0.2,
-        paythree_percentage: 0.25,
-        payfour_percentage: 0.3,
-        paytwo_addition: 20000,
-        paythree_addition: 44000,
-        payfour_addition: 82000
-    });
+    const [showCompanyCost, setShowCompanyCost] = useState(false);
+    const [taxData, setTaxData] = useState('');
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await CalculatorApi.getsalaryrate()
+                setTaxData(response.tax_rate);
+                setUsageCount(response.insight);
+                console.log("salary estimation data", response)
+            } catch (error) {
+
+            }
+        };
+        fetchData();
+
+    }, []);
 
     // Calculate total allowance whenever allowances change
     useEffect(() => {
@@ -82,6 +89,7 @@ const SalaryEstimation = () => {
             estimateGrossSalary(parseFloat(netPay));
         }
     };
+
 
     // Calculate PAYE amount
     const calculatePayAmount = (taxableAmount) => {
@@ -164,8 +172,28 @@ const SalaryEstimation = () => {
         return num ? num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00';
     };
 
+    // Add this function to calculate company costs
+    const calculateCompanyCost = () => {
+        if (!totalGross) return null;
+
+        const employerSSC = totalGross * 0.1; // 10% of gross salary
+        const sdl = totalGross * 0.035;      // 3.5% of gross salary
+        const wcf = totalGross * 0.005;      // 0.5% of gross salary
+        const grandTotal = totalGross + employerSSC + sdl + wcf;
+
+        return {
+            grossSalary: totalGross,
+            employerSSC,
+            sdl,
+            wcf,
+            grandTotal
+        };
+    };
+
     // Download PDF
     const downloadPDF = () => {
+
+
         const element = document.getElementById("result");
         const opt = {
             margin: 10,
@@ -175,7 +203,11 @@ const SalaryEstimation = () => {
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().from(element).set(opt).save();
+
     };
+    // Add this useEffect hook to your component
+
+
 
     // Share on WhatsApp
     const shareOnWhatsApp = () => {
@@ -210,28 +242,28 @@ const SalaryEstimation = () => {
         <div className="py-2">
             <title>Job Salary Estimator</title>
             <Container>
-                <div className="containersal" style={{ marginTop: '30px', maxWidth: '500px', margin: '0 auto', background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                <div className="containersal " style={{ marginTop: '30px', maxWidth: '500px', margin: '0 auto', background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
                     {/* Header */}
-                    <div className="result-section">
+                    <div className="result-section mb-7  border-b border-black">
                         <div className="result-detail" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
                             <div>
                                 <a href="/home">
                                     <img height="45px" width="45" src="/logo.png" alt="eKazi" />
                                 </a>
                             </div>
-                            <h4 style={{ color: '#D36314', margin: 0, fontSize: '19px' }}>
-                                Multi Currency Salary Calculator
+                            <h4 style={{ color: '#D36314', margin: 0, fontSize: '15px', alignItems: 'center' }}>
+                                SALARY CALCULATOR
                             </h4>
                         </div>
                     </div>
 
                     {/* Form */}
-                    <Form style={{ fontSize: '13px' }}>
+                    <Form style={{ fontSize: '13px', }}>
                         {/* Currency Type */}
                         <Form.Group className="form-group-one" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3px' }}>
                             <Form.Label style={{ flex: 1, fontWeight: 600 }}>Select Currency</Form.Label>
                             <Form.Select
-                                style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px' }}
+                                style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '13px' }}
                                 value={currencyType}
                                 onChange={(e) => setCurrencyType(e.target.value)}
                             >
@@ -247,7 +279,7 @@ const SalaryEstimation = () => {
                                 <Form.Label style={{ flex: 1, fontWeight: 600 }}>Exchange Rate (USD to TZS)</Form.Label>
                                 <Form.Control
                                     type="number"
-                                    style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px' }}
+                                    style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '13px' }}
                                     value={exchangeRate}
                                     onChange={(e) => setExchangeRate(e.target.value)}
                                     placeholder="Enter Rate"
@@ -260,16 +292,37 @@ const SalaryEstimation = () => {
                         {/* Salary Type */}
                         <Form.Group style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3px' }}>
                             <Form.Label style={{ flex: 1, fontWeight: 600 }}>Salary Type</Form.Label>
+                            
                             <Form.Select
-                                style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px' }}
+                                style={{ flex: 2, padding: '6px 8px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '13px' }}
                                 value={salaryType}
-                                onChange={(e) => setSalaryType(e.target.value)}
+                                onChange={async (e) => {
+                                    setSalaryType(e.target.value);
+                                    try {
+                                        const response = await CalculatorApi.createinsight()
+                                        const fetchData = async () => {
+                                            try {
+                                                const response = await CalculatorApi.getsalaryrate()
+                                                setTaxData(response.tax_rate);
+                                                setUsageCount(response.insight);
+                                                console.log("salary estimation data", response)
+                                            } catch (error) {
+
+                                            }
+                                        };
+                                         fetchData();
+                                        console.log('Incremented value:', response);
+                                    } catch (error) {
+                                        console.error('Error incrementing value:', error);
+                                    }
+                                }}
                             >
                                 <option value="" disabled>Choose Salary Type</option>
                                 <option value="net">Gross Salary (From Net)</option>
                                 <option value="gross">Net Salary (From Gross)</option>
                             </Form.Select>
                         </Form.Group>
+
 
                         {/* Salary Input */}
                         <Form.Group style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3px' }}>
@@ -350,102 +403,184 @@ const SalaryEstimation = () => {
 
 
                     {/* Results */}
-                 <div
-  id="result"
-  className="relative w-full p-2 text-center bg-white"
->
-  {/* Salary Type Result */}
-  <div className="result-section mb-2">
-    <div className="result-detail flex justify-end items-center">
-      <div className="text-right">
-        <h4 className="text-[14px] md:text-[16px] text-blue-600 m-0">
-          {salaryType === 'net' ? 'Gross Salary' : 'Net Salary'} ={' '}
-          {formatNumber(salaryType === 'net' ? parseFloat(totalGross || 0) : parseFloat(netPay || 0))}{' '}
-          {currencyType === 'usd' ? 'USD' : 'TZS'}
-        </h4>
-      </div>
-    </div>
-  </div>
+                    <div
+                        id="result"
+                        className="relative w-full p-2 text-center bg-white"
+                    >
+                        {/* Header */}
+                        {/* <div className="result-section mb-7  border-b border-black">
+                            <div className="result-detail" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                                <div>
+                                    <a href="/home">
+                                        <img height="45px" width="45" src="/logo.png" alt="eKazi" />
+                                    </a>
+                                </div>
+                                <h4 style={{ color: '#D36314', margin: 0, fontSize: '15px', alignItems: 'center' }}>
+                                    SALARY CALCULATOR
+                                </h4>
+                            </div>
+                        </div> */}
+                        {/* Salary Type Result */}
+                        <div className="result-section mb-2">
+                            <div className="result-detail flex justify-end items-center">
+                                <div className="text-right">
+                                    <h4 className="text-[14px] md:text-[16px] text-blue-600 m-0">
+                                        {salaryType === 'net' ? 'Gross Salary' : 'Net Salary'} ={' '}
+                                        {formatNumber(salaryType === 'net' ? parseFloat(totalGross || 0) : parseFloat(netPay || 0))}{' '}
+                                        {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
 
-  {/* Earnings Section */}
-  <div className="result-section mb-1.5">
-    <div className="result-detail full-line flex justify-between w-full border-t border-b border-black py-1 font-bold text-[12px] md:text-[14px]">
-      <h4 className="m-0 text-[15px] md:text-[16px]">EARNING</h4>
-      <span>AMOUNT</span>
-    </div>
-    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-      <span>Basic</span>
-      <span>
-        {formatNumber(parseFloat(basicPay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-      <span>Total Allowances</span>
-      <span>
-        {formatNumber(parseFloat(totalAllowance || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-  </div>
+                        {/* Earnings Section */}
+                        <div className="result-section mb-1.5">
+                            <div className="result-detail full-line flex justify-between w-full border-t border-b border-black py-1 font-bold text-[12px] md:text-[14px]">
+                                <h4 className="m-0 text-[15px] md:text-[16px]">EARNING</h4>
+                                <span>AMOUNT</span>
+                            </div>
+                            <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                <span>Basic</span>
+                                <span>
+                                    {formatNumber(parseFloat(basicPay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                            <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                <span>Total Allowances</span>
+                                <span>
+                                    {formatNumber(parseFloat(totalAllowance || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                        </div>
 
-  {/* Gross Earnings */}
-  <div className="result-section mb-1.5">
-    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-      <h4 className="font-bold text-[12px] md:text-[14px] m-0">Gross Earning</h4>
-      <span>
-        {formatNumber(parseFloat(totalGross || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-  </div>
+                        {/* Gross Earnings */}
+                        <div className="result-section mb-1.5">
+                            <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                <h4 className="font-bold text-[12px] md:text-[14px] m-0">Gross Earning</h4>
+                                <span>
+                                    {formatNumber(parseFloat(totalGross || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                        </div>
 
-  {/* Deductions */}
-  <div className="result-section mb-1.5">
-    <div className="result-detail full-line flex justify-between w-full border-t border-b border-black py-1 font-bold text-[12px] md:text-[14px]">
-      <h4 className="m-0 text-[15px] md:text-[16px]">DEDUCTIONS</h4>
-      <span>AMOUNT</span>
-    </div>
-    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-      <span>SSC (Employee)</span>
-      <span>
-        {formatNumber(parseFloat(sscEmployee || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-      <span>PAYE</span>
-      <span>
-        {formatNumber(parseFloat(pay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-  </div>
+                        {/* Deductions */}
+                        <div className="result-section mb-1.5">
+                            <div className="result-detail full-line flex justify-between w-full border-t border-b border-black py-1 font-bold text-[12px] md:text-[14px]">
+                                <h4 className="m-0 text-[15px] md:text-[16px]">DEDUCTIONS</h4>
+                                <span>AMOUNT</span>
+                            </div>
+                            <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                <span>SSC (Employee)</span>
+                                <span>
+                                    {formatNumber(parseFloat(sscEmployee || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                            <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                <span>PAYE</span>
+                                <span>
+                                    {formatNumber(parseFloat(pay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                        </div>
 
-  {/* Total Deductions */}
-  <div className="result-section mb-1.5">
-    <div className="result-detail full-line flex justify-between w-full border-t border-b-2 border-black border-dotted py-1 font-bold text-[12px] md:text-[14px]">
-      <h4 className="m-0 text-[15px] md:text-[16px]">TOTAL DEDUCTIONS</h4>
-      <span>
-        {formatNumber(parseFloat(sscEmployee || 0) + parseFloat(pay || 0))}{' '}
-        {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-  </div>
+                        {/* Total Deductions */}
+                        <div className="result-section mb-1.5">
+                            <div className="result-detail full-line flex justify-between w-full border-t border-b-2 border-black border-dotted py-1 font-bold text-[12px] md:text-[14px]">
+                                <h4 className="m-0 text-[15px] md:text-[16px]">TOTAL DEDUCTIONS</h4>
+                                <span>
+                                    {formatNumber(parseFloat(sscEmployee || 0) + parseFloat(pay || 0))}{' '}
+                                    {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                        </div>
 
-  {/* Net Salary */}
-  <div className="result-section mb-1.5">
-    <div className="result-detail full-line flex justify-between w-full border-t-2 border-b-[3px] border-black border-double py-1 font-bold text-[12px] md:text-[14px]">
-      <h4 className="m-0 text-[15px] md:text-[16px]">
-        NET PAY <span className="font-normal text-[14px] md:text-[16px]">(Gross Earnings - Total Deductions)</span>
-      </h4>
-      <span>
-        {formatNumber(parseFloat(netPay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
-      </span>
-    </div>
-  </div>
+                        {/* Net Salary */}
+                        <div className="result-section mb-1.5">
+                            <div className="result-detail full-line flex justify-between w-full border-t-2 border-b-[3px] border-black border-double py-1 font-bold text-[12px] md:text-[14px]">
+                                <h4 className="m-0 text-[15px] md:text-[16px]">
+                                    NET PAY <span className="font-normal text-[14px] md:text-[16px]">(Gross Earnings - Total Deductions)</span>
+                                </h4>
+                                <span>
+                                    {formatNumber(parseFloat(netPay || 0))} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                </span>
+                            </div>
+                        </div>
 
-  <p className="text-center text-[11px] md:text-[13px] my-1">
-    - System generated salary calculation - by eKazi
-  </p>
-</div>
+                        {/* Company Cost Section */}
+                        {showCompanyCost && (
+                            <>
+                                <div className="result-section mb-1.5 mt-4">
+                                    <div className="result-detail full-line flex justify-between w-full border-t border-b border-black py-1 font-bold text-[12px] md:text-[14px]">
+                                        <h4 className="m-0 text-[15px] md:text-[16px]"> TOTOAL COST TO COMPANY </h4>
+                                        <span>AMOUNT</span>
+                                    </div>
+                                    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                        <span>Gross Salary</span>
+                                        <span>
+                                            {formatNumber(calculateCompanyCost()?.grossSalary)} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                        </span>
+                                    </div>
+                                    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                        <span>SSC</span>
+                                        <span>
+                                            {formatNumber(calculateCompanyCost()?.employerSSC)} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                        </span>
+                                    </div>
+                                    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                        <span>SDL (3.5%)</span>
+                                        <span>
+                                            {formatNumber(calculateCompanyCost()?.sdl)} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                        </span>
+                                    </div>
+                                    <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
+                                        <span>WCF (0.5%)</span>
+                                        <span>
+                                            {formatNumber(calculateCompanyCost()?.wcf)} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                        </span>
+                                    </div>
+                                </div>
 
+                                {/* Grand Total */}
+                                <div className="result-section mb-1.5">
+                                    <div className="result-detail full-line flex justify-between w-full border-t-2 border-b-[3px] border-black border-double py-1 font-bold text-[12px] md:text-[14px]">
+                                        <h4 className="m-0 text-[15px] md:text-[16px]">
+                                            GRAND TOTAL
+                                        </h4>
+                                        <span>
+                                            {formatNumber(calculateCompanyCost()?.grandTotal)} {currencyType === 'usd' ? 'USD' : 'TZS'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </>
+                        )}
 
+                        <p className="text-center text-[11px] md:text-[13px] my-1">
+                            - salary calculation generated  - by eKazi
+                        </p>
+                    </div>
+                    {/* Company Cost Button */}
+                    <div className="result-section mb-1.5 no-print">
+                        <button
+                            onClick={() => setShowCompanyCost(!showCompanyCost)}
+                            className="flex items-center justify-center w-full py-2 bg-gray-100 hover:bg-gray-200 text-[14px] md:text-[16px] font-bold gap-2"
+                        >
+                            {showCompanyCost ? (
+                                <>
+                                    <span>Hide Total Cost To Company</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                    </svg>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Show Total Cost To Company</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </div>
 
                     {/* Action Buttons */}
                     <div
@@ -474,7 +609,7 @@ const SalaryEstimation = () => {
 
                             <p style={{ margin: 0, color: '#D36314', fontSize: '18px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <FaUser style={{ color: '#D36314', fontSize: '14px' }} />
-                                <span style={{ color: '#007bff' }}>{formatLargeNumber(usageCount)}</span>
+                                <span style={{ color: '#007bff' }}>{formatLargeNumber(usageCount.no_uses)}</span>
                             </p>
                         </div>
 
@@ -555,34 +690,34 @@ const SalaryEstimation = () => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>0 - {taxData.payone_reduction.toLocaleString()}</td>
-                                <td>0 - {(taxData.payone_reduction * 12).toLocaleString()}</td>
+                                <td>0 - {taxData.payone_reduction?.toLocaleString() }</td>
+                                <td>0 - {(taxData.payone_reduction * 12)?.toLocaleString() }</td>
                                 <td>0%</td>
                                 <td>0</td>
                             </tr>
                             <tr>
-                                <td>{(taxData.payone_reduction + 1).toLocaleString()} - {taxData.paytwo_reduction.toLocaleString()}</td>
-                                <td>{(taxData.payone_reduction * 12 + 1).toLocaleString()} - {(taxData.paytwo_reduction * 12).toLocaleString()}</td>
-                                <td>{(taxData.payone_percentage * 100).toFixed(0)}%</td>
+                                <td>{(taxData.payone_reduction + 1)?.toLocaleString()} - {taxData.paytwo_reduction?.toLocaleString()}</td>
+                                <td>{(taxData.payone_reduction * 12 + 1)?.toLocaleString()} - {(taxData.paytwo_reduction * 12)?.toLocaleString()}</td>
+                                <td>{(taxData.payone_percentage * 100)?.toFixed(0)}%</td>
                                 <td>0</td>
                             </tr>
                             <tr>
-                                <td>{(taxData.paytwo_reduction + 1).toLocaleString()} - {taxData.paythree_reduction.toLocaleString()}</td>
-                                <td>{(taxData.paytwo_reduction * 12 + 1).toLocaleString()} - {(taxData.paythree_reduction * 12).toLocaleString()}</td>
-                                <td>{(taxData.paytwo_percentage * 100).toFixed(0)}%</td>
-                                <td>{taxData.paytwo_addition.toLocaleString()}</td>
+                                <td>{(taxData.paytwo_reduction + 1)?.toLocaleString()} - {taxData.paythree_reduction?.toLocaleString()}</td>
+                                <td>{(taxData.paytwo_reduction * 12 + 1)?.toLocaleString()} - {(taxData.paythree_reduction * 12)?.toLocaleString()}</td>
+                                <td>{(taxData.paytwo_percentage * 100)?.toFixed(0)}%</td>
+                                <td>{taxData.paytwo_addition?.toLocaleString()}</td>
                             </tr>
                             <tr>
-                                <td>{(taxData.paythree_reduction + 1).toLocaleString()} - {taxData.payfour_reduction.toLocaleString()}</td>
-                                <td>{(taxData.paythree_reduction * 12 + 1).toLocaleString()} - {(taxData.payfour_reduction * 12).toLocaleString()}</td>
+                                <td>{(taxData.paythree_reduction + 1)?.toLocaleString()} - {taxData.payfour_reduction?.toLocaleString()}</td>
+                                <td>{(taxData.paythree_reduction * 12 + 1)?.toLocaleString()} - {(taxData.payfour_reduction * 12)?.toLocaleString()}</td>
                                 <td>{(taxData.paythree_percentage * 100).toFixed(0)}%</td>
-                                <td>{taxData.paythree_addition.toLocaleString()}</td>
+                                <td>{taxData.paythree_addition?.toLocaleString()}</td>
                             </tr>
                             <tr>
-                                <td>{(taxData.payfour_reduction + 1).toLocaleString()} and above</td>
-                                <td>{(taxData.payfour_reduction * 12 + 1).toLocaleString()} and above</td>
-                                <td>{(taxData.payfour_percentage * 100).toFixed(0)}%</td>
-                                <td>{taxData.payfour_addition.toLocaleString()}</td>
+                                <td>{(taxData.payfour_reduction + 1)?.toLocaleString()} and above</td>
+                                <td>{(taxData.payfour_reduction * 12 + 1)?.toLocaleString()} and above</td>
+                                <td>{(taxData.payfour_percentage * 100)?.toFixed(0)}%</td>
+                                <td>{taxData.payfour_addition?.toLocaleString()}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -606,7 +741,9 @@ const SalaryEstimation = () => {
                     <Button variant="secondary" onClick={() => setShowTaxModal(false)}>Close</Button>
                 </Modal.Footer>
             </Modal>
+
         </div>
+
     );
 };
 
