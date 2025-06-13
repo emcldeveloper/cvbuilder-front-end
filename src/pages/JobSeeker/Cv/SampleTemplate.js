@@ -6,9 +6,11 @@ import {
     Card,
     Modal,
     Button,
-    Badge
+    Badge,
+    
 } from 'react-bootstrap';
-import { FaEye, FaFileAlt } from "react-icons/fa";
+ 
+import { FaFileAlt, FaEye, FaCrown } from 'react-icons/fa';
 
 // Import your templates
 import Template1 from "../../../templates/template1";
@@ -53,22 +55,85 @@ const SampleTemplate = () => {
     };
 
     const selectedTemplateData = templates.find(template => template.id === selectedTemplate);
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <JobSeekerLayout>
             <Container className="py-4">
                 <Row className="mb-4">
-                    <Col>
-                        <h4 className="d-flex align-items-center gap-3">
-                            <FaFileAlt className="text-primary" />
-                            <span className="fw-bold">Select Your CV Template</span>
-                            <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
-                                <FaEye className="me-1" />
-                                {totalview}
-                            </Badge>
-                        </h4>
-                    </Col>
-                </Row>
+    <Col>
+        <div className="d-flex justify-content-between align-items-center">
+            <h4 className="d-flex align-items-center gap-3 mb-0">
+                <FaFileAlt className="text-primary" style={{ fontSize: '1.5rem' }} />
+                <span className="fw-bold">Select Your CV Template</span>
+                <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
+                    <FaEye className="me-1" />
+                    {totalview}
+                </Badge>
+            </h4>
+            
+            {/* CV Subscription Button */}
+            <Button 
+                variant="outline-primary" 
+                className="d-flex align-items-center gap-2"
+                onClick={() => setShowModal(true)}
+            >
+                <FaCrown className="text-warning" />
+                CV Subscription
+            </Button>
+        </div>
+    </Col>
+</Row>
+
+{/* Modal for CV Subscription */}
+<Modal show={showModal} onHide={() => setShowModal(false)}>
+    <Modal.Header closeButton>
+        <Modal.Title className="d-flex align-items-center gap-2">
+            <FaCrown className="text-warning" />
+            CV Subscription Plans
+        </Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        <div className="text-center">
+            <h5>Choose the plan that works for you</h5>
+            <div className="d-flex justify-content-center gap-3 mt-4">
+                <Card style={{ width: '18rem' }} className="text-center">
+                    <Card.Header>Basic</Card.Header>
+                    <Card.Body>
+                        <Card.Title>$9.99/month</Card.Title>
+                        <Card.Text>
+                            <ul className="list-unstyled">
+                                <li>5 CV Templates</li>
+                                <li>Basic Customization</li>
+                                <li>PDF Downloads</li>
+                            </ul>
+                        </Card.Text>
+                        <Button variant="primary">Select</Button>
+                    </Card.Body>
+                </Card>
+                <Card style={{ width: '18rem' }} className="text-center border-primary">
+                    <Card.Header className="bg-primary text-white">Premium</Card.Header>
+                    <Card.Body>
+                        <Card.Title>$19.99/month</Card.Title>
+                        <Card.Text>
+                            <ul className="list-unstyled">
+                                <li>Unlimited Templates</li>
+                                <li>Advanced Customization</li>
+                                <li>Priority Support</li>
+                            </ul>
+                        </Card.Text>
+                        <Button variant="primary">Select</Button>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+        </Button>
+    </Modal.Footer>
+</Modal>
 
                 <Row xs={2} md={3} lg={4} className="g-4">
                     {templates.map((template) => {
