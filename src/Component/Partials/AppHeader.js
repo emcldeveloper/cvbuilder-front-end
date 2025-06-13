@@ -53,7 +53,7 @@ const AppHeader = () => {
               <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
               <Nav.Link href="/cv-builder" className="text-primary">CV Builder</Nav.Link>
               <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
-              <Nav.Link href="/pricing" className="text-primary">Pricing</Nav.Link>
+              <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
             </Nav>
 
             <Nav className="ms-auto align-items-center">

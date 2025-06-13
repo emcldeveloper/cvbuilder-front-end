@@ -167,20 +167,7 @@ const FilterJobs = ({
           </Dropdown>
         </Col>
 
-        {/* <Col md={3} className="mb-3">
-          <Dropdown>
-            <Dropdown.Toggle variant="outline-primary" className="w-100">
-              {selectedSubLocation || 'Select Sub-location'}
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="py-3 px-3 shadow-lg">
-              {subLocationOptions.map((sub, index) => (
-                <Dropdown.Item key={index} onClick={() => setSelectedSubLocation(sub)}>
-                  <span className="text-dark">{sub}</span>
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col> */}
+       
       </Row>
     </Container>
   );
