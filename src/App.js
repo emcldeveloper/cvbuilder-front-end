@@ -60,7 +60,7 @@ function App() {
           <Route path="/featured-jobseeker" element={<AllFeaturedJobSeeker/>}/>
 
           {/* Jobseeker dashboard */}
-           {/* <Route element={<RequireVerification />}> */}
+           <Route element={<RequireVerification />}>
               <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
           <Route path="jobseeker/My-application" element={<AppliedJob />} />
           <Route path="jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
@@ -74,7 +74,7 @@ function App() {
           <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
           <Route path="jobseeker/cover-letter" element={<CoverLetter />} />
           <Route path="jobseeker/my-resume" element={<Mycv />} />
-          {/* </Route> */}
+          </Route>
         
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}

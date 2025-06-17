@@ -96,5 +96,11 @@ export const getJobTypes = () =>
     data: res.data.type
   }));
 
+  export const getPackagePrice = () =>
+  fetchWithCache('packages', `${UNIVERSAL_API}/employer/packages`, res => ({
+    data: res.data.data
+  }));
+
+
 
 
