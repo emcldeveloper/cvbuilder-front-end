@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getJobCategorySummary } from '../../../Api/Job/JobCategoriesApi';
 import { Link } from 'react-router-dom';
 
-// Helper: Get cached categories from localStorage
 const getCachedCategories = () => {
   const cached = localStorage.getItem('categories');
   return cached ? JSON.parse(cached) : null;
 };
 
-// Helper: Set categories in localStorage
 const setCachedCategories = (data) => {
   localStorage.setItem('categories', JSON.stringify(data));
 };
@@ -52,24 +50,20 @@ const Industries = () => {
       ) : (
         <div className="row">
           {categories.map((category) => (
-            <div key={category.category_id} className="col-md-4 mb-3">
-              <ul className="list-group">
-                <li className="list-group-item d-flex align-items-center">
-                  <span className="badge bg-primary rounded-pill">
-                    {category.total_positions}
-                  </span>
-                  <Link
-                    to={`/category/${category.category_id}`}
-                    className="text-decoration-none text-dark ms-2"
-                  >
-                    {category.category_name
-                      .toLowerCase()
-                      .split(' ')
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' ')}
-                  </Link>
-                </li>
-              </ul>
+            <div key={category.category_id} className="col-md-4 mb-3 d-flex align-items-center">
+              <span className="badge bg-primary rounded-pill me-2">
+                {category.total_positions}
+              </span>
+              <Link
+                to={`/category/${category.category_id}`}
+                className="text-decoration-none text-dark"
+              >
+                {category.category_name
+                  .toLowerCase()
+                  .split(' ')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
+              </Link>
             </div>
           ))}
         </div>
