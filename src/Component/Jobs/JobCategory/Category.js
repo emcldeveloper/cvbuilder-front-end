@@ -49,8 +49,11 @@ const Category = () => {
       ) : (
         <div className="row">
           {industryCounts.map((industry) => (
-            <div key={industry.industry_id} className="col-md-4 mb-3 d-flex align-items-center">
-              <span className="badge bg-primary rounded-pill me-2">
+            <div
+              key={industry.industry_id}
+              className="col-md-4 mb-3 d-flex align-items-center"
+            >
+              <span className="badge bg-primary rounded-pill me-3">
                 {industry.job_count}
               </span>
               <Link

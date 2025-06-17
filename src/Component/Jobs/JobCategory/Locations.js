@@ -50,8 +50,11 @@ const Locations = () => {
       ) : (
         <div className="row">
           {regions.map((region) => (
-            <div key={region.region_id} className="col-md-4 mb-3 d-flex align-items-center">
-              <span className="badge bg-primary rounded-pill me-2">
+            <div
+              key={region.region_id}
+              className="col-md-4 mb-3 d-flex align-items-center"
+            >
+              <span className="badge bg-primary rounded-pill me-3">
                 {region.total_positions}
               </span>
               <Link
