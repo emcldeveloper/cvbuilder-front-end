@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Container,
     Row,
@@ -7,10 +7,12 @@ import {
     Modal,
     Button,
     Badge,
-    
+    Form,
+
 } from 'react-bootstrap';
- 
-import { FaFileAlt, FaEye, FaCrown } from 'react-icons/fa';
+
+import { FaFileAlt, FaEye, FaCrown, FaWhatsapp } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 // Import your templates
 import Template1 from "../../../templates/template1";
@@ -24,6 +26,8 @@ import Template8 from "../../../templates/template8";
 import Template9 from "../../../templates/template9";
 import Template10 from "../../../templates/template10";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
+import { CvApi } from "../../../Api/Jobseeker/CvApi";
+import { Api } from "@mui/icons-material";
 
 const SampleTemplate = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -56,84 +60,240 @@ const SampleTemplate = () => {
 
     const selectedTemplateData = templates.find(template => template.id === selectedTemplate);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [plansubscription, setPlanSubscriptions] = useState([]);
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
+    const [codeNumber, setCodeNumber] = useState('');
+    useEffect(() => {
+        const myPlansubscription = async () => {
+            try {
+                setLoading(true);
+                const response = await CvApi.getsubscriptionPlan()
+                console.log('my plan subscription', response);
+                setPlanSubscriptions(response); // response is already the data
+                setError(null);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching  my plan scubsription:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        myPlansubscription();
+    }, []);
+    console.log('plan subscription is :', plansubscription);
+    const handleSelectPlan = (plan) => {
+        setSelectedPlan(plan);
+        setShowModal(false);
+        setShowInvoiceModal(true);
+    };
+    const uuid = 48;
+    const paymentData = {
+        referenceNumber: codeNumber,
+        applicantId: uuid,
+        subscriptionId: selectedPlan?.id,
+    };
+    const handlePaymentSubmit = async (e) => {  // Added async here
+        e.preventDefault();
+        try {
+            const response = await CvApi.createsubscription(paymentData);
+       
+            if (response.status === 200) {
+                           console.log('data sub', response);
+                           Swal.fire({
+                               title: 'Success!',
+                               text: response.data.success,
+                               icon: 'success',
+                               confirmButtonText: 'OK'
+                           });
+           
+                           window.location.reload();
+                       } else {
+                          console.error("Error creating subscription:");
+                       }
+            
+        } catch (error) {
+            console.error("Error creating subscription:", error);
+            // Handle error (e.g., show error message to user)
+        }
+    };
 
     return (
         <JobSeekerLayout>
             <Container className="py-4">
                 <Row className="mb-4">
-    <Col>
-        <div className="d-flex justify-content-between align-items-center">
-            <h4 className="d-flex align-items-center gap-3 mb-0">
-                <FaFileAlt className="text-primary" style={{ fontSize: '1.5rem' }} />
-                <span className="fw-bold">Select Your CV Template</span>
-                <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
-                    <FaEye className="me-1" />
-                    {totalview}
-                </Badge>
-            </h4>
-            
-            {/* CV Subscription Button */}
-            <Button 
-                variant="outline-primary" 
-                className="d-flex align-items-center gap-2"
-                onClick={() => setShowModal(true)}
-            >
-                <FaCrown className="text-warning" />
-                CV Subscription
-            </Button>
-        </div>
-    </Col>
-</Row>
+                    <Col>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <h4 className="d-flex align-items-center gap-3 mb-0">
+                                <FaFileAlt className="text-primary" style={{ fontSize: '1.5rem' }} />
+                                <span className="fw-bold">Select Your CV Template</span>
+                                <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
+                                    <FaEye className="me-1" />
+                                    {totalview}
+                                </Badge>
+                            </h4>
 
-{/* Modal for CV Subscription */}
-<Modal show={showModal} onHide={() => setShowModal(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title className="d-flex align-items-center gap-2">
-            <FaCrown className="text-warning" />
-            CV Subscription Plans
-        </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <div className="text-center">
-            <h5>Choose the plan that works for you</h5>
-            <div className="d-flex justify-content-center gap-3 mt-4">
-                <Card style={{ width: '18rem' }} className="text-center">
-                    <Card.Header>Basic</Card.Header>
-                    <Card.Body>
-                        <Card.Title>$9.99/month</Card.Title>
-                        <Card.Text>
-                            <ul className="list-unstyled">
-                                <li>5 CV Templates</li>
-                                <li>Basic Customization</li>
-                                <li>PDF Downloads</li>
-                            </ul>
-                        </Card.Text>
-                        <Button variant="primary">Select</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }} className="text-center border-primary">
-                    <Card.Header className="bg-primary text-white">Premium</Card.Header>
-                    <Card.Body>
-                        <Card.Title>$19.99/month</Card.Title>
-                        <Card.Text>
-                            <ul className="list-unstyled">
-                                <li>Unlimited Templates</li>
-                                <li>Advanced Customization</li>
-                                <li>Priority Support</li>
-                            </ul>
-                        </Card.Text>
-                        <Button variant="primary">Select</Button>
-                    </Card.Body>
-                </Card>
-            </div>
-        </div>
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
-        </Button>
-    </Modal.Footer>
-</Modal>
+                            {/* CV Subscription Button */}
+                            <Button
+                                variant="outline-primary"
+                                className="d-flex align-items-center gap-2"
+                                onClick={() => setShowModal(true)}
+                            >
+                                <FaCrown className="text-warning" />
+                                CV Subscription
+                            </Button>
+                        </div>
+                    </Col>
+                </Row>
+
+                {/* Modal for CV Subscription */}
+                <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
+                    <Modal.Header closeButton className="border-0 pb-0">
+                        <Modal.Title className="d-flex align-items-center gap-3">
+                            <FaCrown className="text-warning" />
+                            <span className="fw-bold">CV Subscription Plans</span>
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="pt-0">
+                        <div className="text-center mb-4">
+                            <h5 className="text-muted">Choose the plan that works for you</h5>
+                        </div>
+
+                        <div className="row g-4 justify-content-center">
+                            {plansubscription?.map((subscription, index) => (
+                                <div key={index} className="col-md-6 col-lg-4">
+                                    <Card className={`h-100 border-${index === 1 ? 'primary' : 'light'} shadow-sm`}>
+                                        <Card.Header className={`bg-${index === 1 ? 'primary' : 'light'} text-${index === 1 ? 'white' : 'dark'} py-3`}>
+                                            <h5 className="mb-0 fw-bold">{subscription.name} Subscription</h5>
+                                            {index === 1 && <span className="badge bg-warning text-dark mt-2">Most Popular</span>}
+                                        </Card.Header>
+                                        <Card.Body className="py-4">
+                                            <div className="mb-4">
+                                                <span className="fs-4 fw-bold">{subscription.price?.toLocaleString('en-US')} Tsh</span>
+                                                <span className="text-muted">/month</span>
+                                                <p className="small text-muted mb-0">{subscription.duration}-day billing cycle</p>
+                                            </div>
+
+                                            <ul className="list-unstyled text-start mb-4">
+                                                <li className="mb-3 d-flex align-items-start">
+                                                    <span className="me-2 text-success">✓</span>
+                                                    <span>Manage up to {subscription.cv_limit} CVs</span>
+                                                </li>
+                                                <li className="mb-3 d-flex align-items-start">
+                                                    <span className="me-2 text-success">✓</span>
+                                                    <span>{subscription.description}</span>
+                                                </li>
+                                                <li className="mb-3 d-flex align-items-start">
+                                                    <span className="me-2 text-success">✓</span>
+                                                    <span>{subscription.name} templates</span>
+                                                </li>
+                                                <li className="mb-3 d-flex align-items-start">
+                                                    <span className="me-2 text-success">✓</span>
+                                                    <span>{subscription.cv_limit} PDF downloads</span>
+                                                </li>
+                                                <li className="d-flex align-items-start">
+                                                    <span className="me-2 text-success">✓</span>
+                                                    <span>Priority support</span>
+                                                </li>
+                                            </ul>
+
+                                            <Button
+                                                variant={index === 1 ? "primary" : "outline-primary"}
+                                                size="lg"
+                                                className="w-100 mt-auto"
+                                                onClick={() => handleSelectPlan(subscription)}
+                                            >
+                                                {index === 1 ? "Get Premium" : "Get Started"}
+                                            </Button>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+                            ))}
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className="border-0">
+                        <small className="text-muted me-auto">* Cancel anytime with 30-day money back guarantee</small>
+                        <Button variant="light" onClick={() => setShowModal(false)}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                {/* Invoice/Payment Modal */}
+                <Modal show={showInvoiceModal} onHide={() => setShowInvoiceModal(false)} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Payment Instructions</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedPlan && (
+                            <>
+                                <div className="mb-4">
+                                    <h5>Invoice for {selectedPlan.name} Plan</h5>
+                                    <p className="mb-1">Amount: <strong>{selectedPlan.price?.toLocaleString('en-US')}  Tsh</strong></p>
+                                    <p className="mb-1">Duration: {selectedPlan.duration} days</p>
+                                    <p>CV Limit: {selectedPlan.cv_limit}</p>
+                                </div>
+
+                                <div className="payment-instructions mb-4 p-3 bg-light rounded">
+                                    <h6 className="mb-3">Pay via Tigo Pesa:</h6>
+
+                                    {/* Tigo Lipa Number Image */}
+                                    <div className="payment-images-container mb-4">
+                                        <div className="d-flex flex-wrap justify-content-center align-items-center gap-4">
+                                            {/* First Image - Larger Size */}
+                                            <div className="text-center">
+                                                <img
+                                                    src="/lipa_no/lipa1.jpg"
+                                                    alt="Tigo Pesa Lipa Number"
+                                                    className="img-fluid rounded border shadow-sm"
+                                                    style={{ maxHeight: '250px', width: 'auto' }}
+                                                />
+                                                <p className="mt-2 small text-muted">Payment Number</p>
+                                            </div>
+
+                                            {/* Second Image - Larger Size */}
+                                            <div className="text-center">
+                                                <img
+                                                    src="/lipa_no/jinsi_ya_kulipa.jpg"
+                                                    alt="How to Pay via Tigo Pesa"
+                                                    className="img-fluid rounded border shadow-sm"
+                                                    style={{ maxHeight: '250px', width: 'auto' }}
+                                                />
+                                                <p className="mt-2 small text-muted">Payment Instructions</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-center mt-3 small text-muted">Scan or enter manually</p>
+                                    </div>
+
+                                    <div className="d-flex align-items-center justify-content-center mb-3">
+                                        <FaWhatsapp className="text-success me-2" size={20} />
+                                        <span>Send payment code via WhatsApp: +255 714 059 160</span>
+                                    </div>
+
+                                    <Form onSubmit={handlePaymentSubmit}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Enter Payment Code:</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter code from payment"
+                                                value={codeNumber}
+                                                onChange={(e) => setCodeNumber(e.target.value)}
+                                                required
+
+                                            />
+                                        </Form.Group>
+                                        <Button variant="primary" type="submit" className="w-100">
+                                            Submit Payment Verification
+                                        </Button>
+                                    </Form>
+                                </div>
+                            </>
+                        )}
+                    </Modal.Body>
+                </Modal>
 
                 <Row xs={2} md={3} lg={4} className="g-4">
                     {templates.map((template) => {
