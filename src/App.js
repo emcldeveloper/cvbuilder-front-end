@@ -32,11 +32,12 @@ import SalaryCalculator from './pages/TaxCalculator';
 
 import NotVerifiedPage from './pages/Auth/NotVerifiedPage';
 import RequireVerification from './Auth/RequireVerification';
-import AboutPage from './pages/AboutPage';
 import IntroductionDetails from './pages/introductionDetails';
 import IntroductionData from './pages/JobSeeker/Cv/Introduction';
 import ObjectDetail from './pages/JobSeeker/Cv/Objective';
 import EducationCv from './pages/JobSeeker/Cv/Education';
+ import AboutPage from './pages/AboutPage';
+ import PricePage from './pages/PricePage';
 
 function App() {
   return (
@@ -56,7 +57,13 @@ function App() {
           <Route path="/jobs" element={<FindJobs />} />
           <Route path="/employers" element={<Employer />} />
           <Route path="/employer/details" element={<EmployerDetails />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/jobs" element={<FindJobs/>}/>
+          <Route path="/employers" element={<Employer/>}/>
+          <Route path="/employer/details" element={<EmployerDetails/>}/>
+          <Route path="/about" element={<AboutPage/>}/>
+          <Route path="/pricelists" element={<PricePage/>}/>
+
+          
 
           {/* Featured Profile will be here */}
           {/* <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/> */}

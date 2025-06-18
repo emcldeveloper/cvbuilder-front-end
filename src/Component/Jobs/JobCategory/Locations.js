@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getJobCountByRegion } from '../../../Api/Job/JobCategoriesApi';
 import { Link } from 'react-router-dom';
 
-// Helper: Get cached data
 const getCachedRegions = () => {
   const cached = localStorage.getItem('regions');
   return cached ? JSON.parse(cached) : null;
 };
 
-// Helper: Set cache
 const setCachedRegions = (data) => {
   localStorage.setItem('regions', JSON.stringify(data));
 };
@@ -51,27 +49,30 @@ const Locations = () => {
         <p>No job locations found.</p>
       ) : (
         <div className="row">
-          {regions.map((region) => (
-            <div key={region.region_id} className="col-md-4 mb-3">
-              <ul className="list-group">
-                <li className="list-group-item d-flex align-items-center">
-                  <span className="badge bg-primary rounded-pill">
-                    {region.total_positions}
-                  </span>
-                  <Link
-                    to={`/location/${region.region_id}`}
-                    className="text-decoration-none text-dark ms-2"
-                  >
-                    {region.region_name
-                      .toLowerCase()
-                      .split(' ')
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' ')}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          ))}
+          {regions.map((region) => {
+            const formattedRegionName = region.region_name
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+
+            return (
+              <div
+                key={region.region_id}
+                className="col-md-4 mb-3 d-flex align-items-center"
+              >
+                <span className="badge bg-primary rounded-pill me-3">
+                  {region.total_positions}
+                </span>
+                <Link
+                  to={`/jobs?region=${(region.id)}`}
+                  className="text-decoration-none text-dark"
+                >
+                  {formattedRegionName}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
