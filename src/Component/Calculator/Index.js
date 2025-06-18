@@ -521,7 +521,7 @@ const SalaryEstimation = () => {
                                         </span>
                                     </div>
                                     <div className="result-detail flex justify-between text-[12px] md:text-[14px]">
-                                        <span>SSC</span>
+                                        <span>SSC (Employer)</span>
                                         <span>
                                             {formatNumber(calculateCompanyCost()?.employerSSC)} {currencyType === 'usd' ? 'USD' : 'TZS'}
                                         </span>

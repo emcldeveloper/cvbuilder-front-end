@@ -15,6 +15,12 @@ const api = axios.create({
       'Content-Type': 'multipart/form-data',  
     },
 });
+ const api2 = axios.create({
+   baseURL: `${API_BASE_URL}`, 
+   headers: {
+      'Content-Type': 'multipart/form-data',  
+    },
+});
  
  
 export const CvApi = {
@@ -39,6 +45,17 @@ export const CvApi = {
       throw error.response?.data?.message || error.message;
     }
   },
+
+    getCvprofile: async (uuid) => {
+    try {
+        const response = await api2.get(`/cv/cv_builder/${uuid}`);
+
+      return response
+    } catch (error) {
+      throw error.response?.data?.message || error.message;
+    }
+  },
+ 
  
 };
 

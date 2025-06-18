@@ -9,13 +9,34 @@ import axios from "axios";
 import HideInfo from '../layouts/useHideFields';
 
 const IntroductionDetails = () => {
-  const { currentStep, setCurrentStep, originalDetails, candidate, setCandidate } = useContext(StepsContext)
-  const { uuid, template } = useParams()
-
+  // const {originalDetails, candidate, setCandidate } = useContext(StepsContext)
+  // const { uuid, template } = useParams()
+    const [originalDetails, setOriginalDetails] = useState(null)
+ const candidate=originalDetails;
+ const uuid=48;
   const navigate = useNavigate();
-  useEffect(() => {
-    setCurrentStep(2)
-  }, [])
+      useEffect(() => {
+        console.log(uuid);
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
+
+            if (response != null) {
+                const data = response.data.data
+                 console.log("all data",data);
+                setOriginalDetails(data);
+                // checkIfExists({ uuid }).then((value) => {
+                //     // if(value == false){
+                //     //     setDoc(doc(collection(firestore,"apis"),`${uuid}`),data) 
+                //     // }
+                // });
+            }
+        }).catch((error) => {
+            console.log(error);
+            throw error;
+        })
+    }, [])
+  // useEffect(() => {
+  //   setCurrentStep(2)
+  // }, [])
   // const [NameApplicant, setNameApplicant] = useState(
   //   originalDetails?.applicant_profile[0].first_name || ''
   // );
@@ -382,11 +403,11 @@ const IntroductionDetails = () => {
             {/* Prev Button */}
             <button
               type="button"
-              onClick={() => {
-                console.log("Prev clicked");
-                navigate(-1);
-                setCurrentStep(currentStep - 1);
-              }}
+              // onClick={() => {
+              //   console.log("Prev clicked");
+              //   navigate(-1);
+              //   setCurrentStep(currentStep - 1);
+              // }}
               className="w-full sm:w-auto text-gray-700 font-semibold hover:text-primary transition-all"
             >
               ← Prev
@@ -395,11 +416,11 @@ const IntroductionDetails = () => {
             {/* Continue Button */}
             <button
               type="button"
-              onClick={() => {
-                console.log("Continue clicked");
-                navigate(`/professional_summary/${uuid}/${template}`);
-                setCurrentStep(currentStep + 1);
-              }}
+              // onClick={() => {
+              //   console.log("Continue clicked");
+              //   navigate(`/professional_summary/${uuid}/${template}`);
+              //   setCurrentStep(currentStep + 1);
+              // }}
               className="w-full sm:w-auto py-3 px-6 bg-primary text-white font-bold rounded-full hover:scale-105 transition-all"
             >
               Continue

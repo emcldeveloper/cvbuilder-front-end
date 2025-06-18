@@ -8,28 +8,38 @@ import moment from "moment";
 
 const Template3 = () => {
     const cv  = useRef()
-    const {uuid,template} = useParams()
-    const [candidate,setCandidate] = useState(null)
+    const {template} = useParams()
+  
     const [show, setShow] = useState(false);
     const [pages, setPages] = useState(false);
     const [experiences,setExperiences] = useState([])
   
     
    
-    useEffect(() => {
-      // Fetch data from the API
-      axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-        .then((response) => {
-          if (response?.data?.data) {
-            setCandidate(response.data.data);  // Set the candidate data from the API response
-            setShow(true);  // Display the content
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, [uuid]);
+    const [originalDetails, setOriginalDetails] = useState(null)
+    const candidate=originalDetails;
+    const uuid=48;
  
+      useEffect(() => {
+        console.log(uuid);
+        axios.get(`http://127.0.0.1:8000/api/cv/cv_builder/${uuid}`).then((response) => {
+
+            if (response != null) {
+                const data = response.data.data
+                 console.log("all data",data);
+                setOriginalDetails(data);
+                // checkIfExists({ uuid }).then((value) => {
+                //     // if(value == false){
+                //     //     setDoc(doc(collection(firestore,"apis"),`${uuid}`),data) 
+                //     // }
+                // });
+            }
+        }).catch((error) => {
+            console.log(error);
+            throw error;
+        })
+    }, [])
+ console.log("imefika pande zip",candidate)
   useEffect(()=>{
     if(candidate != null){
        candidate.experience.forEach(item=>{
@@ -49,7 +59,7 @@ const Template3 = () => {
       <div className="col-span-4 flex justify-center sm:justify-start">
         <img
           alt="profile image"
-          src={`https://ekazi.co.tz/${candidate?.applicant_profile?.[0]?.picture || 'default-profile.jpg'}`}
+          src={`http://127.0.0.1:8000/api/cv/cv_builder/${candidate?.applicant_profile?.[0]?.picture || 'default-profile.jpg'}`}
           className="w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-full"
         />
       </div>
