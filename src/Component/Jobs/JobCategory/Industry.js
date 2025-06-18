@@ -30,7 +30,7 @@ const Industries = () => {
             setCachedCategories(response);
           }
         } catch (error) {
-          console.error('Error fetching job category summary:', error);
+          console.error('Error fetching job categories:', error);
         } finally {
           setLoading(false);
         }
@@ -41,34 +41,38 @@ const Industries = () => {
 
   return (
     <div>
-      <h4 className="mb-3">Job Categories</h4>
+      <h4 className="mb-3">Jobs by Industry</h4>
 
       {loading ? (
         <p>Loading...</p>
       ) : categories.length === 0 ? (
-        <p>No job categories found.</p>
+        <p>No industries found.</p>
       ) : (
         <div className="row">
-          {categories.map((category) => (
-            <div
-              key={category.category_id}
-              className="col-md-4 mb-3 d-flex align-items-center"
-            >
-              <span className="badge bg-primary rounded-pill me-3">
-                {category.total_positions}
-              </span>
-              <Link
-                to={`/category/${category.category_id}`}
-                className="text-decoration-none text-dark"
+          {categories.map((category) => {
+            const formattedCategoryName = category.category_name
+              .toLowerCase()
+              .split(' ')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+
+            return (
+              <div
+                key={category.category_id}
+                className="col-md-4 mb-3 d-flex align-items-center"
               >
-                {category.category_name
-                  .toLowerCase()
-                  .split(' ')
-                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ')}
-              </Link>
-            </div>
-          ))}
+                <span className="badge bg-primary rounded-pill me-3">
+                  {category.total_positions}
+                </span>
+                <Link
+                  to={`/jobs?industry=${encodeURIComponent(category.category_name)}`}
+                  className="text-decoration-none text-dark"
+                >
+                  {formattedCategoryName}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -48,26 +48,30 @@ const Category = () => {
         <p>No industries found.</p>
       ) : (
         <div className="row">
-          {industryCounts.map((industry) => (
-            <div
-              key={industry.industry_id}
-              className="col-md-4 mb-3 d-flex align-items-center"
-            >
-              <span className="badge bg-primary rounded-pill me-3">
-                {industry.job_count}
-              </span>
-              <Link
-                to={`/industry/${industry.industry_id}`}
-                className="text-decoration-none text-dark"
+          {industryCounts.map((industry) => {
+            const formattedName = industry.industry_name
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+
+            return (
+              <div
+                key={industry.industry_id}
+                className="col-md-4 mb-3 d-flex align-items-center"
               >
-                {industry.industry_name
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ')}
-              </Link>
-            </div>
-          ))}
+                <span className="badge bg-primary rounded-pill me-3">
+                  {industry.job_count}
+                </span>
+                <Link
+                  to={`/jobs?industry=${encodeURIComponent(industry.industry_name)}`}
+                  className="text-decoration-none text-dark"
+                >
+                  {formattedName}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

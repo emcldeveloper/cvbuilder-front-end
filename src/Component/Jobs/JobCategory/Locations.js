@@ -49,26 +49,30 @@ const Locations = () => {
         <p>No job locations found.</p>
       ) : (
         <div className="row">
-          {regions.map((region) => (
-            <div
-              key={region.region_id}
-              className="col-md-4 mb-3 d-flex align-items-center"
-            >
-              <span className="badge bg-primary rounded-pill me-3">
-                {region.total_positions}
-              </span>
-              <Link
-                to={`/location/${region.region_id}`}
-                className="text-decoration-none text-dark"
+          {regions.map((region) => {
+            const formattedRegionName = region.region_name
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+
+            return (
+              <div
+                key={region.region_id}
+                className="col-md-4 mb-3 d-flex align-items-center"
               >
-                {region.region_name
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ')}
-              </Link>
-            </div>
-          ))}
+                <span className="badge bg-primary rounded-pill me-3">
+                  {region.total_positions}
+                </span>
+                <Link
+                  to={`/jobs?region=${encodeURIComponent(region.region_name)}`}
+                  className="text-decoration-none text-dark"
+                >
+                  {formattedRegionName}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
