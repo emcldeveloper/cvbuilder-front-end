@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Dropdown, Form, Row, Col,Container } from 'react-bootstrap';
+import { Dropdown, Form, Row, Col, Container } from 'react-bootstrap';
 import { UniversalContext } from '../../context/UniversalContext';
 
 const FilterJobs = ({
@@ -9,12 +9,14 @@ const FilterJobs = ({
   selectedCountry, setSelectedCountry,
   selectedRegion, setSelectedRegion,
   selectedSubLocation, setSelectedSubLocation,
-  selectedPositionLevel, setSelectedPositionLevel
+  selectedPositionLevel, setSelectedPositionLevel,
+  selectedIndustry, setSelectedIndustry // ✅ New
 }) => {
   const {
     types = [],
     countries = [],
     regions = [],
+    industries = [], // ✅ Pull from context
     positionLevels = []
   } = useContext(UniversalContext);
 
@@ -37,6 +39,14 @@ const FilterJobs = ({
     ...positionLevels.map(level => ({
       label: level?.position_name || 'Unknown',
       value: String(level?.id)
+    }))
+  ];
+
+  const industryOptions = [
+    { label: 'All Industries', value: '' },
+    ...industries.map(ind => ({
+      label: ind?.industry_name || 'Unknown',
+      value: String(ind?.id)
     }))
   ];
 
@@ -167,7 +177,24 @@ const FilterJobs = ({
           </Dropdown>
         </Col>
 
-       
+        {/* ✅ New Industry Filter */}
+        <Col md={3} className="mb-3">
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-primary" className="w-100">
+              {industryOptions.find(i => i.value === selectedIndustry)?.label || 'Select Industry'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="py-3 px-3 shadow-lg">
+              {industryOptions.map(option => (
+                <Dropdown.Item
+                  key={option.value}
+                  onClick={() => setSelectedIndustry(option.value)}
+                >
+                  <span className="text-dark">{option.label}</span>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
       </Row>
     </Container>
   );

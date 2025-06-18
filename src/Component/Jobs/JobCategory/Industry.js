@@ -65,7 +65,7 @@ const Industries = () => {
                   {category.total_positions}
                 </span>
                 <Link
-                  to={`/jobs?industry=${encodeURIComponent(category.category_name)}`}
+                  to={`/jobs?industry=${category.category_id}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedCategoryName}

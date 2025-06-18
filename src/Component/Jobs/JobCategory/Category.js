@@ -57,14 +57,14 @@ const Category = () => {
 
             return (
               <div
-                key={industry.industry_id}
+                key={industry.id}
                 className="col-md-4 mb-3 d-flex align-items-center"
               >
                 <span className="badge bg-primary rounded-pill me-3">
                   {industry.job_count}
                 </span>
                 <Link
-                  to={`/jobs?industry=${encodeURIComponent(industry.industry_name)}`}
+                  to={`/jobs?industry=${industry.id}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedName}

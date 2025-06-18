@@ -65,7 +65,7 @@ const Locations = () => {
                   {region.total_positions}
                 </span>
                 <Link
-                  to={`/jobs?region=${encodeURIComponent(region.region_name)}`}
+                  to={`/jobs?region=${(region.id)}`}
                   className="text-decoration-none text-dark"
                 >
                   {formattedRegionName}
