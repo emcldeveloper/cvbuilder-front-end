@@ -30,7 +30,9 @@ const MyProfile = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // const applicant_idy = 18861;
-    const applicant_id = 48;
+    // const applicant_id = 48;
+      const applicant_id = localStorage.getItem("applicantId");
+      console.log("applicant id from local storage",applicant_id);
 
     useEffect(() => {
         const fetchProfile = async () => {

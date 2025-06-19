@@ -38,6 +38,7 @@ import ObjectDetail from './pages/JobSeeker/Cv/Objective';
 import EducationCv from './pages/JobSeeker/Cv/Education';
  import AboutPage from './pages/AboutPage';
  import PricePage from './pages/PricePage';
+import ExperinceCv from './pages/JobSeeker/Cv/Experience';
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
             <Route path="jobseeker/introduction" element={<IntroductionData />} />
             <Route path="jobseeker/Objective" element={<ObjectDetail />} />
             <Route path="jobseeker/EducationCv" element={<EducationCv />} />
+            <Route path="jobseeker/ExperienceCv" element={<ExperinceCv />} />
           </Route>
 
 

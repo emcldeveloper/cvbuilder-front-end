@@ -9,7 +9,9 @@ const AppliedJob = () => {
     const [applications, setApplications] = useState([]); // better name, initialize as array
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const applicant_id = 48;
+ 
+    const applicant_id = localStorage.getItem("applicantId");
+  
      
     useEffect(() => {
         const myApplication = async () => {

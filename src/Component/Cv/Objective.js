@@ -20,10 +20,8 @@ const ProfessionalSummary = () => {
   const [Objective, setObjective] = useState(
     originalDetails?.objective?.objective || '' // Default to empty string if data is null or undefined
   );
-  
-    
-    
-      const uuid = 48;
+          
+      const uuid = localStorage.getItem("applicantId");
       const navigate = useNavigate();
    
       useEffect(() => {

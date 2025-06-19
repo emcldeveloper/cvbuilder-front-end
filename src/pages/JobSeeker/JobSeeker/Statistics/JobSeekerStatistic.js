@@ -35,6 +35,8 @@ const JobSeekerStatistic = () => {
     setSelectedJob(job);
     setShowModal(true);
   };
+      const applicant_id = localStorage.getItem("applicantId");
+      console.log("applicant id from local storage",applicant_id);
   return (
     <div className="w-100">
       <Card className="mb-4 shadow-smy">

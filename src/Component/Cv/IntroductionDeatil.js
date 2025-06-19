@@ -16,7 +16,7 @@ const IntroductionDetails = () => {
     // const { uuid, template } = useParams()
     const [originalDetails, setOriginalDetails] = useState(null)
     const candidate = originalDetails;
-    const uuid = 48;
+    const uuid = localStorage.getItem("applicantId");
     const navigate = useNavigate();
  
     useEffect(() => {

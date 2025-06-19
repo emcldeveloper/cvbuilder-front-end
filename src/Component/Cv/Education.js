@@ -47,7 +47,7 @@ const EducationsCv = () => {
     const [setInitialMajor, setSetInitialMajor] = useState(null);
     const [setInitialSelection, setSetInitialSelection] = useState(null);
     const [editCourse, setEditCourse] = useState("");
-    const uuid = 48;
+    const uuid = localStorage.getItem("applicantId");
     const { data, loading, error } = useCvProfileData(uuid);
     const originalDetails = data;
 
@@ -213,12 +213,12 @@ const EducationsCv = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-      
+
         console.log('send data to server :', sendToData);
 
         try {
 
-        
+
             const response = await axios.post('http://127.0.0.1:8000/api/applicant/educationstore', sendToData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -366,27 +366,21 @@ const EducationsCv = () => {
 
     return (!originalDetails?.data == null ? <PageLoader /> : <div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg mt-3">
+
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 bg-white shadow-sm rounded mb-4">
             {/* Left Section: Title & Description */}
-            <div className="text-center sm:text-left">
-                <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Education</h1>
-                <p className="text-base sm:text-lg text-gray-500 mt-1 sm:mt-2">
-                    Add or remove education here
+            <div className="text-center text-md-start mb-3 mb-md-0">
+                <h1 className="fw-bold h2 text-dark mb-1">Education</h1>
+                <p className="text-muted mb-0">
+                    Add or remove experiences here
                 </p>
             </div>
 
             {/* Right Section: Buttons */}
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-                <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full w-full sm:w-auto">
+            <div className="d-flex flex-column flex-md-row gap-2">
+                {/* Step 5 Button */}
+                <button className="btn btn-outline-secondary rounded-pill fw-bold px-4 py-2">
                     Step 4
-                </button>
-
-                {/* Add Experience Button */}
-                <button
-                    className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
-                    onClick={openModel}
-                >
-                    Add Education
                 </button>
             </div>
         </div>
