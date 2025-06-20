@@ -36,11 +36,9 @@ const handleLogin = async (e) => {
         setShowCandidateForm(false);
         onHide();
 
-        if (data.verified !== 1) {
-          window.location.href = '/not-verified';
-        } else {
+      
           window.location.href = '/jobseeker/dashboard';
-        }
+        
       } else {
         alert('Invalid login credentials');
       }

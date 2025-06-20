@@ -9,11 +9,25 @@ const PriceList = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
+        const cachedPlans = localStorage.getItem("employer_plans");
+        const cacheExpiry = localStorage.getItem("employer_plans_expiry");
+
+        if (cachedPlans && cacheExpiry && Date.now() < parseInt(cacheExpiry, 10)) {
+          setPlans(JSON.parse(cachedPlans));
+          return;
+        }
+
         const response = await getPackagePrice();
-        const plansData = response?.data ?? [];
+        const plansData = Array.isArray(response?.data) ? response.data : [];
+
+        localStorage.setItem("employer_plans", JSON.stringify(plansData));
+        localStorage.setItem("employer_plans_expiry", (Date.now() + 10 * 60 * 1000).toString());
+
         setPlans(plansData);
+        setError(null);
       } catch (err) {
-        setError("An error occurred while fetching plans.");
+        console.error("Failed to fetch package prices:", err);
+        setError("An error occurred while fetching plans. Please try again later.");
       }
     };
 
@@ -85,19 +99,24 @@ const PriceList = () => {
       <Row className="mb-4">
         <Col>
           <h2 style={styles.heading}>Employer Subscription Plans</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error && (
+            <Alert variant="danger" className="d-flex justify-content-between align-items-center">
+              <div>{error}</div>
+              <Button variant="outline-danger" size="sm" onClick={() => window.location.reload()}>
+                Retry
+              </Button>
+            </Alert>
+          )}
         </Col>
       </Row>
 
       <Row>
-        {/* Show info if no plans and no error */}
         {plans.length === 0 && !error && (
           <Col>
             <Alert variant="info">No subscription plans available at the moment.</Alert>
           </Col>
         )}
 
-        {/* Map through plans */}
         {plans.map((plan) => (
           <Col md={4} className="mb-4" key={plan?.id ?? Math.random()}>
             <Card style={styles.card} className="h-100">
@@ -114,20 +133,20 @@ const PriceList = () => {
                 </div>
                 <div style={styles.planFor}>{plan?.plan_for ?? "N/A"}</div>
               </div>
-<Card.Body style={styles.body}>
-  {plan?.plan_features?.length > 0 ? (
-    plan.plan_features.map((pf, index) => (
-      <div key={pf.id} style={styles.featureItem}>
-        <i className="fa fa-check" style={styles.checkIcon}></i>
-        <span>{index + 1}. </span> {/* Add numbering */}
-        {pf?.features?.name || "Unnamed Feature"}
-      </div>
-    ))
-  ) : (
-    <div style={styles.featureItem}>No features listed.</div>
-  )}
-</Card.Body>
 
+              <Card.Body style={styles.body}>
+                {plan?.plan_features?.length > 0 ? (
+                  plan.plan_features.map((pf, index) => (
+                    <div key={pf.id} style={styles.featureItem}>
+                      <i className="fa fa-check" style={styles.checkIcon}></i>
+                      <span>{index + 1}. </span>&nbsp;
+                      {pf?.features?.name || "Unnamed Feature"}
+                    </div>
+                  ))
+                ) : (
+                  <div style={styles.featureItem}>No features listed.</div>
+                )}
+              </Card.Body>
 
               <div style={styles.footer}>
                 {plan?.is_trial ? (
@@ -137,8 +156,10 @@ const PriceList = () => {
                 ) : (
                   <Button
                     variant="primary"
-                    href={`/employer/subscription/plan/form/${plan?.id}/upgrading`}
+                    href="https://ekazi.co.tz/employer/subscription/plan/show"
                     style={styles.button}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     Buy Now
                   </Button>
