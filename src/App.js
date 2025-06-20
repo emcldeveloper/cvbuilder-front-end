@@ -40,6 +40,8 @@ import EducationCv from './pages/JobSeeker/Cv/Education';
  import PricePage from './pages/PricePage';
 import ExperinceCv from './pages/JobSeeker/Cv/Experience';
 import SkillsCv from './pages/JobSeeker/Cv/Skills';
+import LanguageCv from './pages/JobSeeker/Cv/Language';
+import RefereeCv from './pages/JobSeeker/Cv/Referee';
 
 function App() {
   return (
@@ -95,7 +97,8 @@ function App() {
             <Route path="jobseeker/EducationCv" element={<EducationCv />} />
             <Route path="jobseeker/ExperienceCv" element={<ExperinceCv />} />
             <Route path="jobseeker/SkillsCv" element={<SkillsCv />} />
-            {/* <Route path="jobseeker/LanguageCv" element={<LanguageCv />} /> */}
+            <Route path="jobseeker/LanguageCv" element={<LanguageCv />} />
+            <Route path="jobseeker/RefereeCv" element={<RefereeCv />} />
           </Route>
 
 
