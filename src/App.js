@@ -39,6 +39,8 @@ import EducationCv from './pages/JobSeeker/Cv/Education';
  import AboutPage from './pages/AboutPage';
  import PricePage from './pages/PricePage';
 import ExperinceCv from './pages/JobSeeker/Cv/Experience';
+import SkillsCv from './pages/JobSeeker/Cv/Skills';
+import LanguageCv from './pages/JobSeeker/Cv/Language';
 
 function App() {
   return (
@@ -74,7 +76,7 @@ function App() {
           <Route path="/featured-jobseeker" element={<AllFeaturedJobSeeker />} />
 
           {/* Jobseeker dashboard */}
-          <Route element={<RequireVerification />}>
+          {/* <Route element={<RequireVerification />}> */}
             <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
             <Route path="jobseeker/My-application" element={<AppliedJob />} />
             <Route path="jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
@@ -93,7 +95,9 @@ function App() {
             <Route path="jobseeker/Objective" element={<ObjectDetail />} />
             <Route path="jobseeker/EducationCv" element={<EducationCv />} />
             <Route path="jobseeker/ExperienceCv" element={<ExperinceCv />} />
-          </Route>
+            <Route path="jobseeker/SkillsCv" element={<SkillsCv />} />
+            <Route path="jobseeker/LanguageCv" element={<LanguageCv />} />
+          {/* </Route> */}
 
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
