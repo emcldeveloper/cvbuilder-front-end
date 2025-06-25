@@ -40,6 +40,10 @@ import EducationCv from './pages/JobSeeker/Cv/Education';
  import PricePage from './pages/PricePage';
 import ExperinceCv from './pages/JobSeeker/Cv/Experience';
 
+// Employer Routes
+import DashBoard from './pages/Employer/Dashboard/DashBoard';
+import PostForm from './pages/Employer/ManageJob/PostForm';
+
 function App() {
   return (
     <UniversalProvider> {/* Wrap everything in the provider */}
@@ -98,7 +102,11 @@ function App() {
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
 
-
+              {/* Employers Routes */}
+          <Route path="employer/dashboard" element={<DashBoard />} />
+           <Route path="employer/post-job" element={<PostForm />} />
+          
+              
         </Routes>
       </BrowserRouter>
     </UniversalProvider>

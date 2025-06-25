@@ -1,5 +1,13 @@
 import React from 'react';
-import { Modal, Button, Form, Row, Col, Spinner } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  Form,
+  Row,
+  Col,
+  Spinner,
+  Container,
+} from 'react-bootstrap';
 import { FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import useLoginForm from '../hooks/Auth/useLoginForm';
 
@@ -15,90 +23,161 @@ const LoginModal = ({ show, onHide }) => {
     handleUserChoice,
     handleLogin,
     handleSocialLogin,
+    errorInfo, // ✅ Add this
   } = useLoginForm(onHide);
 
   return (
     <>
+      {/* Select Login Type */}
       <Modal show={show && !showCandidateForm} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Select Login Type</Modal.Title>
+      
+               <Modal.Title as="h5" className="modal-title">
+        Select Login Type
+</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <Button variant="primary" onClick={() => handleUserChoice('candidate')} className="me-2">
+          <Button
+            variant="primary"
+            onClick={() => handleUserChoice('candidate')}
+            className="me-2"
+          >
             Login as JobSeeker
           </Button>
-          <Button variant="secondary" onClick={() => handleUserChoice('employer')}>
+          <Button
+            variant="secondary"
+            onClick={() => handleUserChoice('employer')}
+          >
             Login as Employer
           </Button>
         </Modal.Body>
       </Modal>
 
-      <Modal show={showCandidateForm} onHide={() => setShowCandidateForm(false)} centered>
+      {/* JobSeeker Login */}
+      <Modal
+        show={showCandidateForm}
+        onHide={() => setShowCandidateForm(false)}
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>JobSeeker Login</Modal.Title>
+        <Modal.Title as="h5" className="modal-title">
+         JobSeeker Login 
+</Modal.Title>
+
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleLogin}>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
+          <Container className="d-flex justify-content-center mb-3">
+            <span
+              className="bg-light text-dark text-center px-4 py-2"
+              style={{ fontSize: '20px', borderRadius: '5px' }}
+            >
+              Welcome to eKazi Portal
+            </span>
+          </Container>
+
+          <Form onSubmit={handleLogin} id="login_User">
+            {errorInfo && (
+              <div className="text-danger text-center mb-3">{errorInfo}</div>
+            )}
+
+            <Form.Group controlId="email" className="mb-3">
               <Form.Control
                 type="email"
-                required
+                placeholder="Email Address"
+                className="form-lg user_email"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
+                autoFocus
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId="password" className="mb-3">
               <Form.Control
                 type="password"
-                required
+                placeholder="Password"
+                className="form-lg user_password"
                 value={password}
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
 
-            <Button type="submit" variant="primary" className="w-100" disabled={isLoading}>
-              {isLoading ? <Spinner animation="border" size="sm" className="me-2" /> : 'Login'}
-              {isLoading && ' Logging in...'}
+            <Button
+              type="submit"
+              className="text-light form-lg bntLogin mb-3 w-100"
+              style={{ backgroundColor: '#D36314' }}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner animation="border" size="sm" className="me-2" />
+                  Logging in...
+                </>
+              ) : (
+                'Login'
+              )}
             </Button>
-          </Form>
 
-          <hr />
-          <div className="text-center mb-2">Or login with</div>
-          <Row className="mb-3 text-center">
-            <Col>
+            <hr />
+
+            <div className="text-center mb-3">
+              <span className="d-block mb-2">Sign in with:</span>
               <Button
-                variant="outline-danger"
-                onClick={() => handleSocialLogin('Google')}
-                className="w-100 mb-2"
+                href="/login/linkedin-openid"
+                className="btn-sm me-2 text-white"
+                style={{ backgroundColor: '#00acee' }}
               >
-                <FaGoogle className="me-2" />
-                Google
+                <FaLinkedin />
               </Button>
-            </Col>
-            <Col>
               <Button
-                variant="outline-primary"
-                onClick={() => handleSocialLogin('LinkedIn')}
-                className="w-100 mb-2"
+                href="/login/google"
+                className="btn-sm me-2 text-white"
+                style={{ backgroundColor: '#db4437' }}
               >
-                <FaLinkedin className="me-2" />
-                LinkedIn
+                <FaGoogle />
               </Button>
-            </Col>
-            <Col>
               <Button
-                variant="outline-info"
-                onClick={() => handleSocialLogin('Twitter')}
-                className="w-100"
+                href="/login/twitter"
+                className="btn-sm text-white"
+                style={{ backgroundColor: '#1da1f2' }}
               >
-                <FaTwitter className="me-2" />
-                Twitter
+                <FaTwitter />
               </Button>
-            </Col>
-          </Row>
+            </div>
+
+            <hr />
+
+  <Row className="text-center py-3">
+  <Col md={6} className="mb-3">
+    <p className="mb-2 text-muted">Forgot your password?</p>
+    <Button
+      variant="outline-primary"
+      className="px-3 py-1 rounded-pill"
+      href="/reset"
+    >
+      Reset Password
+    </Button>
+  </Col>
+  <Col md={6} className="mb-3">
+    <p className="mb-2 text-muted">New to <strong>eKazi</strong>?</p>
+    <Button
+      variant="outline-primary"
+      className="px-3 py-1 rounded-pill"
+      onClick={() => {
+        setShowCandidateForm(false);
+        // Optionally trigger registration modal here
+      }}
+    >
+      Register
+    </Button>
+  </Col>
+</Row>
+
+
+
+            <hr />
+          </Form>
         </Modal.Body>
       </Modal>
     </>
