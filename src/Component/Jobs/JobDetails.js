@@ -127,54 +127,56 @@ const JobDetails = ({job}) => {
                 </p>
 
                 {/* Social Icons */}
-               <Row className="mt-4 justify-content-center text-center">
-        <Col xs="auto">
-          <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Share on Facebook"
-          >
-            <FaFacebook size={30} color="#3b5998" />
-          </a>
-        </Col>
-        <Col xs="auto">
-          <a
-            href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Share on Twitter"
-          >
-            <FaTwitter size={30} color="#1DA1F2" />
-          </a>
-        </Col>
-        <Col xs="auto">
-          <a
-            href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Share on WhatsApp"
-          >
-            <FaWhatsapp size={30} color="#25D366" />
-          </a>
-        </Col>
-        <Col xs="auto">
-          <a
-            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Share on LinkedIn"
-          >
-            <FaLinkedin size={30} color="#0077b5" />
-          </a>
-        </Col>
-      </Row>
+ <Row className="mt-4 justify-content-between align-items-center">
+  {/* Left: Social Media Icons */}
+  <Col md="auto" className="d-flex gap-3">
+    <a
+      href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Share on Facebook"
+    >
+      <FaFacebook size={30} color="#3b5998" />
+    </a>
+    <a
+      href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Share on Twitter"
+    >
+      <FaTwitter size={30} color="#1DA1F2" />
+    </a>
+    <a
+      href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Share on WhatsApp"
+    >
+      <FaWhatsapp size={30} color="#25D366" />
+    </a>
+    <a
+      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Share on LinkedIn"
+    >
+      <FaLinkedin size={30} color="#0077b5" />
+    </a>
+  </Col>
 
-                <div className="text-center mt-4">
-                  <Button variant="primary" size="lg" onClick={() => alert('Apply functionality here')}>
-                    Apply Now
-                  </Button>
-                </div>
+  {/* Right: Apply Button */}
+  <Col md="auto">
+    <Button
+      variant="primary"
+      size="md"
+      onClick={() => alert('Apply functionality here')}
+    >
+      Apply Now
+    </Button>
+  </Col>
+</Row>
+
+               
 
               </Card.Body>
             </Card>

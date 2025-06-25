@@ -36,9 +36,18 @@ const handleLogin = async (e) => {
         setShowCandidateForm(false);
         onHide();
 
-      
-          window.location.href = '/jobseeker/dashboard';
-        
+        if (data.verified !== 1) {
+          window.location.href = '/not-verified';
+        } else {
+          // Role-based redirect
+          if (data.role_id === 12) {
+            window.location.href = '/jobseeker/dashboard';
+          } else if (data.role_id === 9) {
+            window.location.href = '/employer/dashboard';
+          } else {
+            alert('Unknown role. Please contact support.');
+          }
+        }
       } else {
         alert('Invalid login credentials');
       }
@@ -49,6 +58,7 @@ const handleLogin = async (e) => {
     }
   }
 };
+
   const handleSocialLogin = (provider) => {
     alert(`Login with ${provider} clicked`);
   };
