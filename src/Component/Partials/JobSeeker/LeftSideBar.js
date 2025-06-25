@@ -131,11 +131,11 @@ const LeftSideBar = () => {
             {[
               {
                 key: "0",
-                title: "Resume Manager",
+                title: "Cv Manager",
                 icon: <FileEarmarkTextFill className="me-2" />,
                 items: [
                   { name: "Build Cv", path: "/jobseeker/sample-selection" },
-                  { name: "My Resume", path: "/jobseeker/my-resume", count: 5 },
+                  { name: "My Cv", path: "/jobseeker/my-resume", count: 5 },
                   { name: "My subscription", path: "/jobseeker/my-resume", count: 5 },
                   { name: "create cover letter", path: "/jobseeker/cover-letter" }
                 ]

@@ -13,7 +13,7 @@ const ProfileSection = ({ profile, address }) => {
     const [showProfileModal, setShowProfileModal] = useState(false);
   
     const [profileImage, setProfileImage] = useState(
-        profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : '/zuu.JPEG'
+        profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'uploads/picture/pre_photo.jpg'
       );
       const [bgImage, setBgImage] = useState(
         profile?.picture ? `http://127.0.0.1:8000/${profile.background_picture}` : '/comp.jpg'

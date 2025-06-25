@@ -42,6 +42,9 @@ import ExperinceCv from './pages/JobSeeker/Cv/Experience';
 import SkillsCv from './pages/JobSeeker/Cv/Skills';
 import LanguageCv from './pages/JobSeeker/Cv/Language';
 import RefereeCv from './pages/JobSeeker/Cv/Referee';
+import HomeCv from './pages/JobSeeker/Cv/Home';
+import Template3 from './templates/template3';
+import Template6 from './templates/template6';
 
 function App() {
   return (
@@ -99,6 +102,8 @@ function App() {
             <Route path="jobseeker/SkillsCv" element={<SkillsCv />} />
             <Route path="jobseeker/LanguageCv" element={<LanguageCv />} />
             <Route path="jobseeker/RefereeCv" element={<RefereeCv />} />
+             <Route path="jobseeker/Home-Cv" element={<HomeCv />} />
+              <Route path="jobseeker/test-template" element={<Template6 />} />
           </Route>
 
 
