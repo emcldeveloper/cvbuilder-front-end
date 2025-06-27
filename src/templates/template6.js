@@ -1,45 +1,33 @@
 import { useContext,useEffect,useRef, useState } from "react";
 import { StepsContext } from "../layouts/mainLayout";
-import { useParams } from "react-router-dom";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../utils/firebase";
+import { useParams } from "react-router-dom"; 
 import axios from 'axios';
 import moment from "moment";
+import { useCvProfileData } from "../hooks/Candidate/Cv";
 
-const Template3 = () => {
+const Template6 = () => {
     const cv  = useRef()
-    const {uuid,template} = useParams()
-    const [candidate,setCandidate] = useState(null)
+    const {template} = useParams()
     const [show, setShow] = useState(false);
     const [pages, setPages] = useState(false);
-    const [experiences,setExperiences] = useState([])
-  
-    
-   
+    const [experiences, setExperiences] = useState([]);
+    const uuid = localStorage.getItem("applicantId");
+    const { data, loading, error } = useCvProfileData(uuid);
+    const candidate = data?.data || {};
+
     useEffect(() => {
-      // Fetch data from the API
-      axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-        .then((response) => {
-          if (response?.data?.data) {
-            setCandidate(response.data.data);  // Set the candidate data from the API response
-            setShow(true);  // Display the content
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, [uuid]);
- 
-  useEffect(()=>{
-    if(candidate != null){
-       candidate.experience.forEach(item=>{
-           if(experiences.filter((e)=>e.employer.id==item.employer.id) == 0){
-            item.positions = candidate.experience.filter((ex)=>ex.employer.id==item.employer.id)
-              setExperiences([...experiences,item])
-           }
-       })
-    }
-  },[candidate,experiences])
+        if (candidate?.experience) {
+            const uniqueExperiences = [];
+            candidate.experience.forEach(item => {
+                if (!uniqueExperiences.some(e => e.employer?.id === item.employer?.id)) {
+                    const positions = candidate.experience.filter(ex => ex.employer?.id === item.employer?.id);
+                    uniqueExperiences.push({ ...item, positions });
+                }
+            });
+            setExperiences(uniqueExperiences);
+        }
+    }, [candidate]);
+    console.log("no 6",candidate)
     return (show&&
 <div>
   {/* Header Section */}
@@ -307,4 +295,4 @@ const Template3 = () => {
      );
 }
  
-export default Template3;
+export default Template6;

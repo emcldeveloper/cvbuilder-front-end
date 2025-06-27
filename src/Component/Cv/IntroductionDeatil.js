@@ -18,7 +18,7 @@ const IntroductionDetails = () => {
     const candidate = originalDetails;
     const uuid = localStorage.getItem("applicantId");
     const navigate = useNavigate();
- 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -257,26 +257,21 @@ const IntroductionDetails = () => {
         ) : (
             <div className=" ">
                 {/* Header Section */}
-
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white shadow-md rounded-lg ">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 bg-white shadow-sm rounded mb-4">
                     {/* Left Section: Title & Description */}
-
-                    <div className="text-center sm:text-left">
-                        <h1 className="font-bold text-2xl sm:text-3xl text-gray-800">Introduction Details</h1>
+                    <div className="text-center text-md-start mb-3 mb-md-0">
+                        <h1 className="fw-bold h2 text-dark mb-1">Introduction Details</h1>
 
                     </div>
 
                     {/* Right Section: Buttons */}
-                    <div className="mt-4 sm:mt-0 flex items-center space-x-4">
-
-                        <div className="bg-white rounded-full">
-                            <button className="py-2 px-4 bg-secondary font-bold text-secondary bg-opacity-20 rounded-full">
-                                Step 2
-                            </button>
-                        </div>
+                    <div className="d-flex flex-column flex-md-row gap-2">
+                        {/* Step 5 Button */}
+                        <button className="btn btn-outline-secondary rounded-pill fw-bold px-4 py-2">
+                            Step 2
+                        </button>
                     </div>
                 </div>
-
                 {/* Grid Section */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 ">
                     {/* Name */}

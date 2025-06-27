@@ -32,7 +32,7 @@ import { Api } from "@mui/icons-material";
 const SampleTemplate = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
-    const [templateViews, setTemplateViews] = useState({});
+    const [viewCountData, setTemplateViews] = useState({});
     const [totalview, setTotalview] = useState("");
 
     const templates = [
@@ -66,6 +66,7 @@ const SampleTemplate = () => {
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [codeNumber, setCodeNumber] = useState('');
+ 
     useEffect(() => {
         const myPlansubscription = async () => {
             try {
@@ -84,43 +85,119 @@ const SampleTemplate = () => {
 
         myPlansubscription();
     }, []);
-    console.log('plan subscription is :', plansubscription);
+
+ 
+
+// ...
+
+useEffect(() => {
+    const cvcount = async () => {
+        try {
+            setLoading(true);
+            const response = await CvApi.getCvcount();
+            console.log('CV count response:', response);
+            
+            // Handle different response formats
+            let viewsData = {};
+            
+            if (Array.isArray(response)) {
+                // Response is array of {template_no, view} objects
+                viewsData = response.reduce((acc, item) => {
+                    if (item?.template_no !== undefined) {
+                        acc[item.template_no] = item.view || 0;
+                    }
+                    return acc;
+                }, {});
+            } else if (response && typeof response === 'object') {
+                // Response is already in {templateId: views} format
+                viewsData = response;
+            }
+            
+            setTemplateViews(viewsData);
+            
+            // Calculate total views if needed
+            const total = Object.values(viewsData).reduce((sum, count) => sum + count, 0);
+            setTotalview(total);
+            
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching CV counts:', err);
+            setTemplateViews({});
+            setTotalview("0");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    cvcount();
+}, []);
+
+ 
     const handleSelectPlan = (plan) => {
         setSelectedPlan(plan);
         setShowModal(false);
         setShowInvoiceModal(true);
     };
-    const uuid = 48;
+
+    const applicant_id = localStorage.getItem("applicantId");
+    console.log("applicant id from local storage", applicant_id);
     const paymentData = {
         referenceNumber: codeNumber,
-        applicantId: uuid,
+        applicantId: applicant_id,
         subscriptionId: selectedPlan?.id,
     };
     const handlePaymentSubmit = async (e) => {  // Added async here
         e.preventDefault();
         try {
             const response = await CvApi.createsubscription(paymentData);
-       
+
             if (response.status === 200) {
-                           console.log('data sub', response);
-                           Swal.fire({
-                               title: 'Success!',
-                               text: response.data.success,
-                               icon: 'success',
-                               confirmButtonText: 'OK'
-                           });
-           
-                           window.location.reload();
-                       } else {
-                          console.error("Error creating subscription:");
-                       }
-            
+                console.log('data sub', response);
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.data.success,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                window.location.reload();
+            } else {
+                console.error("Error creating subscription:");
+            }
+
         } catch (error) {
             console.error("Error creating subscription:", error);
             // Handle error (e.g., show error message to user)
         }
     };
+       const handlecvincrementSubmit = async (e) => {  // Added async here
+        e.preventDefault();
+        const no =1;
+        try {
+            const response = await CvApi.createsubscription(no);
 
+            if (response.status === 200) {
+                console.log('data sub', response);
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.data.success,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                window.location.reload();
+            } else {
+                console.error("Error creating subscription:");
+            }
+
+        } catch (error) {
+            console.error("Error creating subscription:", error);
+            // Handle error (e.g., show error message to user)
+        }
+    };
+ 
+ 
     return (
         <JobSeekerLayout>
             <Container className="py-4">
@@ -129,7 +206,7 @@ const SampleTemplate = () => {
                         <div className="d-flex justify-content-between align-items-center">
                             <h4 className="d-flex align-items-center gap-3 mb-0">
                                 <FaFileAlt className="text-primary" style={{ fontSize: '1.5rem' }} />
-                                <span className="fw-bold">Select Your CV Template</span>
+                                <span className="fw-bold"> CV Templates</span>
                                 <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
                                     <FaEye className="me-1" />
                                     {totalview}
@@ -297,13 +374,16 @@ const SampleTemplate = () => {
 
                 <Row xs={2} md={3} lg={4} className="g-4">
                     {templates.map((template) => {
-                        const viewCount = templateViews[template.id] ?? template.views ?? 0;
+                        const viewCount = viewCountData[template.id] || 0; // Fallback to 0 if no views
 
                         return (
-                            <Col key={template.id}>
+                            <Col key={template.id} xs={6} md={4} lg={3} className="mb-4">
                                 <Card
                                     className={`h-100 cursor-pointer ${selectedTemplate === template.id ? 'border-primary border-2' : ''}`}
-                                    onClick={() => handleTemplateSelect(template.id)}
+                                     onClick={() => {
+    handleTemplateSelect(template.id);
+    // handlecvincrementSubmit(); // Pass template ID if needed
+  }}
                                 >
                                     <Card.Img
                                         variant="top"
@@ -328,16 +408,39 @@ const SampleTemplate = () => {
                 <Modal
                     show={showPreview}
                     onHide={handleClosePreview}
-                    size="xl"
+                    size="lg"
                     centered
                     scrollable
                 >
                     <Modal.Header closeButton>
                         <Modal.Title>Preview Selected Template</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body className="p-4 bg-light">
+
+                    <Modal.Body
+                        style={{
+                            backgroundColor: '#f8f9fa',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'start',
+                            padding: '1rem',
+
+                        }}
+                    >
+                        {/* <div
+                            style={{
+                                width: '210mm',
+                                minHeight: '297mm',
+                                backgroundColor: 'white',
+                                padding: '20mm',
+                                boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)',
+                                fontSize: '12pt',
+                                lineHeight: '1.5',
+                            }}
+                        > */}
                         {selectedTemplateData?.component}
+                        {/* </div> */}
                     </Modal.Body>
+
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClosePreview}>
                             Back to Templates
@@ -352,6 +455,7 @@ const SampleTemplate = () => {
                         </div>
                     </Modal.Footer>
                 </Modal>
+
             </Container>
         </JobSeekerLayout>
     );
