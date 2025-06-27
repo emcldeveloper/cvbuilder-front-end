@@ -8,10 +8,7 @@ const FeaturedEmployerList = () => {
 
   return (
     <Container>
-      <h4 className="text-center" style={{ color: '#2E58A6', marginTop: '2%' }}>
-        Featured Employers
-      </h4>
-      <br />
+  
 
       {error && <Alert variant="danger">{error}</Alert>} {/* Show error message if failed to fetch */}
 

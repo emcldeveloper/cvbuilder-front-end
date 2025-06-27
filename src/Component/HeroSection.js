@@ -17,8 +17,8 @@ const HeroSection = () => {
      
     },
     title: {
-      fontSize: "43px",
-      fontWeight: 700,
+      fontSize: "45px",
+      fontWeight: 500,
       color: "#2E58A6",
       marginBottom: "10px",
     },
@@ -26,15 +26,16 @@ const HeroSection = () => {
       color: "#D36314",
     },
     subtitle: {
-      fontSize: "22px",
-      fontWeight: 700,
+      fontSize: "26px",
+      fontWeight: 500,
+      color:"#707070"
     },
   };
 
   return (
     <Container><div style={styles.container}>
     <div style={styles.banner}>
-      <div className="py-4 ps-md-5">
+      <div className="py-4 ">
         <p style={styles.title} id="searching">
           <b>
             A place where <span style={styles.highlight}>employers</span>

@@ -1,107 +1,131 @@
-import React from "react";
-import { Form, Button } from "react-bootstrap";
-import SubFooter from "./SubFooter";
+import React, { useState } from 'react';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { BsFacebook, BsLinkedin, BsTwitter, BsRssFill, BsMap } from 'react-icons/bs';
+
+import SubFooter from './SubFooter';
+import ContactModal from '../Pages/ContactModal';
+import MapModal from '../Pages/MapModal';
 
 const AppFooter = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const currentYear = new Date().getFullYear();
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  const handleOpenMap = () => setShowMap(true);
+  const handleCloseMap = () => setShowMap(false);
+
   return (
+    <footer className="bg-white text-dark py-4 mt-4 border-top">
+      <Container fluid>
+        <SubFooter />
 
-    <div className="container-fluid" style={{backgroundColor:'#fff'}}>
-      <SubFooter/>
-      {/* Top Row – Newsletter + Job Alert */}
-      <div
-        className="row"
-        style={{ backgroundColor: "#0000", zIndex: 1, paddingTop: 20 }}
-      >
-        <div className="col-md-6 text-center">
-          {/* Honeypot */}
-          <div style={{ display: "none" }}>
-            <input type="text" name="honeypot" />
-          </div>
-
-          {/* Newsletter Subscription */}
-          <h5>Subscribe to receive job notifications.</h5>
-          <p>Join our weekly Newsletter</p>
-         
-        </div>
-
-        {/* Job Alert Placeholder */}
-        <div className="col-md-6 text-center">
-        <Form className="d-flex justify-content-center mb-3">
-            <Form.Control
-              type="email"
-              placeholder="Your Email"
-              className="w-75 me-2"
+        <Row xs={2} sm={2} md={4} className="g-3 mt-2">
+          {/* Logo & Social Links */}
+          <Col>
+            <img
+              src="/logo.png"
+              alt="eKazi Logo"
+              style={{ maxWidth: '120px', marginBottom: '10px' }}
             />
-            <Button
-              style={{ backgroundColor: "#D36314", color: "#fff" }}
-              type="submit"
-            >
-              Subscribe
-            </Button>
-          </Form>
-        </div>
-      </div>
-
-      {/* Bottom Section */}
-      <div className="col-md-12 mt-4">
-        <div className="container-fluid">
-          <hr />
-
-          <div className="row">
-            {/* Logo and About EMCL */}
-            <div className="col-md-5">
-              <img
-                src="/logo.png"
-                alt="eKazi Logo"
-                style={{ maxWidth: "120px", marginBottom: "10px" }}
-              />
-              <p>
-                eKazi is An Online Recruitment Management Platform Designed for
-                Employers/Recruiters, Job Seekers and Freelancers.
-              </p>
+            <p className="mb-2 text-muted">
+              © {currentYear}.
+              <a href="#" className="text-primary ms-1">
+                eKazi.co.tz
+              </a>
+            </p>
+            <div className="d-flex gap-3">
+              <a href="#" className="text-primary" title="Facebook">
+                <BsFacebook size={20} />
+              </a>
+              <a href="#" className="text-primary" title="LinkedIn">
+                <BsLinkedin size={20} />
+              </a>
+              <a href="#" className="text-primary" title="Twitter">
+                <BsTwitter size={20} />
+              </a>
+              <a href="#" className="text-primary" title="RSS">
+                <BsRssFill size={20} />
+              </a>
             </div>
+          </Col>
 
-            {/* About Section */}
-            <div className="col-md-2" style={{ fontSize: "1.1em" }}>
-              <h6><b>ABOUT</b></h6>
-              <p>About Us</p>
-              <p>My Account</p>
-              <p>Contact</p>
-              <p>Terms of Use</p>
-            </div>
-
-            {/* Freelancer Section */}
-            <div className="col-md-2" style={{ fontSize: "1.1em" }}>
-              <h6><b>FOR FREELANCER</b></h6>
-              <p>Browser Freelancers</p>
-              <p>Hire me</p>
-              <p>Post Project</p>
-            </div>
-
-            {/* Employer Section */}
-            <div className="col-md-3" style={{ fontSize: "1.1em" }}>
-              <h6><b>FOR EMPLOYER</b></h6>
-              <p>Browse jobs</p>
-              <p>
-                <a
-                  href="/post-job"
-                  style={{ color: "#D36314", fontWeight: "bold" ,borderRight: '1px solid #fff',
-                    padding: '0.5rem 1.5rem',
-                    textDecoration: 'none',
-                    textAlign: 'center', }}
-                >
-                  Post Job
+          {/* Job Seeker Links */}
+          <Col>
+            <p className="fw-bold">JOB SEEKER</p>
+            {[
+              ['Sign up', 'jobseeker-register/'],
+              ['Search jobs', 'jobs/'],
+              ['Sign in', 'login/'],
+              ['View applications', 'login/'],
+              ['Job alerts', 'login/'],
+              ['Post resume', ''],
+              ['My courses', '']
+            ].map(([label, link]) => (
+              <div key={label}>
+                <a href="#" className="text-primary">
+                  {label}
                 </a>
-              </p>
-              <h6 className="mt-2">Tel Hotline:</h6>
-              <p>+255 677 400 206</p>
-              <p>+255 677 400 205</p>
-              <p>+255 677 014 718</p>
+              </div>
+            ))}
+          </Col>
+
+          {/* Employer Links */}
+          <Col>
+            <p className="fw-bold">EMPLOYER</p>
+            {[
+              ['Post a job', 'employer/job/post'],
+              ['Search resume', 'employer/search/applicant'],
+              ['Sign in', 'login/'],
+              ['Sign up', 'register/'],
+              ['Applicant tracking', 'employer/dashboard/']
+            ].map(([label, link]) => (
+              <div key={label}>
+                <a href={`https://ekazi.co.tz/${link}`} className="text-primary">
+                  {label}
+                </a>
+              </div>
+            ))}
+          </Col>
+
+          {/* Information Links */}
+          <Col>
+            <p className="fw-bold">INFORMATION</p>
+
+            {/* About Us Link */}
+            <div>
+              <a href="/about" className="text-primary">
+                About us
+              </a>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+            {/* View Map Button */}
+            <div className="my-2">
+              <span    className="text-primary"
+                style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={handleOpenMap}>
+                 View Map
+              </span>
+            </div>
+
+            {/* Contact Modal Link */}
+            <div>
+              <span
+                onClick={handleOpenModal}
+                className="text-primary"
+                style={{ cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Contact
+              </span>
+            </div>
+          </Col>
+        </Row>
+
+        {/* Modals */}
+        <ContactModal show={showModal} handleClose={handleCloseModal} />
+        <MapModal show={showMap} handleClose={handleCloseMap} />
+      </Container>
+    </footer>
   );
 };
 

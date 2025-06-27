@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import AppHeader from "../../Component/Partials/AppHeader";
 import SideBar from "../../Component/Partials/Employer/Sidebar";
-import AppFooter1 from "../../Component/Partials/AppFooter1";
+import AppFooter from "../../Component/Partials/AppFooter";
 import CopyrightBar from "../../Component/Partials/CopyrightBar";
 
 const EmployerLayout = ({ children }) => {
@@ -21,7 +21,7 @@ const EmployerLayout = ({ children }) => {
           </Col>
         </Row>
       </Container>
-      <AppFooter1 />
+      <AppFooter />
       <CopyrightBar />
     </>
   );
