@@ -5,6 +5,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
  
 import PageLoader from "../../widgets/pageLoader"; 
 import axios from "axios";
+import StepProgress from "./Stepprogress";
 // import { checkIfExists } from "../controllers/apisController";
 // import HideInfo from '../layouts/useHideFields';
 
@@ -138,6 +139,17 @@ const ProfessionalSummary = () => {
     <PageLoader />
   ) : (
     <div className="p-4 sm:p-6 md:p-8">
+         <StepProgress currentStep={2} onStepClick={(step) => {
+              // Handle navigation to different steps
+              switch(step) {
+                case 1: navigate('/introduction'); break;
+                case 2: navigate('/jobseeker/objective'); break;
+                case 3: navigate('/jobseeker/EducationCv'); break;
+                case 4: navigate('/languages'); break;
+                // ... add other cases for each step
+                default: break;
+              }
+            }} />
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 bg-white rounded-lg shadow-md  ">
         <div className="text-center sm:text-left">

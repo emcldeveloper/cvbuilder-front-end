@@ -49,6 +49,7 @@ import Template6 from './templates/template6';
 // Employer Routes
 import DashBoard from './pages/Employer/Dashboard/DashBoard';
 import PostForm from './pages/Employer/ManageJob/PostForm';
+import CVComponent from './Component/Cv/Stepprogress';
 
 function App() {
   return (
@@ -108,6 +109,7 @@ function App() {
             <Route path="jobseeker/RefereeCv" element={<RefereeCv />} />
              <Route path="jobseeker/Home-Cv" element={<HomeCv />} />
               <Route path="jobseeker/test-template" element={<Template6 />} />
+              <Route path="jobseeker/cvprogress" element={<CVComponent />} />
           </Route>
 
 

@@ -28,7 +28,7 @@ const LeftSideBar = () => {
 
 
   return (
-    <div className="d-flex flex-column gap-3">
+    <div className="d-flex flex-column gap-2">
       <Card className="shadow-sm">
         {/* Cover image */}
         <div className="position-relative">
@@ -127,7 +127,7 @@ const LeftSideBar = () => {
           />
           {/* Accordions */}
 
-          <Accordion flush className="text-start mb-1" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <Accordion flush className="text-start mb-1" style={{ maxHeight: '300px', overflowY: 'auto' }}>
             {[
               {
                 key: "0",
@@ -188,9 +188,10 @@ const LeftSideBar = () => {
                 key={section.key}
                 className="border-0"
               >
-                <Accordion.Header className="small py-1   border-top px-0" >
+                <Accordion.Header className="small py-0   border-top px-0"  style={{ fontSize: '0.8rem' }} >
                   <div className="d-flex align-items-center">
-                    {section.icon}
+                    {/* {section.icon} */}
+                     {React.cloneElement(section.icon, { size: 14 })}
                     <span>{section.title}</span>
                   </div>
                 </Accordion.Header>

@@ -28,12 +28,14 @@ import Template10 from "../../../templates/template10";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { CvApi } from "../../../Api/Jobseeker/CvApi";
 import { Api } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const SampleTemplate = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
     const [viewCountData, setTemplateViews] = useState({});
     const [totalview, setTotalview] = useState("");
+    const navigate =useNavigate();
 
     const templates = [
         { id: 1, name: "Template 1", image: "/cv1.png", component: <Template1 /> },
@@ -66,7 +68,7 @@ const SampleTemplate = () => {
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [codeNumber, setCodeNumber] = useState('');
- 
+
     useEffect(() => {
         const myPlansubscription = async () => {
             try {
@@ -86,54 +88,54 @@ const SampleTemplate = () => {
         myPlansubscription();
     }, []);
 
- 
 
-// ...
 
-useEffect(() => {
-    const cvcount = async () => {
-        try {
-            setLoading(true);
-            const response = await CvApi.getCvcount();
-            console.log('CV count response:', response);
-            
-            // Handle different response formats
-            let viewsData = {};
-            
-            if (Array.isArray(response)) {
-                // Response is array of {template_no, view} objects
-                viewsData = response.reduce((acc, item) => {
-                    if (item?.template_no !== undefined) {
-                        acc[item.template_no] = item.view || 0;
-                    }
-                    return acc;
-                }, {});
-            } else if (response && typeof response === 'object') {
-                // Response is already in {templateId: views} format
-                viewsData = response;
+    // ...
+
+    useEffect(() => {
+        const cvcount = async () => {
+            try {
+                setLoading(true);
+                const response = await CvApi.getCvcount();
+                console.log('CV count response:', response);
+
+                // Handle different response formats
+                let viewsData = {};
+
+                if (Array.isArray(response)) {
+                    // Response is array of {template_no, view} objects
+                    viewsData = response.reduce((acc, item) => {
+                        if (item?.template_no !== undefined) {
+                            acc[item.template_no] = item.view || 0;
+                        }
+                        return acc;
+                    }, {});
+                } else if (response && typeof response === 'object') {
+                    // Response is already in {templateId: views} format
+                    viewsData = response;
+                }
+
+                setTemplateViews(viewsData);
+
+                // Calculate total views if needed
+                const total = Object.values(viewsData).reduce((sum, count) => sum + count, 0);
+                setTotalview(total);
+
+                setError(null);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching CV counts:', err);
+                setTemplateViews({});
+                setTotalview("0");
+            } finally {
+                setLoading(false);
             }
-            
-            setTemplateViews(viewsData);
-            
-            // Calculate total views if needed
-            const total = Object.values(viewsData).reduce((sum, count) => sum + count, 0);
-            setTotalview(total);
-            
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-            console.error('Error fetching CV counts:', err);
-            setTemplateViews({});
-            setTotalview("0");
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
 
-    cvcount();
-}, []);
+        cvcount();
+    }, []);
 
- 
+
     const handleSelectPlan = (plan) => {
         setSelectedPlan(plan);
         setShowModal(false);
@@ -171,33 +173,59 @@ useEffect(() => {
             // Handle error (e.g., show error message to user)
         }
     };
-       const handlecvincrementSubmit = async (e) => {  // Added async here
-        e.preventDefault();
-        const no =1;
-        try {
-            const response = await CvApi.createsubscription(no);
+   const handlecvincrementSubmit = async (templateId) => {
+    try {
+        // Option 1: If your API expects FormData
+        const formData = new FormData();
+        formData.append('template_id', templateId);
+        formData.append('view_count', 1);
+        
+        // Make sure CvApi.createcvincrement accepts FormData
+        const response = await CvApi.createcvincrement(formData);
+        
+        // Option 2: If your API expects a plain object
+        // const response = await CvApi.createcvincrement({
+        //     template_id: templateId,
+        //     view_count: 1
+        // });
+        
+        console.log('count cv id', response);
+        
+        // Update your viewCountData state after successful increment
+        setTemplateViews(prev => ({
+            ...prev,
+            [templateId]: (prev[templateId] || 0) + 1
+        }));
+        
+    } catch (error) {
+        console.error("Error incrementing view count:", error);
+    }
+};
+    // const handleSubmit = async (templateId) => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append('template_id', templateId);
+    //         formData.append('view_count', 1);
 
-            if (response.status === 200) {
-                console.log('data sub', response);
-                Swal.fire({
-                    title: 'Success!',
-                    text: response.data.success,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
+    //         await axios.post('http://127.0.0.1:8000/api/applicant/countcv', formData);
 
-                window.location.reload();
-            } else {
-                console.error("Error creating subscription:");
-            }
+    //         // Refresh views after submit
+    //         const response = await axios.get("http://127.0.0.1:8000/api/applicant/getcvno");
+    //         const viewCounts = response.data.view_count;
+    //         const totalview = response.data.count;
+    //         setotalview(totalview);
 
-        } catch (error) {
-            console.error("Error creating subscription:", error);
-            // Handle error (e.g., show error message to user)
-        }
-    };
- 
- 
+    //         const mappedViews = {};
+    //         viewCounts.forEach((item) => {
+    //             mappedViews[item.template_no] = item.view;
+    //         });
+    //         setTemplateViews(mappedViews);
+
+    //     } catch (error) {
+    //         console.error("Failed to track view or fetch updated views:", error.message);
+    //     }
+    // };
+
     return (
         <JobSeekerLayout>
             <Container className="py-4">
@@ -380,10 +408,11 @@ useEffect(() => {
                             <Col key={template.id} xs={6} md={4} lg={3} className="mb-4">
                                 <Card
                                     className={`h-100 cursor-pointer ${selectedTemplate === template.id ? 'border-primary border-2' : ''}`}
-                                     onClick={() => {
-    handleTemplateSelect(template.id);
-    // handlecvincrementSubmit(); // Pass template ID if needed
-  }}
+                                    onClick={() => {
+                                        const selectedTemplateId = template.id;
+                                        handleTemplateSelect(selectedTemplateId );
+                                        handlecvincrementSubmit(selectedTemplateId); 
+                                    }}
                                 >
                                     <Card.Img
                                         variant="top"
@@ -449,7 +478,10 @@ useEffect(() => {
                             <Button variant="danger" onClick={handleClosePreview} className="me-2">
                                 Cancel
                             </Button>
-                            <Button variant="primary">
+                            <Button variant="primary"
+                            onClick={()=>navigate('/jobseeker/home-cv')}
+                            
+                            >
                                 Save
                             </Button>
                         </div>

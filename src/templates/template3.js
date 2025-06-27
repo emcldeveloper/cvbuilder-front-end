@@ -65,7 +65,7 @@ const Template3 = () => {
                             <h2 className="h3 mb-3" style={{ fontSize: '1rem' }}>
                                 {candidate?.current_position || candidate?.experience?.[0]?.position?.position_name || 'No Position Available'}
                             </h2>
-                            <p className="lead mb-3">
+                            <p className="lead mb-3" style={{ fontSize: '1rem' }}>
                                 {candidate?.careers?.[0]?.career || 'No career information'}
                             </p>
                             <Card className="bg-white bg-opacity-25 p-3">
@@ -182,7 +182,7 @@ const Template3 = () => {
                             <Col key={i} md={4}>
                                 <Card className="h-100">
                                     <Card.Body>
-                                        <h5 className="fw-bold">{[ref?.first_name, ref?.middle_name, ref?.last_name].filter(Boolean).join(' ')}</h5>
+                                        <h5 className="fw-bold"  style={{ fontSize: '1rem' }}>{[ref?.first_name, ref?.middle_name, ref?.last_name].filter(Boolean).join(' ')}</h5>
                                         <p className="text-muted small">{ref?.referee_position}</p>
                                         <p className="small mb-1">📞 {ref?.phone}</p>
                                         <p className="small">✉️ {ref?.email}</p>

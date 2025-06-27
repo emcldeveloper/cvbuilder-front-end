@@ -107,14 +107,12 @@ const HomePageCv = () => {
 
                             {/* Document Content Area */}
                             <div className="flex flex-col md:flex-row">
-                 
-
+                                
                                 {/* Main Document Preview */}
-                                <div className="flex-1 p-8">
-                                    <div className="max-w-4xl mx-auto bg-white shadow-lg p-8 min-h-[70vh]">
+                                <div className="flex-1 p-0">
+                                    <div className="max-w-4xl mx-auto  p-8 min-h-[70vh]">
                                         {/* CV Preview Content Would Go Here */}
-                                        <div className="text-center py-20 text-gray-400 border-2 border-dashed border-gray-200 rounded">
-                                            <p>CV Preview Content</p>
+                                        <div className="text-center  text-gray-400     rounded">
                                             {[
                                                 // { template: <Template1 /> },
                                                 // { template: <Template2 /> },

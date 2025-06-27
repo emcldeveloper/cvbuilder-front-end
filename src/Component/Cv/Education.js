@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEyeSlash, faTimes } from '@fortawesome/free-solid-svg-icons';
+import StepProgress from "./Stepprogress";
 // import Course from "./course";
 
 
@@ -365,7 +366,18 @@ const EducationsCv = () => {
     };
 
     return (!originalDetails?.data == null ? <PageLoader /> : <div>
-
+         {/* Add the StepProgress component at the top */}
+      <StepProgress currentStep={3} onStepClick={(step) => {
+        // Handle navigation to different steps
+        switch(step) {
+          case 1: navigate('/introduction'); break;
+          case 2: navigate('/jobseeker/objective'); break;
+          case 3: navigate('/jobseeker/EducationCv'); break;
+          case 4: navigate('/languages'); break;
+          // ... add other cases for each step
+          default: break;
+        }
+      }} />
 
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 bg-white shadow-sm rounded mb-4">
             {/* Left Section: Title & Description */}
