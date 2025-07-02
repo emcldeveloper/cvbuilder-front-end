@@ -366,18 +366,24 @@ const EducationsCv = () => {
     };
 
     return (!originalDetails?.data == null ? <PageLoader /> : <div>
-         {/* Add the StepProgress component at the top */}
-      <StepProgress currentStep={3} onStepClick={(step) => {
-        // Handle navigation to different steps
-        switch(step) {
-          case 1: navigate('/introduction'); break;
-          case 2: navigate('/jobseeker/objective'); break;
-          case 3: navigate('/jobseeker/EducationCv'); break;
-          case 4: navigate('/languages'); break;
-          // ... add other cases for each step
-          default: break;
-        }
-      }} />
+        {/* Add the StepProgress component at the top */}
+        <StepProgress currentStep={3} onStepClick={(step) => {
+            // Handle navigation to different steps
+            switch (step) {
+                case 1: navigate('/jobseeker/introduction'); break;
+                case 2: navigate('/jobseeker/objective'); break;
+                case 3: navigate('/jobseeker/EducationCv'); break;
+                case 4: navigate('/jobseeker/ExperienceCv'); break;
+                case 5: navigate('/jobseeker/SkillsCv'); break;
+                case 6: navigate('/jobseeker/LanguageCv'); break;
+                case 7: navigate('/jobseeker/proficiencyCv'); break;
+                case 8: navigate('/jobseeker/TrainingCv'); break;
+                case 9: navigate('/jobseeker/RefereeCv'); break;
+                case 10: navigate('/jobseeker/CompleteCv'); break;
+                // ... add other cases for each step
+                default: break;
+            }
+        }} />
 
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 bg-white shadow-sm rounded mb-4">
             {/* Left Section: Title & Description */}
@@ -388,13 +394,7 @@ const EducationsCv = () => {
                 </p>
             </div>
 
-            {/* Right Section: Buttons */}
-            <div className="d-flex flex-column flex-md-row gap-2">
-                {/* Step 5 Button */}
-                <button className="btn btn-outline-secondary rounded-pill fw-bold px-4 py-2">
-                    Step 4
-                </button>
-            </div>
+             
         </div>
 
 

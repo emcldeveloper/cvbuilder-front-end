@@ -8,6 +8,7 @@ import { useState } from "react";
 import axios from "axios";
 import PageLoader from "../../widgets/pageLoader";
 import { CvApi } from "../../Api/Jobseeker/CvApi";
+import StepProgress from "./Stepprogress";
 
 
 
@@ -256,6 +257,23 @@ const IntroductionDetails = () => {
             <PageLoader />
         ) : (
             <div className=" ">
+                <StepProgress currentStep={1} onStepClick={(step) => {
+                    // Handle navigation to different steps
+                    switch (step) {
+                        case 1: navigate('/jobseeker/introduction'); break;
+                        case 2: navigate('/jobseeker/objective'); break;
+                        case 3: navigate('/jobseeker/EducationCv'); break;
+                        case 4: navigate('/jobseeker/ExperienceCv'); break;
+                        case 5: navigate('/jobseeker/SkillsCv'); break;
+                        case 6: navigate('/jobseeker/LanguageCv'); break;
+                        case 7: navigate('/jobseeker/proficiencyCv'); break;
+                        case 8: navigate('/jobseeker/TrainingCv'); break;
+                        case 9: navigate('/jobseeker/RefereeCv'); break;
+                        case 10: navigate('/jobseeker/CompleteCv'); break;
+                        // ... add other cases for each step
+                        default: break;
+                    }
+                }} />
                 {/* Header Section */}
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 bg-white shadow-sm rounded mb-4">
                     {/* Left Section: Title & Description */}
@@ -264,13 +282,7 @@ const IntroductionDetails = () => {
 
                     </div>
 
-                    {/* Right Section: Buttons */}
-                    <div className="d-flex flex-column flex-md-row gap-2">
-                        {/* Step 5 Button */}
-                        <button className="btn btn-outline-secondary rounded-pill fw-bold px-4 py-2">
-                            Step 2
-                        </button>
-                    </div>
+                  
                 </div>
                 {/* Grid Section */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 ">

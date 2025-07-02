@@ -36,8 +36,8 @@ import IntroductionDetails from './pages/introductionDetails';
 import IntroductionData from './pages/JobSeeker/Cv/Introduction';
 import ObjectDetail from './pages/JobSeeker/Cv/Objective';
 import EducationCv from './pages/JobSeeker/Cv/Education';
- import AboutPage from './pages/AboutPage';
- import PricePage from './pages/PricePage';
+import AboutPage from './pages/AboutPage';
+import PricePage from './pages/PricePage';
 import ExperinceCv from './pages/JobSeeker/Cv/Experience';
 import SkillsCv from './pages/JobSeeker/Cv/Skills';
 import LanguageCv from './pages/JobSeeker/Cv/Language';
@@ -50,6 +50,10 @@ import Template6 from './templates/template6';
 import DashBoard from './pages/Employer/Dashboard/DashBoard';
 import PostForm from './pages/Employer/ManageJob/PostForm';
 import CVComponent from './Component/Cv/Stepprogress';
+import Proficiencycv from './pages/JobSeeker/Cv/Proficiency';
+import TrainingCv from './pages/JobSeeker/Cv/Training';
+import Applyjob from './pages/JobSeeker/Jobs/Applyjob';
+import Complete from './pages/JobSeeker/Cv/CompleteCv';
 
 function App() {
   return (
@@ -69,13 +73,13 @@ function App() {
           <Route path="/jobs" element={<FindJobs />} />
           <Route path="/employers" element={<Employer />} />
           <Route path="/employer/details" element={<EmployerDetails />} />
-          <Route path="/jobs" element={<FindJobs/>}/>
-          <Route path="/employers" element={<Employer/>}/>
-          <Route path="/employer/details" element={<EmployerDetails/>}/>
-          <Route path="/about" element={<AboutPage/>}/>
-          <Route path="/pricelists" element={<PricePage/>}/>
+          <Route path="/jobs" element={<FindJobs />} />
+          <Route path="/employers" element={<Employer />} />
+          <Route path="/employer/details" element={<EmployerDetails />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/pricelists" element={<PricePage />} />
 
-          
+
 
           {/* Featured Profile will be here */}
           {/* <Route path="/job-seeker-profile/:slug" element={<FeaturedProfile/>}/> */}
@@ -93,6 +97,7 @@ function App() {
             <Route path="jobseeker/saved-searches" element={<SavedSearchJob />} />
             <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
             <Route path="jobseeker/job-match" element={<JobMatch />} />
+            <Route path="jobseeker/apply-job" element={<Applyjob />} />
             <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
             <Route path="jobseeker/account-settings" element={<MyAccount />} />
             <Route path="jobseeker/change-password" element={<ChangePassword />} />
@@ -107,19 +112,22 @@ function App() {
             <Route path="jobseeker/SkillsCv" element={<SkillsCv />} />
             <Route path="jobseeker/LanguageCv" element={<LanguageCv />} />
             <Route path="jobseeker/RefereeCv" element={<RefereeCv />} />
-             <Route path="jobseeker/Home-Cv" element={<HomeCv />} />
-              <Route path="jobseeker/test-template" element={<Template6 />} />
-              <Route path="jobseeker/cvprogress" element={<CVComponent />} />
+            <Route path="jobseeker/Home-Cv" element={<HomeCv />} />
+            <Route path="jobseeker/test-template" element={<Template6 />} />
+            <Route path="jobseeker/proficiencycv" element={<Proficiencycv />} />
+            <Route path="jobseeker/Trainingcv" element={<TrainingCv />} />
+            <Route path="jobseeker/cvprogress" element={<CVComponent />} />
+            <Route path="jobseeker/CompleteCv" element={<Complete />} />
           </Route>
 
 
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
 
-              {/* Employers Routes */}
+          {/* Employers Routes */}
           <Route path="employer/dashboard" element={<DashBoard />} />
-           <Route path="employer/post-job" element={<PostForm />} />
-          
-              
+          <Route path="employer/post-job" element={<PostForm />} />
+
+
         </Routes>
       </BrowserRouter>
     </UniversalProvider>

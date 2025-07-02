@@ -43,7 +43,7 @@ const LeftSideBar = () => {
           <div className="position-absolute" style={{ bottom: '-30px', left: '16px' }}>
             <div className="position-relative">
               <Image
-                src="/zuu.JPEG"
+                src="/zuu2.png"
                 roundedCircle
                 className="border border-3 border-white shadow"
                 style={{ width: '72px', height: '72px', objectFit: 'cover' }}

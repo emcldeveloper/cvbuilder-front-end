@@ -1,16 +1,17 @@
 import React from "react";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
-import RefreesCvComponent from "../../../Component/Cv/Referee";
 import { Card } from "react-bootstrap";
-const RefereeCv = () => {
+import CompleteCv from "../../../Component/Cv/Complete";
+
+const Complete = () => {
     return (
         <JobSeekerLayout>
             <Card>
                 <Card.Body>
-                    <RefreesCvComponent></RefreesCvComponent>
+                    <CompleteCv></CompleteCv>
                 </Card.Body>
             </Card>
         </JobSeekerLayout>
     )
 }
-export default RefereeCv;
+export default Complete;
