@@ -35,6 +35,7 @@ const MatchModalButton = ({ matchCount = 4, totalRequirements = 5 }) => {
               <li className="list-group-item">✔️ Experience: Matched</li>
               <li className="list-group-item">❌ Language: Not Matched</li>
               <li className="list-group-item">✔️ Skills: Matched</li>
+              
             </ul>
           </div>
         </Modal.Body>

@@ -4,6 +4,8 @@ import {
   FaEye, FaUsers, FaBriefcase, FaMoneyBill, FaCalendar,
   FaFacebook, FaTwitter, FaWhatsapp, FaLinkedin
 } from 'react-icons/fa';
+import { useNavigate } from "react-router-dom";
+
 
 const JobDetails = ({job}) => {
     const isExpired = job?.dead_line ? new Date(job.dead_line) < new Date() : false;
@@ -12,6 +14,8 @@ const JobDetails = ({job}) => {
     const currentUrl = window.location.href;
     const encodedUrl = encodeURIComponent(currentUrl);
     const encodedTitle = encodeURIComponent(shareTitle);
+    const navigate = useNavigate();
+
         
   return (
  
@@ -166,13 +170,17 @@ const JobDetails = ({job}) => {
 
   {/* Right: Apply Button */}
   <Col md="auto">
-    <Button
-      variant="primary"
-      size="md"
-      onClick={() => alert('Apply functionality here')}
-    >
-      Apply Now
-    </Button>
+   <Button 
+  variant="primary"
+  size="md"
+  onClick={() => {
+    localStorage.setItem("jobId", job.id); // Save jobId to localStorage
+    navigate("/jobseeker/apply-job");     // Navigate to apply-job page
+  }}
+>
+  Apply Now
+</Button>
+
   </Col>
 </Row>
 

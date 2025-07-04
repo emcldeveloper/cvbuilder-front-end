@@ -40,6 +40,7 @@ export const cvprofile = async ({ uuid }) => {
 };
 
 // Fetch Applicant Profile with caching + expiration
+ 
 export const profile = async (applicant_id) => {
     const cacheKey = `profile_${applicant_id}`;
 
@@ -61,6 +62,49 @@ export const profile = async (applicant_id) => {
         throw error;
     }
 };
+export const completeprofile = async (applicant_id) => {
+    const cacheKey = `completeprofile_${applicant_id}`;
+
+    if (isCacheValid(cacheKey)) {
+        return cache[cacheKey].data;
+    }
+  
+    try {
+        const response = await api.get(`applicant/complete/${applicant_id}`, {
+            params: { applicant_id },
+        });
+        cache[cacheKey] = {
+            data: response.data,
+            timestamp: Date.now(),
+        };
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+export const primarydata = async (applicant_id) => {
+    const cacheKey = `primarydata_${applicant_id}`;
+
+    if (isCacheValid(cacheKey)) {
+        return cache[cacheKey].data;
+    }
+  
+    try {
+        const response = await api.get(`applicant/primarydata/${applicant_id}`, {
+            params: { applicant_id },
+        });
+        cache[cacheKey] = {
+            data: response.data,
+            timestamp: Date.now(),
+        };
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 
 // Fetch Featured Job Seeker with caching + expiration
 export const featuredJobSeeker = async () => {
@@ -72,7 +116,7 @@ export const featuredJobSeeker = async () => {
 
     try {
         const response = await api.get(`applicant/feacture-candidate`);
-        console.log("console will be here",response.data.data)
+        console.log("console will be here", response.data.data)
         cache[cacheKey] = {
             data: response.data.data,
             timestamp: Date.now(),

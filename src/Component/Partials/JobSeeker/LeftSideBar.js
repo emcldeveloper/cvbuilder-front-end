@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button, ProgressBar, Accordion, Image, ListGroup, Badge, Modal, } from 'react-bootstrap';
 import {
@@ -16,21 +16,66 @@ import {
 } from 'react-bootstrap-icons';
 import { colors } from '@mui/material';
 import ConsentFormModal from '../../Forms/JobSeeker/ConsertForm';
+import { completeprofile, primarydata } from '../../../Api/Jobseeker/JobSeekerProfileApi';
 
 
 const LeftSideBar = () => {
-  const [profileCompletion] = useState(75);
+  const [profileCompletion, setcomplete] = useState('');
+   const [dataprimary, setprimarydata] = useState('');
   const [showModalPay, setShowModalPay] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
   // Inside your component:
   const navigate = useNavigate();
+  const [employers, setEmployers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+    const applicant_id = localStorage.getItem("applicantId");
 
+  useEffect(() => {
+    const fetchCompleteProfile = async () => {
+      try {
+        setLoading(true);
+        const data = await completeprofile(applicant_id)
+    
+        console.log("complete data is ", data);
+        // setcomplete(data);
+        setcomplete(Math.round(data));
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchCompleteProfile();
+  }, []); // Re-fetch when page or perPage changes
+  
+  useEffect(() => {
+    const fetchprimarydata = async () => {
+      try {
+        setLoading(true);
+        const data = await primarydata(applicant_id)
+    
+        console.log("primary data ", data);
+        setprimarydata(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchprimarydata();
+  }, []); // Re-fetch when page or perPage changes
+  console.log("check primary data is available",dataprimary);
 
   return (
     <div className="d-flex flex-column gap-2">
+   
       <Card className="shadow-sm">
         {/* Cover image */}
+        
         <div className="position-relative">
           <Card.Img
             variant="top"
@@ -62,8 +107,8 @@ const LeftSideBar = () => {
 
         <Card.Body className="text-center mt-2">
           <h5 className="fw-bold mb-1">Halidi Maneno</h5>
-          <p className="text-muted small mb-1">Machine Learning Engineering</p>
-          <p className="text-muted small mb-2">Exactmanpower Consult LTD</p>
+          <p className="text-muted small mb-1">Machine Learning Engineering(latest position)</p>
+          {/* <p className="text-muted small mb-2">Exactmanpower Consult LTD</p> */}
           {/* Status: Available for Work */}
           <Button
             variant="outline-success"
@@ -103,24 +148,7 @@ const LeftSideBar = () => {
           </h6>
 
 
-          {/* <div
-            className="p-3 mb-3  text-dark rounded-lg shadow-sm cursor-pointer hover:bg-warning-dark transition-colors
-             border border-2 border-danger"  style={{ color: '#D36314' }}
-            onClick={() => setShowConsentModal(true)}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <ClipboardCheck className="me-3 text-lg text-danger" />
-                <div>
-                  <span className="font-bold">CONSENT FORM</span>
-                  <p className="text-sm mt-1">Click to authorize your background verification</p>
-                </div>
-              </div>
-              <span className="text-xs bg-danger text-white px-2 py-1 rounded-full animate-pulse">
-                ACTION REQUIRED
-              </span>
-            </div>
-          </div> */}
+      
           <ConsentFormModal
             show={showConsentModal}
             onClose={() => setShowConsentModal(false)}
@@ -188,10 +216,10 @@ const LeftSideBar = () => {
                 key={section.key}
                 className="border-0"
               >
-                <Accordion.Header className="small py-0   border-top px-0"  style={{ fontSize: '0.8rem' }} >
+                <Accordion.Header className="small py-0   border-top px-0" style={{ fontSize: '0.8rem' }} >
                   <div className="d-flex align-items-center">
                     {/* {section.icon} */}
-                     {React.cloneElement(section.icon, { size: 14 })}
+                    {React.cloneElement(section.icon, { size: 14 })}
                     <span>{section.title}</span>
                   </div>
                 </Accordion.Header>
