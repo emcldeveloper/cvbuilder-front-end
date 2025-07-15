@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt, faDownload, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import RefereeModal from '../Forms/JobSeeker/Referee';
 
 const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     const getFileNameFromUrl = (url) => {
@@ -10,6 +11,48 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
         const filename = parts[parts.length - 1];
         return filename.length > 20 ? `${filename.substring(0, 15)}...` : filename;
     };
+    const [currentReferee, setCurrentReferee] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleAddNewReferee = async (refereeData) => {
+    setIsSaving(true);
+    try {
+      // Add your API call to save new referee
+      console.log("Adding new referee:", refereeData);
+      // await api.addReferee(refereeData);
+    } catch (error) {
+      console.error("Error adding referee:", error);
+    } finally {
+      setIsSaving(false);
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleUpdateReferee = async (refereeData) => {
+    setIsSaving(true);
+    try {
+      // Add your API call to update referee
+      console.log("Updating referee:", refereeData);
+      // await api.updateReferee(currentReferee.id, refereeData);
+    } catch (error) {
+      console.error("Error updating referee:", error);
+    } finally {
+      setIsSaving(false);
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleAddReferee = () => {
+    setCurrentReferee(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditReferee = (referee) => {
+    setCurrentReferee(referee);
+    setIsModalOpen(true);
+  };
+
 
     return (
         <div className="referees-section mt-4">
@@ -24,10 +67,19 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
                     <Button
                         variant="link"
                         className="p-0 text-secondary"
-                        onClick={showAddModal}
+                        onClick={handleAddReferee}
                     >
                         <FontAwesomeIcon icon={faPlus} size="lg" className="me-2" />
                     </Button>
+                    <RefereeModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onSubmit={currentReferee ? handleUpdateReferee : handleAddNewReferee}
+                        referee={currentReferee}
+                        isEditMode={!!currentReferee}
+                        isLoading={isSaving}
+                    />
+
                 </Col>
             </Row>
 

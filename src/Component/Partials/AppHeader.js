@@ -2,11 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import RegisterModal from '../../Auth/RegisterModal';
 import LoginModal from '../../Auth/LoginModal';
+import {
+  HouseDoorFill,
+  GearFill,
+  KeyFill,
+  ShieldLockFill,
+  BoxArrowRight
+} from 'react-bootstrap-icons';
+
+
 
 const AppHeader = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
@@ -43,7 +53,7 @@ const AppHeader = () => {
               <Nav.Link href="/" className="text-primary">Home</Nav.Link>
               <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
               <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
-              <Nav.Link href="/cv-builder" className="text-primary">CV Builder</Nav.Link>
+              <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link>
               <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
               <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
             </Nav>
@@ -54,7 +64,7 @@ const AppHeader = () => {
                   align="end"
                   title={
                     <img
-                      src="/default_user.jpeg" // Change this to dynamic profile image if needed
+                      src="/default_user.jpeg"
                       alt="Profile"
                       className="rounded-circle"
                       style={{
@@ -66,14 +76,34 @@ const AppHeader = () => {
                   }
                   id="profile-dropdown"
                 >
-                  <NavDropdown.Header>California, United States</NavDropdown.Header>
-                  <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
-                  <NavDropdown.Item href="/resume-search">Resume Search</NavDropdown.Item>
-                  <NavDropdown.Item href="/post-job">Post Job</NavDropdown.Item>
-                  <NavDropdown.Item href="/edit-profile">Edit Profile</NavDropdown.Item>
+                  <NavDropdown.Header style={{ fontWeight: 'bold' }}>MY ACCOUNT</NavDropdown.Header>
+
+                  {/* Menu Items with Perfectly Aligned Icons */}
+                  <NavDropdown.Item href="/jobseeker/dashboard" className="d-flex align-items-center">
+                    <HouseDoorFill style={{ width: '18px', height: '18px' }} className="me-2" />
+                    <span>Dashboard</span>
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item href="/jobseeker/account-settings" className="d-flex align-items-center">
+                    <GearFill style={{ width: '18px', height: '18px' }} className="me-2" />
+                    <span>Account Setting</span>
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item href="/jobseeker/change-password" className="d-flex align-items-center">
+                    <KeyFill style={{ width: '18px', height: '18px' }} className="me-2" />
+                    <span>Change Password</span>
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item href="/jobseeker/Privacy-policy" className="d-flex align-items-center">
+                    <ShieldLockFill style={{ width: '18px', height: '18px' }} className="me-2" />
+                    <span>Privacy Policy</span>
+                  </NavDropdown.Item>
+
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout} className="text-danger">
-                    Logout
+
+                  <NavDropdown.Item onClick={handleLogout} className="d-flex align-items-center text-danger">
+                    <BoxArrowRight style={{ width: '18px', height: '18px' }} className="me-2" />
+                    <span>Logout</span>
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (

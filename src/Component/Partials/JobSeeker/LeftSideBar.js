@@ -11,7 +11,9 @@ import {
   Search,
   BookFill,
   PeopleFill, InfoCircleFill,
-  ClipboardCheck
+  ClipboardCheck,
+  CheckCircleFill,
+  LightningFill,
 
 } from 'react-bootstrap-icons';
 import { colors } from '@mui/material';
@@ -21,7 +23,7 @@ import { completeprofile, primarydata } from '../../../Api/Jobseeker/JobSeekerPr
 
 const LeftSideBar = () => {
   const [profileCompletion, setcomplete] = useState('');
-   const [dataprimary, setprimarydata] = useState('');
+  const [dataprimary, setprimarydata] = useState('');
   const [showModalPay, setShowModalPay] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
@@ -30,14 +32,14 @@ const LeftSideBar = () => {
   const [employers, setEmployers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-    const applicant_id = localStorage.getItem("applicantId");
+  const applicant_id = localStorage.getItem("applicantId");
 
   useEffect(() => {
     const fetchCompleteProfile = async () => {
       try {
         setLoading(true);
         const data = await completeprofile(applicant_id)
-    
+
         console.log("complete data is ", data);
         // setcomplete(data);
         setcomplete(Math.round(data));
@@ -50,13 +52,13 @@ const LeftSideBar = () => {
 
     fetchCompleteProfile();
   }, []); // Re-fetch when page or perPage changes
-  
+
   useEffect(() => {
     const fetchprimarydata = async () => {
       try {
         setLoading(true);
         const data = await primarydata(applicant_id)
-    
+
         console.log("primary data ", data);
         setprimarydata(data);
         setLoading(false);
@@ -68,49 +70,116 @@ const LeftSideBar = () => {
 
     fetchprimarydata();
   }, []); // Re-fetch when page or perPage changes
-  console.log("check primary data is available",dataprimary);
+  console.log("check primary data is available", dataprimary);
 
   return (
     <div className="d-flex flex-column gap-2">
-   
+
       <Card className="shadow-sm">
         {/* Cover image */}
-        
-        <div className="position-relative">
-          <Card.Img
-            variant="top"
-            src="/comp.jpg"
-            className="object-fit-cover"
-            style={{ height: '80px', objectFit: 'cover' }}
+
+        <div style={{ position: 'relative' }}>
+          <div
+            style={{
+              height: '80px',
+              objectFit: 'cover',
+              width: '100%',
+              backgroundImage: 'url(/comp.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           />
 
           {/* Profile image */}
-          <div className="position-absolute" style={{ bottom: '-30px', left: '16px' }}>
-            <div className="position-relative">
-              <Image
-                src="/zuu2.png"
-                roundedCircle
-                className="border border-3 border-white shadow"
-                style={{ width: '72px', height: '72px', objectFit: 'cover' }}
+          <div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
+            <div style={{ position: 'relative' }}>
+              <div
+                style={{
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '50%',
+                  border: '3px solid white',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  backgroundImage: 'url(/zuu2.png)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
               />
-              <Button
-                variant="primary"
-                size="sm"
-                className="position-absolute bottom-0 end-0 rounded-circle p-1"
+
+              {/* Available indicator - Circular with pulse */}
+              <div style={{ position: 'absolute', top: '0', right: '0', transform: 'translate(50%, -50%)' }}>
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#28a745',
+                    border: '2px solid white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    animation: 'pulse 2s infinite'
+                  }}
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 16 16"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                  </svg>
+                </div>
+              </div>
+
+              <button
+                style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  right: '0',
+                  borderRadius: '50%',
+                  padding: '4px',
+                  backgroundColor: '#0d6efd',
+                  border: 'none',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
                 onClick={() => window.location.href = '/jobseeker/profile-preview'}
               >
-                <PencilFill size={12} />
-              </Button>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 16 16"
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                </svg>
+              </button>
             </div>
           </div>
-        </div>
 
+          {/* Inline style tag for animation */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+      }
+    `
+          }} />
+        </div>
         <Card.Body className="text-center mt-2">
           <h5 className="fw-bold mb-1">Halidi Maneno</h5>
-          <p className="text-muted small mb-1">Machine Learning Engineering(latest position)</p>
-          {/* <p className="text-muted small mb-2">Exactmanpower Consult LTD</p> */}
+          <p className="text-muted small mb-1">Machine Learning Engineering</p>
+          <p className="text-muted small mb-2">Exactmanpower Consult LTD</p>
           {/* Status: Available for Work */}
-          <Button
+          {/* <Button
             variant="outline-success"
             className="w-100 mb-2 fw-semibold py-1"
             style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
@@ -118,7 +187,7 @@ const LeftSideBar = () => {
           >
             <Badge bg="success" className="me-2" pill>•</Badge>
             Status: Available for Work
-          </Button>
+          </Button> */}
 
           {/* Profile Completion */}
           <div className="text-start mb-2">
@@ -130,16 +199,19 @@ const LeftSideBar = () => {
           </div>
 
           {/* Upgrade Button */}
-          <Button
-            className="w-100 mb-2 text-white fw-semibold py-1"
-            style={{
-              background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
-              fontSize: '0.875r 2vw ,1rem'
-            }}
-            onClick={() => setShowModalPay(true)}
-          >
-            <RocketFill className="me-2" /> Upgrade to Premium
-          </Button>
+          {/* <Button
+  className="w-100 mb-2 text-white fw-semibold py-0"
+  style={{
+    background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
+    fontSize: '0.75rem', 
+    height: '28px', 
+    lineHeight: '1.2' 
+  }}
+  onClick={() => setShowModalPay(true)}
+>
+  <RocketFill className="me-1" size={12} /> 
+  Upgrade to Premium
+</Button> */}
 
           {/* Dashboard Section */}
           <h6 className="border-top pt-2 text-start fw-semibold small" onClick={() => navigate('/jobseeker/dashboard')}>
@@ -148,7 +220,7 @@ const LeftSideBar = () => {
           </h6>
 
 
-      
+
           <ConsentFormModal
             show={showConsentModal}
             onClose={() => setShowConsentModal(false)}
@@ -170,13 +242,12 @@ const LeftSideBar = () => {
               },
               {
                 key: "1",
-                title: "My Account",
+                title: "My Correspondend",
                 icon: <PersonFill className="me-2" />,
                 items: [
-                  { name: "My Profile", path: "/jobseeker/profile-preview" },
-                  { name: "Account Settings", path: "/jobseeker/account-settings" },
-                  { name: "Change Password", path: "/jobseeker/change-password" },
-                  { name: "Privacy Policy", path: "/jobseeker/Privacy-policy" },
+                  { name: "Inbox", path: "/jobseeker/employer-correspondence",count: 10 },
+                  { name: "Sent", path: "/jobseeker/employer-correspondence",count: 4 },
+                
                   { name: "Consent Form", onClick: () => setShowConsentModal(true) }
                 ]
               },
@@ -186,21 +257,20 @@ const LeftSideBar = () => {
                 icon: <BriefcaseFill className="me-2" />,
                 items: [
                   { name: "My Application", path: "/jobseeker/My-application", count: 8 },
-                  { name: "Employer Correspondence", path: "/jobseeker/employer-correspondence", count: 2 },
                   { name: "History", path: "/jobseeker/history", count: 2 },
                   { name: "Saved Jobs", path: "/jobseeker/saved-jobs", count: 20 },
                   { name: "Job Match", path: "/jobseeker/job-match", count: 3 },
                 ]
               },
-              {
-                key: "3",
-                title: "My Job Search",
-                icon: <Search className="me-2" />,
-                items: [
-                  { name: "Saved Searches", path: "/jobseeker/saved-searches", count: 7 },
-                  { name: "Recent Searches", path: "/jobseeker/recent-searches", count: 12 }
-                ]
-              },
+              // {
+              //   key: "3",
+              //   title: "My Job Search",
+              //   icon: <Search className="me-2" />,
+              //   items: [
+              //     { name: "Saved Searches", path: "/jobseeker/saved-searches", count: 7 },
+              //     { name: "Recent Searches", path: "/jobseeker/recent-searches", count: 12 }
+              //   ]
+              // },
               {
                 key: "4",
                 title: "Resources",

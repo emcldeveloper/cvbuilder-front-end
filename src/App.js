@@ -54,6 +54,7 @@ import Proficiencycv from './pages/JobSeeker/Cv/Proficiency';
 import TrainingCv from './pages/JobSeeker/Cv/Training';
 import Applyjob from './pages/JobSeeker/Jobs/Applyjob';
 import Complete from './pages/JobSeeker/Cv/CompleteCv';
+import Jobemial from './pages/JobSeeker/Jobs/EmailJob';
 
 function App() {
   return (
@@ -103,7 +104,9 @@ function App() {
             <Route path="jobseeker/change-password" element={<ChangePassword />} />
             <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
             <Route path="jobseeker/cover-letter" element={<CoverLetter />} />
+            <Route path="jobseeker/apply-job-email" element={<Jobemial />} /> 
             <Route path="jobseeker/my-resume" element={<Mycv />} />
+      
             {/*   cv temepalte and cv builder */}
             <Route path="jobseeker/introduction" element={<IntroductionData />} />
             <Route path="jobseeker/Objective" element={<ObjectDetail />} />
