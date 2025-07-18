@@ -4,35 +4,35 @@ import {
     OverlayTrigger, Tooltip, Badge
 } from 'react-bootstrap';
 
-const ObejctiveModelForm = ({isOpen, onClose, onSubmit,applicant}) => {
+const CareerModelForm = ({isOpen, onClose, onSubmit,applicant}) => {
     
      
-    const [objective, setObjective] = useState(applicant?.objective?.objective || '');
+    const [career, setCareer] = useState(applicant?.objective?.objective || '');
     const [charCount, setCharCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
     // Character counter for textarea
-    useEffect(() => {
-        setCharCount(objective.length);
-    }, [objective]);
+    // useEffect(() => {
+    //     setCharCount(objective.length);
+    // }, [objective]);
 
     
     return (
         <div>
             <Modal show={isOpen} onHide={onClose} size="md" centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Career Objectives</Modal.Title>
+                    <Modal.Title>Career Profile</Modal.Title>
                 </Modal.Header>
                 <Form  >
                     <Modal.Body>
                         <Form.Group controlId="objectiveTextarea">
-                            <Form.Label>Career Objective <span className="text-danger">*</span></Form.Label>
+                            <Form.Label>Career Profile <span className="text-danger">*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={8}
-                                value={objective}
-                                onChange={(e) => setObjective(e.target.value)}
+                                // value={objective}
+                                onChange={(e) => setCareer(e.target.value)}
                                 maxLength={300}
                                 placeholder="Start typing..."
                                 style={{
@@ -57,7 +57,7 @@ const ObejctiveModelForm = ({isOpen, onClose, onSubmit,applicant}) => {
                         <Button
                             variant="outline-primary"
                             type="submit"
-                            disabled={isSubmitting || !objective.trim()}
+                            disabled={isSubmitting || !career.trim()}
                         >
                             {isSubmitting ? 'Saving...' : 'Save Changes'}
                         </Button>
@@ -92,4 +92,4 @@ const ObejctiveModelForm = ({isOpen, onClose, onSubmit,applicant}) => {
         </div>
     )
 }
-export default ObejctiveModelForm
+export default CareerModelForm;

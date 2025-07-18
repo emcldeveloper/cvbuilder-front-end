@@ -183,11 +183,10 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
                                             <i className="fas fa-plus me-1"></i> Add Data
                                         </button>
                                     </div>
-                                    <div className="mt-2 small text-muted d-flex align-items-center">
-                                        <i className="fas fa-info-circle text-secondary me-2"></i>
-                                        Complete the "{(completecheck?.sections && completecheck.sections[`applicant_${field?.toLowerCase()}`]) || field}" section to continue
-                                    </div>
-                                </div>
+      <div className="mt-2 small text-muted d-flex align-items-center">
+    <i className="fas fa-info-circle text-secondary me-2"></i>
+    Complete the <span className="badge bg-warning text-dark mx-1">{(completecheck?.sections && completecheck.sections[`applicant_${field?.toLowerCase()}`]) || field}</span> section to continue
+</div>                        </div>
                             </div>
                         ))}
                     </div>
@@ -211,7 +210,7 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
                             navigate("/jobseeker/profile-preview");
                         }}
                     >
-                        Complete Profile
+                             Go To Profile
                     </Button>
                 </div>
             </Modal.Footer>

@@ -9,24 +9,28 @@ import axios from 'axios';
 import ObejctiveModelForm from '../Forms/JobSeeker/ObjectiveModelForm';
 
 const CareerObjectivesSection = ({ applicant, isApplicant }) => {
-  const [showEditModal, setShowEditModal] = useState(false);
+ 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [objective, setObjective] = useState(applicant?.objective?.objective || '');
   const [charCount, setCharCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Character counter for textarea
   useEffect(() => {
     setCharCount(objective.length);
   }, [objective]);
 
-  const handleShowEdit = () => setShowEditModal(true);
-  const handleCloseEdit = () => setShowEditModal(false);
-  const handleShowDelete = () => setShowDeleteModal(true);
-  const handleCloseDelete = () => setShowDeleteModal(false);
+  
+  
+  const handleOpenModel=()=>{
+    setIsModalOpen(true);
+   }
+  
 
-//   const handleSubmit = async (e) => {
+
+//   const hanSubmit = async (e) => {
 //     e.preventDefault();
 //     setIsSubmitting(true);
 //     setError(null);
@@ -78,18 +82,15 @@ const CareerObjectivesSection = ({ applicant, isApplicant }) => {
             
            
               <div className="d-flex">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip>Edit Objective</Tooltip>}
-                >
+               
                   <Button 
                     variant="link" 
                     className="text-dark p-0 me-2"
-                    onClick={handleShowEdit}
+                    onClick={handleOpenModel}
                   >
                     <Pencil size={18} />
                   </Button>
-                </OverlayTrigger>
+             
                 
                 
               </div>
@@ -109,7 +110,11 @@ const CareerObjectivesSection = ({ applicant, isApplicant }) => {
         
 
       {/* Edit Objective Modal - Smaller size */}
-      <ObejctiveModelForm applicant={applicant}/>
+      <ObejctiveModelForm
+         isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+       applicant={applicant}
+       />
      
     </>
   );

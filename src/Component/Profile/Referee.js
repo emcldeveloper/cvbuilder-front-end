@@ -12,46 +12,47 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
         return filename.length > 20 ? `${filename.substring(0, 15)}...` : filename;
     };
     const [currentReferee, setCurrentReferee] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
-  const handleAddNewReferee = async (refereeData) => {
-    setIsSaving(true);
-    try {
-      // Add your API call to save new referee
-      console.log("Adding new referee:", refereeData);
-      // await api.addReferee(refereeData);
-    } catch (error) {
-      console.error("Error adding referee:", error);
-    } finally {
-      setIsSaving(false);
-      setIsModalOpen(false);
-    }
-  };
 
-  const handleUpdateReferee = async (refereeData) => {
-    setIsSaving(true);
-    try {
-      // Add your API call to update referee
-      console.log("Updating referee:", refereeData);
-      // await api.updateReferee(currentReferee.id, refereeData);
-    } catch (error) {
-      console.error("Error updating referee:", error);
-    } finally {
-      setIsSaving(false);
-      setIsModalOpen(false);
-    }
-  };
+    const handleAddNewReferee = async (refereeData) => {
+        setIsSaving(true);
+        try {
+            // Add your API call to save new referee
+            console.log("Adding new referee:", refereeData);
+            // await api.addReferee(refereeData);
+        } catch (error) {
+            console.error("Error adding referee:", error);
+        } finally {
+            setIsSaving(false);
+            setIsModalOpen(false);
+        }
+    };
 
-  const handleAddReferee = () => {
-    setCurrentReferee(null);
-    setIsModalOpen(true);
-  };
+    const handleUpdateReferee = async (refereeData) => {
+        setIsSaving(true);
+        try {
+            // Add your API call to update referee
+            console.log("Updating referee:", refereeData);
+            // await api.updateReferee(currentReferee.id, refereeData);
+        } catch (error) {
+            console.error("Error updating referee:", error);
+        } finally {
+            setIsSaving(false);
+            setIsModalOpen(false);
+        }
+    };
 
-  const handleEditReferee = (referee) => {
-    setCurrentReferee(referee);
-    setIsModalOpen(true);
-  };
+    const handleAddReferee = () => {
+        setCurrentReferee(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEditReferee = (referee) => {
+        setCurrentReferee(referee);
+        setIsModalOpen(true);
+    };
 
 
     return (

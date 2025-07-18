@@ -8,10 +8,16 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import ExperienceModelMform from '../Forms/JobSeeker/ExperienceModelForm';
 
 const WorkExperienceSection = ({ applicant, isApplicant }) => {
-    const [showModal, setShowModal] = useState(false);
+    
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const ModelExperience = () => {
+        setIsModalOpen(true);
+    }
 
     // Calculate duration for a set of positions
     const calculateDuration = (positions) => {
@@ -51,22 +57,24 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
             <div className="d-flex justify-content-between align-items-center">
                 <Card.Title className="mb-0">
                     <h6 className="card-title ">
-                         WORK EXPERIENCE ({totalExperience.text})
+                        WORK EXPERIENCE ({totalExperience.text})
                     </h6>
                 </Card.Title>
 
                 <div className="d-flex gap-2">
                     <Button
                         variant="link"
-                        onClick={() => setShowModal(true)}
+
                         className="p-0 border-0 bg-transparent"
+                        onClick={ModelExperience}
                     >
                         <Plus
                             style={{ fontSize: '1.5rem' }}
                             className="text-muted"
                         />
+                     
                     </Button>
-
+                     
                     <Link
                         to={`/detail-exprience?expd=${applicant.id}`}
                     >
@@ -77,6 +85,11 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                     </Link>
                 </div>
             </div>
+               {/* <ExperienceModelMform
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            applicant={applicant}
+                        /> */}
             <hr className="border-primary mt-2 mb-3" />
 
             {/* Grouped by Employer */}

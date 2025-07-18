@@ -415,7 +415,7 @@ const SkillsCvCompnent = () => {
                 <div className="d-flex flex-column flex-md-row gap-2">
                    
                     <button
-                        className="py-2 px-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all w-full sm:w-auto"
+                        className="py-2 px-4 bg-[#D36314] text-white font-bold rounded-full hover:bg-[#2E58A6] transition-all w-full sm:w-auto"
                         onClick={openeditNodel}
                     >
                         Edit
