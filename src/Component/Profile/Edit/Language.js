@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Row, Col, Table, Button, Modal, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPencilAlt, faArrowLeft ,faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
-import AddLanguageModal from '../Forms/JobSeeker/Language';
+import { Link, useNavigate } from 'react-router-dom';
 
-const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
+const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
     const [showAddModal, setShowAddModal] = useState(false);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         language: '',
         read: '',
@@ -29,38 +29,41 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
         // Then close modal
         setShowAddModal(false);
     };
-    const [IsModelOpen ,setIsModalOpen]=useState(false);
-   
+    const handleEditLanguage = (language) => {
+        // Your edit logic here
+        console.log('Editing language:', language);
+    };
+
+    const handleDeleteLanguage = (id) => {
+        // Your delete logic here
+        console.log('Deleting language with id:', id);
+    };
 
     return (
         <div className="languages-section mb-4 mt-2">
             {/* Header */}
-             <div className="d-flex justify-content-between align-items-center mb-2">
-                          <h6 className="section-title mb-0">
-                              <b>LANGUAGES</b>
-                          </h6>
-                          <div className="d-flex gap-2">
-                              <Button
-                                  variant="link"
-                                  onClick={() => setIsModalOpen(true)}
-                                  className="p-0 border-0 bg-transparent"
-                              >
-                                  <Plus
-                                      style={{ fontSize: '1.5rem' }}
-                                      className="text-muted"
-                                  />
-                              </Button>
-                              <AddLanguageModal show={IsModelOpen} onHide={()=>{setFormData(false)}}/>
-                              <Link
-                                  to={`/jobseeker/Edit-Language`}
-                              >
-                                  <Pencil
-                                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                                      className="text-muted"
-                                  />
-                              </Link>
-                          </div>
-                      </div>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h6 className="section-title mb-0">
+                    <b>LANGUAGES</b>
+                </h6>
+                <div className="d-flex gap-2">
+                    <Button
+                        variant="link"
+                        className="p-0 text-secondary me-2"
+                        onClick={() => navigate(-1)}  // Using react-router's navigate function
+                        title="Back to Training"
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+                    </Button>
+                    <Button
+                        variant="link"
+                        className="p-0 text-secondary"
+                        onClick={showAddModal}
+                    >
+                        <FontAwesomeIcon icon={faPlus} size="lg" />
+                    </Button>
+                </div>
+            </div>
             <div className="divider mb-3" />
 
             {/* Languages Table */}
@@ -74,6 +77,7 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
                                 <th className="text-black fw-bold">Write</th>
                                 <th className="text-black fw-bold">Speak</th>
                                 <th className="text-black fw-bold">Understand</th>
+                                <th className="text-black fw-bold">Actions</th> {/* Added Actions column */}
                             </tr>
                         </thead>
 
@@ -86,11 +90,31 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
                                         <td className="p-1">{ability.write?.write_ability}</td>
                                         <td className="p-1">{ability.speak?.speak_ability}</td>
                                         <td className="p-1">{ability.understand?.understand_ability}</td>
+                                        <td className="p-1">
+                                            <div className="d-flex justify-content-end">
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-secondary me-2"
+                                                    onClick={() => handleEditLanguage(ability)}
+                                                    title="Edit"
+                                                >
+                                                    <FontAwesomeIcon icon={faPencilAlt} size="sm" />
+                                                </Button>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-danger"
+                                                    onClick={() => handleDeleteLanguage(ability.id)}
+                                                    title="Delete"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashAlt} size="sm" />
+                                                </Button>
+                                            </div>
+                                        </td>
                                     </tr>
 
                                     {index < applicant.language.length - 1 && (
                                         <tr>
-                                            <td colSpan={5} className="border-top"></td>
+                                            <td colSpan={6} className="border-top"></td> {/* Updated colspan to 6 */}
                                         </tr>
                                     )}
                                 </React.Fragment>
@@ -213,4 +237,4 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
     );
 };
 
-export default LanguagesSection;
+export default EditLanguages;

@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Container, Badge, Card, Button, Modal, Form, Row, Col,
     Spinner, Alert, Image
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt, faDownload, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPencilAlt, faDownload, faCalendarAlt, faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
-import AddEducationModal from '../Forms/JobSeeker/Education';
+import { Link, useNavigate } from 'react-router-dom';
 
-const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
+const EditEducationDetails = ({ applicant, showAddModal, showEditModal }) => {
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
+    const navigate = useNavigate();
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');
@@ -33,12 +33,21 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
 
         return `${shortenedName}${extension}`;
     };
-    const [IsModelOpen ,setIsModelOpen]=useState(false);
+    const showAddEducationModal = () => {
+        // Your logic to show add education modal
+    };
 
-    const HandleOpenModel =()=>{
-        console.log("vip imefika pale pale");
-        setIsModelOpen(true);
-    }
+    const handleEditEducation = (education) => {
+        // Your edit logic here
+        console.log('Editing education:', education);
+    };
+
+    const handleDeleteEducation = (id) => {
+        if (window.confirm('Are you sure you want to delete this education record?')) {
+            // Your delete logic here
+            console.log('Deleting education with id:', id);
+        }
+    };
     return (
         <div className="education-section">
             {/* Education Details Header */}
@@ -51,26 +60,20 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                         <div className="d-flex gap-2">
                             <Button
                                 variant="link"
-
-                                className="p-0 border-0 bg-transparent"
-                                onClick={HandleOpenModel}
+                                className="p-0 text-secondary me-2"
+                                onClick={() => navigate(-1)}
+                                title="Back to Training"
                             >
-                                <Plus
-                                    style={{ fontSize: '1.5rem' }}
-                                    className="text-muted"
-                                />
+                                <FontAwesomeIcon icon={faArrowLeft} size="lg" />
                             </Button>
-                               <AddEducationModal
-                               show={IsModelOpen}
-                                onHide={() => setIsModelOpen(false)}/>
-                            <Link
-                                to={`/jobseeker/Edit-Education`}
+                            <Button
+                                variant="link"
+                                className="p-0 text-secondary"
+                                onClick={showAddEducationModal}
+                                title="Add Education"
                             >
-                                <Pencil
-                                    style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                                    className="text-muted"
-                                />
-                            </Link>
+                                <FontAwesomeIcon icon={faPlus} size="lg" />
+                            </Button>
                         </div>
                     </div>
 
@@ -80,17 +83,15 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                     <div className="education-list">
                         {applicant.education.length > 0 ? (
                             applicant.education.map((education, index) => (
-                                <div key={education.id} className="education-item mb-1 p-1  ">
+                                <div key={education.id} className="education-item mb-1 p-1">
                                     <div className="d-flex">
                                         {/* Education Icon */}
-
                                         <div className="me-3 mt-1">
                                             <FontAwesomeIcon
                                                 icon={faGraduationCap}
                                                 className="text-primary"
                                                 style={{ fontSize: '1.75rem' }}
                                             />
-
                                         </div>
 
                                         {/* Education Details */}
@@ -99,10 +100,25 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                                 <h6 className="fw-bold mb-1">
                                                     {education.level?.education_level} in {education.course?.course_name}
                                                 </h6>
-
+                                                <div className="d-flex">
+                                                    <Button
+                                                        variant="link"
+                                                        className="p-0 text-secondary me-2"
+                                                        onClick={() => handleEditEducation(education)}
+                                                        title="Edit Education"
+                                                    >
+                                                        <FontAwesomeIcon icon={faPencilAlt} />
+                                                    </Button>
+                                                    <Button
+                                                        variant="link"
+                                                        className="p-0 text-danger"
+                                                        onClick={() => handleDeleteEducation(education.id)}
+                                                        title="Delete Education"
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                                    </Button>
+                                                </div>
                                             </div>
-
-                                          
 
                                             {education.major?.name && (
                                                 <p className="mb-1">
@@ -111,7 +127,7 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                                     </Badge>
                                                 </p>
                                             )}
-                                              <p className="mb-1 text-dark">
+                                            <p className="mb-1 text-dark">
                                                 {education.college?.college_name}
                                             </p>
 
@@ -119,21 +135,6 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                                 <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
                                                 {formatDate(education.started)} - {formatDate(education.ended)}
                                             </p>
-
-                                            {/* {education.attachment && (
-                                                <div className="mt-2">
-                                                    <a
-                                                        href={education.attachment}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-decoration-none"
-                                                        title={getFileNameFromUrl(education.attachment)}
-                                                    >
-                                                        <FontAwesomeIcon icon={faDownload} className="me-1" />
-                                                        {getFileNameFromUrl(education.attachment)}
-                                                    </a>
-                                                </div>
-                                            )} */}
                                         </div>
                                     </div>
                                 </div>
@@ -148,19 +149,17 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
             )}
 
             <style jsx>{`
-        .divider {
-          height: 1px;
-          background-color: #eaeaea;
-        }
-        .education-item {
-          background-color: #fff;
-        //    background-color: #f9f9f9;
-          transition: all 0.2s;
-        }
-    
-      `}</style>
+    .divider {
+      height: 1px;
+      background-color: #eaeaea;
+    }
+    .education-item {
+      background-color: #fff;
+      transition: all 0.2s;
+    }
+  `}</style>
         </div>
     );
 };
 
-export default EducationDetails;
+export default EditEducationDetails;

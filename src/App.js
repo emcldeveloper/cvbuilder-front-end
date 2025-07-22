@@ -46,6 +46,7 @@ import HomeCv from './pages/JobSeeker/Cv/Home';
 import Template3 from './templates/template3';
 import Template6 from './templates/template6';
 
+
 // Employer Routes
 import DashBoard from './pages/Employer/Dashboard/DashBoard';
 import PostForm from './pages/Employer/ManageJob/PostForm';
@@ -55,6 +56,13 @@ import TrainingCv from './pages/JobSeeker/Cv/Training';
 import Applyjob from './pages/JobSeeker/Jobs/Applyjob';
 import Complete from './pages/JobSeeker/Cv/CompleteCv';
 import Jobemial from './pages/JobSeeker/Jobs/EmailJob';
+import EditTraningPage from './pages/JobSeeker/EditJobseeker/Training';
+import EditProficiencyPage from './pages/JobSeeker/EditJobseeker/Proficiency';
+import EditLanguagePage from './pages/JobSeeker/EditJobseeker/Language';
+import EditRefereePage from './pages/JobSeeker/EditJobseeker/Referee';
+import EditExperincePage from './pages/JobSeeker/EditJobseeker/Experience';
+import EditEducationPage from './pages/JobSeeker/EditJobseeker/Education';
+ 
 
 function App() {
   return (
@@ -91,36 +99,44 @@ function App() {
 
           {/* Jobseeker dashboard */}
           <Route element={<RequireVerification />}>
-            <Route path="jobseeker/dashboard" element={<JobSeekerDashboard />} />
-            <Route path="jobseeker/My-application" element={<AppliedJob />} />
-            <Route path="jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
-            <Route path="jobseeker/profile-preview" element={<MyProfile />} />
-            <Route path="jobseeker/saved-searches" element={<SavedSearchJob />} />
-            <Route path="jobseeker/saved-jobs" element={<SavedJob />} />
-            <Route path="jobseeker/job-match" element={<JobMatch />} />
-            <Route path="jobseeker/apply-job" element={<Applyjob />} />
-            <Route path="jobseeker/sample-selection" element={<SampleTemplate />} />
-            <Route path="jobseeker/account-settings" element={<MyAccount />} />
-            <Route path="jobseeker/change-password" element={<ChangePassword />} />
-            <Route path="jobseeker/Privacy-policy" element={<Privatepolicy />} />
-            <Route path="jobseeker/cover-letter" element={<CoverLetter />} />
-            <Route path="jobseeker/apply-job-email" element={<Jobemial />} /> 
-            <Route path="jobseeker/my-resume" element={<Mycv />} />
-      
+            <Route path="/jobseeker/dashboard" element={<JobSeekerDashboard />} />
+            <Route path="/jobseeker/My-application" element={<AppliedJob />} />
+            <Route path="/jobseeker/employer-correspondence" element={<EmployerCorrespondence />} />
+            <Route path="/jobseeker/profile-preview" element={<MyProfile />} />
+            <Route path="/jobseeker/saved-searches" element={<SavedSearchJob />} />
+            <Route path="/jobseeker/saved-jobs" element={<SavedJob />} />
+            <Route path="/jobseeker/job-match" element={<JobMatch />} />
+            <Route path="/jobseeker/apply-job" element={<Applyjob />} />
+            <Route path="/jobseeker/sample-selection" element={<SampleTemplate />} />
+            <Route path="/jobseeker/account-settings" element={<MyAccount />} />
+            <Route path="/jobseeker/change-password" element={<ChangePassword />} />
+            <Route path="/jobseeker/Privacy-policy" element={<Privatepolicy />} />
+            <Route path="/jobseeker/cover-letter" element={<CoverLetter />} />
+            <Route path="/jobseeker/apply-job-email" element={<Jobemial />} />
+            <Route path="/jobseeker/my-resume" element={<Mycv />} />
+
+            {/* edit profile */}
+            <Route path="/jobseeker/Edit-Training" element={<EditTraningPage />} />
+            <Route path="/jobseeker/Edit-Proficiency" element={<EditProficiencyPage />} />
+            <Route path="/jobseeker/Edit-Language" element={<EditLanguagePage />} />
+            <Route path="/jobseeker/Edit-Referee" element={<EditRefereePage />} />
+            <Route path="/jobseeker/Edit-Experience" element={<EditExperincePage />} />
+            <Route path="/jobseeker/Edit-Education" element={<EditEducationPage />} />
+
             {/*   cv temepalte and cv builder */}
-            <Route path="jobseeker/introduction" element={<IntroductionData />} />
-            <Route path="jobseeker/Objective" element={<ObjectDetail />} />
-            <Route path="jobseeker/EducationCv" element={<EducationCv />} />
-            <Route path="jobseeker/ExperienceCv" element={<ExperinceCv />} />
-            <Route path="jobseeker/SkillsCv" element={<SkillsCv />} />
-            <Route path="jobseeker/LanguageCv" element={<LanguageCv />} />
-            <Route path="jobseeker/RefereeCv" element={<RefereeCv />} />
-            <Route path="jobseeker/Home-Cv" element={<HomeCv />} />
-            <Route path="jobseeker/test-template" element={<Template6 />} />
-            <Route path="jobseeker/proficiencycv" element={<Proficiencycv />} />
-            <Route path="jobseeker/Trainingcv" element={<TrainingCv />} />
-            <Route path="jobseeker/cvprogress" element={<CVComponent />} />
-            <Route path="jobseeker/CompleteCv" element={<Complete />} />
+            <Route path="/jobseeker/introduction" element={<IntroductionData />} />
+            <Route path="/jobseeker/Objective" element={<ObjectDetail />} />
+            <Route path="/jobseeker/EducationCv" element={<EducationCv />} />
+            <Route path="/jobseeker/ExperienceCv" element={<ExperinceCv />} />
+            <Route path="/jobseeker/SkillsCv" element={<SkillsCv />} />
+            <Route path="/jobseeker/LanguageCv" element={<LanguageCv />} />
+            <Route path="/jobseeker/RefereeCv" element={<RefereeCv />} />
+            <Route path="/jobseeker/Home-Cv" element={<HomeCv />} />
+            <Route path="/jobseeker/test-template" element={<Template6 />} />
+            <Route path="/jobseeker/proficiencycv" element={<Proficiencycv />} />
+            <Route path="/jobseeker/Trainingcv" element={<TrainingCv />} />
+            <Route path="/jobseeker/cvprogress" element={<CVComponent />} />
+            <Route path="/jobseeker/CompleteCv" element={<Complete />} />
           </Route>
 
 

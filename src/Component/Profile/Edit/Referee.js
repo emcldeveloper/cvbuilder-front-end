@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt, faDownload, faUserTie } from '@fortawesome/free-solid-svg-icons';
-import RefereeModal from '../Forms/JobSeeker/Referee';
+import { faPlus, faPencilAlt, faDownload, faUserTie, faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import RefereeModal from '../../Forms/JobSeeker/Referee';
 import { Pencil, Plus } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
+const EditReferee = ({ applicant, showAddModal, showEditModal }) => {
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');
@@ -16,6 +16,8 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     const [currentReferee, setCurrentReferee] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const navigate = useNavigate();
+
 
 
     const handleAddNewReferee = async (refereeData) => {
@@ -55,7 +57,14 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
         setCurrentReferee(referee);
         setIsModalOpen(true);
     };
-
+    const handleDeleteReferee = (id) => {
+        // Your delete logic here
+        console.log('Deleting referee with id:', id);
+     
+        if (window.confirm('Are you sure you want to delete this referee?')) {
+           // call api
+        }
+    };
 
     return (
         <div className="referees-section mt-4">
@@ -68,15 +77,18 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
                 <div className="d-flex gap-2">
                     <Button
                         variant="link"
-
-                        className="p-0 border-0 bg-transparent"
+                        className="p-0 text-secondary me-2"
+                        onClick={() => navigate(-1)}  // Using react-router's navigate function
+                        title="Back to Training"
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+                    </Button>
+                    <Button
+                        variant="link"
+                        className="p-0 text-secondary"
                         onClick={handleAddReferee}
                     >
-                        <Plus
-                            style={{ fontSize: '1.5rem' }}
-                            className="text-muted"
-                        />
-
+                        <FontAwesomeIcon icon={faPlus} size="lg" />
                     </Button>
                     <RefereeModal
                         isOpen={isModalOpen}
@@ -87,14 +99,14 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
                         isLoading={isSaving}
                     />
 
-                    <Link
-                        to={`/jobseeker/Edit-Referee `}
+                    {/* <Link
+                        to={`/ `}
                     >
                         <Pencil
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                             className="text-muted"
                         />
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
 
@@ -151,7 +163,24 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
                                                     {referee.phone}
                                                 </p>
                                             </div>
-                                          
+                                            <div>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-secondary me-2"
+                                                    onClick={() => showEditModal(referee)}
+                                                    title="Edit"
+                                                >
+                                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                                </Button>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-danger"
+                                                    onClick={() => handleDeleteReferee(referee.id)}
+                                                    title="Delete"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </Button>
+                                            </div>
                                         </div>
 
                                         {referee.type === 'private' && referee.attachment && (
@@ -203,4 +232,4 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     );
 };
 
-export default RefereesSection;
+export default EditReferee;

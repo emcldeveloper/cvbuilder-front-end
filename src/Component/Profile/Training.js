@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt, faDownload, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
+import { Pencil, Plus } from 'react-bootstrap-icons';
+import { Link } from 'react-router-dom';
+import AddTrainingModal from '../Forms/JobSeeker/Training';
 
 const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
   const formatDate = (dateString) => {
@@ -10,7 +13,7 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  
+
   const getFileNameFromUrl = (url) => {
     if (!url) return '';
     const parts = url.split('/');
@@ -22,33 +25,52 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
     const extension = fullName.substring(lastDotIndex);
 
     const shortenedName = name.length > 10
-        ? `${name.substring(0, 7)}...`
-        : name;
+      ? `${name.substring(0, 7)}...`
+      : name;
 
     return `${shortenedName}${extension}`;
-};
+  };
+  const [IsOpenModel ,setIsOpenModel]=useState(false);
+   const handleOpenModelTraining =()=>{
+    console.log("training mode is open");
+    setIsOpenModel(true);
+    
+   }
 
   return (
     <div className="training-section mt-3">
       {/* Training Header */}
       {applicant?.training && (
         <div>
-          <Row className="align-items-center mb-2">
-            <Col xs={8}>
-              <h6 className="text-uppercase mb-0">
-                <b>TRAININGS & WORKSHOPS</b>
-              </h6>
-            </Col>
-            <Col xs={4} className="text-end">
-              <Button 
-                variant="link" 
-                className="p-0 text-secondary"
-                onClick={showAddModal}
+
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <h6 className="section-title mb-0">
+              <b>TRAININGS & WORKSHOPS</b>
+            </h6>
+            <div className="d-flex gap-2">
+              <Button
+                variant="link"
+
+                className="p-0 border-0 bg-transparent"
+                onClick={handleOpenModelTraining}
               >
-                <FontAwesomeIcon icon={faPlus} size="lg" />
+                <Plus
+                  style={{ fontSize: '1.5rem' }}
+                  className="text-muted"
+                />
               </Button>
-            </Col>
-          </Row>
+               <AddTrainingModal  show={IsOpenModel}  onHide={()=>{setIsOpenModel(false)}}/>
+              <Link
+                to={`/jobseeker/Edit-Training`}
+              >
+                <Pencil
+                  style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                  className="text-muted"
+                />
+              </Link>
+            </div>
+          </div>
+
 
           <div className="mb-3 divider" />
 
@@ -58,10 +80,10 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
               applicant.training.map((training, index) => (
                 <div key={index} className="d-flex mb-3 training-item">
                   <div className="me-3 mt-1">
-                    <FontAwesomeIcon 
-                      icon={faChalkboardTeacher} 
-                      className="text-primary" 
-                      style={{ fontSize: '1.5rem' }} 
+                    <FontAwesomeIcon
+                      icon={faChalkboardTeacher}
+                      className="text-primary"
+                      style={{ fontSize: '1.5rem' }}
                     />
                   </div>
                   <div className="flex-grow-1">
@@ -72,23 +94,17 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
                           {formatDate(training.started)} - {formatDate(training.ended)}
                         </span>
                       </h6>
-                      <Button 
-                        variant="link" 
-                        className="p-0 text-secondary"
-                        onClick={() => showEditModal(training)}
-                      >
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                      </Button>
+
                     </div>
                     <p className="mb-0">
                       {training.institution}
                     </p>
-                    
+
                     {training.attachment && (
                       <div className="mt-1">
-                        <a 
-                          href={training.attachment} 
-                          target="_blank" 
+                        <a
+                          href={training.attachment}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-decoration-none small"
                         >

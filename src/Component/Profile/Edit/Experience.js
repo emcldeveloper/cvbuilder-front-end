@@ -4,19 +4,24 @@ import {
     ListGroup, Badge, Spinner, Alert, Image
 } from 'react-bootstrap';
 import { Plus, Pencil } from 'react-bootstrap-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faPencilAlt, faDownload, faChalkboardTeacher, faTrashAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import ExperienceModelMform from '../Forms/JobSeeker/ExperienceModelForm';
-import AddWorkExperienceModal from '../Forms/JobSeeker/ExperienceModelForm';
 
-const WorkExperienceSection = ({ applicant, isApplicant }) => {
+import ExperienceModelMform from '../../Forms/JobSeeker/ExperienceModelForm';
+
+const EditWorkExperience = ({ applicant, isApplicant }) => {
 
     const [error, setError] = useState(null);
-    const [showExperienceModal, setShowExperienceModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
 
-    
+    const ModelExperience = () => {
+        setIsModalOpen(true);
+    }
 
     // Calculate duration for a set of positions
     const calculateDuration = (positions) => {
@@ -47,7 +52,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
     // Group experience by employer ID
     const groupedExperience = _.groupBy(applicant?.experience || [], 'applicant_employer_id');
 
-    if (!applicant) return <Spinner animation="border" />;
+   
 
     return (
         <div className="mt-4">
@@ -63,32 +68,26 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                 <div className="d-flex gap-2">
                     <Button
                         variant="link"
-
-                        className="p-0 border-0 bg-transparent"
-                      onClick={() => setShowExperienceModal(true)}
+                        className="p-0 text-secondary me-2"
+                        onClick={() => navigate(-1)}  // Using react-router's navigate function
+                        title="Back to Training"
                     >
-                        <AddWorkExperienceModal
-                            show={showExperienceModal}
-                            onHide={() => setShowExperienceModal(false)}
-                        />
-                        <Plus
-                            style={{ fontSize: '1.5rem' }}
-                            className="text-muted"
-                        />
-
+                        <FontAwesomeIcon icon={faArrowLeft} size="lg" />
                     </Button>
-
-                    <Link
-                        to={`/jobseeker/Edit-Experience`}
+                    <Button
+                        variant="link"
+                        className="p-0 text-secondary"
+                    // onClick={showAddModal}
                     >
-                        <Pencil
-                            style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                            className="text-muted"
-                        />
-                    </Link>
+                        <FontAwesomeIcon icon={faPlus} size="lg" />
+                    </Button>
                 </div>
             </div>
-
+            {/* <ExperienceModelMform
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            applicant={applicant}
+                        /> */}
             <hr className="border-primary mt-2 mb-3" />
 
             {/* Grouped by Employer */}
@@ -114,7 +113,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                 </div>
 
                                 <div className="flex-grow-1">
-                                    <div className="d-flex justify-content-between">
+                                    <div className="d-flex justify-content-between align-items-start">
                                         <div>
                                             <h5 className="mb-1">{employer?.employer_name}</h5>
                                             <p className="text-muted mb-2">
@@ -124,18 +123,16 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                                 {duration.text}
                                             </Badge>
                                         </div>
+
                                     </div>
 
                                     <ListGroup variant="flush" className="mt-1">
                                         {positions.reduce((acc, position) => {
-                                            // Check if this position's employer is already in the accumulator
                                             const existingEmployer = acc.find(item => item.employer_id === position.employer.id);
 
                                             if (existingEmployer) {
-                                                // Add position to existing employer group
                                                 existingEmployer.positions.push(position);
                                             } else {
-                                                // Create new employer group
                                                 acc.push({
                                                     employer_id: position.employer.id,
                                                     employer_name: position.employer.employer_name,
@@ -145,18 +142,15 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                             return acc;
                                         }, []).map(employerGroup => (
                                             <ListGroup.Item key={employerGroup.employer_id} className="border-0 px-0 py-1">
-                                                <div className="d-flex justify-content-between">
+                                                <div className="d-flex justify-content-between align-items-start">
                                                     <div>
-                                                        {/* Display all positions for this employer */}
                                                         {employerGroup.positions.map((position, idx) => (
                                                             <div
                                                                 key={`${employerGroup.employer_id}-${idx}`}
                                                                 className="d-flex position-relative mb-2"
                                                             >
-                                                                {/* Timeline line + dot (only if there are 2 or more positions) */}
                                                                 {employerGroup.positions.length > 1 && (
                                                                     <div className="position-relative me-3" style={{ width: "20px" }}>
-                                                                        {/* Vertical line (only if not last item) */}
                                                                         {idx < employerGroup.positions.length - 1 && (
                                                                             <div
                                                                                 style={{
@@ -170,8 +164,6 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                                                                 }}
                                                                             />
                                                                         )}
-
-                                                                        {/* Circle (dot) */}
                                                                         <div
                                                                             style={{
                                                                                 width: "14px",
@@ -185,23 +177,43 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                                                     </div>
                                                                 )}
 
-                                                                {/* Position details */}
-                                                                <div>
-                                                                    <p className="mb-1">
-                                                                        <strong>{position.position?.position_name}</strong>
+                                                                <div className="flex-grow-1">
+                                                                    <div className="d-flex justify-content-between align-items-start">
+                                                                        <div>
+                                                                            <p className="mb-1">
+                                                                                <strong>{position.position?.position_name}</strong>
+                                                                            </p>
+                                                                            <p className="mb-1">
+                                                                                {position.industry?.industry_name &&
+                                                                                    ` ${position.industry.industry_name} Industry`}
+                                                                            </p>
+                                                                            <p className="text-muted small">
+                                                                                {moment(position.start_date).format("MMM YYYY")} -{" "}
+                                                                                {position.end_date
+                                                                                    ? moment(position.end_date).format("MMM YYYY")
+                                                                                    : "Present"}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="d-flex justify-content-end">
+                                                                            <Button
+                                                                                variant="link"
+                                                                                className="p-0 text-secondary me-2"
+                                                                                // onClick={() => handleEditPosition(position)}
+                                                                                title="Edit Position"
+                                                                            >
+                                                                                <FontAwesomeIcon icon={faPencilAlt} size="sm" />
+                                                                            </Button>
+                                                                            <Button
+                                                                                variant="link"
+                                                                                className="p-0 text-danger ms-2"
+                                                                                // onClick={() => handleDeletePosition(position.id)}
+                                                                                title="Delete Position"
+                                                                            >
+                                                                                <FontAwesomeIcon icon={faTrashAlt} size="sm" />
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
 
-                                                                    </p>
-                                                                    <p className="mb-1">
-
-                                                                        {position.industry?.industry_name &&
-                                                                            ` ${position.industry.industry_name} Industry`}
-                                                                    </p>
-                                                                    <p className="text-muted small">
-                                                                        {moment(position.start_date).format("MMM YYYY")} -{" "}
-                                                                        {position.end_date
-                                                                            ? moment(position.end_date).format("MMM YYYY")
-                                                                            : "Present"}
-                                                                    </p>
                                                                     <div className="mt-2">
                                                                         <p className="mb-1 text-wrap" style={{ wordBreak: 'break-word', maxWidth: '100%' }}>
                                                                             <strong>Responsibility:</strong>{" "}
@@ -226,8 +238,6 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                                                                 </div>
                                                             </div>
                                                         ))}
-
-
                                                     </div>
                                                 </div>
                                             </ListGroup.Item>
@@ -243,7 +253,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
     );
 };
 
-WorkExperienceSection.propTypes = {
+EditWorkExperience.propTypes = {
     applicant: PropTypes.shape({
         id: PropTypes.number,
         experience: PropTypes.arrayOf(PropTypes.object)
@@ -251,4 +261,4 @@ WorkExperienceSection.propTypes = {
     isApplicant: PropTypes.bool
 };
 
-export default WorkExperienceSection;
+export default EditWorkExperience;

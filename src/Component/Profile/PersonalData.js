@@ -11,14 +11,14 @@ const ProfileSection = ({ profile, address }) => {
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
     const [showBgModal, setShowBgModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
-  
+
     const [profileImage, setProfileImage] = useState(
         profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'uploads/picture/pre_photo.jpg'
-      );
-      const [bgImage, setBgImage] = useState(
+    );
+    const [bgImage, setBgImage] = useState(
         profile?.picture ? `http://127.0.0.1:8000/${profile.background_picture}` : '/comp.jpg'
-      );
-      
+    );
+
 
     const handleBgImageUpload = (e) => {
         const file = e.target.files[0];
@@ -41,7 +41,7 @@ const ProfileSection = ({ profile, address }) => {
             reader.readAsDataURL(file);
         }
     };
-
+    const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones"];
     return (
         <div  >
             {/* Background Image Section with Edit Icon */}
@@ -169,7 +169,7 @@ const ProfileSection = ({ profile, address }) => {
                             <h5 className="mb-1 fw-bold me-2">
                                 {profile?.first_name} {profile?.middle_name} {profile?.last_name}
                             </h5>
-                          
+
                         </div>
 
                         <div className="text-dark d-flex align-items-center flex-wrap">
@@ -200,7 +200,7 @@ const ProfileSection = ({ profile, address }) => {
                             title="Edit personal information"
                         >
                             <PencilFill size={16} className="me-1" />
-                          
+
                         </Button>
                     </Col>
                 </Row>
@@ -245,24 +245,185 @@ const ProfileSection = ({ profile, address }) => {
             {/* Basic Info Modal */}
             <Modal size="lg" show={showBasicInfoModal} onHide={() => setShowBasicInfoModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit Personal Information</Modal.Title>
+                    <Modal.Title>Personal Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form method="POST"  >
+                        <input type="hidden" name="id" value={profile?.id} />
                         <Row>
                             <Form.Group as={Col} md={4}>
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control type="text" defaultValue={profile?.first_name} />
+                                <Form.Label>First Name <span className="text-danger">*</span></Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="First Name"
+                                    name="first_name"
+                                    defaultValue={profile?.first_name}
+                                    required
+                                />
                             </Form.Group>
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Middle Name</Form.Label>
-                                <Form.Control type="text" defaultValue={profile?.middle_name} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Middle Name"
+                                    name="middle_name"
+                                    defaultValue={profile?.middle_name}
+                                />
                             </Form.Group>
                             <Form.Group as={Col} md={4}>
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control type="text" defaultValue={profile?.last_name} />
+                                <Form.Label>Last Name <span className="text-danger">*</span></Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Last Name"
+                                    name="last_name"
+                                    defaultValue={profile?.last_name}
+                                    required
+                                />
                             </Form.Group>
                         </Row>
+
+                        <Row className="mt-3">
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Gender <span className="text-danger">*</span></Form.Label>
+                                <Form.Select name="gender" required>
+                                    <option disabled>--Select Gender--</option>
+                                    {/* {Universal.gender().map(data => (
+                                        <option
+                                            key={data.id}
+                                            value={data.id}
+                                            selected={data.id === applicant?.gender_id}
+                                        >
+                                            {data.gender_name}
+                                        </option>
+                                    ))} */}
+                                </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Marital <span className="text-danger">*</span></Form.Label>
+                                <Form.Select name="marital" required>
+                                    <option value="">--select marital status--</option>
+                                    {/* {Universal.maritalStatus().map(data => (
+                                        <option
+                                            key={data.id}
+                                            value={data.id}
+                                            selected={data.id === applicant?.marital_id}
+                                        >
+                                            {data.marital_status}
+                                        </option>
+                                    ))} */}
+                                </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Date of Birth <span className="text-danger">*</span></Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    name="date_of_birth"
+                                    defaultValue={profile?.dob ? new Date(profile.dob).toISOString().split('T')[0] : ''}
+                                />
+                            </Form.Group>
+                        </Row>
+
+                        <Row className="mt-3">
+                            <Form.Group as={Col} md={6}>
+                                <Form.Label>Phone Number <span className="text-danger">*</span></Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="phone"
+                                    // defaultValue={phone?.phone_number}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={6}>
+                                <Form.Label>Extra Phone Number</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="phone2"
+                                    defaultValue=""
+                                />
+                            </Form.Group>
+                        </Row>
+
+                        <Row className="mt-3">
+                            <Form.Group as={Col} md={6}>
+                                <Form.Label>Country <span className="text-danger">*</span></Form.Label>
+                                <Form.Select name="country">
+                                    <option value="">--select country--</option>
+                                    {/* {Universal.countries().map(data => (
+                                        <option
+                                            key={data.id}
+                                            value={data.name}
+                                            selected={data.id === applicant?.address?.region?.country_id}
+                                        >
+                                            {data.name}
+                                        </option>
+                                    ))} */}
+                                </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={6}>
+                                <Form.Label>Nationality <span className="text-danger">*</span></Form.Label>
+                                <Form.Select name="nationality">
+                                    <option value="">--select nationality--</option>
+                                    {/* {Universal.countries().map(data => (
+                                        <option
+                                            key={data.id}
+                                            value={data.citizenship}
+                                            selected={data.id === applicant?.address?.region?.country?.id}
+                                        >
+                                            {data.citizenship}
+                                        </option>
+                                    ))} */}
+                                </Form.Select>
+                            </Form.Group>
+                        </Row>
+
+                        <Row className="mt-3">
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Region <span className="text-danger">*</span></Form.Label>
+                                <Form.Select name="region">
+                                    <option value="">--select regions--</option>
+                                    {/* {Universal.regions().map(data => (
+                                        <option
+                                            key={data.id}
+                                            value={data.region_name}
+                                            selected={data.id === applicant?.address?.region?.id}
+                                        >
+                                            {data.region_name}
+                                        </option>
+                                    ))} */}
+                                </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Sub Location</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="sub_location"
+                                    defaultValue={profile?.address?.sub_location}
+                                />
+                            </Form.Group>
+
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Postal</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="postal_address"
+                                    defaultValue={profile?.address?.postal}
+                                />
+                            </Form.Group>
+                        </Row>
+
+                        <Modal.Footer className="mt-3">
+                            <Button variant="outline-secondary" onClick={() => setShowBasicInfoModal(false)}>
+                                Close
+                            </Button>
+                            <Button variant="outline-secondary" type="submit">
+                                Save changes
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
             </Modal>

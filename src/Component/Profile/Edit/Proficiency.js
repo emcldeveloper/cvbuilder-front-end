@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt, faDownload, faCertificate } from '@fortawesome/free-solid-svg-icons';
-import { Plus, Pencil } from 'react-bootstrap-icons';
+import { faPlus, faPencilAlt, faDownload, faCertificate, faArrowLeft, Plus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
-import AddProficiencyModal from '../Forms/JobSeeker/Proficiency';
-
-const ProficiencyQualifications = ({ applicant }) => {
 
 
-
+const EditProficiency = ({ applicant }) => {
     const formatYear = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-    //   const getFileNameFromUrl = (url) => {
-    //     if (!url) return '';
-    //     const parts = url.split('/');
-    //     return parts[parts.length - 1];
-    //   };
+    const navigate = useNavigate();
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');
@@ -37,10 +30,14 @@ const ProficiencyQualifications = ({ applicant }) => {
 
         return `${shortenedName}${extension}`;
     };
-    const [IsOpenModel ,setIsOpenModel]=useState(false);
-    const handleModelProficiency =()=>{
-        setIsOpenModel(true);
-    }
+    const handleEditProficiency = (proficiency) => {
+        // Your edit logic here
+    };
+
+    const handleDeleteProficiency = (id) => {
+        // Your delete logic here
+    };
+
 
     return (
         <div className="proficiency-section mt-3">
@@ -55,24 +52,19 @@ const ProficiencyQualifications = ({ applicant }) => {
                         <div className="d-flex gap-2">
                             <Button
                                 variant="link"
-
-                                className="p-0 border-0 bg-transparent"
-                                onClick={handleModelProficiency}
+                                className="p-0 text-secondary me-2"
+                                onClick={() => navigate(-1)}  // Using react-router's navigate function
+                                title="Back to Training"
                             >
-                                <Plus
-                                    style={{ fontSize: '1.5rem' }}
-                                    className="text-muted"
-                                />
+                                <FontAwesomeIcon icon={faArrowLeft} size="lg" />
                             </Button>
-                            <AddProficiencyModal  show={IsOpenModel} onHide={()=>{setIsOpenModel(false)}}/>
-                            <Link
-                                to={`/jobseeker/Edit-Proficiency`}
+                            <Button
+                                variant="link"
+                                className="p-0 text-secondary"
+                            // onClick={showAddModal}Edit-Proficiency
                             >
-                                <Pencil
-                                    style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                                    className="text-muted"
-                                />
-                            </Link>
+                                <FontAwesomeIcon icon={faPlus} size="lg" />
+                            </Button>
                         </div>
                     </div>
 
@@ -91,14 +83,31 @@ const ProficiencyQualifications = ({ applicant }) => {
                                         />
                                     </div>
                                     <div className="flex-grow-1">
-                                        <div className="d-flex justify-content-between">
+                                        <div className="d-flex justify-content-between align-items-center">
                                             <h6 className="mb-0 fw-bold">
                                                 {proficiency.proficiency?.proficiency_name} - {' '}
                                                 <span className="fw-light text-muted">
                                                     {formatYear(proficiency.started)} - {formatYear(proficiency.ended)}
                                                 </span>
                                             </h6>
-
+                                            <div>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-secondary me-2"
+                                                    onClick={() => handleEditProficiency(proficiency)}
+                                                    title="Edit"
+                                                >
+                                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                                </Button>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0 text-danger"
+                                                    onClick={() => handleDeleteProficiency(proficiency.id)}
+                                                    title="Delete"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </Button>
+                                            </div>
                                         </div>
                                         <p className="mb-0 text-uppercase">
                                             {proficiency.award} ({proficiency.organization?.organization_name})
@@ -148,4 +157,4 @@ const ProficiencyQualifications = ({ applicant }) => {
     );
 };
 
-export default ProficiencyQualifications;
+export default EditProficiency;
