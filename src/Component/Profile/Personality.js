@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import EditPersonalityModal from '../Forms/JobSeeker/Personality';
 
 const PersonalitiesSection = ({ applicant }) => {
+    const [IsOpenModel ,setIsModalOpen]=useState(false);
+    const handleOpenPersonality =()=>{
+        setIsModalOpen(true);
+    }
+    const CloseModelPersonality =()=>{
+        setIsModalOpen(false);
+    }
     return (
         <div className="personalities-section mt-4">
             {/* Only render if applicant exists */}
@@ -30,13 +38,14 @@ const PersonalitiesSection = ({ applicant }) => {
                                 </Button>
 
                                 <Link
-                                    to={`/detail-exprience?expd=${applicant.id}`}
+                                    onClick={handleOpenPersonality}
                                 >
                                     <Pencil
                                         style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                                         className="text-muted"
                                     />
                                 </Link>
+                                <EditPersonalityModal  show={IsOpenModel} onHide={CloseModelPersonality}/>
                             </div>
                         </div>
 

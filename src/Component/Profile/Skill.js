@@ -42,7 +42,7 @@ const ApplicantSkillsSection = ({ applicant, isApplicant }) => {
             [field]: values
         }));
     };
-
+ 
     return (
         <>
             <Row className="justify-content-center mb-3">

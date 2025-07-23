@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Badge, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import EditSkillsModal from '../Forms/JobSeeker/Skills';
 
 const KnowledgesSection = ({ applicant, onEdit, onAdd }) => {
+    const [IsOpenModel, setIsOpenModel] = useState(false);
+
+    const handleSkillModel = () => {
+        setIsOpenModel(true);
+    }
+
+    const handleSkilledClose = () => {
+        setIsOpenModel(false);
+    }
+
     return (
         <div className="knowledges-section mt-4  ">
-           
+
             <div className="d-flex justify-content-between align-items-center mb-2">
                 <h6 className="section-title mb-0">
                     <b>KEY SKILLS & COMPETEMCIES</b>
                 </h6>
                 <div className="d-flex gap-2">
-                    <Button
-                        variant="link"
-
-                        className="p-0 border-0 bg-transparent"
-                    >
-                        <Plus
-                            style={{ fontSize: '1.5rem' }}
-                            className="text-muted"
-                        />
-                    </Button>
-
                     <Link
-                        to={`/`}
+                        onClick={handleSkillModel}
                     >
                         <Pencil
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
@@ -36,10 +36,11 @@ const KnowledgesSection = ({ applicant, onEdit, onAdd }) => {
                     </Link>
                 </div>
             </div>
-
+            <EditSkillsModal show={IsOpenModel} onHide={handleSkilledClose}
+            />
             <div className="mb-3 divider" />
 
-            
+
 
             {applicant?.knowledge?.length > 0 ? (
                 <Row className="g-2">
@@ -51,7 +52,7 @@ const KnowledgesSection = ({ applicant, onEdit, onAdd }) => {
 
                                 style={{ cursor: 'pointer' }}
                             >
-                               {item.knowledge?.knowledge_name}
+                                {item.knowledge?.knowledge_name}
                             </div>
                         </Col>
                     ))}
@@ -61,7 +62,7 @@ const KnowledgesSection = ({ applicant, onEdit, onAdd }) => {
             ) : (
                 <div className="text-muted">No knowledges added yet</div>
             )}
-            
+
 
             <style jsx>{`
         .divider {

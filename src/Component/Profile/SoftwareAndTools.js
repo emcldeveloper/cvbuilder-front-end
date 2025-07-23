@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import EditSoftwareModal from '../Forms/JobSeeker/Software';
 
 const SoftwareSection = ({ applicant }) => {
+    const [IsModelOpen, setIsModalOpen] = useState(false);
+    const handleSoftwareModel = () => {
+        setIsModalOpen(true);
+    }
+    const CloseModelSoftware = () => {
+        setIsModalOpen(false);
+    }
     return (
         <div className="personalities-section mt-4">
             {/* Only render if applicant exists */}
@@ -18,19 +26,10 @@ const SoftwareSection = ({ applicant }) => {
                                 <b>SOFTWARE & TOOLS</b>
                             </h6>
                             <div className="d-flex gap-2">
-                                <Button
-                                    variant="link"
-
-                                    className="p-0 border-0 bg-transparent"
-                                >
-                                    <Plus
-                                        style={{ fontSize: '1.5rem' }}
-                                        className="text-muted"
-                                    />
-                                </Button>
-
+                                
+                                <EditSoftwareModal show={IsModelOpen} onHide={CloseModelSoftware} />
                                 <Link
-                                    to={`/`}
+                                      onClick={handleSoftwareModel}
                                 >
                                     <Pencil
                                         style={{ cursor: 'pointer', fontSize: '1.2rem' }}
@@ -61,7 +60,7 @@ const SoftwareSection = ({ applicant }) => {
                             </Row>
                         </Col>
                     )}
-                        {applicant.tools?.length > 0 && (
+                    {applicant.tools?.length > 0 && (
                         <Col md={12} className="mt-3">
                             <Row className="g-2">
                                 {applicant.tools.map((item, index) => (
