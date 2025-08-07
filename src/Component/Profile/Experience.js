@@ -11,12 +11,13 @@ import _ from 'lodash';
 import ExperienceModelMform from '../Forms/JobSeeker/ExperienceModelForm';
 import AddWorkExperienceModal from '../Forms/JobSeeker/ExperienceModelForm';
 
+
 const WorkExperienceSection = ({ applicant, isApplicant }) => {
 
     const [error, setError] = useState(null);
     const [showExperienceModal, setShowExperienceModal] = useState(false);
 
-    
+
 
     // Calculate duration for a set of positions
     const calculateDuration = (positions) => {
@@ -65,19 +66,19 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                         variant="link"
 
                         className="p-0 border-0 bg-transparent"
-                      onClick={() => setShowExperienceModal(true)}
+                        onClick={() => setShowExperienceModal(true)}
                     >
-                        <AddWorkExperienceModal
-                            show={showExperienceModal}
-                            onHide={() => setShowExperienceModal(false)}
-                        />
+
                         <Plus
                             style={{ fontSize: '1.5rem' }}
                             className="text-muted"
                         />
 
                     </Button>
-
+                    <AddWorkExperienceModal
+                        show={showExperienceModal}
+                        onHide={() => setShowExperienceModal(false)}
+                    />
                     <Link
                         to={`/jobseeker/Edit-Experience`}
                     >
@@ -102,7 +103,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
                             <div className="d-flex">
                                 <div className="flex-shrink-0 me-3">
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        className="h-10 w-10 text-gray-500"
+                                        className="h-10 w-10 stroke-[#2E58A6]"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor">

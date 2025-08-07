@@ -78,102 +78,124 @@ const LeftSideBar = () => {
       <Card className="shadow-sm">
         {/* Cover image */}
 
-        <div style={{ position: 'relative' }}>
-          <div
-            style={{
-              height: '80px',
-              objectFit: 'cover',
-              width: '100%',
-              backgroundImage: 'url(/comp.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          />
+      <div style={{ position: 'relative' }}>
+  <div
+    style={{
+      height: '80px',
+      objectFit: 'cover',
+      width: '100%',
+      backgroundImage: 'url(/comp.jpg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    }}
+  />
 
-          {/* Profile image */}
-          <div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  width: '72px',
-                  height: '72px',
-                  borderRadius: '50%',
-                  border: '3px solid white',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  backgroundImage: 'url(/zuu2.png)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}
-              />
+  {/* Profile image */}
+{/* <div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
+  <div style={{ position: 'relative', width: '72px', height: '72px' }}>
+    <div
+      style={{
+        width: '72px',
+        height: '72px',
+        borderRadius: '50%',
+        border: '3px solid white',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        backgroundImage: 'url(/zuu2.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    />
+    <div
+      style={{
+        position: 'absolute',
+        bottom: '0px',
+        right: '0px',
+        width: '20px',
+        height: '20px',
+        backgroundColor: '#28a745', // green color
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: '2px solid white',
+      }}
+      title="Available for job"
+    >
+      <i className="fas fa-check" style={{ color: 'white', fontSize: '12px' }}></i>
+    </div>
+  </div>
+</div> */}
+<div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
+  <div
+    style={{
+      width: '80px', // Slightly larger than the image
+      height: '80px',
+      borderRadius: '50%',
+      border: '3px solid #28a745', // Green ring
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+    title="Available for Job"
+  >
+    <div
+      style={{
+        width: '72px',
+        height: '72px',
+        borderRadius: '50%',
+        border: '3px solid white',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        backgroundImage: 'url(/zuu2.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    />
+  </div>
+</div>
 
-              {/* Available indicator - Circular with pulse */}
-              <div style={{ position: 'absolute', top: '0', right: '0', transform: 'translate(50%, -50%)' }}>
-                <div
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: '#28a745',
-                    border: '2px solid white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    animation: 'pulse 2s infinite'
-                  }}
-                >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 16 16"
-                    fill="white"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                  </svg>
-                </div>
-              </div>
 
-              <button
-                style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  right: '0',
-                  borderRadius: '50%',
-                  padding: '4px',
-                  backgroundColor: '#0d6efd',
-                  border: 'none',
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                onClick={() => window.location.href = '/jobseeker/profile-preview'}
-              >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 16 16"
-                  fill="white"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
-                </svg>
-              </button>
-            </div>
-          </div>
 
-          {/* Inline style tag for animation */}
-          <style dangerouslySetInnerHTML={{
-            __html: `
-      @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-        70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-      }
+  {/* Edit profile button - moved below cover image */}
+  <button
+    style={{
+      position: 'absolute',
+      bottom: '8px', // Adjust this value to position vertically
+      right: '16px', // Adjust this value to position horizontally
+      borderRadius: '4px',
+      padding: '4px 8px',
+      backgroundColor: '#0d6efd',
+      border: 'none',
+      color: 'white',
+      fontSize: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px'
+    }}
+    onClick={() => window.location.href = '/jobseeker/profile-preview'}
+  >
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 16 16"
+      fill="white"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+    </svg>
+    Edit
+  </button>
+
+  {/* Inline style tag for animation */}
+  <style dangerouslySetInnerHTML={{
+    __html: `
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+    }
     `
-          }} />
-        </div>
+  }} />
+</div>
         <Card.Body className="text-center mt-2">
           <h5 className="fw-bold mb-1">Halidi Maneno</h5>
           <p className="text-muted small mb-1">Machine Learning Engineering</p>
@@ -200,21 +222,21 @@ const LeftSideBar = () => {
 
           {/* Upgrade Button */}
           {/* <Button
-  className="w-100 mb-2 text-white fw-semibold py-0"
-  style={{
-    background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
-    fontSize: '0.75rem', 
-    height: '28px', 
-    lineHeight: '1.2' 
-  }}
-  onClick={() => setShowModalPay(true)}
->
-  <RocketFill className="me-1" size={12} /> 
-  Upgrade to Premium
-</Button> */}
+            className="w-100 mb-2 text-white fw-semibold py-0"
+            style={{
+              background: 'linear-gradient(90deg, #7f00ff 0%, #e100ff 100%)',
+              fontSize: '0.75rem', 
+              height: '28px', 
+              lineHeight: '1.2' 
+            }}
+            onClick={() => setShowModalPay(true)}
+          >
+            <RocketFill className="me-1" size={12} /> 
+            Upgrade to Premium
+          </Button> */}
 
           {/* Dashboard Section */}
-          <h6 className="border-top pt-2 text-start fw-semibold small" onClick={() => navigate('/jobseeker/dashboard')}>
+          <h6 className="border-top pt-2 text-start fw-semibold " onClick={() => navigate('/jobseeker/dashboard')}>
 
             <BarChartFill className="me-2" /> Dashboard
           </h6>
@@ -245,9 +267,9 @@ const LeftSideBar = () => {
                 title: "My Correspondend",
                 icon: <PersonFill className="me-2" />,
                 items: [
-                  { name: "Inbox", path: "/jobseeker/employer-correspondence",count: 10 },
-                  { name: "Sent", path: "/jobseeker/employer-correspondence",count: 4 },
-                
+                  { name: "Inbox", path: "/jobseeker/employer-correspondence", count: 10 },
+                  { name: "Sent", path: "/jobseeker/employer-correspondence", count: 4 },
+
                   { name: "Consent Form", onClick: () => setShowConsentModal(true) }
                 ]
               },

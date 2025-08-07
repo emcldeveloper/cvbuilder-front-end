@@ -4,13 +4,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { ProgressBar, Accordion, ListGroup } from 'react-bootstrap';
 import { PencilFill, Camera } from 'react-bootstrap-icons';
-// import LazyImage from '../../utils/Lazyimage';
+// import LazyImage from '../../utils/Lazyimage
+import useGenders from '../../hooks/Universal/Gender';
+import useMalitalstatus from '../../hooks/Universal/MaritalStatus';
+import useRegions from '../../hooks/Universal/Region';
+import usegetCountries from '../../hooks/Universal/Country';
+import useCitizenship from '../../hooks/Universal/Citizenship';
+
 
 const ProfileSection = ({ profile, address }) => {
     const [showContactModal, setShowContactModal] = useState(false);
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
     const [showBgModal, setShowBgModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const { genders, loading } = useGenders();
+    const { maritalstatus, maritalsatausloading } = useMalitalstatus();
+    const { regions, loaingregions } = useRegions()
+    const { countries, loadingcountries } = usegetCountries()
+    const { citizenship, loadingcitizenship } = useCitizenship();
+    console.log('citizenship welcome', citizenship);
+
+
 
     const [profileImage, setProfileImage] = useState(
         profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'uploads/picture/pre_photo.jpg'
@@ -42,6 +56,7 @@ const ProfileSection = ({ profile, address }) => {
         }
     };
     const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones"];
+    // if (loading) return <p>Loading genders...</p>;
     return (
         <div  >
             {/* Background Image Section with Edit Icon */}
@@ -287,15 +302,15 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Label>Gender <span className="text-danger">*</span></Form.Label>
                                 <Form.Select name="gender" required>
                                     <option disabled>--Select Gender--</option>
-                                    {/* {Universal.gender().map(data => (
+                                    {genders.map(data => (
                                         <option
                                             key={data.id}
                                             value={data.id}
-                                            selected={data.id === applicant?.gender_id}
+                                            selected={data.id}
                                         >
                                             {data.gender_name}
                                         </option>
-                                    ))} */}
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
 
@@ -303,15 +318,17 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Label>Marital <span className="text-danger">*</span></Form.Label>
                                 <Form.Select name="marital" required>
                                     <option value="">--select marital status--</option>
-                                    {/* {Universal.maritalStatus().map(data => (
+                                    {maritalstatus.map(data => (
                                         <option
                                             key={data.id}
                                             value={data.id}
-                                            selected={data.id === applicant?.marital_id}
+                                            selected={data.id
+                                                // === applicant?.marital_id
+                                            }
                                         >
                                             {data.marital_status}
                                         </option>
-                                    ))} */}
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
 
@@ -351,15 +368,17 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Label>Country <span className="text-danger">*</span></Form.Label>
                                 <Form.Select name="country">
                                     <option value="">--select country--</option>
-                                    {/* {Universal.countries().map(data => (
+                                    {countries.map(data => (
                                         <option
                                             key={data.id}
                                             value={data.name}
-                                            selected={data.id === applicant?.address?.region?.country_id}
+                                            selected={data.id
+                                                //  === applicant?.address?.region?.country_id
+                                            }
                                         >
                                             {data.name}
                                         </option>
-                                    ))} */}
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
 
@@ -367,15 +386,17 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Label>Nationality <span className="text-danger">*</span></Form.Label>
                                 <Form.Select name="nationality">
                                     <option value="">--select nationality--</option>
-                                    {/* {Universal.countries().map(data => (
+                                    {citizenship.map(data => (
                                         <option
                                             key={data.id}
                                             value={data.citizenship}
-                                            selected={data.id === applicant?.address?.region?.country?.id}
+                                            selected={data.id    
+                                            // === applicant?.address?.region?.country?.id
+                                        }
                                         >
                                             {data.citizenship}
                                         </option>
-                                    ))} */}
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
                         </Row>
@@ -385,15 +406,17 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Label>Region <span className="text-danger">*</span></Form.Label>
                                 <Form.Select name="region">
                                     <option value="">--select regions--</option>
-                                    {/* {Universal.regions().map(data => (
+                                    {regions.map(data => (
                                         <option
                                             key={data.id}
                                             value={data.region_name}
-                                            selected={data.id === applicant?.address?.region?.id}
+                                            selected={data.id
+                                                // === applicant?.address?.region?.id
+                                            }
                                         >
                                             {data.region_name}
                                         </option>
-                                    ))} */}
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
 

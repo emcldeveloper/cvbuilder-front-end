@@ -12,7 +12,9 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import AddEducationModal from '../Forms/JobSeeker/Education';
 
+
 const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
+
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -33,12 +35,13 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
 
         return `${shortenedName}${extension}`;
     };
-    const [IsModelOpen ,setIsModelOpen]=useState(false);
+    const [IsModelOpen, setIsModelOpen] = useState(false);
 
-    const HandleOpenModel =()=>{
+    const HandleOpenModel = () => {
         console.log("vip imefika pale pale");
         setIsModelOpen(true);
     }
+
     return (
         <div className="education-section">
             {/* Education Details Header */}
@@ -60,9 +63,9 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                     className="text-muted"
                                 />
                             </Button>
-                               <AddEducationModal
-                               show={IsModelOpen}
-                                onHide={() => setIsModelOpen(false)}/>
+                            <AddEducationModal
+                                show={IsModelOpen}
+                                onHide={() => setIsModelOpen(false)} />
                             <Link
                                 to={`/jobseeker/Edit-Education`}
                             >
@@ -101,9 +104,6 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                                 </h6>
 
                                             </div>
-
-                                          
-
                                             {education.major?.name && (
                                                 <p className="mb-1">
                                                     <Badge bg="light" text="dark" className="fw-normal">
@@ -111,7 +111,7 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                                     </Badge>
                                                 </p>
                                             )}
-                                              <p className="mb-1 text-dark">
+                                            <p className="mb-1 text-dark">
                                                 {education.college?.college_name}
                                             </p>
 

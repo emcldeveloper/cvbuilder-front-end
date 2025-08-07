@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const UNIVERSAL_API = `${API_BASE_URL}universal`;
+const UNIVERSAL_APPLICANT_API = `${API_BASE_URL}applicant`;
 
 const cache = {};
 const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -52,6 +53,10 @@ export const getCountries = () =>
   fetchWithCache('country', `${UNIVERSAL_API}/country`, res => ({
     data: res.data.country
   }));
+export const getCitizenship = () =>
+  fetchWithCache('citizenship', `${UNIVERSAL_APPLICANT_API}/citizenship`, res => ({
+    data: res.data.citizenship
+  }));
 
 export const getRegions = () =>
   fetchWithCache('regions', `${UNIVERSAL_API}/regions`, res => ({
@@ -72,6 +77,11 @@ export const getCourse = () =>
   fetchWithCache('course', `${UNIVERSAL_API}/course`, res => ({
     data: res.data.course
   }));
+export const getOrganization = () =>
+  fetchWithCache('organization', `${UNIVERSAL_APPLICANT_API}/organization`, res => ({
+    data: res.data.organization
+  }));
+
 
 export const getEducationLevel = () =>
   fetchWithCache('education_level', `${UNIVERSAL_API}/education_level`, res => ({
@@ -96,10 +106,55 @@ export const getJobTypes = () =>
     data: res.data.type
   }));
 
-  export const getPackagePrice = () =>
+export const getPackagePrice = () =>
   fetchWithCache('packages', `${UNIVERSAL_API}/employer/packages`, res => ({
     data: res.data.data
   }));
+export const getLanguage = () =>
+  fetchWithCache('language', `${UNIVERSAL_APPLICANT_API}/language`, res => ({
+    data: res.data.language
+  }));
+export const getReadLanguage = () =>
+  fetchWithCache('language_read', `${UNIVERSAL_APPLICANT_API}/language_read`, res => ({
+    data: res.data.language_read
+  }));
+export const getWriteLanguage = () =>
+  fetchWithCache('language_write', `${UNIVERSAL_APPLICANT_API}/language_write`, res => ({
+    data: res.data.language_write
+  }));
+export const getSpeakLanguage = () =>
+  fetchWithCache('language_speak', `${UNIVERSAL_APPLICANT_API}/language_speak`, res => ({
+    data: res.data.language_speak
+  }));
+export const getUnderstandLanguage = () =>
+  fetchWithCache('language_understand', `${UNIVERSAL_APPLICANT_API}/language_understand`, res => ({
+    data: res.data.understand_ability
+  }));
+export const getknowlege = () =>
+  fetchWithCache('knowlege', `${UNIVERSAL_APPLICANT_API}/knowlege`, res => ({
+    data: res.data.knowledge
+  }));
+export const getSoftware = () =>
+  fetchWithCache('software', `${UNIVERSAL_APPLICANT_API}/software`, res => ({
+    data: res.data.software
+  }));
+export const getTool = () =>
+  fetchWithCache('tool', `${UNIVERSAL_APPLICANT_API}/tool`, res => ({
+    data: res.data.tool
+  }));
+export const getPersonality = () =>
+  fetchWithCache('personality', `${UNIVERSAL_APPLICANT_API}/personality`, res => ({
+    data: res.data.personality
+  }));
+  export const getEmployer = () =>
+  fetchWithCache('applicant_employer', `${UNIVERSAL_APPLICANT_API}/applicant_employer`, res => ({
+    data: res.data.data
+  }));
+
+
+
+
+
 
 
 
