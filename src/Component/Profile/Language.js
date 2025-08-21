@@ -29,7 +29,14 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
         // Then close modal
         setShowAddModal(false);
     };
-    const [IsModelOpen ,setIsModalOpen]=useState(false);
+       const [IsOpenModel ,setIsModalOpen]=useState(false);
+        const handleOpenLnagugae =()=>{
+            setIsModalOpen(true);
+        }
+        const CloseModelLnaguage =()=>{
+            setIsModalOpen(false);
+        }
+     
    
 
     return (
@@ -42,7 +49,7 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
                           <div className="d-flex gap-2">
                               <Button
                                   variant="link"
-                                  onClick={() => setIsModalOpen(true)}
+                                  onClick={handleOpenLnagugae }
                                   className="p-0 border-0 bg-transparent"
                               >
                                   <Plus
@@ -50,7 +57,7 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
                                       className="text-muted"
                                   />
                               </Button>
-                              <AddLanguageModal show={IsModelOpen} onHide={()=>{setFormData(false)}}/>
+                              <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage}/>
                               <Link
                                   to={`/jobseeker/Edit-Language`}
                               >

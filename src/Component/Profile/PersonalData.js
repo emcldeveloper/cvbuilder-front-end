@@ -27,10 +27,10 @@ const ProfileSection = ({ profile, address }) => {
 
 
     const [profileImage, setProfileImage] = useState(
-        profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'uploads/picture/pre_photo.jpg'
+        profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
     );
     const [bgImage, setBgImage] = useState(
-        profile?.picture ? `http://127.0.0.1:8000/${profile.background_picture}` : '/comp.jpg'
+        profile?.picture ? `http://127.0.0.1:8000/${profile.background_picture}` : 'http://127.0.0.1:8000/comp.jpg'
     );
 
 
@@ -107,7 +107,7 @@ const ProfileSection = ({ profile, address }) => {
             {/* Background Image Edit Modal */}
             <Modal show={showBgModal} onHide={() => setShowBgModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit Background Image</Modal.Title>
+                    <Modal.Title className='fs-5'>Edit Background Image</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
                     <Image
@@ -140,7 +140,7 @@ const ProfileSection = ({ profile, address }) => {
             {/* Profile Image Edit Modal */}
             <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit Profile Image</Modal.Title>
+                    <Modal.Title className='fs-5'>Edit Profile Image</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
                     <Image
@@ -224,7 +224,7 @@ const ProfileSection = ({ profile, address }) => {
             {/* Contact Modal */}
             <Modal show={showContactModal} onHide={() => setShowContactModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Contact Info</Modal.Title>
+                    <Modal.Title className='fs-5'>Contact Info</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row className="mb-3">
@@ -260,7 +260,7 @@ const ProfileSection = ({ profile, address }) => {
             {/* Basic Info Modal */}
             <Modal size="lg" show={showBasicInfoModal} onHide={() => setShowBasicInfoModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Personal Information</Modal.Title>
+                    <Modal.Title className='fs-5'>Personal Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form method="POST"  >

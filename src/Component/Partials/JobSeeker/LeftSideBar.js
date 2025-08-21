@@ -23,7 +23,7 @@ import { completeprofile, primarydata } from '../../../Api/Jobseeker/JobSeekerPr
 
 const LeftSideBar = () => {
   const [profileCompletion, setcomplete] = useState('');
-  const [dataprimary, setprimarydata] = useState('');
+ const [dataprimary, setprimarydata] = useState([]);
   const [showModalPay, setShowModalPay] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
@@ -76,130 +76,101 @@ const LeftSideBar = () => {
     <div className="d-flex flex-column gap-2">
 
       <Card className="shadow-sm">
+ 
         {/* Cover image */}
 
-      <div style={{ position: 'relative' }}>
-  <div
-    style={{
-      height: '80px',
-      objectFit: 'cover',
-      width: '100%',
-      backgroundImage: 'url(/comp.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center'
-    }}
-  />
+            <div style={{ position: 'relative' }}>
+              <div
+                style={{
+                  height: '80px',
+                  objectFit: 'cover',
+                  width: '100%',
+                  backgroundImage: `url(https://ekazi.co.tz/${dataprimary?.[0]?.background_picture || '/comp.jpg'})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                  // https://ekazi.co.tz
+                  // http://127.0.0.1:8000
+                }}
+              />
 
-  {/* Profile image */}
-{/* <div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
-  <div style={{ position: 'relative', width: '72px', height: '72px' }}>
-    <div
-      style={{
-        width: '72px',
-        height: '72px',
-        borderRadius: '50%',
-        border: '3px solid white',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        backgroundImage: 'url(/zuu2.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    />
-    <div
-      style={{
-        position: 'absolute',
-        bottom: '0px',
-        right: '0px',
-        width: '20px',
-        height: '20px',
-        backgroundColor: '#28a745', // green color
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: '2px solid white',
-      }}
-      title="Available for job"
-    >
-      <i className="fas fa-check" style={{ color: 'white', fontSize: '12px' }}></i>
-    </div>
-  </div>
-</div> */}
-<div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
-  <div
-    style={{
-      width: '80px', // Slightly larger than the image
-      height: '80px',
-      borderRadius: '50%',
-      border: '3px solid #28a745', // Green ring
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-    title="Available for Job"
-  >
-    <div
-      style={{
-        width: '72px',
-        height: '72px',
-        borderRadius: '50%',
-        border: '3px solid white',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        backgroundImage: 'url(/zuu2.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    />
-  </div>
-</div>
+          {/* Profile image */}
+
+          <div style={{ position: 'absolute', bottom: '-30px', left: '16px' }}>
+            <div
+              style={{
+                width: '80px', // Slightly larger than the image
+                height: '80px',
+                borderRadius: '50%',
+                border: '3px solid #28a745', // Green ring
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              title="Available for Job"
+            >
+              <div
+                style={{
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '50%',
+                  border: '3px solid white',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  backgroundImage: `url(https://ekazi.co.tz/${dataprimary?.[0]?.picture || '/zuu2.png'})`,
+                
+                
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
+            </div>
+          </div>
 
 
 
-  {/* Edit profile button - moved below cover image */}
-  <button
-    style={{
-      position: 'absolute',
-      bottom: '8px', // Adjust this value to position vertically
-      right: '16px', // Adjust this value to position horizontally
-      borderRadius: '4px',
-      padding: '4px 8px',
-      backgroundColor: '#0d6efd',
-      border: 'none',
-      color: 'white',
-      fontSize: '12px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '4px'
-    }}
-    onClick={() => window.location.href = '/jobseeker/profile-preview'}
-  >
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 16 16"
-      fill="white"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
-    </svg>
-    Edit
-  </button>
+          {/* Edit profile button - moved below cover image */}
+          <button
+            style={{
+              position: 'absolute',
+              bottom: '8px', // Adjust this value to position vertically
+              right: '16px', // Adjust this value to position horizontally
+              borderRadius: '4px',
+              padding: '4px 8px',
+              backgroundColor: '#0d6efd',
+              border: 'none',
+              color: 'white',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+            onClick={() => window.location.href = '/jobseeker/profile-preview'}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 16 16"
+              fill="white"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+            </svg>
+            Edit Profile
+          </button>
 
-  {/* Inline style tag for animation */}
-  <style dangerouslySetInnerHTML={{
-    __html: `
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-      70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-    }
-    `
-  }} />
-</div>
+          {/* Inline style tag for animation */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+                70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+              }
+              `
+          }} />
+        </div>
         <Card.Body className="text-center mt-2">
-          <h5 className="fw-bold mb-1">Halidi Maneno</h5>
-          <p className="text-muted small mb-1">Machine Learning Engineering</p>
-          <p className="text-muted small mb-2">Exactmanpower Consult LTD</p>
+          <h5 className="fw-bold mb-1"> {dataprimary?.[0]?.first_name}  {dataprimary?.[0]?.last_name}</h5>
+          <p className="text-muted small mb-1">  {dataprimary?.[0]?.latest_position?.position?.position_name || " "}</p>
           {/* Status: Available for Work */}
           {/* <Button
             variant="outline-success"

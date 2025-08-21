@@ -56,7 +56,7 @@ const AddEducationModal = ({ show, onHide }) => {
     return (
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Add Education</Modal.Title>
+                <Modal.Title  className="fs-5">Add Education</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form encType="multipart/form-data" className="education-applicant">

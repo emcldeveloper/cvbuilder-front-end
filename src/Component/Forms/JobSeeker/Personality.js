@@ -43,7 +43,7 @@ const EditPersonalityModal = ({ show, onHide }) => {
     return (
         <Modal show={show} onHide={onHide} size="m" centered>
             <Modal.Header closeButton>
-                <Modal.Title>Skills-No best title specified yet</Modal.Title>
+                <Modal.Title className="fs-5"> Personality Traits</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>

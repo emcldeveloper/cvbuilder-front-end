@@ -86,7 +86,7 @@ const ProficiencyQualifications = ({ applicant }) => {
                                     <div className="me-3 mt-1">
                                         <FontAwesomeIcon
                                             icon={faMedal}
-                                            className="text-primary"
+                                            className="text-primaryu"
                                             style={{ fontSize: '1.5rem' }}
                                         />
                                     </div>

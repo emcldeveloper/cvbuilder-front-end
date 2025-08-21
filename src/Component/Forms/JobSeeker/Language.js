@@ -46,7 +46,7 @@ const AddLanguageModal = ({ show, onHide }) => {
     return (
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Add Language</Modal.Title>
+                <Modal.Title className="fs-5">Add Language</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form className="language-applicant">

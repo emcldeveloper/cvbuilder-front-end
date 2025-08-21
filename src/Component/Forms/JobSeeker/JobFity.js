@@ -4,8 +4,9 @@ import useSoftware from '../../../hooks/Universal/Software';
 import useTool from '../../../hooks/Universal/Tools';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import useIndustry from '../../../hooks/Universal/Industry';
 
-const EditSoftwareModal = ({ show, onHide }) => {
+const EditJobfitModal = ({ show, onHide }) => {
     // State for form data
     const [formData, setFormData] = useState({
         software: [],
@@ -29,18 +30,18 @@ const EditSoftwareModal = ({ show, onHide }) => {
         console.log(formData);
         onHide(); // Close modal after submission
     };
-    const { software, loadsoftware } = useSoftware()
-    const AllsoftwareOptions = software?.map(software => ({
-        value: software.id,
-        label: software.software_name,
+    const { industry, loadindustry } = useIndustry()
+    const AllIndustryOptions = industry?.map(industry => ({
+        value: industry.id,
+        label: industry.industry_name,
     })) || [];
-    const [softwareOptions, setSoftwareOptions] = useState([]);
-    console.log("knowlege is availavle yes", AllsoftwareOptions);
-    useEffect(() => setSoftwareOptions(AllsoftwareOptions.slice(0, 10)), [software]);
-    const loadMoreSoftware = () => {
-        setSoftwareOptions(prev => AllsoftwareOptions.slice(0, prev.length + 10));
+    const [industryOptions, setIndustryOptions] = useState([]);
+    console.log("industry is availavle yes", AllIndustryOptions);
+    useEffect(() => setIndustryOptions(AllIndustryOptions.slice(0, 10)), [industry]);
+    const loadMoreIndustry = () => {
+        setIndustryOptions(prev => AllIndustryOptions.slice(0, prev.length + 10));
     };
-     const {tool, loadtool } = useTool()
+    const { tool, loadtool } = useTool()
     const AlltoolOptions = tool?.map(tool => ({
         value: tool.id,
         label: tool.tool_name,
@@ -55,26 +56,27 @@ const EditSoftwareModal = ({ show, onHide }) => {
     return (
         <Modal show={show} onHide={onHide} size="m" centered>
             <Modal.Header closeButton>
-                <Modal.Title className="fs-5">Software & Tools</Modal.Title>
+                <Modal.Title className='fs-5' > List Of Job I May Fit </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group as={Row}>
-                                <Form.Label column sm={2}>Software</Form.Label>
+                                <Form.Label column sm={2}>Industry</Form.Label>
                                 <Col sm={10}>
-                                    <CreatableSelect
-                                        name="software"
-                                        options={softwareOptions}
-                                        onMenuScrollToBottom={loadMoreSoftware}
-                                        placeholder="Select software ..."
+
+                                    <Select
+                                        name="industry"
+                                        options={industryOptions}
+                                        onMenuScrollToBottom={loadMoreIndustry}
+                                        placeholder="Select industry ..."
                                         onChange={selected => {
                                             // You can store this in state or pass to your form handler
-                                            console.log("Selected software:", selected);
+                                            console.log("Selected industry:", selected);
                                         }}
                                         isSearchable // this is the default behavior
-                                        isMulti // Enable multi-select
+
                                         isClearable // Allow clearing the selected option
                                     />
                                 </Col>
@@ -85,20 +87,21 @@ const EditSoftwareModal = ({ show, onHide }) => {
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group as={Row}>
-                                <Form.Label column sm={2}>Tools</Form.Label>
+                                <Form.Label column sm={2}>Job</Form.Label>
                                 <Col sm={10}>
-                                  <CreatableSelect
+                                    <CreatableSelect
                                         name="software"
-                                        options={toolOptions}
-                                        onMenuScrollToBottom={loadMoretool}
-                                        placeholder="Select tool ..."
+                                        placeholder="Write Job You may fit ..."
                                         onChange={selected => {
-                                            // You can store this in state or pass to your form handler
                                             console.log("Selected tool:", selected);
                                         }}
-                                        isSearchable // this is the default behavior
-                                        isMulti // Enable multi-select
-                                        isClearable // Allow clearing the selected option
+                                        isSearchable
+                                        isMulti
+                                        isClearable
+                                        components={{
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null
+                                        }}
                                     />
                                 </Col>
                             </Form.Group>
@@ -119,4 +122,4 @@ const EditSoftwareModal = ({ show, onHide }) => {
     );
 };
 
-export default EditSoftwareModal;
+export default EditJobfitModal;

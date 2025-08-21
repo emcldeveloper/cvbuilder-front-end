@@ -26,16 +26,7 @@ const PersonalitiesSection = ({ applicant }) => {
                                 <b>PERSONALITY TRAITS</b>
                             </h6>
                             <div className="d-flex gap-2">
-                                <Button
-                                    variant="link"
-
-                                    className="p-0 border-0 bg-transparent"
-                                >
-                                    <Plus
-                                        style={{ fontSize: '1.5rem' }}
-                                        className="text-muted"
-                                    />
-                                </Button>
+                               
 
                                 <Link
                                     onClick={handleOpenPersonality}

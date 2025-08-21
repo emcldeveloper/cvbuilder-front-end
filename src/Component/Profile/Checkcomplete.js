@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { jobcompleteprofile } from "../../Api/Jobseeker/JobSeekerProfileApi";
+import { ModalSwitcher } from "./SwitchModal";
 
 const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileCompleteModal, setProfileComplete }) => {
     const navigate = useNavigate();
@@ -34,10 +35,10 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
             checkProfileCompletion();
         }
     }, [completecheck]);
+ 
+    const [refreshTrigger, setRefreshTrigger] = useState(false);
 
-    // ... (rest of your component remains the same)
-
-
+    // Fetch profile completion status
     useEffect(() => {
         const fetchJobCompleteProfile = async () => {
             try {
@@ -52,9 +53,24 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
         };
 
         fetchJobCompleteProfile();
-    }, []);
+    }, [refreshTrigger]);
 
 
+    const [activeModal, setActiveModal] = useState(null);
+    const [IsOpenModel, setIsModalOpen] = useState(false);
+    const handleOpenLnagugae = () => {
+        setIsModalOpen(true);
+    }
+    const CloseModelLnaguage = () => {
+        setIsModalOpen(false);
+    }
+    
+    const handleModalClose = (shouldRefresh = false) => {
+        setActiveModal(null);
+        if (shouldRefresh) {
+            setRefreshTrigger(prev => !prev); // Trigger data refresh
+        }
+    };
 
     return (
 
@@ -173,20 +189,18 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
                                         <button
                                             className="btn btn-sm btn-outline-primary mt-1 mt-md-0"
                                             onClick={() => {
-
                                                 setCurrentField(field);
-                                                setShowModal(true);
-
-                                               
+                                                setActiveModal(field.toLowerCase());
                                             }}
                                         >
                                             <i className="fas fa-plus me-1"></i> Add Data
                                         </button>
                                     </div>
-      <div className="mt-2 small text-muted d-flex align-items-center">
-    <i className="fas fa-info-circle text-secondary me-2"></i>
-    Complete the <span className="badge bg-warning text-dark mx-1">{(completecheck?.sections && completecheck.sections[`applicant_${field?.toLowerCase()}`]) || field}</span> section to continue
-</div>                        </div>
+                                    <div className="mt-2 small text-muted d-flex align-items-center">
+                                        <i className="fas fa-info-circle text-secondary me-2"></i>
+                                        Complete the <span className="badge bg-warning text-dark mx-1">{(completecheck?.sections && completecheck.sections[`applicant_${field?.toLowerCase()}`]) || field}</span> section to continue
+                                    </div>                        </div>
+
                             </div>
                         ))}
                     </div>
@@ -210,10 +224,20 @@ const Checkcompleteprofile = ({ showProfileCompleteModal, setShowProfileComplete
                             navigate("/jobseeker/profile-preview");
                         }}
                     >
-                             Go To Profile
+                        Go To Profile
                     </Button>
                 </div>
             </Modal.Footer>
+            {activeModal && (
+                <Modal show={true} onHide={() => handleModalClose()} centered>
+                    <ModalSwitcher 
+                        activeModal={activeModal} 
+                        onClose={handleModalClose}
+                        applicant={applicant_id}
+                        onSuccess={() => handleModalClose(true)}
+                    />
+                </Modal>
+            )}
             {showModal && (
                 <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
                     <div className="modal-dialog modal-dialog-centered">

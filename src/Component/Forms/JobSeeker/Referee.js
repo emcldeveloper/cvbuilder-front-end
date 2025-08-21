@@ -98,7 +98,7 @@ const RefereeModal = ({ isOpen, onClose, onSubmit, referee = null, isEditMode = 
     return (
         <Modal show={isOpen} onHide={onClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>
+                <Modal.Title className="fs-5">
                     {isEditMode ? 'Edit Referee' : 'Add Referee'}
                 </Modal.Title>
             </Modal.Header>

@@ -5,23 +5,30 @@ const UNIVERSAL_API = `${API_BASE_URL}universal`;
 const UNIVERSAL_APPLICANT_API = `${API_BASE_URL}applicant`;
 
 const cache = {};
-const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
+const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour
+const MAX_RETRIES = 5; // maximum number of retries for 429
+const BASE_DELAY = 1000; // base delay in ms for exponential backoff
 
-// Modified fetchWithCache function to avoid retries and handle rate-limiting
-const fetchWithCache = async (key, url, transform) => {
+/**
+ * Fetch data with caching and automatic retry on 429
+ * @param {string} key - cache key
+ * @param {string} url - API endpoint
+ * @param {function} transform - optional function to transform response
+ * @param {number} retryCount - internal retry counter
+ */
+const fetchWithCache = async (key, url, transform, retryCount = 0) => {
   const now = Date.now();
 
-  // Check if cached data exists and hasn't expired
+  // Return cached data if valid
   if (cache[key] && (now - cache[key].timestamp < CACHE_EXPIRATION_TIME)) {
     return Promise.resolve(cache[key].data);
   }
 
   try {
-    // Make the API request
     const res = await axios.get(url);
     const data = transform ? transform(res) : res.data;
 
-    // Save data and timestamp in cache
+    // Save in cache
     cache[key] = {
       data,
       timestamp: Date.now()
@@ -29,15 +36,21 @@ const fetchWithCache = async (key, url, transform) => {
 
     return data;
   } catch (error) {
-    // Handle 429 error (rate-limited)
-    if (error.response?.status === 429) {
-      console.error(`Rate limit exceeded for ${url}. No retry will occur.`);
+    if (error.response?.status === 429 && retryCount < MAX_RETRIES) {
+      // Exponential backoff before retrying
+      const delay = Math.pow(2, retryCount) * BASE_DELAY;
+      console.warn(`429 rate limit for ${url}. Retrying in ${delay / 1000}s...`);
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return fetchWithCache(key, url, transform, retryCount + 1);
     }
-    // Re-throw other errors
+
+    // No retry or other error
     throw error;
   }
 };
 
+export default fetchWithCache;
 
 
 export const getGenders = () =>
@@ -54,7 +67,7 @@ export const getCountries = () =>
     data: res.data.country
   }));
 export const getCitizenship = () =>
-  fetchWithCache('citizenship', `${UNIVERSAL_APPLICANT_API}/citizenship`, res => ({
+  fetchWithCache('citizenship', `${UNIVERSAL_API}/citizenship`, res => ({
     data: res.data.citizenship
   }));
 
@@ -146,10 +159,33 @@ export const getPersonality = () =>
   fetchWithCache('personality', `${UNIVERSAL_APPLICANT_API}/personality`, res => ({
     data: res.data.personality
   }));
-  export const getEmployer = () =>
+export const getEmployer = () =>
   fetchWithCache('applicant_employer', `${UNIVERSAL_APPLICANT_API}/applicant_employer`, res => ({
     data: res.data.data
   }));
+export const getTraining = () =>
+  fetchWithCache('gettraining', `${UNIVERSAL_APPLICANT_API}/gettraining`, res => ({
+    data: res.data.training
+  }));
+export const getProficiency = () =>
+  fetchWithCache('getproficiency', `${UNIVERSAL_API}/getproficiency`, res => ({
+    data: res.data.proficiency
+  }));
+export const getCulture = () =>
+  fetchWithCache('culture', `${UNIVERSAL_APPLICANT_API}/culture`, res => ({
+
+    data: res.data.culture
+  }));
+
+export const getSalaryRange = () =>
+  fetchWithCache('salary_range', `${UNIVERSAL_APPLICANT_API}/salary_range`, res => ({
+    data: res.data.salary_range
+  }));
+
+
+
+
+
 
 
 

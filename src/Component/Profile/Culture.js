@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Badge, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import EditCultureModal from '../Forms/JobSeeker/Culture';
 
 const CulturesSection = ({ applicant, onEdit, onAdd }) => {
+      const [IsOpenModel ,setIsOpenModel]=useState(false);
+        const handleModelCulture =()=>{
+            setIsOpenModel(true);
+        }
     return (
         <div className="knowledges-section mt-4  ">
            
@@ -15,20 +20,13 @@ const CulturesSection = ({ applicant, onEdit, onAdd }) => {
                     <b>WORK COMPATIBILITY PROFILE</b>
                 </h6>
                 <div className="d-flex gap-2">
-                    <Button
-                        variant="link"
-
-                        className="p-0 border-0 bg-transparent"
-                    >
-                        <Plus
-                            style={{ fontSize: '1.5rem' }}
-                            className="text-muted"
-                        />
-                    </Button>
-
+                    
+     
+                <EditCultureModal show={IsOpenModel} onHide={()=>{setIsOpenModel(false)}} /> 
                     <Link
-                        to={`/`}
+                         onClick={handleModelCulture} 
                     >
+
                         <Pencil
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                             className="text-muted"

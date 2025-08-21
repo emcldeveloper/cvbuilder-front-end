@@ -6,6 +6,10 @@ import CreatableSelect from 'react-select/creatable';
 import UsegetCountries from '../../../hooks/Universal/Country';
 import useRegions from '../../../hooks/Universal/Region';
 import usePosition from '../../../hooks/Universal/Position';
+import useIndustry from '../../../hooks/Universal/Industry';
+import usePositionLevel from '../../../hooks/Universal/PositionLevel';
+import usesalaryRange from '../../../hooks/Universal/SalaryRange';
+import useSalaryRange from '../../../hooks/Universal/SalaryRange';
 
 const AddWorkExperienceModal = ({ show, onHide }) => {
   const [currentRole, setCurrentRole] = useState(false);
@@ -68,12 +72,56 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
   useEffect(() => setPositionOptions(AllPositionOptions.slice(0, 10)), [positions]);
 
   const loadMorePosition = () => {
-    setRegionOptions(prev => AllPositionOptions.slice(0, prev.length + 10));
+    setPositionOptions(prev => AllPositionOptions.slice(0, prev.length + 10));
+  };
+   //industry
+  const { industry, loadindustry} = useIndustry();
+  const AllIndustryOptions = industry?.map(industry => ({
+    value: industry.id,
+    label: industry.industry_name
+  })) || [];
+  console.log("industry list yes", AllIndustryOptions);
+  const [Industryoptions, setIndustryOptions] = useState([]);
+
+  useEffect(() => setIndustryOptions(AllIndustryOptions.slice(0, 10)), [industry]);
+
+  const loadMoreIndustry = () => {
+    setIndustryOptions(prev => AllIndustryOptions.slice(0, prev.length + 10));
+  };
+   // positionlevel
+  const { positionlevel, loadpositionlevel} = usePositionLevel();
+  const AllPositionLevelOptions = positionlevel?.map(positionlevel => ({
+    value: positionlevel.id,
+    label: positionlevel.position_name
+
+  })) || [];
+  console.log("position level list yes", positionlevel);
+  const [positionleveloptions, setPositionLevelOptions] = useState([]);
+
+  useEffect(() => setPositionLevelOptions(AllPositionLevelOptions.slice(0, 10)), [positionlevel]);
+
+  const loadMorePositionLevel = () => {
+    setPositionLevelOptions(prev => AllPositionLevelOptions.slice(0, prev.length + 10));
+  };
+  //salry Range
+    const {salaryrange, loadsalryrange} = useSalaryRange();
+  const AllSalaryRangeOption = salaryrange?.map(salaryrange => ({
+    value: salaryrange.id,
+    label: salaryrange.low
+
+  })) || [];
+  console.log("salry range list yes", salaryrange);
+  const [salaryrangeoptions, setSalaryRangeOptions] = useState([]);
+
+  useEffect(() => setSalaryRangeOptions(AllSalaryRangeOption.slice(0, 10)), [salaryrange]);
+
+  const loadMoreSalaryRange = () => {
+    setSalaryRangeOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
   };
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add Experience</Modal.Title>
+        <Modal.Title className="fs-5">Add Experience</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form className="experience_applicant">
@@ -173,15 +221,18 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                 </Col>
 
                 <Col md={5}>
-                  <Form.Select
-                    name="level"
-                    required
-                  >
-                    <option value="">Select Level</option>
-                    {/* {Universal.getPositionLevels().map(data => (
-                      <option key={data.id} value={data.id}>{data.position_name}</option>
-                    ))} */}
-                  </Form.Select>
+                   <Select
+                    name="positionlevel"
+                    options={positionleveloptions}
+                    onMenuScrollToBottom={loadMorePositionLevel}
+                    placeholder="Select level "
+                    onChange={selected => {
+                      // You can store this in state or pass to your form handler
+                      console.log("Selected  level:", selected);
+                    }}
+                    isSearchable // this is the default behavior
+                    isClearable // Allow clearing the selected option
+                  />
                 </Col>
               </Row>
             </Col>
@@ -192,14 +243,18 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
               Industry <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
-              <Form.Select
-                name="industry"
-                className="select_industry"
-                required
-                onChange={(e) => setShowCustomIndustry(e.target.value === 'other')}
-              >
-                {/* Options will be loaded dynamically */}
-              </Form.Select>
+                <Select
+                    name="industry"
+                    options={Industryoptions}
+                    onMenuScrollToBottom={loadMoreIndustry}
+                    placeholder="Select industry "
+                    onChange={selected => {
+                      // You can store this in state or pass to your form handler
+                      console.log("Selected  industry:", selected);
+                    }}
+                    isSearchable // this is the default behavior
+                    isClearable // Allow clearing the selected option
+                  />
             </Col>
           </Form.Group>
 
@@ -264,29 +319,35 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
               Salary Range from <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={4}>
-              <Form.Select
-                name="start_salary"
-                required
-              >
-                <option value="">Select salary Range</option>
-                {/* {Universal.salaryRanges().map(data => (
-                  <option key={data.id} value={data.id}>{data.low}</option>
-                ))} */}
-              </Form.Select>
+                <Select
+                    name="salaryRange"
+                    options={salaryrangeoptions}
+                    onMenuScrollToBottom={loadMoreSalaryRange}
+                    placeholder="Select Salry Range "
+                    onChange={selected => {
+                      // You can store this in state or pass to your form handler
+                      console.log("Selected  salary Range:", selected);
+                    }}
+                    isSearchable // this is the default behavior
+                    isClearable // Allow clearing the selected option
+                  />
             </Col>
             <Form.Label column sm={1}>
               To <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={4}>
-              <Form.Select
-                name="end_salary"
-                required
-              >
-                <option value="">Select salary Range</option>
-                {/* {Universal.salaryRanges().map(data => (
-                  <option key={data.id} value={data.id}>{data.low}</option>
-                ))} */}
-              </Form.Select>
+               <Select
+                    name="salaryRange"
+                    options={salaryrangeoptions}
+                    onMenuScrollToBottom={loadMoreSalaryRange}
+                    placeholder="Select Salry Range "
+                    onChange={selected => {
+                      // You can store this in state or pass to your form handler
+                      console.log("Selected  salary Range:", selected);
+                    }}
+                    isSearchable // this is the default behavior
+                    isClearable // Allow clearing the selected option
+                  />
             </Col>
           </Form.Group>
 

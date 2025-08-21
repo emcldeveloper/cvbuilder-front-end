@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Pencil, Plus } from 'react-bootstrap-icons';
+import EditJobfitModal from '../Forms/JobSeeker/JobFity';
+ 
 
 const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
   const applicant_tag = applicant?.applicant_tag || [];
-
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [IsModelOpen, setIsModalOpen] = useState(false);
+  // const [showAddModal, setShowAddModal] = useState(false);
   const [formData, setFormData] = useState({
     industry: '',
     jobs: []
@@ -24,8 +26,17 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
     // Add your form submission logic here
     console.log('Form submitted:', formData);
     // Then close modal
-    setShowAddModal(false);
+   setIsModalOpen(false);
   };
+ 
+  const handleModelJobFit= () => {
+    setIsModalOpen(true);
+  }
+  const CloseModelJobFit = () => {
+    setIsModalOpen(false);
+  }
+
+  
 
   return (
     <div className="jobs-fit-section mb-4 mt-2">
@@ -40,13 +51,14 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
             variant="link"
 
             className="p-0 border-0 bg-transparent"
+            onClick={handleModelJobFit  }
           >
             <Plus
               style={{ fontSize: '1.5rem' }}
               className="text-muted"
             />
           </Button>
-
+         <EditJobfitModal  show={IsModelOpen} onHide={CloseModelJobFit}/>
           <Link
             to={`/ `}
           >
@@ -63,47 +75,47 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
 
       {/* Jobs Display - Grouped by Industry */}
       {applicant_tag?.length > 0 ? (
-      <Row className="g-0">
-  {/* First group tags by industry */}
-  {Object.entries(
-    applicant_tag.reduce((acc, tag) => {
-      if (!acc[tag.industry_name]) {
-        acc[tag.industry_name] = [];
-      }
-      acc[tag.industry_name].push(tag);
-      return acc;
-    }, {})
-  ).map(([industryName, tags], index) => (
-    <Col md={12} key={index}>
-      <Card className="border-0">
-        <Card.Body className="p-1">
-          <div className="d-flex flex-column flex-md-row align-items-start">
-            <div className="me-md-2" style={{ minWidth: '150px' }}>
-              <h6 className="fw-bold mb-0">{industryName}</h6>
-            </div>
-            <div className="flex-grow-1">
-              <Row className="g-0">
-                {tags.map((tag, index) => (
-                  <Col xs="auto" key={index}>
-                    <div className="personality-tag p-0 px-1">
-                      {tag.tag_name}
+        <Row className="g-0">
+          {/* First group tags by industry */}
+          {Object.entries(
+            applicant_tag.reduce((acc, tag) => {
+              if (!acc[tag.industry_name]) {
+                acc[tag.industry_name] = [];
+              }
+              acc[tag.industry_name].push(tag);
+              return acc;
+            }, {})
+          ).map(([industryName, tags], index) => (
+            <Col md={12} key={index}>
+              <Card className="border-0">
+                <Card.Body className="p-1">
+                  <div className="d-flex flex-column flex-md-row align-items-start">
+                    <div className="me-md-2" style={{ minWidth: '150px' }}>
+                      <h6 className="fw-bold mb-0">{industryName}</h6>
                     </div>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </div>
-        </Card.Body>
-      </Card>
-    </Col>
-  ))}
-</Row>
+                    <div className="flex-grow-1">
+                      <Row className="g-0">
+                        {tags.map((tag, index) => (
+                          <Col xs="auto" key={index}>
+                            <div className="personality-tag p-0 px-1">
+                              {tag.tag_name}
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       ) : (
         <p className="text-muted">No job matches added yet</p>
       )}
 
       {/* Add Jobs Modal */}
-      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+      {/* <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add Jobs I May Fit</Modal.Title>
         </Modal.Header>
@@ -163,7 +175,7 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
             </div>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       <style jsx>{`
       .text-orange {
