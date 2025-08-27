@@ -23,7 +23,7 @@ import { completeprofile, primarydata } from '../../../Api/Jobseeker/JobSeekerPr
 
 const LeftSideBar = () => {
   const [profileCompletion, setcomplete] = useState('');
- const [dataprimary, setprimarydata] = useState([]);
+  const [dataprimary, setprimarydata] = useState([]);
   const [showModalPay, setShowModalPay] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
@@ -71,27 +71,37 @@ const LeftSideBar = () => {
     fetchprimarydata();
   }, []); // Re-fetch when page or perPage changes
   console.log("check primary data is available", dataprimary);
-
+  // profile image
+  const picture = dataprimary?.[0]?.picture
+    ? `https://ekazi.co.tz/${dataprimary[0].picture}`
+    : "http://127.0.0.1:8000/uploads/picture/pre_photo.jpg";
+  //background image
+  const backgroundpicture = dataprimary?.[0]?.picture
+    ? `https://ekazi.co.tz/${dataprimary?.[0]?.background_picturee}`
+    : "https://ekazi.co.tz/svg/dotted.svg";
+    
+ 
   return (
     <div className="d-flex flex-column gap-2">
 
       <Card className="shadow-sm">
- 
+
         {/* Cover image */}
 
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  height: '80px',
-                  objectFit: 'cover',
-                  width: '100%',
-                  backgroundImage: `url(https://ekazi.co.tz/${dataprimary?.[0]?.background_picture || '/comp.jpg'})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                  // https://ekazi.co.tz
-                  // http://127.0.0.1:8000
-                }}
-              />
+        <div style={{ position: 'relative' }}>
+          <div
+            style={{
+              height: '80px',
+              objectFit: 'cover',
+              width: '100%',
+             backgroundImage: `url(${backgroundpicture})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundColor:'#2995CC'
+              // https://ekazi.co.tz
+              // http://127.0.0.1:8000
+            }}
+          />
 
           {/* Profile image */}
 
@@ -108,18 +118,17 @@ const LeftSideBar = () => {
               }}
               title="Available for Job"
             >
+
               <div
                 style={{
-                  width: '72px',
-                  height: '72px',
-                  borderRadius: '50%',
-                  border: '3px solid white',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  backgroundImage: `url(https://ekazi.co.tz/${dataprimary?.[0]?.picture || '/zuu2.png'})`,
-                
-                
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
+                  width: "72px",
+                  height: "72px",
+                  borderRadius: "50%",
+                  border: "3px solid white",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  backgroundImage: `url(${picture})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                 }}
               />
             </div>

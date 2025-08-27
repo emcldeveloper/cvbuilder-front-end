@@ -2,9 +2,10 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 const About = ({ candidate }) => {
+  console.log("candidate data is availbel",candidate)
   const careerText = candidate?.applicant?.career?.career;
   const objectiveText = candidate?.applicant?.objective?.objective;
-
+ 
   const styles = {
     paragraph: {
       wordWrap: "break-word",
@@ -13,7 +14,7 @@ const About = ({ candidate }) => {
   };
 
   return (
-    <Container className="border py-4 mb-4 bg-white ">
+    <Container className="border py-4 mb-1 bg-white ">
       {/* About Section */}
       <Row className="mb-4">
         <Col>
@@ -29,7 +30,7 @@ const About = ({ candidate }) => {
       {/* Career Objectives Section */}
       <Row>
         <Col>
-          <h6 className="text-primary fw-bold mb-2">Career Objectives</h6>
+          <h6 className="text-primary fw-bold mb-1">Career Objectives</h6>
           {objectiveText ? (
             <p style={styles.paragraph}>{objectiveText}</p>
           ) : (

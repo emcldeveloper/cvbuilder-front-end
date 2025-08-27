@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Modal, Form, Image, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import Select from 'react-select';
 import { ProgressBar, Accordion, ListGroup } from 'react-bootstrap';
 import { PencilFill, Camera } from 'react-bootstrap-icons';
 // import LazyImage from '../../utils/Lazyimage
@@ -12,6 +13,8 @@ import usegetCountries from '../../hooks/Universal/Country';
 import useCitizenship from '../../hooks/Universal/Citizenship';
 
 
+
+
 const ProfileSection = ({ profile, address }) => {
     const [showContactModal, setShowContactModal] = useState(false);
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
@@ -19,19 +22,93 @@ const ProfileSection = ({ profile, address }) => {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const { genders, loading } = useGenders();
     const { maritalstatus, maritalsatausloading } = useMalitalstatus();
-    const { regions, loaingregions } = useRegions()
-    const { countries, loadingcountries } = usegetCountries()
+
+
     const { citizenship, loadingcitizenship } = useCitizenship();
-    console.log('citizenship welcome', citizenship);
+    console.log("citizenship mambo vip",citizenship);
+
 
 
 
     const [profileImage, setProfileImage] = useState(
-        profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
+        profile?.picture ? `https://ekazi.co.tz/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
     );
     const [bgImage, setBgImage] = useState(
-        profile?.picture ? `http://127.0.0.1:8000/${profile.background_picture}` : 'http://127.0.0.1:8000/comp.jpg'
-    );
+        profile?.picture ? `https://ekazi.co.tz/${profile.background_picture}` : 'https://ekazi.co.tz/svg/dotted.svg');
+
+ 
+    //region option
+    const { regions, loaderegion } = useRegions();
+    const AllRegionOptions = regions?.map(region => ({
+        value: region.id,
+        label: region.region_name
+    })) || [];
+
+    const [Regionoptions, setRegionOptions] = useState([]);
+
+    useEffect(() => setRegionOptions(AllRegionOptions.slice(0, 10)), [regions]);
+
+    const loadMoreRegions = () => {
+        setRegionOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
+    };
+    //country option
+    const { countries, loadecountry } = usegetCountries();
+    const AllCountryOptions = countries?.map(country => ({
+        value: country.id,
+        label: country.name,
+    })) || [];
+
+    const [Countryoptions, setCountryOptions] = useState([]);
+
+    useEffect(() => setCountryOptions(AllCountryOptions.slice(0, 10)), [countries]);
+
+    const loadMoreCountry = () => {
+        setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
+    };
+    //gender option
+    
+    const AllGenderOptions = genders?.map(gender => ({
+        value: gender.id,
+        label: gender.gender_name,
+    })) || [];
+    console.log("current gender 2025", genders);
+    const [Genderoptions, setGenderOptions] = useState([]);
+
+    useEffect(() => setGenderOptions(AllGenderOptions.slice(0, 10)), [genders]);
+
+    const loadMoreGender = () => {
+        setGenderOptions(prev => AllGenderOptions.slice(0, prev.length + 10));
+    };
+    //maritalstattus option
+    
+    const AllMaritalStatusOptions = maritalstatus?.map(maritalstatus => ({
+        value: maritalstatus.id,
+        label: maritalstatus.marital_status,
+    })) || [];
+    console.log("current maritalstaus 2025", genders);
+    const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
+
+    useEffect(() => setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10)), [maritalstatus]);
+
+    const loadMoreMaritalStatus = () => {
+        setGenderOptions(prev => AllMaritalStatusOptions.slice(0, prev.length + 10));
+    };
+
+    //natinality option
+    
+    const AllCitizenshipOptions = citizenship?.map(citizenship => ({
+        value: citizenship.id,
+        label: citizenship.citizenship,
+    })) || [];
+    console.log("current citizenship 2025", citizenship);
+    const [citizenshipoptions, setCitizenshipOptions] = useState([]);
+
+    useEffect(() => setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10)), [maritalstatus]);
+
+    const loadMoreCitizenship = () => {
+        setCitizenshipOptions(prev => AllCitizenshipOptions.slice(0, prev.length + 10));
+    };
+
 
 
     const handleBgImageUpload = (e) => {
@@ -65,10 +142,19 @@ const ProfileSection = ({ profile, address }) => {
                     variant="top"
                     src={bgImage}
                     loading="lazy"
-                    onLoad={(e) => e.target.style.opacity = 1}
-                    className="object-fit-cover"
-                    style={{ height: '150px', objectFit: 'cover' }}
+
+                    onLoad={(e) => (e.target.style.opacity = 1)}
+
+                    style={{
+                        height: "100px",   // fixed height
+                        width: "100%",     // full card width
+                        objectFit: "cover", // fit without cutting
+                        backgroundColor:'#2995CC'
+
+                    }}
                 />
+
+
                 <Button
                     variant="light"
                     size="sm"
@@ -300,36 +386,34 @@ const ProfileSection = ({ profile, address }) => {
                         <Row className="mt-3">
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Gender <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="gender" required>
-                                    <option disabled>--Select Gender--</option>
-                                    {genders.map(data => (
-                                        <option
-                                            key={data.id}
-                                            value={data.id}
-                                            selected={data.id}
-                                        >
-                                            {data.gender_name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
+                                <Select
+                                    name="gender"
+                                    options={Genderoptions}
+                                    onMenuScrollToBottom={loadMoreGender}
+                                    placeholder="Select Gender "
+                                    onChange={selected => {
+                                        // You can store this in state or pass to your form handler
+                                        console.log("Selected  gender:", selected);
+                                    }}
+                                    isSearchable // this is the default behavior
+                                    isClearable // Allow clearing the selected option
+                                />
                             </Form.Group>
 
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Marital <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="marital" required>
-                                    <option value="">--select marital status--</option>
-                                    {maritalstatus.map(data => (
-                                        <option
-                                            key={data.id}
-                                            value={data.id}
-                                            selected={data.id
-                                                // === applicant?.marital_id
-                                            }
-                                        >
-                                            {data.marital_status}
-                                        </option>
-                                    ))}
-                                </Form.Select>
+                                <Select
+                                    name="marital"
+                                    options={MaritalStatusoptions}
+                                    onMenuScrollToBottom={loadMoreMaritalStatus}
+                                    placeholder="Select marital status "
+                                    onChange={selected => {
+                                        // You can store this in state or pass to your form handler
+                                        console.log("Selected  marital status:", selected);
+                                    }}
+                                    isSearchable // this is the default behavior
+                                    isClearable // Allow clearing the selected option
+                                />
                             </Form.Group>
 
                             <Form.Group as={Col} md={4}>
@@ -366,58 +450,53 @@ const ProfileSection = ({ profile, address }) => {
                         <Row className="mt-3">
                             <Form.Group as={Col} md={6}>
                                 <Form.Label>Country <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="country">
-                                    <option value="">--select country--</option>
-                                    {countries.map(data => (
-                                        <option
-                                            key={data.id}
-                                            value={data.name}
-                                            selected={data.id
-                                                //  === applicant?.address?.region?.country_id
-                                            }
-                                        >
-                                            {data.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
+                                <Select
+                                    name="country"
+                                    options={Countryoptions}
+                                    onMenuScrollToBottom={loadMoreCountry}
+                                    placeholder="Select country "
+                                    onChange={selected => {
+                                        // You can store this in state or pass to your form handler
+                                        console.log("Selected  country:", selected);
+                                    }}
+                                    isSearchable // this is the default behavior
+                                    isClearable // Allow clearing the selected option
+                                />
+
                             </Form.Group>
 
                             <Form.Group as={Col} md={6}>
                                 <Form.Label>Nationality <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="nationality">
-                                    <option value="">--select nationality--</option>
-                                    {citizenship.map(data => (
-                                        <option
-                                            key={data.id}
-                                            value={data.citizenship}
-                                            selected={data.id    
-                                            // === applicant?.address?.region?.country?.id
-                                        }
-                                        >
-                                            {data.citizenship}
-                                        </option>
-                                    ))}
-                                </Form.Select>
+                                  <Select
+                                    name="citizenship"
+                                    options={citizenshipoptions}
+                                    onMenuScrollToBottom={loadMoreCitizenship}
+                                    placeholder="Select citizenship "
+                                    onChange={selected => {
+                                        // You can store this in state or pass to your form handler
+                                        console.log("Selected  citizenship:", selected);
+                                    }}
+                                    isSearchable // this is the default behavior
+                                    isClearable // Allow clearing the selected option
+                                />
                             </Form.Group>
                         </Row>
 
                         <Row className="mt-3">
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Region <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="region">
-                                    <option value="">--select regions--</option>
-                                    {regions.map(data => (
-                                        <option
-                                            key={data.id}
-                                            value={data.region_name}
-                                            selected={data.id
-                                                // === applicant?.address?.region?.id
-                                            }
-                                        >
-                                            {data.region_name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
+                                <Select
+                                    name="region"
+                                    options={Regionoptions}
+                                    onMenuScrollToBottom={loadMoreRegions}
+                                    placeholder="Select Region "
+                                    onChange={selected => {
+                                        // You can store this in state or pass to your form handler
+                                        console.log("Selected  region:", selected);
+                                    }}
+                                    isSearchable // this is the default behavior
+                                    isClearable // Allow clearing the selected option
+                                />
                             </Form.Group>
 
                             <Form.Group as={Col} md={4}>

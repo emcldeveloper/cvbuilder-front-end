@@ -72,29 +72,21 @@ const MyProfile = () => {
                 scrollbarWidth: 'none', /* Firefox */
                 msOverflowStyle: 'none',  /* IE and Edge */
             }}>
-                {/* Hide scrollbar for Chrome, Safari and Opera */}
-                {/* <style>
-                    {`::-webkit-scrollbar {
-                    display: none;
-                    }`}
-                </style> */}
-
-
-
+       
+        
 
                 {/* Career Objective */}
                 <Row className="justify-content-center mb-3">
                     <Col >
                         <Card className="shadow-smy">
                             <Card.Body className="p-4">
-                                {(applicant?.applicant_profile?.length > 0 || applicant?.address?.length > 0) ? (
+                                {/* || applicant?.address?.length > 0 */}
+                                
                                     <ProfileSection
                                         profile={applicant?.applicant_profile?.[0] || null}
                                         address={applicant?.address?.[0] || null}
                                     />
-                                ) : (
-                                    <div className="text-muted">No profile or address information available.</div>
-                                )}
+                                
                                 <ApplicantCareerSection applicant={applicant} />
                                 <CareerObjectivesSection applicant={applicant} />
                                 <WorkExperienceSection applicant={applicant} />

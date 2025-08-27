@@ -6,14 +6,14 @@ const Language = ({ candidate }) => {
 
   if (languages.length === 0) {
     return (
-      <Container className="border p-4 bg-white rounded mb-4">
+      <Container className="border p-4 bg-white rounded mb-1">
         <p className="text-muted">No languages available.</p>
       </Container>
     );
   }
 
   return (
-    <Container className="border p-4 bg-white rounded mb-4">
+    <Container className="border p-4 bg-white rounded mb-1">
       <p className="fw-bold text-primary mb-3" style={{ fontSize: "18px" }}>
         Language
       </p>

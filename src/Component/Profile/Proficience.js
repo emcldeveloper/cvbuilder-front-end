@@ -16,11 +16,7 @@ const ProficiencyQualifications = ({ applicant }) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-    //   const getFileNameFromUrl = (url) => {
-    //     if (!url) return '';
-    //     const parts = url.split('/');
-    //     return parts[parts.length - 1];
-    //   };
+   
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');

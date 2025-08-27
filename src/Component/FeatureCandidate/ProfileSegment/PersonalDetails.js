@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const defaultImage = "/pre_profile/pre_photo.jpg";
 
@@ -41,8 +42,8 @@ const PersonalDetails = ({ candidate }) => {
 
   // Location
   const locationParts = [
-    applicant.address?.sub_location,
-    applicant.address?.region?.region_name,
+    // applicant.address?.sub_location,
+    // applicant.address?.region?.region_name,
     applicant.address?.region?.country?.name,
   ];
   const location =
@@ -54,11 +55,11 @@ const PersonalDetails = ({ candidate }) => {
 
   // Profile Image
   const image = applicant.picture
-    ? `https://ekazi.co.tz/${applicant.picture.trim()}`
+    ? `http://127.0.0.1:8000/${applicant.picture.trim()}`
     : defaultImage;
 
   return (
-    <Container className="border mb-4 bg-white" style={styles.container}>
+    <Container className="border mb-1 bg-white" style={styles.container}>
       {/* Header / Picture */}
       <Row style={styles.headerRow} className="align-items-center ">
         <Col md={3}>
@@ -92,13 +93,13 @@ const PersonalDetails = ({ candidate }) => {
           <p className="text-primary mb-0">{location}</p>
         </Col>
 
-        <Col md={3} className="mb-2">
+        <Col md={2} className="mb-2">
           <p className="text-primary mb-0" style={{ cursor: "pointer" }}>
             Contact Info
           </p>
         </Col>
 
-        <Col md={4} className="mb-2">
+        <Col md={5} className="mb-2">
           <p className="text-primary mb-0">
             {applicant.educations?.[0]?.college?.college_name || "No College Records"}
           </p>
