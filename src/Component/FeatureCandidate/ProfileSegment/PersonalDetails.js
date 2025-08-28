@@ -62,7 +62,7 @@ const PersonalDetails = ({ candidate }) => {
     <Container className="border mb-1 bg-white" style={styles.container}>
       {/* Header / Picture */}
       <Row style={styles.headerRow} className="align-items-center ">
-        <Col md={3}>
+        <Col md={12}>
           <Image src={image} alt="Profile" rounded style={styles.image} fluid />
         </Col>
       </Row>
