@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const FeaturedCandidateList = () => {
   const { jobSeekers, loading, error } = useFeaturedJobSeekers();
+ 
 
   return (
     <Container>

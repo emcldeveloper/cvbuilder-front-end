@@ -1,380 +1,539 @@
-import { useContext,useEffect,useRef, useState } from "react";
-import { StepsContext } from "../layouts/mainLayout";
-import { useParams } from "react-router-dom";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../utils/firebase";
-import Spinner from "../widgets/spinner";
-import PageLoader from "../widgets/pageLoader";
-import axios from 'axios';
+// Template1.jsx — Compatible with provided format (uses moment, no helpers)
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Spinner,
+  Alert,
+  Badge,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
-import HideInfo from '../layouts/useHideFields';
-import { useLocation } from 'react-router-dom';
- 
- 
-import { useHideFields } from '../layouts/HideFieldsContext';
 
+const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const CV_BASE = "https://ekazi.co.tz";
+const BRAND = "#1756a5";
+const BRAND_DARK = "#0e3668";
 
 const Template1 = () => {
- 
-  const cv  = useRef()
-  const {uuid,template} = useParams()
-  const [candidate,setCandidate] = useState(null)
-  const [show, setShow] = useState(false);
-  const [pages, setPages] = useState(false);
-  const [experiences,setExperiences] = useState([])
-  // Access hideFields from the navigation state
-  const { hideFields } = useHideFields();
-  const location = useLocation();
+  const [payload, setPayload] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const isAdminTemplatePath = /^\/Admin\/[^/]+\/[^/]+$/.test(location.pathname);
-
-  const isVerified = candidate?.subscription?.verify === 1;
-  console.log("checjk verifcation:",isVerified);
   useEffect(() => {
-    // Fetch data from the API
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-      .then((response) => {
-        if (response?.data?.data) {
-          setCandidate(response.data.data);  // Set the candidate data from the API response
-          setShow(true);  // Display the content
-        }
+    fetch(API)
+      .then((res) => {
+        if (!res.ok) throw new Error('HTTP error! status: ${res.status}');
+        return res.json();
       })
-      .catch((error) => {
-        console.error(error);
+      .then((json) => {
+        setPayload(json?.data || {});
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load profile");
+        setLoading(false);
       });
-  }, [uuid]);
-  
-useEffect(()=>{
-  if(candidate != null){
-     candidate.experience.forEach(item=>{
-         if(experiences.filter((e)=>e.employer.id==item.employer.id) == 0){
-          item.positions = candidate.experience.filter((ex)=>ex.employer.id==item.employer.id)
-            setExperiences([...experiences,item])
-         }
-     })
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "60vh" }}
+      >
+        <Spinner animation="border" role="status" />
+        <span className="ms-3">Loading CV…</span>
+      </div>
+    );
   }
-},[candidate,experiences])
-const processText = (text) => {
-  return text
-    // Split on multiple sentence separators
-    .split(/(?<=[.])|(?=\d+\.)/g)
-    // Group items and clean
-    .reduce((acc, item) => {
-      const trimmed = item.trim();
-      if (!trimmed) return acc;
-      
-      // Check if item starts with number
-      if (/^\d+\./.test(trimmed)) {
-        acc.push(trimmed);
-      } else {
-        // Append to previous item if exists
-        acc.length > 0 
-          ? acc[acc.length - 1] += ` ${trimmed}`
-          : acc.push(trimmed);
-      }
-      return acc;
-    }, [])
-    // Final cleanup
-    .map(item => {
-      const cleaned = item
-        .replace(/^\d+\.\s*/, '')
-        .replace(/([^.])$/, '$1.') // Add period if missing
-        .trim();
-      
-      return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+
+  if (error) {
+    return (
+      <div className="container py-4">
+        <Alert variant="danger" className="mb-0">
+          {error}
+        </Alert>
+      </div>
+    );
+  }
+
+  // ===== Extract Payload Safely =====
+  const profiles = Array.isArray(payload?.applicant_profile)
+    ? payload.applicant_profile
+    : [];
+  const personalities = Array.isArray(payload?.applicant_personality)
+    ? payload.applicant_personality
+    : [];
+  const experiences = Array.isArray(payload?.experience)
+    ? payload.experience
+    : [];
+  const referees = Array.isArray(payload?.referees) ? payload.referees : [];
+  const languages = Array.isArray(payload?.language) ? payload.language : [];
+  const users = Array.isArray(payload?.user) ? payload.user : [];
+  const addresses = Array.isArray(payload?.address) ? payload.address : [];
+  const education = Array.isArray(payload?.education) ? payload.education : [];
+  const skills = Array.isArray(payload?.knowledge) ? payload.knowledge : [];
+  const software = Array.isArray(payload?.software) ? payload.software : [];
+  const tools = Array.isArray(payload?.tools) ? payload.tools : [];
+  const culture = Array.isArray(payload?.culture) ? payload.culture : [];
+
+  const fullName = (() => {
+    const p = profiles[0] || {};
+    const name = `${p?.first_name || ""} ${p?.middle_name || ""} ${
+      p?.last_name || ""
+    }`
+      .replace(/\s+/g, " ")
+      .trim();
+    return name || "—";
+  })();
+
+  const currentTitle =
+    payload?.current_position ||
+    payload?.experience?.[0]?.position?.position_name ||
+    "—";
+
+  const summary =
+    payload?.careers?.[0]?.career ||
+    payload?.objective?.objective ||
+    "Professional summary not provided.";
+
+  const primaryEmail = users?.[0]?.email || payload?.email?.email || "—";
+  const primaryPhone =
+    payload?.phone?.phone_number ||
+    payload?.phone?.number ||
+    users?.[0]?.phone ||
+    "—";
+  const primaryAddress = addresses?.[0]
+    ? `${addresses[0]?.region_name || ""}${
+        addresses[0]?.name ? ", " + addresses[0]?.name : ""
+      }`.replace(/^,\s*/, "")
+    : "—";
+
+  // ===== Work Experience (sorted & formatted via moment) =====
+  const work = experiences
+    .slice()
+    .sort((a, b) => {
+      const bEnd = moment(b?.end_date);
+      const bStart = moment(b?.start_date);
+      const aEnd = moment(a?.end_date);
+      const aStart = moment(a?.start_date);
+      const bKey = (bEnd.isValid() ? bEnd : bStart).valueOf() || 0;
+      const aKey = (aEnd.isValid() ? aEnd : aStart).valueOf() || 0;
+      return bKey - aKey;
     })
-    .filter(item => item.length > 1);
-};
+    .map((e) => {
+      const start = moment(e?.start_date);
+      const end = moment(e?.end_date);
+      const period =
+        (start.isValid() ? start.format("MMM YYYY") : "") +
+        " – " +
+        (end.isValid() ? end.format("MMM YYYY") : "Present");
 
-    return ( !show? <PageLoader/>: candidate == null?<div className="flex justify-center items-center">
-      <p className="pt-12 text-gray-300">Oops! No Content</p>
-    </div> : ( <div  >
-      
-      <div className="px-4 sm:px-6 md:px-8 lg:px-12 pt-4 sm:pt-6 md:pt-8 pb-8 sm:pb-12">
-  {/* Watermark */}
-  <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-    
-        {isAdminTemplatePath && (
-          <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
-            <img
-              src="/logo.png"
-              alt="Watermark"
-              className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
-            />
-          </div>
-        )}
-  
-        {!isAdminTemplatePath && candidate.subscription.length < 1 && (
-          <div className="flex flex-col items-center justify-center mt-10 sm:mt-16 md:mt-20 lg:mt-24">
-            <img
-              src="/logo.png"
-              alt="Watermark"
-              className="opacity-1 w-16 sm:w-24 md:w-32 lg:w-48 xl:w-64 h-auto max-w-full"
-            />
-          </div>
-        )}
-   
-  </div>
-  
-  
+      return {
+        title: e?.position?.position_name || e?.title || "—",
+        company:
+          e?.employer?.employer_name || e?.company || e?.organization || "—",
+        industry: e?.industry?.industry_name || "",
+        location: `${e?.employer?.region?.region_name || ""}${
+          e?.employer?.sub_location ? ", " + e?.employer?.sub_location : ""
+        }`.replace(/^,\s*/, ""),
+        period,
+        bullets: (e?.responsibility || "")
+          .split("\n")
+          .map((t) => t.trim().replace(/^•\s*/, ""))
+          .filter(Boolean),
+      };
+    });
 
-  {/* Header Section */}
-  <div className="flex flex-col items-center justify-center text-center">
-    <h1 className="text-xl sm:text-2xl font-bold">CURRICULUM VITAE</h1>
-    <h1 className="text-lg sm:text-xl font-bold mt-2">
-      {hideFields.name
-        ? " "
-        : `${candidate.applicant_profile?.[0]?.first_name || "No Name Provided"} ${candidate.applicant_profile?.[0]?.middle_name || ""} ${candidate.applicant_profile?.[0]?.last_name || ""}`}
-    </h1>
-    <h1 className="text-base sm:text-lg">
-      {candidate.experience?.[0]?.position?.position_name || "No Position Available"}
-    </h1>
-  </div>
+  // ===== Education (sorted & formatted via moment) =====
+  const eduVM = education
+    .slice()
+    .sort((a, b) => {
+      const bEnd = moment(b?.ended || b?.end_date);
+      const bStart = moment(b?.started || b?.start_date);
+      const aEnd = moment(a?.ended || a?.end_date);
+      const aStart = moment(a?.started || a?.start_date);
+      const bKey = (bEnd.isValid() ? bEnd : bStart).valueOf() || 0;
+      const aKey = (aEnd.isValid() ? aEnd : aStart).valueOf() || 0;
+      return bKey - aKey;
+    })
+    .map((ed) => {
+      const start = moment(ed?.started || ed?.start_date);
+      const end = moment(ed?.ended || ed?.end_date);
+      return {
+        school:
+          ed?.college?.college_name || ed?.institution || ed?.school || "—",
+        course:
+          ed?.course?.course_name ||
+          ed?.qualification?.qualification ||
+          ed?.degree ||
+          "—",
+        yearRange:
+          (start.isValid() ? start.format("YYYY") : "") +
+          (start.isValid() || end.isValid() ? " - " : "") +
+          (end.isValid()
+            ? end.format("YYYY")
+            : start.isValid()
+            ? "Present"
+            : ""),
+        period:
+          (start.isValid() ? start.format("MMM YYYY") : "") +
+          (start.isValid() || end.isValid() ? " – " : "") +
+          (end.isValid() ? end.format("MMM YYYY") : ""),
+      };
+    });
 
-  {/* Contact Information Section */}
-  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-6">
-    <div className="col-span-1 sm:col-span-5 break-words">
-      {[
-        { title: "Location:", value: "Dar es Salaam" },
-        !hideFields.phone && { 
-          title: "Phone:", 
-          value: candidate.phone?.phone_number || "Not specified" 
-        },
-        !hideFields.email && { 
-          title: "Email:", 
-          value: candidate.applicant_profile?.[0]?.email || "Email not provided" 
-        },
-        { title: "Nationality:", value: "Tanzanian" },
-        {
-          title: "Date of birth:",
-          value: candidate.applicant_profile?.[0]?.dob || "Not specified"
-        },
-        {
-          title: "Gender:",
-          value: candidate.applicant_profile?.[0]?.gender_name || "Not specified"
-        },
-      ]
-      .filter(Boolean)
-      .map((item, index) => (
-        <div className="grid grid-cols-2 gap-2" key={index}>
-          <div className="font-semibold">{item.title}</div>
-          <div>{item.value}</div>
-        </div>
-      ))}
-    </div>
-
-    {/* Profile Picture Section */}
-    <div className="col-span-1 sm:col-span-7 flex justify-center sm:justify-end">
-      {!hideFields.picture && (
-        <img
-          alt="profile image"
-          src={
-            candidate.applicant_profile?.[0]?.picture
-              ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
-              : "https://ekazi.co.tz/default-placeholder.png"
-          }
-          className="w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-full"
-        />
-      )}
-    </div>
-  </div>
-
-  {/* Professional Summary Section */}
-  <div className="mt-6">
-    <h1 className="font-bold text-lg sm:text-xl">PROFESSIONAL SUMMARY</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    <p className="text-sm sm:text-base">
-      {candidate?.careers?.[0]?.career || "Professional summary not specified"}
-    </p>
-    <h1 className="font-bold mt-2 text-sm sm:text-base">Career Objective</h1>
-    <p className="text-sm sm:text-base">
-      {candidate?.objective?.objective || "Career objective not specified"}
-    </p>
-  </div>
-
-  {/* Working Experience Section */}
-  {experiences?.length > 0 && (
-    <div className="mt-6">
-      <h1 className="font-bold text-lg sm:text-xl">WORKING EXPERIENCE</h1>
-      <div className="h-[2px] bg-gray-100 mb-2"></div>
-      <div className="space-y-4">
-        {experiences.map((item, index) => (
-          <div key={index}>
-            <div>
-              <p className="font-bold text-sm sm:text-base">
-                {item?.employer?.employer_name || "Employer name not specified"}
-              </p>
-              <span className="capitalize text-sm sm:text-base">
-                {item?.employer?.region?.region_name || "Region not specified"}, {item?.employer?.sub_location || "Sub-location not specified"}
-              </span>
+  return (
+    <Container
+      fluid
+      style={{
+        width: "210mm",
+        minHeight: "297mm",
+        margin: "auto",
+        backgroundColor: "#000",
+        padding: "5mm",
+        fontFamily:
+          '"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+      }}
+    >
+      <Row className="text-start">
+        {/* LEFT SECTION */}
+        <Col md={8} className="bg-white shadow-sm p-4">
+          {/* Header */}
+          <div className="mb-3">
+            <h2
+              className="fw-bold text-uppercase mb-1"
+              style={{ fontSize: "1.1rem", color: BRAND_DARK }}
+            >
+              {fullName}
+            </h2>
+            <div className="text-muted" style={{ fontSize: ".95rem" }}>
+              {currentTitle}
             </div>
-            <ul className="list-disc list-outside ml-5 space-y-2">
-              {item?.positions?.map((position, positionIndex) => (
-                <li key={positionIndex} className="text-sm sm:text-base">
-                  <p className="font-bold">
-                    {position?.position?.position_name || "Position not specified"}
-                  </p>
-                  <p>
-                    {position?.start_date
-                      ? `${new Date(position.start_date).getFullYear()}-${(new Date(position.start_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.start_date).getDate().toString().padStart(2, '0')}`
-                      : "Start date not specified"}{" "}
-                    -{" "}
-                    {position?.end_date
-                      ? `${new Date(position.end_date).getFullYear()}-${(new Date(position.end_date).getMonth() + 1).toString().padStart(2, '0')}-${new Date(position.end_date).getDate().toString().padStart(2, '0')}`
-                      : "Present"}
-                  </p>
-                  <p className="mt-2">
-                    <span className="font-semibold">Responsibilities: </span>
-                    <ul className="list-disc pl-6 mt-2 space-y-2">
-                      {(() => {
-                        const text = position.responsibility.trim();
-                        const isNumbered = /^\d+\./.test(text);
-                        return text
-                          .split(isNumbered ? /\d+\.\s*/g : /(?<=\.)\s+/g)
-                          .filter(item => item.trim().length > 0)
-                          .map((item, index) => (
-                            <li key={index} className="mb-2">{item.trim()}</li>
-                          ));
-                      })()}
-                    </ul>
-                  </p>
-                </li>
-              ))}
+          </div>
+
+          {/* About */}
+          <Card className="border-0 p-0 mb-3">
+            <Card.Title
+              className="fw-semibold text-uppercase mb-2"
+              style={{ fontSize: "1rem", color: BRAND }}
+            >
+              About
+            </Card.Title>
+            <Card.Body className="p-0">
+              <p
+                className="mb-0"
+                style={{ fontSize: "0.95rem", lineHeight: 1.6 }}
+              >
+                {summary}
+              </p>
+            </Card.Body>
+          </Card>
+
+          {/* Career Objective */}
+          {payload?.objective?.objective ? (
+            <Card className="border-0 p-0 mb-3">
+              <Card.Title
+                className="fw-semibold text-uppercase mb-2"
+                style={{ fontSize: "1rem", color: BRAND }}
+              >
+                Career Objective
+              </Card.Title>
+              <Card.Body className="p-0">
+                <p
+                  className="mb-0"
+                  style={{ fontSize: "0.95rem", lineHeight: 1.6 }}
+                >
+                  {payload.objective.objective}
+                </p>
+              </Card.Body>
+            </Card>
+          ) : null}
+
+          {/* Job Experience */}
+          <Card className="border-0 p-0 mb-3">
+            <Card.Title
+              className="fw-semibold text-uppercase mb-2"
+              style={{ fontSize: "1rem", color: BRAND }}
+            >
+              Job Experience
+            </Card.Title>
+            <Card.Body className="p-0" style={{ fontSize: "0.95rem" }}>
+              {work.length > 0 ? (
+                work.map((exp, i) => (
+                  <div key={i} className="mb-4 text-start">
+                    <div className="d-flex justify-content-between gap-3">
+                      <div>
+                        <div
+                          className="fw-bold text-capitalize"
+                          style={{ color: BRAND_DARK }}
+                        >
+                          {exp.title}
+                        </div>
+                        <div className="text-muted">
+                          {exp.company}
+                          {exp.industry ? ` / ${exp.industry}` : ""}
+                        </div>
+                        {exp.location ? (
+                          <div className="text-muted small">{exp.location}</div>
+                        ) : null}
+                      </div>
+                      <Badge
+                        bg="light"
+                        className="text-dark border align-self-start"
+                      >
+                        {exp.period}
+                      </Badge>
+                    </div>
+
+                    {exp.bullets.length > 0 ? (
+                      <ul className="small mb-0 mt-2 ps-3">
+                        {exp.bullets.map((b, k) => (
+                          <li key={k} className="text-muted lh-base">
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                ))
+              ) : (
+                <p className="mb-0 text-muted">No job experience added.</p>
+              )}
+            </Card.Body>
+          </Card>
+
+          {/* Skills & Endorsements */}
+          <Card className="border-0 p-0">
+            <Card.Title
+              className="fw-semibold text-uppercase mb-2"
+              style={{ fontSize: "1rem", color: BRAND }}
+            >
+              Skills & Endorsements
+            </Card.Title>
+            <Card.Body className="p-0" style={{ fontSize: "0.95rem" }}>
+              <div className="d-flex align-items-center gap-3 mb-2">
+                <p className="fw-semibold mb-0" style={{ minWidth: 110 }}>
+                  Culture Fit:
+                </p>
+                <p className="small mb-0">
+                  {culture.length
+                    ? culture
+                        .map(
+                          (c) =>
+                            c?.culture?.culture_name ||
+                            c?.culture_name ||
+                            c?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="d-flex align-items-center gap-3 mb-2">
+                <p className="fw-semibold mb-0" style={{ minWidth: 110 }}>
+                  Personality:
+                </p>
+                <p className="small mb-0">
+                  {personalities.length
+                    ? personalities
+                        .map((p) => p?.personality?.personality_name)
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="d-flex align-items-center gap-3 mb-2">
+                <p className="fw-semibold mb-0" style={{ minWidth: 110 }}>
+                  Software:
+                </p>
+                <p className="small mb-0">
+                  {software.length
+                    ? software
+                        .map(
+                          (s) => s?.software?.software_name || s?.software_name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="d-flex align-items-center gap-3 mb-2">
+                <p className="fw-semibold mb-0" style={{ minWidth: 110 }}>
+                  Skills & Knowledge:
+                </p>
+                <p className="small mb-0">
+                  {skills.length
+                    ? skills
+                        .map(
+                          (k) =>
+                            k?.knowledge?.knowledge_name || k?.knowledge_name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="d-flex align-items-center gap-3">
+                <p className="fw-semibold mb-0" style={{ minWidth: 110 }}>
+                  Tools:
+                </p>
+                <p className="small mb-0">
+                  {tools.length
+                    ? tools
+                        .map((t) => t?.tool?.tool_name || t?.tool_name)
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        {/* RIGHT SECTION */}
+        <Col md={4} className="bg-dark text-light p-4">
+          {/* Photo */}
+      {profiles.length ? (
+  <div className="text-center mb-4">
+    <img
+      src={
+        profiles[0]?.picture
+          ? `${CV_BASE}/${profiles[0].picture}`
+          : "https://placehold.co/120x120?text=Photo"
+      }
+      alt="profile"
+      className="border border-3 border-white rounded"
+      width="100"
+      height="100"
+      onError={(e) =>
+        (e.currentTarget.src = "https://placehold.co/120x120?text=Photo")
+      }
+      style={{ objectFit: "cover" }}
+    />
+  </div>
+) : null}
+
+          {/* Language */}
+          <div className="small mb-4">
+            <h5
+              className="border-bottom fw-bold pb-1 text-uppercase"
+              style={{ fontSize: "1rem", borderColor: "rgba(255,255,255,.25)" }}
+            >
+              Language
+            </h5>
+            <ul className="mb-0">
+              {languages.length ? (
+                languages.map((language, i) => (
+                  <li key={i} className="small text-start">
+                    {language?.language?.language_name || "—"}
+                  </li>
+                ))
+              ) : (
+                <li className="small text-start">—</li>
+              )}
             </ul>
           </div>
-        ))}
-      </div>
-    </div>
-  )}
 
-  {/* Languages Section */}
-  <div className="mt-6">
-    <h1 className="font-bold text-lg sm:text-xl">LANGUAGES</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    <div className="flex flex-wrap gap-2 text-sm sm:text-base">
-      {candidate?.language?.length > 0 ? (
-        candidate.language.map((item, index) => (
-          <p key={index}>
-            {item?.language?.language_name || "Language not specified"}
-            {index + 1 !== candidate.language.length && ","}
-          </p>
-        ))
-      ) : (
-        <p>Not Specified</p>
-      )}
-    </div>
-  </div>
-
-  {/* Skills Section */}
-  <div className="mt-6">
-    <h1 className="font-bold text-lg sm:text-xl">SKILLS</h1>
-    <div className="h-[2px] bg-gray-100 mb-2"></div>
-    <div className="space-y-2 text-sm sm:text-base">
-      <p>
-        <span className="font-bold">Culture:</span>{" "}
-        {candidate?.culture?.map((item, index) => (
-          <span key={index}>
-            {item?.culture?.culture_name || "Culture not specified"}
-            {index + 1 !== candidate.culture.length && ", "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <span className="font-bold">Personality:</span>{" "}
-        {candidate?.culture?.map((item, index) => (
-          <span key={index}>
-            {item?.culture?.culture_name || "Personality not specified"}
-            {index + 1 !== candidate.culture.length && ", "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <span className="font-bold">Skill & Knowledge:</span>{" "}
-        {candidate?.knowledge?.map((item, index) => (
-          <span key={index}>
-            {item?.knowledge?.knowledge_name || "Skill not specified"}
-            {index + 1 !== candidate.knowledge.length && ", "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <span className="font-bold">Software:</span>{" "}
-        {candidate?.software?.map((item, index) => (
-          <span key={index}>
-            {item?.software?.software_name || "Software not specified"}
-            {index + 1 !== candidate.software.length && ", "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <span className="font-bold">Tools:</span>{" "}
-        {candidate?.tools?.map((item, index) => (
-          <span key={index}>
-            {item?.tool?.tool_name || "Tool not specified"}
-            {index + 1 !== candidate.tools.length && ", "}
-          </span>
-        ))}
-      </p>
-    </div>
-  </div>
-
-  {/* Education Section */}
-  {candidate?.education?.length > 0 && (
-    <div className="mt-6">
-      <h1 className="font-bold text-lg sm:text-xl">EDUCATION DETAILS</h1>
-      <div className="h-[2px] bg-gray-100 mb-2"></div>
-      {candidate.education.map((item, index) => (
-        <div key={index} className="text-sm sm:text-base">
-          <p>
-            <span className="font-bold">
-              {item?.course?.course_name || "Course not specified"}:
-            </span>{" "}
-            {item?.started
-              ? new Date(item.started).getFullYear()
-              : "Start date not specified"}{" "}
-            -{" "}
-            {item?.ended
-              ? new Date(item.ended).getFullYear()
-              : "End date not specified"}
-          </p>
-          <i>{item?.level?.education_level || "Level not specified"}</i>,{" "}
-          <span>{item?.college?.college_name || "College not specified"}</span>
-        </div>
-      ))}
-    </div>
-  )}
-
-  {/* Referees Section */}
-  {candidate?.referees?.length > 0 && !hideFields.referee && (
-    <div className="mt-6">
-      <h1 className="font-bold text-lg sm:text-xl">REFEREES</h1>
-      <div className="h-[2px] bg-gray-100 mb-2"></div>
-      <div className="space-y-3 text-sm sm:text-base">
-        {candidate.referees.map((item, index) => (
-          <div key={index}>
-            <p>
-              <span className="font-bold">
-                {item?.first_name || "First name not specified"}{" "}
-                {item?.middle_name || ""} {item?.last_name || ""}
-              </span>
-            </p>
-            <p>{item?.referee_position || "Position not specified"}</p>
-            <p>
-              <span className="font-bold">Phone:</span>{" "}
-              {item?.phone || "Phone not specified"}
-            </p>
-            <p>
-              <span className="font-bold">Email:</span>{" "}
-              {item?.email || "Email not specified"}
-            </p>
+          {/* Contact Info */}
+          <div className="small mb-4">
+            <h5
+              className="fw-bold border-bottom text-uppercase mb-2 pb-1"
+              style={{ fontSize: "1rem", borderColor: "rgba(255,255,255,.25)" }}
+            >
+              Contact Me
+            </h5>
+            <ul className="mb-0">
+              <li>{primaryPhone}</li>
+              <li>{primaryEmail}</li>
+              {addresses.length ? (
+                addresses.map((a, i) => (
+                  <li key={i}>
+                    {`${a?.region_name || ""}${
+                      a?.name ? ", " + a?.name : ""
+                    }`.replace(/^,\s*/, "")}
+                  </li>
+                ))
+              ) : (
+                <li>{primaryAddress}</li>
+              )}
+            </ul>
           </div>
-        ))}
-      </div>
-    </div>
-  )}
-</div>
-        
-    </div> ));
-}
- 
-export default Template1;
+
+          {/* Education */}
+          <div className="mb-4">
+            <h5
+              className="fw-bold border-bottom pb-1 text-uppercase"
+              style={{ fontSize: "1rem", borderColor: "rgba(255,255,255,.25)" }}
+            >
+              Education
+            </h5>
+            {eduVM.length > 0 ? (
+              <ul className="small ps-3 text-start mb-0">
+                {eduVM.map((edu, i) => (
+                  <li key={i} className="mt-2">
+                    <strong>{edu.course}</strong>
+                    <br />
+                    {edu.school}{" "}
+                    <span className="text-secondary">({edu.yearRange})</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-0">No education records available.</p>
+            )}
+          </div>
+
+          {/* Referees */}
+          <div className="border-0 p-0">
+            <div
+              className="fw-bold text-uppercase border-bottom mb-2 pb-1"
+              style={{ fontSize: "1rem", borderColor: "rgba(255,255,255,.25)" }}
+            >
+              Referees
+            </div>
+            <ul
+              className="p-0 list-unstyled mb-0"
+              style={{ fontSize: "0.95rem" }}
+            >
+              {referees.length > 0 ? (
+                referees.map((r, index) => {
+                  const name = [r?.first_name, r?.middle_name, r?.last_name]
+                    .filter(Boolean)
+                    .join(" ");
+                  return (
+                    <li key={index} className="mb-2 text-start">
+                      <h6 className="mb-0">{name || "—"}</h6>
+                      <p className="small mb-1">
+                        <em>{r?.referee_position || "—"}</em>
+                      </p>
+                      <p className="small mb-0">{r?.employer || "—"}</p>
+                      <p className="small mb-0">{r?.email || "—"}</p>
+                      <p className="small mb-0">{r?.phone || "—"}</p>
+                    </li>
+                  );
+                })
+              ) : (
+                <p className="mb-0">No referees added.</p>
+              )}
+            </ul>
+          </div>
+        </Col>
+      </Row>
+
+      <style>{`
+        body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji", sans-serif; }
+      `}</style>
+    </Container>
+  );
+};
+
+export default Template1;

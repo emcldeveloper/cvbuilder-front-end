@@ -19,12 +19,12 @@ import Template1 from "../../../templates/template1";
 import Template2 from "../../../templates/template2";
 import Template3 from "../../../templates/template3";
 import Template4 from "../../../templates/template4";
-// import Templat5  from "../../../templates/template5";
 import Template6 from "../../../templates/template6";
 import Template7 from "../../../templates/template7";
 import Template8 from "../../../templates/template8";
 import Template9 from "../../../templates/template9";
 import Template10 from "../../../templates/template10";
+import Template5 from "../../../templates/template5";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { CvApi } from "../../../Api/Jobseeker/CvApi";
 import { Api } from "@mui/icons-material";
@@ -42,7 +42,7 @@ const SampleTemplate = () => {
         { id: 2, name: "Template 2", image: "/cv2.png", component: <Template2 /> },
         { id: 3, name: "Template 3", image: "/cv3.png", component: <Template3 /> },
         { id: 4, name: "Template 4", image: "/cv4.png", component: <Template4 /> },
-        // { id: 5, name: "Template 5", image: "/cv5.png", component: <Template5 /> },
+        { id: 5, name: "Template 5", image: "/cv5.png", component: <Template5 /> },
         { id: 6, name: "Template 6", image: "/cv6.png", component: <Template6 /> },
         { id: 7, name: "Template 7", image: "/cv7.png", component: <Template7 /> },
         { id: 8, name: "Template 8", image: "/cv8.png", component: <Template8 /> },
@@ -479,7 +479,8 @@ const SampleTemplate = () => {
                                 Cancel
                             </Button>
                             <Button variant="primary"
-                            onClick={()=>navigate('/jobseeker/home-cv')}
+                            // onClick={()=>navigate('/jobseeker/home-cv')}
+                             onClick={() => navigate('/jobseeker/home-cv', { state: { template: selectedTemplate } })}
                             
                             >
                                 Save

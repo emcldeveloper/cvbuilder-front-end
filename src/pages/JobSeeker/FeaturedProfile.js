@@ -58,7 +58,10 @@ const FeaturedProfile = () => {
             {/* Sidebar Ad */}
             <Col xs={12} lg={3} className="mt-4 mt-lg-0 mb-3"
               style={{ position: "sticky", top: "180px", alignSelf: "flex-start" }}>
-              <aside>
+              <aside className="mb-2">
+                <AdPlaceholder />
+              </aside>
+                <aside>
                 <AdPlaceholder />
               </aside>
             </Col>

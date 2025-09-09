@@ -5,17 +5,23 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 const defaultImage = "/pre_profile/pre_photo.jpg";
 
 const styles = {
- 
+
   image: {
     height: "100px",
     width: "80px",
     objectFit: "cover",
-    marginTop:"12px"
+    marginTop: "12px"
+  },
+  bgk: {
+    height: "100px",
+    width: "80px",
+    objectFit: "cover",
+    marginTop: "12px"
   },
   headerRow: {
     backgroundColor: "#2E58A6",
-   
-   
+
+
   },
   nameText: {
     fontWeight: "bold",
@@ -33,7 +39,9 @@ const PersonalDetails = ({ candidate }) => {
   const applicant = candidate.applicant;
 
   // Full name
-  const rawNameParts = [applicant.first_name, applicant.middle_name, applicant.last_name];
+  const rawNameParts = [applicant.first_name, 
+    // applicant.middle_name, 
+    applicant.last_name];
   const fullName =
     rawNameParts.map(part => part?.trim()).filter(part => part && part !== "0").join(" ") || "No Name Record";
 
@@ -62,20 +70,51 @@ const PersonalDetails = ({ candidate }) => {
     <Container className="border mb-1 bg-white" style={styles.container}>
       {/* Header / Picture */}
       <Row style={styles.headerRow} className="align-items-center ">
-        <Col md={12}>
-          <Image src={image} alt="Profile" rounded style={styles.image} fluid />
+        <Col md={3}>
+
+          <div style={styles.bgk}></div>
         </Col>
       </Row>
 
       {/* Name & Position */}
-      <Row className="pt-2">
-        <Col md={9}>
-          <p className="text-primary" style={styles.nameText}>
-            {fullName}
-          </p>
-          <p className="text-secondary mb-2">{position}</p>
-        </Col>
-      </Row>
+      <Row className="align-items-center justify-content-center">
+  <Col md={12} className="d-flex align-items-center">
+    {/* Image column */}
+    <div style={{ marginRight: '15px' }}> {/* Minimum distance */}
+      <Image
+        src={image}
+        alt="Profile"
+        rounded
+        fluid
+        style={{
+          width: '140px',
+          height: '160px',
+          objectFit: 'cover',
+          border: '3px solid white',
+          marginTop: '-80px',
+          marginBottom: '15px',
+          zIndex: 1,
+          position: 'relative'
+        }}
+      />
+    </div>
+
+    {/* Text column */}
+    <div>
+      <p
+        className="text-primary"
+        style={{
+          fontSize: '1.2rem',
+          fontWeight: 'bold',
+          marginBottom: '0.25rem'
+        }}
+      >
+        {fullName}
+      </p>
+      <p className="text-secondary mb-2">{position}</p>
+    </div>
+  </Col>
+</Row>
 
       {/* Info Row */}
       <Row className="pt-2 align-items-center">

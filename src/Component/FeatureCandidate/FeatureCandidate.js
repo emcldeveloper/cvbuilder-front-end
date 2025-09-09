@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Row, Col, Image } from 'react-bootstrap';
 import { FaStar, FaEye, FaThumbsUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import toTitleCase from '../../utils/toTitleCase';
+import axios from 'axios';
+import { createviewcount } from '../../Api/FeatureCandidate/FeactureApi';
 
 const FeatureCandidate = ({ candidate }) => {
   const navigate = useNavigate();
@@ -51,11 +53,35 @@ const FeatureCandidate = ({ candidate }) => {
   // Example score logic: basic engagement metric
   const score = views + likes > 0 ? ((likes / (views + likes)) * 5).toFixed(1) : 'N/A';
 
-  const handleViewProfile = () => {
-    const slug = `${name.toLowerCase().replace(/\s+/g, '-')}`;
-    navigate(`/job-seeker-profile/${slug}`, {
-      state: { candidate },
-    });
+  const [viewCount, setViewCount] = useState(0);
+
+
+  const handleViewProfile = async () => {
+    // Update local counter immediately for better UX
+    setViewCount(prevCount => prevCount + 1);
+      const sendData = {
+      candidateId: candidate.id,
+      candidateName: name,
+      viewCount: viewCount,
+      timestamp: new Date().toISOString()
+    };
+    try {
+      // Track the view via API (fire and forget)
+
+      const response = await createviewcount(sendData)
+     
+      console.log('view profile ', 10);
+
+    } catch (error) {
+      console.error('Error in tracking:', error);
+    } finally {
+      // Always navigate to profile
+      console.log('view profile ', 12);
+      const slug = `${name.toLowerCase().replace(/\s+/g, '-')}`;
+      navigate(`/job-seeker-profile/${slug}`, {
+        state: { candidate },
+      });
+    }
   };
 
   return (

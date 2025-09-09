@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import Template1 from "../../templates/template1";
+
 import axios from "axios";
 import Spinner from "../../widgets/spinner";
-// import Template2 from "../../templates/template2";
+import Template1 from "../../templates/template1";
+import Template2 from "../../templates/template2";
 import Template3 from "../../templates/template3";
 import Template4 from "../../templates/template4";
 import Template5 from "../../templates/template5";
@@ -15,17 +16,32 @@ import Template10 from "../../templates/template10";
 import { useCvProfileData } from "../../hooks/Candidate/Cv";
 import { Card, Col } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const HomePageCv = () => {
     const [downloading, setDownloading] = useState(false)
-    const [selectedTemplate, setselectedTemplate] = useState(null)
     const uuid = localStorage.getItem("applicantId");
     const { data, loading, error } = useCvProfileData(uuid);
     const originalDetails = data;
-    const template = 1;
+    const location = useLocation();
+    const [selectedTemplate, setSelectedTemplate] = useState(location.state?.template);
+    const template = selectedTemplate;
     const navigate = useNavigate();
 
-   
+    console.log("slected tempalted", selectedTemplate);
+    const templates = [
+        { id: 1, component: <Template1 /> },
+        { id: 2, component: <Template2 /> },
+        { id: 3, component: <Template3 /> },
+        { id: 4, component: <Template4 /> },
+        { id: 5, component: <Template5 /> },
+        { id: 6, component: <Template6 /> },
+        { id: 7, component: <Template7 /> },
+        { id: 8, component: <Template8 /> },
+        { id: 9, component: <Template9 /> },
+        { id: 10, component: <Template10 /> },
+    ];
+
 
     return (
         <div className=" min-h-screen overflow-x-hidden  ">
@@ -73,14 +89,14 @@ const HomePageCv = () => {
                                         </button>
 
                                         <button
-                                            onClick={() => {
-                                                setDownloading(true);
-                                                axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${originalDetails.applicant_profile[0].first_name}`)
-                                                    .then((response) => {
-                                                        setDownloading(false);
-                                                        window.open(response.data.body.link, '_blank');
-                                                    });
-                                            }}
+                                            // onClick={() => {
+                                            //     setDownloading(true);
+                                            //     axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${originalDetails.applicant_profile[0].first_name}`)
+                                            //         .then((response) => {
+                                            //             setDownloading(false);
+                                            //             window.open(response.data.body.link, '_blank');
+                                            //         });
+                                            // }}
                                             className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 flex items-center gap-2 transition-colors w-full md:w-auto justify-center"
                                             disabled={downloading}
                                         >
@@ -107,23 +123,17 @@ const HomePageCv = () => {
 
                             {/* Document Content Area */}
                             <div className="flex flex-col md:flex-row">
-                                
+
                                 {/* Main Document Preview */}
                                 <div className="flex-1 p-0">
                                     <div className="max-w-4xl mx-auto  p-8 min-h-[70vh]">
                                         {/* CV Preview Content Would Go Here */}
                                         <div className="text-center  text-gray-400     rounded">
-                                            {[
-                                                // { template: <Template1 /> },
-                                                // { template: <Template2 /> },
-                                                { template: <Template3 /> },
-                                                { template: <Template4 /> },
-                                                { template: <Template5 /> },
-                                                { template: <Template6 /> },
-                                                { template: <Template7 /> },
-                                                { template: <Template8 /> }].map((item, index) => {
-                                                    return index + 1 == template && <div>{item.template}</div>
-                                                })}
+                                            {templates.map((item, index) =>
+                                                item.id === template && <div key={index}>{item.component}</div>
+                                            )}
+
+
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto mt-7">
                                             <button

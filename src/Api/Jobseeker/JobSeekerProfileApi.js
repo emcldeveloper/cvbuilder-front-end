@@ -159,3 +159,16 @@ export const createreferee = async (sendData) => {
     }
 };
 
+export const createcareer = async(data)=>{
+    try {
+        const response = await api.post('');
+        return response;
+
+    } catch (error) {
+        throw error.response?.data?.message || 
+        error.response?.data.error 
+        ||error.message; 
+    
+    }
+}
+

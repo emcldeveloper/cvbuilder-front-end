@@ -1,441 +1,451 @@
-import { useContext,useEffect,useRef, useState } from "react";
-import { StepsContext } from "../layouts/mainLayout";
-import { useParams } from "react-router-dom";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../utils/firebase";
-import Spinner from "../widgets/spinner";
-import PageLoader from "../widgets/pageLoader";
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Image,
+  Badge,
+  ListGroup,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FiMail, FiPhone, FiMapPin, FiGlobe, FiLinkedin } from "react-icons/fi";
+import moment from "moment";
+ const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const CV_BASE = "https://ekazi.co.tz";
+// Brand + UI
+const BRAND = "#D36314";
+const BRAND_DARK = "#8B3A0F";
+const INK = "#1f2937";
+const PAPER = "#ffffff";
+const PANEL = "#f8fafc";
+const DIVIDER = "rgba(0,0,0,.08)";
 
-const Template4 = () => {
- 
-  const cv  = useRef()
-  const {uuid,template} = useParams()
-  const [candidate,setCandidate] = useState(null)
-  const [show, setShow] = useState(false);
-  const [pages, setPages] = useState(false);
-  const [experiences,setExperiences] = useState([])
+export default function Template5() {
+  const [payload, setPayload] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const isVerified = candidate?.subscription?.verify === 1;
-  const formatDate = (date) => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toISOString().split('T')[0]; // 'yyyy-mm-dd'
-};
-  console.log("checjk verifcation:",isVerified);
   useEffect(() => {
-    // Fetch data from the API
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-      .then((response) => {
-        if (response?.data?.data) {
-          setCandidate(response.data.data);  // Set the candidate data from the API response
-          setShow(true);  // Display the content
-        }
+    fetch(API)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
       })
-      .catch((error) => {
-        console.error(error);
+      .then((json) => {
+        setPayload(json?.data || {});
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load profile");
+        setLoading(false);
       });
-  }, [uuid]);
-  
-useEffect(()=>{
-  if(candidate != null){
-     candidate.experience.forEach(item=>{
-         if(experiences.filter((e)=>e.employer.id==item.employer.id) == 0){
-          item.positions = candidate.experience.filter((ex)=>ex.employer.id==item.employer.id)
-            setExperiences([...experiences,item])
-         }
-     })
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "60vh" }}
+      >
+        <Spinner animation="border" role="status" />
+        <span className="ms-3">Loading CV…</span>
+      </div>
+    );
   }
-},[candidate,experiences])
+  if (error) {
+    return (
+      <div className="container py-4">
+        <Alert variant="danger" className="mb-0">
+          {error}
+        </Alert>
+      </div>
+    );
+  }
 
-    return ( !show? <PageLoader/>: candidate == null?<div className="flex justify-center items-center">
-      <p className="pt-12 text-gray-300">Oops! No Content</p>
-    </div> : (
-  <div>
-  <div className="">
-    <div ref={cv} id="data" className="px-4 sm:px-6 md:px-12 pt-8 pb-12">
-      {/* Watermark */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-        {candidate.subscription.length < 1 && (
-          <div style={{ textAlign: 'center' }}>
-            <img
-              src="/logo.png"
-              alt="Watermark"
-              className="opacity-1"
-              style={{ width: "100%", maxWidth: "550px", height: "auto" }}
-            />
+  // ---------- extract safely ----------
+  const profiles = Array.isArray(payload?.applicant_profile)
+    ? payload.applicant_profile
+    : [];
+  const profile = profiles[0] || {};
+  const users = Array.isArray(payload?.user) ? payload.user : [];
+  const experiences = Array.isArray(payload?.experience)
+    ? payload.experience
+    : [];
+  const referees = Array.isArray(payload?.referees) ? payload.referees : [];
+  const languages = Array.isArray(payload?.language) ? payload.language : [];
+  const addresses = Array.isArray(payload?.address) ? payload.address : [];
+  const education = Array.isArray(payload?.education) ? payload.education : [];
+  const knowledge = Array.isArray(payload?.knowledge) ? payload.knowledge : [];
+  const software = Array.isArray(payload?.software) ? payload.software : [];
+  const tools = Array.isArray(payload?.tools) ? payload.tools : [];
+  const culture = Array.isArray(payload?.culture) ? payload.culture : [];
+  const personalities = Array.isArray(payload?.applicant_personality)
+    ? payload.applicant_personality
+    : [];
+  const training = Array.isArray(payload?.training) ? payload.training : [];
+  const proficiency = Array.isArray(payload?.proficiency)
+    ? payload.proficiency
+    : [];
+
+  // ---------- derive fields ----------
+  const fullName =
+    `${profile?.first_name || ""} ${profile?.middle_name || ""} ${profile?.last_name || ""}`
+      .replace(/\s+/g, " ")
+      .trim() || "—";
+
+  const currentTitle =
+    payload?.current_position ||
+    payload?.experience?.[0]?.position?.position_name ||
+    "—";
+
+  const summary =
+    payload?.careers?.[0]?.career ||
+    payload?.objective?.objective ||
+    "Professional summary not provided.";
+
+  const primaryEmail =
+    profile?.email || users?.[0]?.email || payload?.email?.email || "—";
+
+  const primaryPhone =
+    payload?.phone?.phone_number ||
+    payload?.phone?.number ||
+    users?.[0]?.phone ||
+    "—";
+
+  const primaryAddress = addresses?.[0]
+    ? `${addresses[0]?.region_name || ""}${addresses[0]?.name ? ", " + addresses[0]?.name : ""}`.replace(/^,\s*/, "")
+    : "—";
+
+  const website = payload?.socials?.website || "";
+  const linkedin = payload?.socials?.linkedin || "";
+  const safeWebsite =
+    website && !/^https?:\/\//i.test(website) ? `https://${website}` : website;
+  const safeLinkedin =
+    linkedin && !/^https?:\/\//i.test(linkedin) ? `https://${linkedin}` : linkedin;
+
+  // ---------- Experience ----------
+  const work = experiences
+    .slice()
+    .sort((a, b) => {
+      const bEnd = moment(b?.end_date);
+      const bStart = moment(b?.start_date);
+      const aEnd = moment(a?.end_date);
+      const aStart = moment(a?.start_date);
+      const bKey = (bEnd.isValid() ? bEnd : bStart).valueOf() || 0;
+      const aKey = (aEnd.isValid() ? aEnd : aStart).valueOf() || 0;
+      return bKey - aKey;
+    })
+    .map((e) => {
+      const start = moment(e?.start_date);
+      const end = moment(e?.end_date);
+      const period =
+        (start.isValid() ? start.format("MMM YYYY") : "") +
+        " – " +
+        (end.isValid() ? end.format("MMM YYYY") : "Present");
+
+      return {
+        title: e?.position?.position_name || e?.title || "—",
+        company: e?.employer?.employer_name || e?.company || e?.organization || "—",
+        industry: e?.industry?.industry_name || "",
+        location: `${e?.employer?.region?.region_name || ""}${e?.employer?.sub_location ? ", " + e?.employer?.sub_location : ""}`.replace(/^,\s*/, ""),
+        period,
+        bullets: (e?.responsibility || "")
+          .split("\n")
+          .map((t) => t.trim().replace(/^•\s*/, ""))
+          .filter(Boolean),
+      };
+    });
+
+  // ---------- Education ----------
+  const eduVM = education
+    .slice()
+    .sort((a, b) => {
+      const bEnd = moment(b?.ended || b?.end_date);
+      const bStart = moment(b?.started || b?.start_date);
+      const aEnd = moment(a?.ended || a?.end_date);
+      const aStart = moment(a?.started || a?.start_date);
+      const bKey = (bEnd.isValid() ? bEnd : bStart).valueOf() || 0;
+      const aKey = (aEnd.isValid() ? aEnd : aStart).valueOf() || 0;
+      return bKey - aKey;
+    })
+    .map((ed) => {
+      const start = moment(ed?.started || ed?.start_date);
+      const end = moment(ed?.ended || ed?.end_date);
+      return {
+        school: ed?.college?.college_name || ed?.institution || ed?.school || "—",
+        course: ed?.course?.course_name || ed?.qualification?.qualification || ed?.degree || "—",
+        yearRange:
+          (start.isValid() ? start.format("YYYY") : "") +
+          (start.isValid() || end.isValid() ? " - " : "") +
+          (end.isValid() ? end.format("YYYY") : start.isValid() ? "Present" : ""),
+        period:
+          (start.isValid() ? start.format("MMM YYYY") : "") +
+          (start.isValid() || end.isValid() ? " – " : "") +
+          (end.isValid() ? end.format("MMM YYYY") : ""),
+      };
+    });
+
+  const sideSkills = knowledge
+    .map((k) => k?.knowledge?.knowledge_name || k?.knowledge_name || k)
+    .filter(Boolean)
+    .slice(0, 10);
+
+  return (
+    <Container
+      fluid
+      style={{
+        width: "210mm",
+        minHeight: "297mm",
+        margin: "auto",
+        backgroundColor: PAPER,
+        padding: "5mm",
+        color: INK,
+        boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+      }}
+      className="p-0"
+    >
+      <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+
+      {/* Header */}
+      <Row className="g-0">
+        <Col xs={12}>
+          <div className="headerWrap">
+            <div className="bar left" />
+            <h1 className="name">{fullName}</h1>
+            <div className="bar right" />
           </div>
-        )}
-        <div className="absolute text-gray-200 opacity-10 text-4xl sm:text-6xl font-bold">
-          Ekazi
-        </div>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        {/* Candidate Name */}
-        <h1 className="text-2xl sm:text-4xl font-bold">CURRICULUM VITAE</h1>
-        <h1 className="text-xl sm:text-3xl font-bold" style={{ color: "rgb(46, 88, 166)" }}>
-          {candidate.applicant_profile[0]?.first_name || "First Name"}, {candidate.applicant_profile[0]?.last_name || "Last Name"}
-        </h1>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start mt-8">
-        {/* Profile Image Section */}
-        <div className="md:col-span-5 flex justify-center">
-          <img
-            alt="profile"
-            src={`https://ekazi.co.tz/${candidate.applicant_profile[0]?.picture || "default-profile.png"}`}
-            className="w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-full border-2 border-gray-300"
-          />
-        </div>
+      <Row className="g-0">
+        {/* LEFT — main */}
+        <Col md={8} className="p-4 pe-md-5">
+          <SectionTitle title="Profile" />
+          <p className="text-muted lh-base">{summary}</p>
 
-        {/* Candidate Information Section */}
-        <div className="md:col-span-7 space-y-4">
-          {[
-            { title: "Location:", value: "Dar es salaam" },
-            { title: "Phone:", value: candidate.phone?.phone_number || "Not Specified" },
-            { title: "Email:", value: candidate.applicant_profile[0]?.email || "Not Specified" },
-            { title: "Nationality:", value: "Tanzanian" },
-            { title: "Date of birth:", value: candidate.applicant_profile[0]?.dob || "Not Specified" },
-            { title: "Gender:", value: candidate.applicant_profile[0]?.gender_name || "Not Specified" },
-          ].map((item, index) => (
-            <div key={index} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="font-semibold text-gray-700">{item.title}</div>
-              <div className="sm:col-span-2 text-gray-600">{item.value}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+          {payload?.objective?.objective && (
+            <>
+              <SectionTitle title="Career Objective" />
+              <p className="text-muted lh-base">{payload.objective.objective}</p>
+            </>
+          )}
 
-      <div className="mt-6">
-        {/* Professional Summary Section */}
-        <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-          PROFESSIONAL SUMMARY
-        </h1>
-        <div className="h-[2px] bg-gray-200 mb-3"></div>
-        <p className="text-gray-700 mb-4">
-          {candidate.careers[0]?.career || "Not Specified"}
-        </p>
-
-        {/* Career Objective Section */}
-        <h1 className="font-bold text-lg mt-4 mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-          CAREER OBJECTIVE
-        </h1>
-        <div className="h-[2px] bg-gray-200 mb-3"></div>
-        <p className="text-gray-700">
-          {candidate.objective?.objective || "Not Specified"}
-        </p>
-      </div>
-
-      {/* Work Experience Section */}
-      {experiences.length > 0 && (
-        <div className="mt-6">
-          {/* Work Experience Header */}
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            WORK EXPERIENCE
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-
-          {/* Experience Items */}
-          <div className="space-y-6">
-            {experiences.map((item, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-md">
-                {/* Employer and Location */}
-                <div className="mb-2">
-                  <p className="font-bold text-lg" style={{ color: "rgb(46, 88, 166)" }}>
-                    {item.employer?.employer_name || "Employer Name Not Specified"}
-                  </p>
-                  <p className="text-gray-600 capitalize">
-                    {item.employer?.region?.region_name || "Region Not Specified"}
-                    {item.employer?.sub_location ? `, ${item.employer.sub_location}` : ""}
-                  </p>
-                </div>
-
-                {/* Positions List */}
-                <ul className="list-disc list-outside ml-5 space-y-3">
-                  {item.positions.map((position, posIndex) => (
-                    <li key={posIndex}>
-                      <div className="space-y-1">
-                        {/* Position Title */}
-                        <p className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
-                          {position.position?.position_name || "Position Not Specified"}
-                        </p>
-
-                        {/* Employer */}
-                        <i className="text-gray-700">
-                          {position.employer?.employer_name || "Employer Not Specified"}
-                        </i>
-
-                        {/* Dates */}
-                        <p className="text-gray-600">
-                          {new Date(position?.start_date).getFullYear()} -{" "}
-                          {position?.end_date
-                            ? new Date(position.end_date).getFullYear()
-                            : "Present"}
-                        </p>
-                        <p className="mt-2">
-                          <span className="font-semibold">Responsibilities: </span>
-                          <span dangerouslySetInnerHTML={{ __html: position.responsibility }}></span>
-                        </p>
+          <SectionTitle title="Job Experience" />
+          {work.length > 0 ? (
+            work.map((exp, i) => (
+              <Card key={i} className="mb-3 border-0">
+                <Card.Body className="p-0">
+                  <div className="d-flex justify-content-between gap-3">
+                    <div>
+                      <div className="fw-bold text-capitalize" style={{ color: BRAND_DARK }}>
+                        {exp.title}
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+                      <div className="text-muted">
+                        {exp.company}
+                        {exp.industry ? ` / ${exp.industry}` : ""}
+                      </div>
+                      {exp.location && <div className="text-muted small">{exp.location}</div>}
+                    </div>
+                    <Badge bg="light" className="text-dark border align-self-start">
+                      {exp.period}
+                    </Badge>
+                  </div>
 
-      {/* Language Proficiency Section */}
-      <div className="mt-6">
-        <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-          LANGUAGE PROFICIENCY
-        </h1>
-        <div className="h-[2px] bg-gray-200 mb-3"></div>
+                  {exp.bullets.length > 0 && (
+                    <ul className="small mb-0 mt-2 ps-3">
+                      {exp.bullets.map((b, k) => (
+                        <li key={k} className="text-muted lh-base">{b}</li>
+                      ))}
+                    </ul>
+                  )}
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <div className="text-muted">No job experience added.</div>
+          )}
 
-        {/* Language List */}
-        {candidate.language.length > 0 ? (
-          <div className="p-4 bg-gray-50 rounded-md text-gray-700">
-            {candidate.language.map((item, index) => (
-              <span key={index}>
-                {item.language?.language_name || "Language Not Specified"}
-                {index + 1 !== candidate.language.length && ", "}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-600">No language proficiency data available.</p>
-        )}
-      </div>
-
-      {/* Skills Section */}
-      <div className="mt-6">
-        <h1 className="font-bold mt-5 mb-1 text-lg" style={{ color: "rgb(46, 88, 166)" }}>
-          SKILLS
-        </h1>
-        <div className="h-[2px] bg-gray-100 mb-2"></div>
-
-        {/* Skills Content */}
-        <div className="p-4 bg-gray-50 rounded-md text-gray-700 space-y-4">
-          {/* Culture */}
-          <p className="flex space-x-1">
-            <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>Culture:</span>
-            <span>
-              {candidate.culture.map((item, index) => (
-                <span key={index}>
-                  {item.culture?.culture_name}
-                  {index + 1 !== candidate.culture.length && ', '}
-                </span>
-              ))}
-            </span>
-          </p>
-
-          {/* Personality */}
-          <p className="flex space-x-1">
-            <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>Personality:</span>
-            <span>
-              {candidate.culture.map((item, index) => (
-                <span key={index}>
-                  {item.culture?.culture_name}
-                  {index + 1 !== candidate.culture.length && ', '}
-                </span>
-              ))}
-            </span>
-          </p>
-
-          {/* Skill & Knowledge */}
-          <p className="flex space-x-1 flex-wrap">
-            <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>Skill & Knowledge:</span>
-            <span>
-              {candidate.knowledge.map((item, index) => (
-                <span key={index}>
-                  {item.knowledge?.knowledge_name}
-                  {index + 1 !== candidate.knowledge.length && ', '}
-                </span>
-              ))}
-            </span>
-          </p>
-
-          {/* Software */}
-          <p className="flex space-x-1 flex-wrap">
-            <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>Software:</span>
-            <span>
-              {candidate.software.map((item, index) => (
-                <span key={index}>
-                  {item.software?.software_name}
-                  {index + 1 !== candidate.software.length && ', '}
-                </span>
-              ))}
-            </span>
-          </p>
-
-          {/* Tools */}
-          <p className="flex space-x-1">
-            <span className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>Tools:</span>
-            <span>
-              {candidate.tools.map((item, index) => (
-                <span key={index}>
-                  {item.tool?.tool_name}
-                  {index + 1 !== candidate.tools.length && ', '}
-                </span>
-              ))}
-            </span>
-          </p>
-        </div>
-      </div>
-
-      {/* Education Details Section */}
-      {candidate.education.length > 0 && (
-        <div className="mt-6">
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            EDUCATION DETAILS
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-
-          {/* Education List */}
-          <div className="space-y-4">
-            {candidate.education.map((item, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-md">
-                {/* Course Name */}
-                <p className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
-                  {item?.course?.course_name || "Course Name Not Specified"}
-                </p>
-
-                {/* Dates */}
-                <p className="text-gray-700">
-                  {item?.started ? new Date(item.started).getFullYear() : "Start Date Not Specified"} -{" "}
-                  {item?.ended ? new Date(item.ended).getFullYear() : "End Date Not Specified"}
-                </p>
-
-                {/* Level and College */}
-                <div className="flex space-x-2 text-gray-700 mt-2">
-                  <i>{item?.level?.education_level || "Level Not Specified"}</i>
-                  <span>{item?.college?.college_name || "College Name Not Specified"}</span>
+          <SectionTitle title="Skills & Endorsements" />
+          <div className="mb-3">
+            <Row>
+              <Col sm={6} className="mb-2">
+                <div className="fw-semibold">Culture Fit</div>
+                <div className="small text-muted">
+                  {culture.length
+                    ? culture.map((c) => c?.culture?.culture_name || c?.culture_name || c?.name).filter(Boolean).join(", ")
+                    : "—"}
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Proficiency Qualification Section */}
-      {candidate.proficiency.length > 0 && (
-        <div className="mt-6">
-          {/* Header */}
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            PROFICIENCY QUALIFICATION
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-
-          {/* Proficiency List */}
-          <div className="space-y-4">
-            {candidate.proficiency.map((item, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-md">
-                {/* Award Name */}
-                <p className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
-                  {item?.award || "Award Not Specified"}
-                </p>
-
-                {/* Start and End Dates */}
-                <p className="text-gray-700">
-                  {item?.started ? formatDate(item.started) : "Start Date Not Specified"} -{" "}
-                  {item?.ended ? formatDate(item.ended) : "End Date Not Specified"}
-                </p>
-
-                {/* Proficiency and Organization */}
-                <div className="flex space-x-2 text-gray-700 mt-2">
-                  <i>{item?.proficiency?.proficiency_name || "Proficiency Not Specified"}</i>
-                  <p>{item?.organization?.organization_name || "Organization Not Specified"}</p>
+              </Col>
+              <Col sm={6} className="mb-2">
+                <div className="fw-semibold">Personality</div>
+                <div className="small text-muted">
+                  {personalities.length
+                    ? personalities.map((p) => p?.personality?.personality_name).filter(Boolean).join(", ")
+                    : "—"}
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Trainings & Workshops Section */}
-      {candidate.training.length > 0 && (
-        <div className="mt-6">
-          {/* Header */}
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            TRAININGS & WORKSHOPS
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-
-          {/* Trainings List */}
-          <div className="space-y-4">
-            {candidate.training.map((item, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-md">
-                {/* Training Name */}
-                <p className="font-bold" style={{ color: "rgb(211, 99, 20)" }}>
-                  {item?.name || "Training Not Specified"}
-                </p>
-
-                {/* Start and End Dates */}
-                <p className="text-gray-700">
-                  {item?.started ? formatDate(item.started) : "Start Date Not Specified"} -{" "}
-                  {item?.ended ? formatDate(item.ended) : "End Date Not Specified"}
-                </p>
-
-                {/* Institution */}
-                <div className="flex space-x-2 text-gray-700 mt-2">
-                  <p>{item?.institution || "Institution Not Specified"}</p>
+              </Col>
+              <Col sm={6} className="mb-2">
+                <div className="fw-semibold">Software</div>
+                <div className="small text-muted">
+                  {software.length
+                    ? software.map((s) => s?.software?.software_name || s?.software_name).filter(Boolean).join(", ")
+                    : "—"}
                 </div>
-              </div>
-            ))}
+              </Col>
+              <Col sm={6} className="mb-2">
+                <div className="fw-semibold">Skills & Knowledge</div>
+                <div className="small text-muted">
+                  {knowledge.length
+                    ? knowledge.map((k) => k?.knowledge?.knowledge_name || k?.knowledge_name).filter(Boolean).join(", ")
+                    : "—"}
+                </div>
+              </Col>
+            </Row>
           </div>
-        </div>
-      )}
 
-      {/* Referees Section */}
-      {candidate.referees.length > 0 && (
-        <div className="mt-6">
-          {/* Header */}
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            REFEREES
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-
-          {/* Referees List */}
-          <div className="space-y-4">
-            {candidate.referees.map((referee, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-md">
-                {/* Name */}
-                <p className="text-lg font-bold" style={{ color: "rgb(211, 99, 20)" }}>
-                  {`${referee?.first_name || "First Name"} ${
-                    referee?.middle_name || ""
-                  } ${referee?.last_name || "Last Name"}`}
-                </p>
-
-                {/* Position */}
-                <p className="text-gray-700">
-                  {referee?.referee_position || "Position Not Specified"}
-                </p>
-
-                {/* Phone */}
-                <p className="text-gray-700">
-                  <span className="font-semibold" style={{ color: "rgb(211, 99, 20)" }}>
-                    Phone:
-                  </span>{" "}
-                  {referee?.phone || "Phone Not Specified"}
-                </p>
-
-                {/* Email */}
-                <p className="text-gray-700">
-                  <span className="font-semibold" style={{ color: "rgb(211, 99, 20)" }}>
-                    Email:
-                  </span>{" "}
-                  {referee?.email || "Email Not Specified"}
-                </p>
-              </div>
-            ))}
+          <SectionTitle title="Tools" />
+          <div className="small text-muted mb-4">
+            {tools.length
+              ? tools.map((t) => t?.tool?.tool_name || t?.tool_name || (typeof t === "string" ? t : "")).filter(Boolean).join(", ")
+              : "—"}
           </div>
-        </div>
-      )}
-    </div>
-  </div>
-</div>
-    ));
+
+          <div className="refPanel mt-2">
+            <div className="d-flex align-items-center gap-2 mb-2">
+              <span className="refDot" />
+              <h6 className="m-0" style={{ color: BRAND_DARK }}>Referees</h6>
+            </div>
+            {referees.length ? (
+              <Row className="g-4">
+                {referees.map((r, i) => {
+                  const nm = [r.first_name, r.middle_name, r.last_name].filter(Boolean).join(" ");
+                  return (
+                    <Col md={12} key={r.id ?? i}>
+                      <div className="fw-semibold">{nm || "—"}</div>
+                      <div className="text-muted small">{r?.referee_position || "—"}</div>
+                      <div className="small">{r?.employer || "—"}</div>
+                      <div className="small">{r?.phone || "—"}</div>
+                      <div className="small">{r?.email || "—"}</div>
+                    </Col>
+                  );
+                })}
+              </Row>
+            ) : (
+              <div className="text-muted">—</div>
+            )}
+          </div>
+        </Col>
+
+        {/* RIGHT — sidebar */}
+        <Col md={4} className="p-4 ps-md-3">
+          <Card className="border-0 mb-3">
+            <Card.Body className="p-3 d-flex align-items-center justify-content-center">
+              <Image
+                src={
+                  profile?.picture ? `${CV_BASE}/${profile.picture}` : "https://placehold.co/150x180?text=Photo"
+                }
+                onError={(e) => (e.currentTarget.src = "https://placehold.co/150x180?text=Photo")}
+                className="border profile-photo"
+                alt="profile"
+                width={150}
+                height={180}
+                style={{ objectFit: "cover", borderRadius: 8 }}
+              />
+            </Card.Body>
+          </Card>
+
+          <SideSection title="Contact Details">
+            <ListGroup variant="flush" className="small">
+              <ListGroup.Item className="px-0 bg-transparent d-flex gap-2 align-items-start">
+                <FiMapPin className="mt-1" />
+                <span className="text-wrap">{primaryAddress}</span>
+              </ListGroup.Item>
+              <ListGroup.Item className="px-0 bg-transparent d-flex gap-2 align-items-start">
+                <FiPhone className="mt-1" />
+                <span>{primaryPhone}</span>
+              </ListGroup.Item>
+              <ListGroup.Item className="px-0 bg-transparent d-flex gap-2 align-items-start">
+                <FiMail className="mt-1" />
+                <span className="text-wrap">{primaryEmail}</span>
+              </ListGroup.Item>
+              {safeWebsite && (
+                <ListGroup.Item className="px-0 bg-transparent d-flex gap-2 align-items-start">
+                  <FiGlobe className="mt-1" />
+                  <a href={safeWebsite} target="_blank" rel="noreferrer noopener" className="link-underline link-underline-opacity-0">
+                    {website}
+                  </a>
+                </ListGroup.Item>
+              )}
+              {safeLinkedin && (
+                <ListGroup.Item className="px-0 bg-transparent d-flex gap-2 align-items-start">
+                  <FiLinkedin className="mt-1" />
+                  <a href={safeLinkedin} target="_blank" rel="noreferrer noopener" className="link-underline link-underline-opacity-0">
+                    {linkedin}
+                  </a>
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          </SideSection>
+
+          <SideSection title="Languages">
+            {languages.length ? (
+              <ul className="list-unstyled small mb-0">
+                {languages.map((l, i) => (
+                  <li key={`lang-${i}`} className="mb-1">
+                    {l?.language?.language_name || "—"}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-muted small">—</div>
+            )}
+          </SideSection>
+
+          <SideSection title="Education">
+            {eduVM.length > 0 ? (
+              <ul className="list-unstyled small mb-0">
+                {eduVM.map((edu, i) => (
+                  <li key={i} className="mb-1">
+                    <div className="fw-semibold">{edu.school}</div>
+                    <div className="text-muted">{edu.course}</div>
+                    <div className="text-muted small">{edu.yearRange}</div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-muted small">—</div>
+            )}
+          </SideSection>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
- 
-export default Template4;
+
+// ---------- Section Helpers ----------
+function SectionTitle({ title }) {
+  return (
+    <h5 className="fw-semibold mb-2 mt-4" style={{ color: BRAND }}>
+      {title}
+    </h5>
+  );
+}
+
+function SideSection({ title, children }) {
+  return (
+    <Card className="border-0 mb-3">
+      <Card.Body className="p-2">
+        <div className="fw-semibold mb-2" style={{ color: BRAND_DARK }}>
+          {title}
+        </div>
+        {children}
+      </Card.Body>
+    </Card>
+  );
+}
