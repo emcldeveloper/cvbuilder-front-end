@@ -31,7 +31,7 @@ const ProfileSection = ({ profile, address }) => {
 
 
     const [profileImage, setProfileImage] = useState(
-        profile?.picture ? `https://ekazi.co.tz/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
+        profile?.picture ? `https://ekazi.co.tz/${profile.picture}` : 'https://ekazi.co.tz/uploads/picture/pre_photo.jpg'
     );
     const [bgImage, setBgImage] = useState(
         profile?.picture ? `https://ekazi.co.tz/${profile.background_picture}` : 'https://ekazi.co.tz/svg/dotted.svg');

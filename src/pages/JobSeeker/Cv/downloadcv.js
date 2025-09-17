@@ -1,27 +1,33 @@
 import React, { useRef } from "react";
 import { Button } from "react-bootstrap";
-import { useReactToPrint } from "react-to-print";
-import Template1 from "../../../templates/template1";
+import html2pdf from "html2pdf.js";
+import Template7 from "../../../templates/template7";
+import Template2 from "../../../templates/template2";
 
 const DownloadCv = () => {
   const componentRef = useRef();
 
-  // function to handle print/download
-  const handleDownload = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: "My_CV", // filename when downloading
-  });
+  const handleDownload = () => {
+    const element = componentRef.current;
+    const options = {
+      margin:       0,
+      filename:     "My_CV.pdf",
+      image:        { type: "jpeg", quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: "in", format: "a4", orientation: "portrait" }
+    };
+    html2pdf().set(options).from(element).save();
+  };
 
   return (
     <div className="p-3">
-      {/* Download button */}
       <Button variant="success" onClick={handleDownload} className="mb-3">
         Download CV
       </Button>
 
-      {/* The CV content */}
       <div ref={componentRef}>
-        <Template1 />
+        
+        <Template2 />
       </div>
     </div>
   );

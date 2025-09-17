@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, Card, Button, Modal } from 'react-bootstrap';
 import { BsArrowRight, BsCalendar, BsChevronDown } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+ import Usegetapplicantpipeline from '../../hooks/Candidate/ApplicantPipeline';
 import {
     BarChart,
     Bar,
@@ -11,12 +12,15 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
-    Cell
+    Cell 
 } from 'recharts';
 
 const ApplicantPipeline = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const{jobseekerpipeline ,loading}=Usegetapplicantpipeline();
+    console.log("applicnt pipeline is present",jobseekerpipeline);
+
     const [filteredData, setFilteredData] = useState([]);
     const [filterType, setFilterType] = useState('lastMonth');
     const [dateRange, setDateRange] = useState({

@@ -38,14 +38,14 @@ const SampleTemplate = () => {
     const navigate =useNavigate();
 
     const templates = [
-        { id: 1, name: "Template 1", image: "/cv1.png", component: <Template1 /> },
-        { id: 2, name: "Template 2", image: "/cv2.png", component: <Template2 /> },
-        { id: 3, name: "Template 3", image: "/cv3.png", component: <Template3 /> },
-        { id: 4, name: "Template 4", image: "/cv4.png", component: <Template4 /> },
-        { id: 5, name: "Template 5", image: "/cv5.png", component: <Template5 /> },
-        { id: 6, name: "Template 6", image: "/cv6.png", component: <Template6 /> },
-        { id: 7, name: "Template 7", image: "/cv7.png", component: <Template7 /> },
-        { id: 8, name: "Template 8", image: "/cv8.png", component: <Template8 /> },
+        { id: 1, name: "Template 1", image: "/01.jpg", component: <Template1 /> },
+        { id: 2, name: "Template 2", image: "/02.jpg", component: <Template2 /> },
+        { id: 3, name: "Template 3", image: "/03.jpg", component: <Template3 /> },
+        { id: 4, name: "Template 4", image: "/04.jpg", component: <Template4 /> },
+        { id: 5, name: "Template 5", image: "/05.jpg", component: <Template5 /> },
+        { id: 6, name: "Template 6", image: "/06.jpg", component: <Template6 /> },
+        { id: 7, name: "Template 7", image: "/07.jpg", component: <Template7 /> },
+        { id: 8, name: "Template 8", image: "/08.jpg", component: <Template8 /> },
         { id: 9, name: "Template 9", image: "/cv9.png", component: <Template9 /> },
         { id: 10, name: "Template 10", image: "/cv10.png", component: <Template10 /> },
     ];

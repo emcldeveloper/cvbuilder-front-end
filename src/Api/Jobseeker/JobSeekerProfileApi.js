@@ -62,6 +62,28 @@ export const profile = async (applicant_id) => {
         throw error;
     }
 };
+
+export const applicantpipeline = async (applicant_id) => {
+    const cacheKey = `applicantpipeline_${applicant_id}`;
+
+    if (isCacheValid(cacheKey)) {
+        return cache[cacheKey].data;
+    }
+
+    try {
+        const response = await api.get(`applicant/applicantpipeline`, {
+            params: { applicant_id },
+        });
+        cache[cacheKey] = {
+            data: response.data.applicant_pipeline,
+            timestamp: Date.now(),
+        };
+        return response.data.applicant_pipeline;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
 export const completeprofile = async (applicant_id) => {
     const cacheKey = `completeprofile_${applicant_id}`;
 
