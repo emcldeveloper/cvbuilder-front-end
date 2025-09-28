@@ -5,9 +5,11 @@ import { faPlus, faPencilAlt, faArrowLeft ,faTrashAlt } from '@fortawesome/free-
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
+import useDeleteLanguage from '../../../hooks/Candidate/deleteLanguage';
 
 const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
     const [showAddModal, setShowAddModal] = useState(false);
+    const handledeletelanguage=useDeleteLanguage();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         language: '',
@@ -22,22 +24,13 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Add your form submission logic here
-        console.log('Form submitted:', formData);
-        // Then close modal
-        setShowAddModal(false);
-    };
+    
     const handleEditLanguage = (language) => {
         // Your edit logic here
         console.log('Editing language:', language);
     };
 
-    const handleDeleteLanguage = (id) => {
-        // Your delete logic here
-        console.log('Deleting language with id:', id);
-    };
+   
 
     return (
         <div className="languages-section mb-4 mt-2">
@@ -103,7 +96,7 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
                                                 <Button
                                                     variant="link"
                                                     className="p-0 text-danger"
-                                                    onClick={() => handleDeleteLanguage(ability.id)}
+                                                    onClick={() => handledeletelanguage(ability.id)}
                                                     title="Delete"
                                                 >
                                                     <FontAwesomeIcon icon={faTrashAlt} size="sm" />

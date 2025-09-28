@@ -13,6 +13,7 @@ import Template7 from "../templates/template7";
 import Template8 from "../templates/template8";
 import Template9 from "../templates/template9";
 import Template10 from "../templates/template10";
+import Template11 from "../templates/template11";
 import { FaFileAlt } from 'react-icons/fa'; // CV icon + View icon
 
 
@@ -39,6 +40,7 @@ const SampleTemplate = () => {
         { id: 8, name: "Template 8", image: "/cv8.png", component: <Template8 /> },
         { id: 9, name: "Template 9", image: "/cv9.png", component: <Template9 /> },
         { id: 10, name: "Template 10", image: "/cv10.png", component: <Template10 /> },
+        { id: 11, name: "Template 11", image: "/cv10.png", component: <Template11 /> },
     ];
 
     useEffect(() => {

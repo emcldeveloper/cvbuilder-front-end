@@ -13,6 +13,20 @@ import Template7 from "../../templates/template7";
 import Template8 from "../../templates/template8";
 import Template9 from "../../templates/template9";
 import Template10 from "../../templates/template10";
+import Template11 from "../../templates/template11";
+import Template12 from "../../templates/template12";
+import Template13 from "../../templates/template13";
+import Template14 from "../../templates/template14";
+import Template15 from "../../templates/template15";
+import Template17 from "../../templates/template17";
+import Template18 from "../../templates/template18";
+import Template19 from "../../templates/template19";
+import Template20 from "../../templates/template20";
+import Template21 from "../../templates/template21";
+import Template22 from "../../templates/template22";
+import Template23 from "../../templates/template23";
+import Template24 from "../../templates/template24";
+import Template25 from "../../templates/template25";
 import { useCvProfileData } from "../../hooks/Candidate/Cv";
 import { Card, Col } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
@@ -40,6 +54,20 @@ const HomePageCv = () => {
         { id: 8, component: <Template8 /> },
         { id: 9, component: <Template9 /> },
         { id: 10, component: <Template10 /> },
+        { id: 11, component: <Template11 /> },
+        { id: 12, component: <Template12 /> },
+        { id: 13, component: <Template13 /> },
+        { id: 14, component: <Template14 /> },
+        { id: 15, component: <Template15 /> },
+        { id: 17, component: <Template17 /> },
+        { id: 18, component: <Template18 /> },
+        { id: 19, component: <Template19 /> },
+        { id: 20, component: <Template20 /> },
+        { id: 21, component: <Template21 /> },
+        { id: 22, component: <Template22 /> },
+        { id: 23, component: <Template23 /> },
+        { id: 24, component: <Template24 /> },
+        { id: 25, component: <Template25 /> },
     ];
 
 

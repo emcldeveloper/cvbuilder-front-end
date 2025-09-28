@@ -29,6 +29,7 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
         // Then close modal
         setShowAddModal(false);
     };
+    
        const [IsOpenModel ,setIsModalOpen]=useState(false);
         const handleOpenLnagugae =()=>{
             setIsModalOpen(true);

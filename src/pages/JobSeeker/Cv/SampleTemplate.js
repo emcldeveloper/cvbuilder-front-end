@@ -25,9 +25,23 @@ import Template8 from "../../../templates/template8";
 import Template9 from "../../../templates/template9";
 import Template10 from "../../../templates/template10";
 import Template5 from "../../../templates/template5";
+import Template11 from "../../../templates/template11";
+import Template12 from "../../../templates/template12";
+import Template13 from "../../../templates/template13";
+import Template14 from "../../../templates/template14";
+import Template15 from "../../../templates/template15";
+import Template17 from "../../../templates/template17";
+import Template18 from "../../../templates/template18";
+import Template19 from "../../../templates/template19";
+import Template20 from "../../../templates/template20";
+import Template21 from "../../../templates/template21";
+import Template22 from "../../../templates/template22";
+import Template23 from "../../../templates/template23";
+import Template24 from "../../../templates/template24";
+import Template25 from "../../../templates/template25";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { CvApi } from "../../../Api/Jobseeker/CvApi";
-import { Api } from "@mui/icons-material";
+
 import { useNavigate } from "react-router-dom";
 
 const SampleTemplate = () => {
@@ -35,7 +49,7 @@ const SampleTemplate = () => {
     const [showPreview, setShowPreview] = useState(false);
     const [viewCountData, setTemplateViews] = useState({});
     const [totalview, setTotalview] = useState("");
-    const navigate =useNavigate();
+    const navigate = useNavigate();
 
     const templates = [
         { id: 1, name: "Template 1", image: "/01.jpg", component: <Template1 /> },
@@ -48,6 +62,21 @@ const SampleTemplate = () => {
         { id: 8, name: "Template 8", image: "/08.jpg", component: <Template8 /> },
         { id: 9, name: "Template 9", image: "/cv9.png", component: <Template9 /> },
         { id: 10, name: "Template 10", image: "/cv10.png", component: <Template10 /> },
+        { id: 11, name: "Template 11", image: "/cv10.png", component: <Template11 /> },
+        { id: 12, name: "Template 12", image: "/cv10.png", component: <Template12 /> },
+        { id: 13, name: "Template 13", image: "/cv1.png", component: <Template13 /> },
+        { id: 14, name: "Template 14", image: "/cv1.png", component: <Template14 /> },
+        { id: 15, name: "Template 15", image: "/cv1.png", component: <Template15 /> },
+        { id: 17, name: "Template 17", image: "/cv1.png", component: <Template17 /> },
+        { id: 18, name: "Template 18", image: "/cv1.png", component: <Template18 /> },
+        { id: 19, name: "Template 19", image: "/cv1.png", component: <Template19 /> },
+        { id: 20, name: "Template 20", image: "/cv1.png", component: <Template20 /> },
+        { id: 21, name: "Template 21", image: "/cv1.png", component: <Template21 /> },
+        { id: 22, name: "Template 22", image: "/cv1.png", component: <Template22 /> },
+        { id: 23, name: "Template 23", image: "/cv1.png", component: <Template23 /> },
+        { id: 24, name: "Template 24", image: "/cv1.png", component: <Template24 /> },
+        { id: 25, name: "Template 25", image: "/cv1.png", component: <Template25 /> },
+
     ];
 
     const handleTemplateSelect = (templateId) => {
@@ -173,34 +202,34 @@ const SampleTemplate = () => {
             // Handle error (e.g., show error message to user)
         }
     };
-   const handlecvincrementSubmit = async (templateId) => {
-    try {
-        // Option 1: If your API expects FormData
-        const formData = new FormData();
-        formData.append('template_id', templateId);
-        formData.append('view_count', 1);
-        
-        // Make sure CvApi.createcvincrement accepts FormData
-        const response = await CvApi.createcvincrement(formData);
-        
-        // Option 2: If your API expects a plain object
-        // const response = await CvApi.createcvincrement({
-        //     template_id: templateId,
-        //     view_count: 1
-        // });
-        
-        console.log('count cv id', response);
-        
-        // Update your viewCountData state after successful increment
-        setTemplateViews(prev => ({
-            ...prev,
-            [templateId]: (prev[templateId] || 0) + 1
-        }));
-        
-    } catch (error) {
-        console.error("Error incrementing view count:", error);
-    }
-};
+    const handlecvincrementSubmit = async (templateId) => {
+        try {
+            // Option 1: If your API expects FormData
+            const formData = new FormData();
+            formData.append('template_id', templateId);
+            formData.append('view_count', 1);
+
+            // Make sure CvApi.createcvincrement accepts FormData
+            const response = await CvApi.createcvincrement(formData);
+
+            // Option 2: If your API expects a plain object
+            // const response = await CvApi.createcvincrement({
+            //     template_id: templateId,
+            //     view_count: 1
+            // });
+
+            console.log('count cv id', response);
+
+            // Update your viewCountData state after successful increment
+            setTemplateViews(prev => ({
+                ...prev,
+                [templateId]: (prev[templateId] || 0) + 1
+            }));
+
+        } catch (error) {
+            console.error("Error incrementing view count:", error);
+        }
+    };
     // const handleSubmit = async (templateId) => {
     //     try {
     //         const formData = new FormData();
@@ -410,8 +439,8 @@ const SampleTemplate = () => {
                                     className={`h-100 cursor-pointer ${selectedTemplate === template.id ? 'border-primary border-2' : ''}`}
                                     onClick={() => {
                                         const selectedTemplateId = template.id;
-                                        handleTemplateSelect(selectedTemplateId );
-                                        handlecvincrementSubmit(selectedTemplateId); 
+                                        handleTemplateSelect(selectedTemplateId);
+                                        handlecvincrementSubmit(selectedTemplateId);
                                     }}
                                 >
                                     <Card.Img
@@ -479,9 +508,9 @@ const SampleTemplate = () => {
                                 Cancel
                             </Button>
                             <Button variant="primary"
-                            // onClick={()=>navigate('/jobseeker/home-cv')}
-                             onClick={() => navigate('/jobseeker/home-cv', { state: { template: selectedTemplate } })}
-                            
+                                // onClick={()=>navigate('/jobseeker/home-cv')}
+                                onClick={() => navigate('/jobseeker/home-cv', { state: { template: selectedTemplate } })}
+
                             >
                                 Save
                             </Button>

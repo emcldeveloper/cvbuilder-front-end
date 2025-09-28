@@ -8,7 +8,7 @@ const HomeCv =()=>{
       
        <JobSeekerLayout2>
            <HomePageCv/>
-           <DownloadCv />
+       
        </JobSeekerLayout2>
     )
 }

@@ -180,6 +180,51 @@ export const createreferee = async (sendData) => {
         error.message;
     }
 };
+export const createlanguage = async (sendData) => {
+    try {
+        const response = await api.post('applicant/storeLanguage', sendData);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+export const deleteLanguage = async (languageId) => {
+  try {
+    const response = await api.delete(`applicant/languagedelete/${languageId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+export const deleteReferee = async (RefereeId) => {
+  try {
+    const response = await api.delete(`applicant/refereedelete/${RefereeId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+ 
+export const createculture = async (sendData) => {
+    try {
+        const response = await api.post('applicant/culturestore', sendData);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
 
 export const createcareer = async(data)=>{
     try {

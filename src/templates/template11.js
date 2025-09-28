@@ -1,443 +1,371 @@
-import { useContext,useEffect,useRef, useState } from "react";
-import { StepsContext } from "../layouts/mainLayout";
-import { useParams } from "react-router-dom";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { firestore } from "../utils/firebase";
-import Spinner from "../widgets/spinner";
-import PageLoader from "../widgets/pageLoader";
-import axios from 'axios';
+// TemplateOrange.jsx — CV Template with #e38720 brand and Dosis font
+import { useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Spinner,
+  Alert,
+  Badge,
+  Image,
+} from "react-bootstrap";
+import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import "bootstrap/dist/css/bootstrap.min.css";
+import moment from "moment";
 
-const Template6 = () => {
- 
-  const cv  = useRef()
-  const {uuid,template} = useParams()
-  const [candidate,setCandidate] = useState(null)
-  const [show, setShow] = useState(false);
-  const [pages, setPages] = useState(false);
-  const [experiences,setExperiences] = useState([])
+const cvUrl = "https://ekazi.co.tz";
+const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const BRAND = "#009485";
 
-  const isVerified = candidate?.subscription?.verify === 1;
-  const formatDate = (date) => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toISOString().split('T')[0]; // 'yyyy-mm-dd'
-};
-  console.log("checjk verifcation:",isVerified);
+export default function Template11() {
+  const [payload, setPayload] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    // Fetch data from the API
-    axios.get(`https://ekazi.co.tz/api/cv/cv_builder/${uuid}`)
-      .then((response) => {
-        if (response?.data?.data) {
-          setCandidate(response.data.data);  // Set the candidate data from the API response
-          setShow(true);  // Display the content
-        }
+    fetch(API)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
       })
-      .catch((error) => {
-        console.error(error);
+      .then((json) => {
+        setPayload(json?.data || {});
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load profile");
+        setLoading(false);
       });
-  }, [uuid]);
-  
-useEffect(()=>{
-  if(candidate != null){
-     candidate.experience.forEach(item=>{
-         if(experiences.filter((e)=>e.employer.id==item.employer.id) == 0){
-          item.positions = candidate.experience.filter((ex)=>ex.employer.id==item.employer.id)
-            setExperiences([...experiences,item])
-         }
-     })
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <Spinner animation="border" style={{ color: BRAND }} />
+        <span className="ms-3">Loading CV…</span>
+      </div>
+    );
   }
-},[candidate,experiences])
 
-    return ( !show? <PageLoader/>: candidate == null?<div className="flex justify-center items-center">
-      <p className="pt-12 text-gray-300">Oops! No Content</p>
-    </div> : ( <div  >
-      <div className="px-12 pt-8 pb-12">
-  {/* Watermark */}
-  <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-   
-        
-      {candidate.subscription.length < 1 && ( // Render the image only if length is 1 or less
-    
-        <div style={{ textAlign: 'center' }}>
-          <img
-            src="/logo.png"
-            alt="Watermark"
-            className="opacity-1"
-            style={{ width: '550px', height: '200px' }}
-          />
-        </div>
-      )}
-    
-    <div className="absolute text-gray-200 opacity-10 text-6xl font-bold">Ekazi</div>
-  </div>
+  if (error) {
+    return (
+      <Container className="py-4">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
 
-  {/* Header Section */}
-  <div className="text-center">
-    <h1 className="text-3xl font-bold bg-primary py-2 text-white font-bold px-4">
-      {candidate.applicant_profile[0]?.first_name} {candidate.applicant_profile[0]?.last_name}
-    </h1>
-  </div>
-  
-  {/* Two-column Layout */}
-  <div className="grid grid-cols-12 gap-6 mt-8">
-    {/* Left Column */}
-    <div className="col-span-7 space-y-8">
-      {/* Work Experience */}
-      {experiences?.length > 0 ? (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>WORK EXPERIENCE</h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <div className="space-y-6">
-            {experiences.map((item, index) => (
-              <div key={index} className="p-2 rounded-md">
-                <p className="font-bold text-lg">
-                  {item?.employer?.employer_name || 'Employer Not Specified'}
-                </p>
-                <p className="text-gray-600 capitalize">
-                  {item?.employer?.region?.region_name || 'Region Not Specified'}, {item?.employer?.sub_location || 'Sub-location Not Specified'}
-                </p>
-                <ul className="list-disc list-outside ml-5 space-y-2">
-                  {item?.positions?.length > 0 ? (
-                    item.positions.map((position, posIndex) => (
-                      <li key={posIndex}>
-                        <p className="font-bold">
-                          {position.position?.position_name || "Position Not Specified"}
-                        </p>
-                        <p className="text-gray-600">
-                          {position?.start_date ? new Date(position.start_date).getFullYear() : 'Start Date Not Available'} -{' '}
-                          {position?.end_date ? new Date(position.end_date).getFullYear() : 'Present'}
-                        </p>
-                      </li>
+  const profiles = payload?.applicant_profile ?? [];
+  const profile = profiles[0] ?? {};
+  const experiences = payload?.experience ?? [];
+  const referees = payload?.referees ?? [];
+  const addresses = payload?.address ?? [];
+  const education = payload?.education ?? [];
+  const languages = payload?.language ?? [];
+  const knowledge = payload?.knowledge ?? [];
+  const software = payload?.software ?? [];
+  const culture = payload?.culture ?? [];
+  const personalities = payload?.applicant_personality ?? [];
+
+  const phone =
+    payload?.phone?.phone_number ||
+    payload?.phone?.number ||
+    payload?.user?.[0]?.phone ||
+    "—";
+  const email = payload?.user?.[0]?.email || payload?.email?.email || "—";
+  const location = addresses?.[0]
+    ? `${addresses[0]?.region_name || ""}${
+        addresses[0]?.name ? ", " + addresses[0].name : ""
+      }`
+    : "—";
+
+  const intro =
+    payload?.careers?.[0]?.career ||
+    payload?.objective?.objective ||
+    "Professional summary not provided.";
+
+  const currentPosition =
+    payload?.current_position ||
+    payload?.experience?.[0]?.position?.position_name ||
+    "—";
+
+  const formatMY = (d) => {
+    const m = moment(d);
+    return m.isValid() ? m.format("MMM YYYY") : "—";
+  };
+
+  const formatY = (d) => {
+    const m = moment(d);
+    return m.isValid() ? m.format("YYYY") : "";
+  };
+
+  return (
+    <Container fluid className="my-4">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <Row className="justify-content-center">
+        <Col md={11} lg={10}>
+          <Card className="shadow-lg border-0 rounded-3 overflow-hidden">
+            {/* Header */}
+            <Card.Header
+              className="text-white text-center py-5"
+              style={{
+                backgroundColor: BRAND,
+                fontFamily: "Dosis, sans-serif",
+              }}
+            >
+              <h1 className="fw-bold mb-1" style={{ fontSize: "2.2rem" }}>
+                {`${profile.first_name || ""} ${profile.middle_name || ""} ${
+                  profile.last_name || ""
+                }`.trim() || "—"}
+              </h1>
+              <h5 className="mb-0 fw-light">{currentPosition}</h5>
+            </Card.Header>
+
+            <Row className="g-0">
+              {/* Sidebar */}
+              <Col md={4} className="bg-light p-4 text-center text-md-start">
+                <div className="d-flex flex-column align-items-center align-items-md-start">
+                  <Image
+                    src={
+                      profile?.picture
+                        ? `${cvUrl}/${profile.picture}`
+                        : "https://placehold.co/200x200?text=Photo"
+                    }
+                    alt="profile"
+                    roundedCircle
+                    fluid
+                    className="mb-4 shadow"
+                    style={{
+                      width: "160px",
+                      height: "160px",
+                      objectFit: "cover",
+                      border: `4px solid ${BRAND}`,
+                    }}
+                    onError={(e) =>
+                      (e.currentTarget.src =
+                        "https://placehold.co/200x200?text=Photo")
+                    }
+                  />
+
+                  <Section icon={<FiMapPin />} title="Location">
+                    {location}
+                  </Section>
+                  <Section icon={<FiPhone />} title="Phone">
+                    {phone}
+                  </Section>
+                  <Section icon={<FiMail />} title="Email">
+                    {email}
+                  </Section>
+
+                  {languages.length > 0 && (
+                    <Section title="Languages">
+                      <div className="d-flex flex-wrap gap-2">
+                        {languages.map((l, i) => (
+                          <Badge
+                            key={i}
+                            pill
+                            style={{
+                              backgroundColor: BRAND,
+                              color: "#fff",
+                              fontFamily: "Dosis, sans-serif",
+                            }}
+                          >
+                            {l?.language?.language_name || "Language"}
+                          </Badge>
+                        ))}
+                      </div>
+                    </Section>
+                  )}
+                </div>
+              </Col>
+
+              {/* Main content */}
+              <Col
+                md={8}
+                className="p-4"
+                style={{ fontFamily: "Dosis, sans-serif" }}
+              >
+                <TimelineSection title="About Me">
+                  <p className="mb-0" style={{ textAlign: "justify" }}>
+                    {intro}
+                  </p>
+                </TimelineSection>
+
+                <TimelineSection title="Experience">
+                  {experiences.length ? (
+                    experiences.map((exp, i) => (
+                      <Card
+                        body
+                        className="mb-3 border-0 shadow-sm"
+                        key={i}
+                        style={{ borderLeft: `5px solid ${BRAND}` }}
+                      >
+                        <div className="fw-semibold">
+                          {exp?.position?.position_name || "Job Title"}
+                          {exp?.employer?.employer_name && (
+                            <span className="text-muted">
+                              {" "}
+                              @ {exp.employer.employer_name}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-muted small mb-2">
+                          {formatY(exp?.start_date)} –{" "}
+                          {exp?.end_date ? formatY(exp.end_date) : "Present"}
+                        </div>
+                        {exp?.responsibility && (
+                          <ul className="mb-0 small">
+                            {exp.responsibility
+                              .split("\n")
+                              .map((t) => t.trim())
+                              .filter(Boolean)
+                              .map((t, k) => (
+                                <li key={k}>{t.replace(/^•\s*/, "")}</li>
+                              ))}
+                          </ul>
+                        )}
+                      </Card>
                     ))
                   ) : (
-                    <p className="text-gray-600">No positions available.</p>
+                    <div className="text-secondary">
+                      No job experience added.
+                    </div>
                   )}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>WORK EXPERIENCE</h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <p className="text-gray-700">No work experience available.</p>
-        </div>
-      )}
-      
-  
-      {/* Education Details */}
-      {candidate?.education?.length > 0 ? (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            EDUCATION DETAILS
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <div className="space-y-4">
-            {candidate.education.map((item, index) => (
-              <div key={index} className="p-4 rounded-md">
-                <p className="font-bold">
-                  {item?.course?.course_name || 'Course Name Not Available'}:
-                </p>
-                <p className="text-gray-700">
-                  {item?.started ? new Date(item.started).getFullYear() : 'Start Year Not Available'} - 
-                  {item?.ended ? new Date(item.ended).getFullYear() : 'End Year Not Available'}
-                </p>
-                <div className="flex space-x-2 text-gray-700 mt-2">
-                  <i>{item?.level?.education_level || 'Education Level Not Available'}</i>
-                  <span>{item?.college?.college_name || 'College Name Not Available'}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            EDUCATION DETAILS
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <p className="text-gray-700">No education details available.</p>
-        </div>
-      )}
-      
-  
-      {/* Proficiency Qualifications */}
-      {candidate?.proficiency?.length > 0 ? (
-        <div className="mt-6">
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            PROFICIENCY QUALIFICATION
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <div className="space-y-4">
-            {candidate.proficiency?.map((item, index) => (
-              <div key={index} className="p-4 rounded-md">
-                <p className="font-bold">
-                  {item?.award || 'Award Not Available'}:
-                </p>
-                <p className="text-gray-700">
-                  {item?.started ? formatDate(item.started) : 'Start Date Not Available'} - 
-                  {item?.ended ? formatDate(item.ended) : 'End Date Not Available'}
-                </p>
-                <div className="flex space-x-2 text-gray-700 mt-2">
-                  <i>{item?.proficiency?.proficiency_name || 'Proficiency Name Not Available'}</i>
-                  <p>{item?.organization?.organization_name || 'Organization Name Not Available'}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            PROFICIENCY QUALIFICATION
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <p className="text-gray-700">No proficiency qualifications available.</p>
-        </div>
-      )}
-      {candidate?.training?.length > 0 ? (
-        <div className="mt-6">
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            TRAININGS & WORKSHOPS
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <div className="space-y-4">
-            {candidate.training?.map((item, index) => (
-              <div key={index} className="p-4 rounded-md">
-                <p className="font-bold">
-                  {item?.name || 'Award Not Available'}:
-                </p>
-                <p className="text-gray-700">
-                  {item?.started ? formatDate(item.started) : 'Start Date Not Available'} - 
-                  {item?.ended ? formatDate(item.ended) : 'End Date Not Available'}
-                </p>
-                <div className="flex space-x-2 text-gray-700 mt-2">
-             
-                  <p>{item?.institution || 'Institution Name Not Available'}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>
-            PROFICIENCY QUALIFICATION
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <p className="text-gray-700">No proficiency qualifications available.</p>
-        </div>
-      )}
-      
-  
-    </div>
-  
-  
+                </TimelineSection>
 
-    {/* Right Column */}
-    <div className="col-span-5 space-y-8 ">
-      {/* Personal Information */}
-      <div className="space-y-4">
-        {/* Profile Image Section */}
-       <div className="flex-shrink-0">
-        <img
-        alt="profile image"
-        src={
-          candidate?.applicant_profile?.[0]?.picture
-            ? `https://ekazi.co.tz/${candidate.applicant_profile[0].picture}`
-            : 'path_to_default_image_or_placeholder.jpg' // Fallback image if no profile picture exists
-        }
-        className="w-48 h-48 object-cover rounded-full border-2 border-gray-300"
-      />
-      
-  </div>
-        <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>PERSONAL INFORMATION</h1>
-        {[
-          { title: 'Location:', value: 'Dar es salaam' },
-          { title: 'Phone:', value: candidate.phone?.phone_number || 'Not specified' },
-          { title: 'Email:', value: candidate.applicant_profile[0]?.email || 'Not specified' },
-          { title: 'Nationality:', value: 'Tanzanian' },
-          { title: 'Date of birth:', value: candidate.applicant_profile[0]?.dob || 'Not specified' },
-          { title: 'Gender:', value: candidate.applicant_profile[0]?.gender_name || 'Not specified' },
-          { title: 'Marital status:', value: candidate.applicant_profile[0]?.marital_status || 'Not specified' },
-        ].map((item, index) => (
-          <div key={index} className="grid grid-cols-3 gap-4">
-            <div className="font-semibold text-gray-700">{item.title}</div>
-            <div className="col-span-2 text-gray-600">{item.value}</div>
-          </div>
-        ))}
-        
-      </div>
+                <TimelineSection title="Education">
+                  {education.length ? (
+                    education.map((edu, i) => (
+                      <Card
+                        body
+                        className="mb-3 border-0 shadow-sm"
+                        key={i}
+                        style={{ borderLeft: `5px solid ${BRAND}` }}
+                      >
+                        <div className="fw-semibold">
+                          {edu?.level?.education_level || edu?.degree || "—"}
+                        </div>
+                        <div>
+                          {edu?.college?.college_name ||
+                            edu?.institution ||
+                            "—"}
+                        </div>
+                        <div className="text-muted small">
+                          {formatMY(edu?.started)} – {formatMY(edu?.ended)}
+                        </div>
+                      </Card>
+                    ))
+                  ) : (
+                    <div className="text-secondary">
+                      No education records available.
+                    </div>
+                  )}
+                </TimelineSection>
 
-      {/* Professional Summary */}
-      <div>
-        <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>PROFESSIONAL SUMMARY</h1>
-        <div className="h-[2px] bg-gray-200 mb-3"></div>
-        <p className="text-gray-700">
-          {candidate.careers?.[0]?.career || 'Not Specified'}
-        </p>
-      </div>
-      
-      {/* Career Objective */}
-      <div>
-        <h1 className="font-bold text-lg mb-1" style={{ color: 'rgb(46, 88, 166)' }}>CAREER OBJECTIVE</h1>
-        <div className="h-[2px] bg-gray-200 mb-3"></div>
-        <p className="text-gray-700">
-          {candidate.objective?.objective || 'Not Specified'}
-        </p>
-      </div>
-      
-      <div className="mt-6">
-        <h1 className="font-bold mt-5 mb-1 text-lg" style={{ color: "rgb(46, 88, 166)" }}>SKILLS</h1>
-        <div className="h-[2px] bg-gray-100 mb-2 "></div>
-        <div className="p-4 rounded-md text-gray-700">
-          {/* Culture Section */}
-          <p className="flex space-x-1">
-            <span className="font-bold">Culture:</span>
-            <div className="flex space-x-1">
-              {candidate.culture?.length > 0 ? (
-                candidate.culture.map((item, index) => (
-                  <p key={index}>
-                    {item.culture?.culture_name}
-                    {index + 1 !== candidate.culture.length && ','}
-                  </p>
-                ))
-              ) : (
-                <p className="text-gray-600">Not Specified</p>
-              )}
-            </div>
-          </p>
-      
-          {/* Personality Section */}
-          <p className="flex space-x-1">
-            <span className="font-bold">Personality:</span>
-            {candidate.culture?.length > 0 ? (
-              candidate.culture.map((item, index) => (
-                <p key={index}>
-                  {item.culture?.culture_name}
-                  {index + 1 !== candidate.culture.length && ','}
-                </p>
-              ))
-            ) : (
-              <p className="text-gray-600">Not Specified</p>
-            )}
-          </p>
-      
-          {/* Skill & Knowledge Section */}
-          <p className="flex space-x-1 flex-wrap">
-            <span className="font-bold">Skill & Knowledge:</span>
-            {candidate.knowledge?.length > 0 ? (
-              candidate.knowledge.map((item, index) => (
-                <p key={index}>
-                  {item.knowledge?.knowledge_name}
-                  {index + 1 !== candidate.knowledge.length && ','}
-                </p>
-              ))
-            ) : (
-              <p className="text-gray-600">Not Specified</p>
-            )}
-          </p>
-      
-          {/* Software Section */}
-          <p className="flex space-x-1 flex-wrap">
-            <span className="font-bold">Software:</span>
-            {candidate.software?.length > 0 ? (
-              candidate.software.map((item, index) => (
-                <p key={index}>
-                  {item.software?.software_name}
-                  {index + 1 !== candidate.software.length && ','}
-                </p>
-              ))
-            ) : (
-              <p className="text-gray-600">Not Specified</p>
-            )}
-          </p>
-      
-          {/* Tools Section */}
-          <p className="flex space-x-1">
-            <span className="font-bold">Tools:</span>
-            {candidate.tools?.length > 0 ? (
-              candidate.tools.map((item, index) => (
-                <span key={index} className="text-gray-700">
-                  {item.tool?.tool_name}
-                  {index + 1 !== candidate.tools.length && ', '}
-                </span>
-              ))
-            ) : (
-              <p className="text-gray-600">Not Specified</p>
-            )}
-          </p>
-        </div>
-      </div>
-      
-      <div className="mt-6">
-        <h1 className="font-bold mt-5 mb-1 text-lg" style={{ color: "rgb(46, 88, 166)" }}>LANGUAGE PROFICIENCY</h1>
-        <div className="h-[2px] bg-gray-100 mb-2"></div>
-        <div className="flex space-x-1">
-          {candidate.language?.length > 0 ? (
-            <div className="mt-6">
-              {/* Language List */}
-              <div className="p-4 rounded-md text-gray-700">
-                {candidate.language.map((item, index) => (
-                  <span key={index}>
-                    {item.language?.language_name}
-                    {index + 1 !== candidate.language.length && ', '}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="text-gray-600">Not Specified</p> // Display fallback message if no language data exists
-          )}
-        </div>
-      </div>
-      
-      {candidate.referees?.length > 0 ? (
-        <div className="mt-6">
-          {/* Referees Header */}
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            REFEREES
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-      
-          {/* Referees List */}
-          <div className="space-y-4">
-            {candidate.referees.map((referee, index) => (
-              <div key={index} className="p-4 rounded-md">
-                <p className="text-lg font-bold">
-                  {referee?.first_name} {referee?.middle_name} {referee?.last_name}
-                </p>
-                <p className="text-gray-700">{referee.referee_position}</p>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Phone:</span> {referee?.phone}
-                </p>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Email:</span> {referee?.email}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="mt-6">
-          <h1 className="font-bold text-lg mb-1" style={{ color: "rgb(46, 88, 166)" }}>
-            REFEREES
-          </h1>
-          <div className="h-[2px] bg-gray-200 mb-3"></div>
-          <p className="text-gray-700">No referees provided.</p>
-        </div>
-      )}
-      
-    </div>
-    
-  </div>
-  
-</div>
+                <TimelineSection title="Skills & Tools">
+                  <div className="d-flex flex-wrap gap-2">
+                    {knowledge.map((k, i) => (
+                      <Badge
+                        key={i}
+                        pill
+                        style={{ backgroundColor: BRAND, color: "#fff" }}
+                      >
+                        {k?.knowledge?.knowledge_name}
+                      </Badge>
+                    ))}
+                    {software.map((s, i) => (
+                      <Badge
+                        key={i}
+                        pill
+                        bg="secondary"
+                        style={{ color: "#fff" }}
+                      >
+                        {s?.software?.software_name}
+                      </Badge>
+                    ))}
+                    {culture.map((c, i) => (
+                      <Badge
+                        key={i}
+                        pill
+                        style={{ backgroundColor: BRAND, color: "#fff" }}
+                      >
+                        {c?.culture?.culture_name}
+                      </Badge>
+                    ))}
+                    {personalities.map((p, i) => (
+                      <Badge key={i} pill bg="dark" style={{ color: "#fff" }}>
+                        {p?.personality?.personality_name}
+                      </Badge>
+                    ))}
+                  </div>
+                </TimelineSection>
 
-        
-        
-    </div> ));
+                {referees.length > 0 && (
+                  <TimelineSection title="Referees">
+                    {referees.map((r, i) => {
+                      const fullName = [
+                        r.first_name,
+                        r.middle_name,
+                        r.last_name,
+                      ]
+                        .filter(Boolean)
+                        .join(" ");
+                      return (
+                        <Card
+                          body
+                          className="mb-3 border-0 shadow-sm"
+                          key={r.id ?? i}
+                          style={{ borderLeft: `5px solid ${BRAND}` }}
+                        >
+                          <div className="fw-semibold">{fullName || "—"}</div>
+                          <div className="text-muted">
+                            {r?.referee_position || "—"}
+                          </div>
+                          <div>{r?.employer || "—"}</div>
+                          <div className="small">{r?.phone || "—"}</div>
+                          <div className="small">{r?.email || "—"}</div>
+                        </Card>
+                      );
+                    })}
+                  </TimelineSection>
+                )}
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
- 
-export default Template6;
+
+function Section({ title, children, icon }) {
+  return (
+    <div className="mb-3">
+      <h6
+        className="fw-semibold mb-1 d-flex align-items-center"
+        style={{ color: BRAND }}
+      >
+        {icon && <span className="me-2">{icon}</span>} {title}
+      </h6>
+      <div>{children || "—"}</div>
+    </div>
+  );
+}
+
+function TimelineSection({ title, children }) {
+  return (
+    <div className="mb-4">
+      <h4 className="fw-bold mb-3" style={{ color: BRAND }}>
+        {title}
+      </h4>
+      {children}
+    </div>
+  );
+}

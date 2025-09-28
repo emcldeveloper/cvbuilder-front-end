@@ -1,4 +1,4 @@
-// Template13.jsx — CV Template with Crimson Text + Brand #32489e
+// Template13.jsx — CV Template with Bitter font + Brand #9896f0
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -10,15 +10,23 @@ import {
   Badge,
   Image,
 } from "react-bootstrap";
-import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import {
+  FiPhone,
+  FiMail,
+  FiMapPin,
+  FiCpu,
+  FiStar,
+  FiGlobe,
+  FiUser,
+} from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
 
 const cvUrl = "https://ekazi.co.tz";
 const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
-const BRAND = "#32489e";
+const BRAND = "#242a64";
 
-export default function Template12() {
+export default function Template13() {
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -106,14 +114,14 @@ export default function Template12() {
   return (
     <Container fluid className="my-4">
       <link
-        href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&display=swap"
         rel="stylesheet"
       />
       <Card
-        className="shadow-lg border-0 overflow-hidden"
-        style={{ fontFamily: "Crimson Text, serif" }}
+        className="shadow border-0 overflow-hidden"
+        style={{ fontFamily: "Bitter, serif" }}
       >
-        {/* Banner */}
+        {/* Header */}
         <Card.Header
           className="text-white py-4"
           style={{ backgroundColor: BRAND }}
@@ -128,8 +136,7 @@ export default function Template12() {
                 }
                 alt="profile"
                 roundedCircle
-                fluid
-                className="shadow"
+                className="shadow mb-3"
                 style={{
                   width: "160px",
                   height: "160px",
@@ -142,13 +149,13 @@ export default function Template12() {
                 }
               />
             </Col>
-            <Col md={9} className="text-center text-md-start mt-3 mt-md-0">
+            <Col md={9} className="text-center text-md-start">
               <h1 className="fw-bold mb-1">
                 {`${profile.first_name || ""} ${profile.middle_name || ""} ${
                   profile.last_name || ""
                 }`.trim() || "—"}
               </h1>
-              <h4 className="fw-light">{currentPosition}</h4>
+              <h4 className="fw-light border-top pt-2">{currentPosition}</h4>
             </Col>
           </Row>
         </Card.Header>
@@ -158,28 +165,20 @@ export default function Template12() {
           <Row>
             {/* Left column */}
             <Col md={4}>
-              <Card className="mb-4 shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
-                    Contact
-                  </h5>
-                  <p className="mb-2">
-                    <FiPhone className="me-2" /> {phone}
-                  </p>
-                  <p className="mb-2">
-                    <FiMail className="me-2" /> {email}
-                  </p>
-                  <p className="mb-0">
-                    <FiMapPin className="me-2" /> {location}
-                  </p>
-                </Card.Body>
-              </Card>
+              <SideCard title="Contact">
+                <p className="mb-2">
+                  <FiPhone className="me-2" /> {phone}
+                </p>
+                <p className="mb-2">
+                  <FiMail className="me-2" /> {email}
+                </p>
+                <p className="mb-0">
+                  <FiMapPin className="me-2" /> {location}
+                </p>
+              </SideCard>
 
-              <Card className="mb-4 shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
-                    Languages
-                  </h5>
+              {languages.length > 0 && (
+                <SideCard title="Languages">
                   <div className="d-flex flex-wrap gap-2">
                     {languages.map((l, i) => (
                       <Badge
@@ -191,65 +190,80 @@ export default function Template12() {
                       </Badge>
                     ))}
                   </div>
-                </Card.Body>
-              </Card>
+                </SideCard>
+              )}
 
-              {/* Skills Card */}
-              <Card className="mb-4 shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
-                    Skills
-                  </h5>
-                  <div className="d-flex flex-wrap gap-2">
-                    {knowledge.map((k, i) => (
-                      <Badge key={i} pill bg="secondary">
-                        {k?.knowledge?.knowledge_name}
-                      </Badge>
-                    ))}
-                    {software.map((s, i) => (
-                      <Badge key={i} pill bg="dark">
-                        {s?.software?.software_name}
-                      </Badge>
-                    ))}
-                  </div>
-                </Card.Body>
-              </Card>
+              {/* Knowledge Skills */}
+              <SideCard
+                title={
+                  <>
+                    <FiStar className="me-2" /> Knowledge
+                  </>
+                }
+              >
+                <div className="d-flex flex-wrap gap-2">
+                  {knowledge.map((k, i) => (
+                    <Badge key={i} pill bg="secondary">
+                      {k?.knowledge?.knowledge_name}
+                    </Badge>
+                  ))}
+                </div>
+              </SideCard>
 
-              {/* Culture Card */}
-              <Card className="mb-4 shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
-                    Culture
-                  </h5>
-                  <div className="d-flex flex-wrap gap-2">
-                    {culture.map((c, i) => (
-                      <Badge
-                        key={i}
-                        pill
-                        style={{ backgroundColor: BRAND, color: "#fff" }}
-                      >
-                        {c?.culture?.culture_name}
-                      </Badge>
-                    ))}
-                  </div>
-                </Card.Body>
-              </Card>
+              {/* Software Skills */}
+              <SideCard
+                title={
+                  <>
+                    <FiCpu className="me-2" /> Software
+                  </>
+                }
+              >
+                <div className="d-flex flex-wrap gap-2">
+                  {software.map((s, i) => (
+                    <Badge key={i} pill bg="dark">
+                      {s?.software?.software_name}
+                    </Badge>
+                  ))}
+                </div>
+              </SideCard>
 
-              {/* Personality Card */}
-              <Card className="mb-4 shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
-                    Personality
-                  </h5>
-                  <div className="d-flex flex-wrap gap-2">
-                    {personalities.map((p, i) => (
-                      <Badge key={i} pill bg="info" text="dark">
-                        {p?.personality?.personality_name}
-                      </Badge>
-                    ))}
-                  </div>
-                </Card.Body>
-              </Card>
+              {/* Culture */}
+              <SideCard
+                title={
+                  <>
+                    <FiGlobe className="me-2" /> Culture
+                  </>
+                }
+              >
+                <div className="d-flex flex-wrap gap-2">
+                  {culture.map((c, i) => (
+                    <Badge
+                      key={i}
+                      pill
+                      style={{ backgroundColor: BRAND, color: "#fff" }}
+                    >
+                      {c?.culture?.culture_name}
+                    </Badge>
+                  ))}
+                </div>
+              </SideCard>
+
+              {/* Personality */}
+              <SideCard
+                title={
+                  <>
+                    <FiUser className="me-2" /> Personality
+                  </>
+                }
+              >
+                <div className="d-flex flex-wrap gap-2">
+                  {personalities.map((p, i) => (
+                    <Badge key={i} pill bg="info" text="dark">
+                      {p?.personality?.personality_name}
+                    </Badge>
+                  ))}
+                </div>
+              </SideCard>
             </Col>
 
             {/* Right column */}
@@ -264,7 +278,7 @@ export default function Template12() {
                     <Card
                       key={i}
                       body
-                      className="mb-3 shadow-sm border-0"
+                      className="mb-3 border-0"
                       style={{ borderLeft: `5px solid ${BRAND}` }}
                     >
                       <div className="fw-semibold">
@@ -278,7 +292,7 @@ export default function Template12() {
                       </div>
                       <div className="text-muted small mb-2">
                         {formatY(exp?.start_date)} –{" "}
-                        {exp?.end_date ? formatY(exp.end_date) : "Present"}
+                        {formatY(exp?.end_date) || "Present"}
                       </div>
                       {exp?.responsibility && (
                         <ul className="mb-0 small">
@@ -304,7 +318,7 @@ export default function Template12() {
                     <Card
                       key={i}
                       body
-                      className="mb-3 shadow-sm border-0"
+                      className="mb-3 border-0"
                       style={{ borderLeft: `5px solid ${BRAND}` }}
                     >
                       <div className="fw-semibold">
@@ -335,7 +349,7 @@ export default function Template12() {
                       <Card
                         key={r.id ?? i}
                         body
-                        className="mb-3 shadow-sm border-0"
+                        className="mb-3 border-0"
                         style={{ borderLeft: `5px solid ${BRAND}` }}
                       >
                         <div className="fw-semibold">{fullName || "—"}</div>
@@ -366,5 +380,21 @@ function SectionCard({ title, children }) {
       </h4>
       {children}
     </div>
+  );
+}
+
+function SideCard({ title, children }) {
+  return (
+    <Card className="mb-4 border-0 shadow-sm">
+      <Card.Body>
+        <h5
+          className="fw-bold mb-3 d-flex align-items-center"
+          style={{ color: BRAND }}
+        >
+          {title}
+        </h5>
+        {children}
+      </Card.Body>
+    </Card>
   );
 }
