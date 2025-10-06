@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt, faDownload, faChalkboardTeacher, faTrashAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import useDeleteTraining from '../../../hooks/Candidate/DeleteTraining';
+import AddTrainingModal from '../../Forms/JobSeeker/Training';
 
 const EditTraining = ({ applicant, showAddModal, showEditModal }) => {
+    const [IsOpenModel, setIsOpenModel] = useState(false);
+    const handleDeleteTraining = useDeleteTraining();
     const formatDate = (dateString) => {
         if (!dateString) return 'Present';
         const options = { year: 'numeric', month: 'short' };
@@ -30,6 +34,10 @@ const EditTraining = ({ applicant, showAddModal, showEditModal }) => {
         return `${shortenedName}${extension}`;
     };
 
+    const handleOpenModelTraining = () => {
+        setIsOpenModel(true);
+    }
+
     return (
         <div className="training-section mt-3">
             {/* Training Header */}
@@ -53,10 +61,11 @@ const EditTraining = ({ applicant, showAddModal, showEditModal }) => {
                             <Button
                                 variant="link"
                                 className="p-0 text-secondary"
-                                onClick={showAddModal}
+                                onClick={handleOpenModelTraining}
                             >
                                 <FontAwesomeIcon icon={faPlus} size="lg" />
                             </Button>
+                            <AddTrainingModal show={IsOpenModel} onHide={() => { setIsOpenModel(false) }} />
                         </Col>
                     </Row>
 
@@ -93,7 +102,7 @@ const EditTraining = ({ applicant, showAddModal, showEditModal }) => {
                                                 <Button
                                                     variant="link"
                                                     className="p-0 text-danger"
-                                                // onClick={() => handleDeleteTraining(training.id)}  
+                                                    onClick={() => handleDeleteTraining(training.id)}
                                                 >
                                                     <FontAwesomeIcon icon={faTrashAlt} />
                                                 </Button>

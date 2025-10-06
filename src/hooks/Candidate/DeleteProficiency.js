@@ -1,10 +1,10 @@
 // src/hooks/JobSeeker/useLanguageForm.js
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { deleteReferee } from "../../Api/Jobseeker/JobSeekerProfileApi";
+import { deleteProficiency } from "../../Api/Jobseeker/JobSeekerProfileApi";
  
-const useDeleteReferee = () => {
-  const handleDeleteReferee = async (refereeId) => {
+const useDeleteProficiency= () => {
+  const handleDeleteproficiency = async (ProficiencyId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "This action will permanently delete the item. Do you want to proceed?",
@@ -16,7 +16,7 @@ const useDeleteReferee = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await deleteReferee(refereeId)
+          const response = await deleteProficiency(ProficiencyId)
 
           if (response?.status === 200) {
             Swal.fire({
@@ -40,8 +40,8 @@ const useDeleteReferee = () => {
     });
   };
 
-  return handleDeleteReferee // return the function
+  return handleDeleteproficiency
 };
 
 
-export default useDeleteReferee;
+export default useDeleteProficiency;

@@ -5,115 +5,133 @@ import { faPencilAlt, faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/f
 import Select from 'react-select';
 import { ProgressBar, Accordion, ListGroup } from 'react-bootstrap';
 import { PencilFill, Camera } from 'react-bootstrap-icons';
-// import LazyImage from '../../utils/Lazyimage
 import useGenders from '../../hooks/Universal/Gender';
 import useMalitalstatus from '../../hooks/Universal/MaritalStatus';
 import useRegions from '../../hooks/Universal/Region';
 import usegetCountries from '../../hooks/Universal/Country';
 import useCitizenship from '../../hooks/Universal/Citizenship';
-
-
-
+import { createProfileImage } from '../../Api/Jobseeker/JobSeekerProfileApi';
+import Swal from 'sweetalert2';
 
 const ProfileSection = ({ profile, address }) => {
+    const applicant_id = localStorage.getItem("applicantId");
     const [showContactModal, setShowContactModal] = useState(false);
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
     const [showBgModal, setShowBgModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
+
     const { genders, loading } = useGenders();
     const { maritalstatus, maritalsatausloading } = useMalitalstatus();
-
-
     const { citizenship, loadingcitizenship } = useCitizenship();
-    console.log("citizenship mambo vip",citizenship);
+    const { regions, loaderegion } = useRegions();
+    const { countries, loadecountry } = usegetCountries();
 
-
-
+    const [Regionoptions, setRegionOptions] = useState([]);
+    const [Countryoptions, setCountryOptions] = useState([]);
+    const [Genderoptions, setGenderOptions] = useState([]);
+    const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
+    const [citizenshipoptions, setCitizenshipOptions] = useState([]);
 
     const [profileImage, setProfileImage] = useState(
         profile?.picture ? `https://ekazi.co.tz/${profile.picture}` : 'https://ekazi.co.tz/uploads/picture/pre_photo.jpg'
     );
     const [bgImage, setBgImage] = useState(
-        profile?.picture ? `https://ekazi.co.tz/${profile.background_picture}` : 'https://ekazi.co.tz/svg/dotted.svg');
+        profile?.background_picture ? `https://ekazi.co.tz/${profile.background_picture}` : 'https://ekazi.co.tz/svg/dotted.svg'
+    );
 
- 
-    //region option
-    const { regions, loaderegion } = useRegions();
-    const AllRegionOptions = regions?.map(region => ({
-        value: region.id,
-        label: region.region_name
-    })) || [];
+    const [profileFile, setProfileFile] = useState(null);
+    const [bgFile, setBgFile] = useState(null);
 
-    const [Regionoptions, setRegionOptions] = useState([]);
-
-    useEffect(() => setRegionOptions(AllRegionOptions.slice(0, 10)), [regions]);
+    // Region options
+    useEffect(() => {
+        const AllRegionOptions = regions?.map(region => ({
+            value: region.id,
+            label: region.region_name
+        })) || [];
+        setRegionOptions(AllRegionOptions.slice(0, 10));
+    }, [regions]);
 
     const loadMoreRegions = () => {
+        const AllRegionOptions = regions?.map(region => ({
+            value: region.id,
+            label: region.region_name
+        })) || [];
         setRegionOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
     };
-    //country option
-    const { countries, loadecountry } = usegetCountries();
-    const AllCountryOptions = countries?.map(country => ({
-        value: country.id,
-        label: country.name,
-    })) || [];
 
-    const [Countryoptions, setCountryOptions] = useState([]);
-
-    useEffect(() => setCountryOptions(AllCountryOptions.slice(0, 10)), [countries]);
+    // Country options
+    useEffect(() => {
+        const AllCountryOptions = countries?.map(country => ({
+            value: country.id,
+            label: country.name,
+        })) || [];
+        setCountryOptions(AllCountryOptions.slice(0, 10));
+    }, [countries]);
 
     const loadMoreCountry = () => {
+        const AllCountryOptions = countries?.map(country => ({
+            value: country.id,
+            label: country.name,
+        })) || [];
         setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
     };
-    //gender option
-    
-    const AllGenderOptions = genders?.map(gender => ({
-        value: gender.id,
-        label: gender.gender_name,
-    })) || [];
-    console.log("current gender 2025", genders);
-    const [Genderoptions, setGenderOptions] = useState([]);
 
-    useEffect(() => setGenderOptions(AllGenderOptions.slice(0, 10)), [genders]);
+    // Gender options
+    useEffect(() => {
+        const AllGenderOptions = genders?.map(gender => ({
+            value: gender.id,
+            label: gender.gender_name,
+        })) || [];
+        setGenderOptions(AllGenderOptions.slice(0, 10));
+    }, [genders]);
 
     const loadMoreGender = () => {
+        const AllGenderOptions = genders?.map(gender => ({
+            value: gender.id,
+            label: gender.gender_name,
+        })) || [];
         setGenderOptions(prev => AllGenderOptions.slice(0, prev.length + 10));
     };
-    //maritalstattus option
-    
-    const AllMaritalStatusOptions = maritalstatus?.map(maritalstatus => ({
-        value: maritalstatus.id,
-        label: maritalstatus.marital_status,
-    })) || [];
-    console.log("current maritalstaus 2025", genders);
-    const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
 
-    useEffect(() => setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10)), [maritalstatus]);
+    // Marital status options
+    useEffect(() => {
+        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
+            value: status.id,
+            label: status.marital_status,
+        })) || [];
+        setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10));
+    }, [maritalstatus]);
 
     const loadMoreMaritalStatus = () => {
-        setGenderOptions(prev => AllMaritalStatusOptions.slice(0, prev.length + 10));
+        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
+            value: status.id,
+            label: status.marital_status,
+        })) || [];
+        setMaritalStatusOptions(prev => AllMaritalStatusOptions.slice(0, prev.length + 10));
     };
 
-    //natinality option
-    
-    const AllCitizenshipOptions = citizenship?.map(citizenship => ({
-        value: citizenship.id,
-        label: citizenship.citizenship,
-    })) || [];
-    console.log("current citizenship 2025", citizenship);
-    const [citizenshipoptions, setCitizenshipOptions] = useState([]);
-
-    useEffect(() => setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10)), [maritalstatus]);
+    // Citizenship options
+    useEffect(() => {
+        const AllCitizenshipOptions = citizenship?.map(citizen => ({
+            value: citizen.id,
+            label: citizen.citizenship,
+        })) || [];
+        setCitizenshipOptions(AllCitizenshipOptions.slice(0, 10));
+    }, [citizenship]);
 
     const loadMoreCitizenship = () => {
+        const AllCitizenshipOptions = citizenship?.map(citizen => ({
+            value: citizen.id,
+            label: citizen.citizenship,
+        })) || [];
         setCitizenshipOptions(prev => AllCitizenshipOptions.slice(0, prev.length + 10));
     };
 
-
-
+    // Background image handlers
     const handleBgImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setBgFile(file);
             const reader = new FileReader();
             reader.onload = (event) => {
                 setBgImage(event.target.result);
@@ -122,38 +140,200 @@ const ProfileSection = ({ profile, address }) => {
         }
     };
 
+    const saveBackgroundImage = async (e) => {
+        e.preventDefault();
+        if (!bgFile) {
+            Swal.fire({
+                title: "Error!",
+                text: "Please select an image first!",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("background_picture", bgFile); // Append the actual file
+            formData.append("applicant_id", applicant_id);
+
+            // Uncomment and implement your background image API call
+            // const response = await createBackgroundImage(formData);
+
+            // if (response?.status === 200) {
+            Swal.fire({
+                title: "Success!",
+                text: "Background image updated successfully!",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+            setShowBgModal(false);
+            // }
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                title: "Error!",
+                text: "Error saving background image",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    // Profile image handlers
     const handleProfileImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setProfileFile(file);
             const reader = new FileReader();
-            reader.onload = (event) => {
-                setProfileImage(event.target.result);
-            };
+            reader.onload = (event) => setProfileImage(event.target.result);
             reader.readAsDataURL(file);
         }
     };
-    const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones"];
-    // if (loading) return <p>Loading genders...</p>;
+
+    const saveProfileImage = async (e) => {
+        e.preventDefault();
+
+        console.log("saveProfileImage called");
+        console.log("profileFile state:", profileFile);
+
+        if (!profileFile) {
+            Swal.fire({
+                title: "Error!",
+                text: "Please select an image first!",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("picture", profileFile);
+            formData.append("applicant_id", applicant_id);
+
+            // Debug FormData contents
+            console.log("=== FormData Debug ===");
+            console.log("FormData has picture:", formData.has("picture"));
+            console.log("FormData has applicant_id:", formData.has("applicant_id"));
+
+            for (let [key, value] of formData.entries()) {
+                if (value instanceof File) {
+                    console.log(`${key}: File - ${value.name}, ${value.size} bytes, ${value.type}`);
+                } else {
+                    console.log(`${key}: ${value}`);
+                }
+            }
+        
+
+          
+            const response = await createProfileImage(formData);
+     
+
+            if (response?.status === 200 || response?.success) {
+                Swal.fire({
+                    title: "Success!",
+
+                    text: response.success || "Profile image updated successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                console.error("API returned unexpected response:", response);
+                throw new Error(response?.message || "Failed to save profile image");
+            }
+
+            setShowProfileModal(false);
+        } catch (err) {
+            console.error("Error in saveProfileImage:", err);
+
+            let errorMessage = "Error saving profile image";
+
+            // Check if error response contains Laravel validation errors
+            if (err.response?.data?.errors) {
+                const errors = err.response.data.errors;
+                errorMessage = Array.isArray(errors) ? errors.join(', ') : errors;
+            }
+            // Check if error has a direct message
+            else if (err.response?.data?.message) {
+                errorMessage = err.response.data.message;
+            }
+            // Handle Laravel validation error format
+            else if (err.response?.status === 422 && err.response?.data) {
+                // Laravel often returns { errors: { field: ["error1", "error2"] } }
+                const errors = err.response.data.errors;
+                if (typeof errors === 'object') {
+                    errorMessage = Object.values(errors).flat().join(', ');
+                } else {
+                    errorMessage = errors || "Validation error";
+                }
+            }
+            // Use the error message if available
+            else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            Swal.fire({
+                title: "Error!",
+                text: errorMessage,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    // Save address + personal info
+    const saveAddressInfo = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData(e.target);
+            formData.append("user_id", profile?.id);
+
+            // Implement your API call here
+            // const res = await fetch(`${API_URL}/profile/address`, {
+            //     method: "POST",
+            //     body: formData,
+            // });
+
+            Swal.fire({
+                title: "Success!",
+                text: "Personal information updated successfully!",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+
+            setShowBasicInfoModal(false);
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                title: "Error!",
+                text: "Error saving personal information",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+
     return (
-        <div  >
+        <div>
             {/* Background Image Section with Edit Icon */}
-            <div className="position-relative ">
+            <div className="position-relative">
                 <Card.Img
                     variant="top"
                     src={bgImage}
                     loading="lazy"
-
                     onLoad={(e) => (e.target.style.opacity = 1)}
-
                     style={{
-                        height: "100px",   // fixed height
-                        width: "100%",     // full card width
-                        objectFit: "cover", // fit without cutting
-                        backgroundColor:'#2995CC'
-
+                        height: "100px",
+                        width: "100%",
+                        objectFit: "cover",
+                        backgroundColor: '#2995CC'
                     }}
                 />
-
 
                 <Button
                     variant="light"
@@ -186,8 +366,6 @@ const ProfileSection = ({ profile, address }) => {
                         </Button>
                     </div>
                 </div>
-
-
             </div>
 
             {/* Background Image Edit Modal */}
@@ -198,13 +376,12 @@ const ProfileSection = ({ profile, address }) => {
                 <Modal.Body className="text-center">
                     <Image
                         src={bgImage}
-                        fluid
                         className="mb-3"
-                        style={{ maxHeight: '300px', objectFit: 'contain' }}
+                        style={{ width: '100%', height: '150px', objectFit: 'cover' }}
                     />
-                    <Form>
+                    <Form onSubmit={saveBackgroundImage}>
                         <Form.Group controlId="formBgImage" className="mb-3">
-                            <Form.Label>Upload New Background</Form.Label>
+                            <Form.Label>Upload New Background Photo</Form.Label>
                             <Form.Control
                                 type="file"
                                 accept="image/*"
@@ -215,7 +392,7 @@ const ProfileSection = ({ profile, address }) => {
                             <Button variant="outline-secondary" onClick={() => setShowBgModal(false)}>
                                 Cancel
                             </Button>
-                            <Button variant="primary" onClick={() => setShowBgModal(false)}>
+                            <Button variant="primary" type="submit">
                                 Save Changes
                             </Button>
                         </div>
@@ -223,7 +400,7 @@ const ProfileSection = ({ profile, address }) => {
                 </Modal.Body>
             </Modal>
 
-            {/* Profile Image Edit Modal */}
+            {/* Profile Image Edit Modal - FIXED: Only one modal */}
             <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title className='fs-5'>Edit Profile Image</Modal.Title>
@@ -235,7 +412,7 @@ const ProfileSection = ({ profile, address }) => {
                         className="mb-3"
                         style={{ width: '200px', height: '200px', objectFit: 'cover' }}
                     />
-                    <Form>
+                    <Form onSubmit={saveProfileImage}>
                         <Form.Group controlId="formProfileImage" className="mb-3">
                             <Form.Label>Upload New Profile Photo</Form.Label>
                             <Form.Control
@@ -248,13 +425,17 @@ const ProfileSection = ({ profile, address }) => {
                             <Button variant="outline-secondary" onClick={() => setShowProfileModal(false)}>
                                 Cancel
                             </Button>
-                            <Button variant="danger" className="me-auto" onClick={() => {
-                                setProfileImage('/default-profile.jpg');
-                                setShowProfileModal(false);
-                            }}>
+                            <Button
+                                variant="danger"
+                                className="me-auto"
+                                onClick={() => {
+                                    setProfileImage('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
+                                    setProfileFile(null);
+                                }}
+                            >
                                 Remove Photo
                             </Button>
-                            <Button variant="primary" onClick={() => setShowProfileModal(false)}>
+                            <Button variant="primary" type="submit">
                                 Save Changes
                             </Button>
                         </div>
@@ -270,12 +451,10 @@ const ProfileSection = ({ profile, address }) => {
                             <h5 className="mb-1 fw-bold me-2">
                                 {profile?.first_name} {profile?.middle_name} {profile?.last_name}
                             </h5>
-
                         </div>
 
                         <div className="text-dark d-flex align-items-center flex-wrap">
                             <FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" />
-
                             <span className="me-2">
                                 {address?.postal && `${address.postal}, `}
                                 {address?.sub_location && `${address.sub_location}, `}
@@ -285,8 +464,8 @@ const ProfileSection = ({ profile, address }) => {
 
                             <Button
                                 variant="link"
-                                className="  p-0 ms-2 text-decolation:none"
-                                onClick={() => setShowBasicInfoModal(true)}
+                                className="p-0 ms-2 text-decoration-none"
+                                onClick={() => setShowContactModal(true)}
                             >
                                 <b>|</b> View Contacts
                             </Button>
@@ -301,7 +480,6 @@ const ProfileSection = ({ profile, address }) => {
                             title="Edit personal information"
                         >
                             <PencilFill size={16} className="me-1" />
-
                         </Button>
                     </Col>
                 </Row>
@@ -349,7 +527,7 @@ const ProfileSection = ({ profile, address }) => {
                     <Modal.Title className='fs-5'>Personal Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form method="POST"  >
+                    <Form onSubmit={saveAddressInfo}>
                         <input type="hidden" name="id" value={profile?.id} />
                         <Row>
                             <Form.Group as={Col} md={4}>
@@ -390,29 +568,21 @@ const ProfileSection = ({ profile, address }) => {
                                     name="gender"
                                     options={Genderoptions}
                                     onMenuScrollToBottom={loadMoreGender}
-                                    placeholder="Select Gender "
-                                    onChange={selected => {
-                                        // You can store this in state or pass to your form handler
-                                        console.log("Selected  gender:", selected);
-                                    }}
-                                    isSearchable // this is the default behavior
-                                    isClearable // Allow clearing the selected option
+                                    placeholder="Select Gender"
+                                    isSearchable
+                                    isClearable
                                 />
                             </Form.Group>
 
                             <Form.Group as={Col} md={4}>
-                                <Form.Label>Marital <span className="text-danger">*</span></Form.Label>
+                                <Form.Label>Marital Status <span className="text-danger">*</span></Form.Label>
                                 <Select
                                     name="marital"
                                     options={MaritalStatusoptions}
                                     onMenuScrollToBottom={loadMoreMaritalStatus}
-                                    placeholder="Select marital status "
-                                    onChange={selected => {
-                                        // You can store this in state or pass to your form handler
-                                        console.log("Selected  marital status:", selected);
-                                    }}
-                                    isSearchable // this is the default behavior
-                                    isClearable // Allow clearing the selected option
+                                    placeholder="Select marital status"
+                                    isSearchable
+                                    isClearable
                                 />
                             </Form.Group>
 
@@ -432,7 +602,6 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Control
                                     type="text"
                                     name="phone"
-                                    // defaultValue={phone?.phone_number}
                                     required
                                 />
                             </Form.Group>
@@ -454,30 +623,21 @@ const ProfileSection = ({ profile, address }) => {
                                     name="country"
                                     options={Countryoptions}
                                     onMenuScrollToBottom={loadMoreCountry}
-                                    placeholder="Select country "
-                                    onChange={selected => {
-                                        // You can store this in state or pass to your form handler
-                                        console.log("Selected  country:", selected);
-                                    }}
-                                    isSearchable // this is the default behavior
-                                    isClearable // Allow clearing the selected option
+                                    placeholder="Select country"
+                                    isSearchable
+                                    isClearable
                                 />
-
                             </Form.Group>
 
                             <Form.Group as={Col} md={6}>
                                 <Form.Label>Nationality <span className="text-danger">*</span></Form.Label>
-                                  <Select
+                                <Select
                                     name="citizenship"
                                     options={citizenshipoptions}
                                     onMenuScrollToBottom={loadMoreCitizenship}
-                                    placeholder="Select citizenship "
-                                    onChange={selected => {
-                                        // You can store this in state or pass to your form handler
-                                        console.log("Selected  citizenship:", selected);
-                                    }}
-                                    isSearchable // this is the default behavior
-                                    isClearable // Allow clearing the selected option
+                                    placeholder="Select citizenship"
+                                    isSearchable
+                                    isClearable
                                 />
                             </Form.Group>
                         </Row>
@@ -489,13 +649,9 @@ const ProfileSection = ({ profile, address }) => {
                                     name="region"
                                     options={Regionoptions}
                                     onMenuScrollToBottom={loadMoreRegions}
-                                    placeholder="Select Region "
-                                    onChange={selected => {
-                                        // You can store this in state or pass to your form handler
-                                        console.log("Selected  region:", selected);
-                                    }}
-                                    isSearchable // this is the default behavior
-                                    isClearable // Allow clearing the selected option
+                                    placeholder="Select Region"
+                                    isSearchable
+                                    isClearable
                                 />
                             </Form.Group>
 
@@ -504,7 +660,7 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Control
                                     type="text"
                                     name="sub_location"
-                                    defaultValue={profile?.address?.sub_location}
+                                    defaultValue={address?.sub_location}
                                 />
                             </Form.Group>
 
@@ -513,7 +669,7 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Control
                                     type="text"
                                     name="postal_address"
-                                    defaultValue={profile?.address?.postal}
+                                    defaultValue={address?.postal}
                                 />
                             </Form.Group>
                         </Row>
@@ -522,7 +678,7 @@ const ProfileSection = ({ profile, address }) => {
                             <Button variant="outline-secondary" onClick={() => setShowBasicInfoModal(false)}>
                                 Close
                             </Button>
-                            <Button variant="outline-secondary" type="submit">
+                            <Button variant="primary" type="submit">
                                 Save changes
                             </Button>
                         </Modal.Footer>

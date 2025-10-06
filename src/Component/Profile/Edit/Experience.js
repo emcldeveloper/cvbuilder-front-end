@@ -10,11 +10,13 @@ import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
+import useDeleteExperience from '../../../hooks/Candidate/DeleteExperiency';
 import ExperienceModelMform from '../../Forms/JobSeeker/ExperienceModelForm';
+import AddWorkExperienceModal from '../../Forms/JobSeeker/ExperienceModelForm';
 
 const EditWorkExperience = ({ applicant, isApplicant }) => {
-
+    const handleDeleteExperience = useDeleteExperience();
+    const [showExperienceModal, setShowExperienceModal] = useState(false);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -52,7 +54,7 @@ const EditWorkExperience = ({ applicant, isApplicant }) => {
     // Group experience by employer ID
     const groupedExperience = _.groupBy(applicant?.experience || [], 'applicant_employer_id');
 
-   
+
 
     return (
         <div className="mt-4">
@@ -77,10 +79,14 @@ const EditWorkExperience = ({ applicant, isApplicant }) => {
                     <Button
                         variant="link"
                         className="p-0 text-secondary"
-                    // onClick={showAddModal}
+                        onClick={() => setShowExperienceModal(true)}
                     >
                         <FontAwesomeIcon icon={faPlus} size="lg" />
                     </Button>
+                    <AddWorkExperienceModal
+                        show={showExperienceModal}
+                        onHide={() => setShowExperienceModal(false)}
+                    />
                 </div>
             </div>
             {/* <ExperienceModelMform
@@ -206,7 +212,7 @@ const EditWorkExperience = ({ applicant, isApplicant }) => {
                                                                             <Button
                                                                                 variant="link"
                                                                                 className="p-0 text-danger ms-2"
-                                                                                // onClick={() => handleDeletePosition(position.id)}
+                                                                                onClick={() => handleDeleteExperience(position.id)}
                                                                                 title="Delete Position"
                                                                             >
                                                                                 <FontAwesomeIcon icon={faTrashAlt} size="sm" />

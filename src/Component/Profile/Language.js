@@ -9,6 +9,7 @@ import AddLanguageModal from '../Forms/JobSeeker/Language';
 
 const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
     const [showAddModal, setShowAddModal] = useState(false);
+    const [IsOpenModel, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         language: '',
         read: '',
@@ -29,46 +30,46 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
         // Then close modal
         setShowAddModal(false);
     };
-    
-       const [IsOpenModel ,setIsModalOpen]=useState(false);
-        const handleOpenLnagugae =()=>{
-            setIsModalOpen(true);
-        }
-        const CloseModelLnaguage =()=>{
-            setIsModalOpen(false);
-        }
-     
-   
+
+
+    const handleOpenLnagugae = () => {
+        setIsModalOpen(true);
+    }
+    const CloseModelLnaguage = () => {
+        setIsModalOpen(false);
+    }
+
+
 
     return (
         <div className="languages-section mb-4 mt-2">
             {/* Header */}
-             <div className="d-flex justify-content-between align-items-center mb-2">
-                          <h6 className="section-title mb-0">
-                              <b>LANGUAGES</b>
-                          </h6>
-                          <div className="d-flex gap-2">
-                              <Button
-                                  variant="link"
-                                  onClick={handleOpenLnagugae }
-                                  className="p-0 border-0 bg-transparent"
-                              >
-                                  <Plus
-                                      style={{ fontSize: '1.5rem' }}
-                                      className="text-muted"
-                                  />
-                              </Button>
-                              <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage}/>
-                              <Link
-                                  to={`/jobseeker/Edit-Language`}
-                              >
-                                  <Pencil
-                                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                                      className="text-muted"
-                                  />
-                              </Link>
-                          </div>
-                      </div>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h6 className="section-title mb-0">
+                    <b>LANGUAGES</b>
+                </h6>
+                <div className="d-flex gap-2">
+                    <Button
+                        variant="link"
+                        onClick={handleOpenLnagugae}
+                        className="p-0 border-0 bg-transparent"
+                    >
+                        <Plus
+                            style={{ fontSize: '1.5rem' }}
+                            className="text-muted"
+                        />
+                    </Button>
+                    <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage} />
+                    <Link
+                        to={`/jobseeker/Edit-Language`}
+                    >
+                        <Pencil
+                            style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                            className="text-muted"
+                        />
+                    </Link>
+                </div>
+            </div>
             <div className="divider mb-3" />
 
             {/* Languages Table */}

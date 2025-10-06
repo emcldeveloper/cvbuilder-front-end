@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt, faDownload, faCertificate, faArrowLeft, Plus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -6,9 +6,13 @@ import { Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
+import useDeleteProficiency from '../../../hooks/Candidate/DeleteProficiency';
+import AddProficiencyModal from '../../Forms/JobSeeker/Proficiency';
 
 
 const EditProficiency = ({ applicant }) => {
+    const handleDeleteproficiency = useDeleteProficiency();
+    const [IsOpenModel, setIsOpenModel] = useState(false);
     const formatYear = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -34,9 +38,11 @@ const EditProficiency = ({ applicant }) => {
         // Your edit logic here
     };
 
-    const handleDeleteProficiency = (id) => {
-        // Your delete logic here
-    };
+    const handleModelProficiency = () => {
+        setIsOpenModel(true);
+    }
+
+
 
 
     return (
@@ -61,10 +67,11 @@ const EditProficiency = ({ applicant }) => {
                             <Button
                                 variant="link"
                                 className="p-0 text-secondary"
-                            // onClick={showAddModal}Edit-Proficiency
+                              onClick={handleModelProficiency}
                             >
                                 <FontAwesomeIcon icon={faPlus} size="lg" />
                             </Button>
+                                <AddProficiencyModal  show={IsOpenModel} onHide={()=>{setIsOpenModel(false)}}/>
                         </div>
                     </div>
 
@@ -102,7 +109,7 @@ const EditProficiency = ({ applicant }) => {
                                                 <Button
                                                     variant="link"
                                                     className="p-0 text-danger"
-                                                    onClick={() => handleDeleteProficiency(proficiency.id)}
+                                                    onClick={() => handleDeleteproficiency(proficiency.id)}
                                                     title="Delete"
                                                 >
                                                     <FontAwesomeIcon icon={faTrashAlt} />

@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Row, Col, Table, Button, Modal, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt, faArrowLeft ,faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPencilAlt, faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
 import useDeleteLanguage from '../../../hooks/Candidate/deleteLanguage';
+import AddLanguageModal from '../../Forms/JobSeeker/Language';
 
 const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
     const [showAddModal, setShowAddModal] = useState(false);
-    const handledeletelanguage=useDeleteLanguage();
+    const [IsOpenModel, setIsModalOpen] = useState(false);
+    const [editData, setEditData] = useState(null); // <-- to hold selected language data
+    const handledeletelanguage = useDeleteLanguage();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         language: '',
@@ -24,13 +27,19 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    
+
     const handleEditLanguage = (language) => {
         // Your edit logic here
         console.log('Editing language:', language);
     };
+    const handleOpenLnagugae = () => {
+        setIsModalOpen(true);
+    }
+    const CloseModelLnaguage = () => {
+        setIsModalOpen(false);
+    }
 
-   
+
 
     return (
         <div className="languages-section mb-4 mt-2">
@@ -50,11 +59,13 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
                     </Button>
                     <Button
                         variant="link"
-                        className="p-0 text-secondary"
-                        onClick={showAddModal}
+                        onClick={handleOpenLnagugae}
+                        className="p-0 border-0 bg-transparent"
                     >
                         <FontAwesomeIcon icon={faPlus} size="lg" />
                     </Button>
+                    <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage} />
+
                 </div>
             </div>
             <div className="divider mb-3" />

@@ -10,6 +10,7 @@ import useIndustry from '../../../hooks/Universal/Industry';
 import usePositionLevel from '../../../hooks/Universal/PositionLevel';
 import usesalaryRange from '../../../hooks/Universal/SalaryRange';
 import useSalaryRange from '../../../hooks/Universal/SalaryRange';
+import useExperienceType from '../../../hooks/Universal/ExperienceType';
 
 const AddWorkExperienceModal = ({ show, onHide }) => {
   const [currentRole, setCurrentRole] = useState(false);
@@ -24,7 +25,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     value: employer.id,
     label: employer.employer_name,
   })) || [];
-  console.log("employer list yes", AllEmployerOptions);
+   
   const [Employeronoptions, setEmployerOptions] = useState([]);
 
   useEffect(() => setEmployerOptions(AllEmployerOptions.slice(0, 10)), [employers]);
@@ -38,7 +39,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     value: country.id,
     label: country.name,
   })) || [];
-  console.log("country list yes", AllCountryOptions);
+  
   const [Countryoptions, setCountryOptions] = useState([]);
 
   useEffect(() => setCountryOptions(AllCountryOptions.slice(0, 10)), [countries]);
@@ -46,13 +47,28 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
   const loadMoreCountry = () => {
     setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
   };
+    //experince type option
+  const { experincetype, loadeexperincetype } = useExperienceType();
+  console.log("chap data",experincetype);
+  const AllexperiencetypeOptions = experincetype?.map(experincetype => ({
+    value: experincetype.id,
+    label: experincetype.name,
+  })) || [];
+ 
+  const [Experiencetypeoptions, setExperiencetypeOptions] = useState([]);
+
+  useEffect(() => setExperiencetypeOptions(AllexperiencetypeOptions.slice(0, 10)), [countries]);
+
+  const loadMoreExpeiencetype = () => {
+    setCountryOptions(prev => AllexperiencetypeOptions.slice(0, prev.length + 10));
+  };
   //region option
   const { regions, loaderegion } = useRegions();
   const AllRegionOptions = regions?.map(region => ({
     value: region.id,
     label: region.region_name
   })) || [];
-  console.log("region list yes", AllRegionOptions);
+  
   const [Regionoptions, setRegionOptions] = useState([]);
 
   useEffect(() => setRegionOptions(AllRegionOptions.slice(0, 10)), [regions]);
@@ -66,7 +82,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     value: position.id,
     label: position.position_name
   })) || [];
-  console.log("position list yes", AllPositionOptions);
+ 
   const [Positionoptions, setPositionOptions] = useState([]);
 
   useEffect(() => setPositionOptions(AllPositionOptions.slice(0, 10)), [positions]);
@@ -80,7 +96,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     value: industry.id,
     label: industry.industry_name
   })) || [];
-  console.log("industry list yes", AllIndustryOptions);
+ 
   const [Industryoptions, setIndustryOptions] = useState([]);
 
   useEffect(() => setIndustryOptions(AllIndustryOptions.slice(0, 10)), [industry]);
@@ -95,7 +111,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     label: positionlevel.position_name
 
   })) || [];
-  console.log("position level list yes", positionlevel);
+ 
   const [positionleveloptions, setPositionLevelOptions] = useState([]);
 
   useEffect(() => setPositionLevelOptions(AllPositionLevelOptions.slice(0, 10)), [positionlevel]);
@@ -110,7 +126,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
     label: salaryrange.low
 
   })) || [];
-  console.log("salry range list yes", salaryrange);
+   
   const [salaryrangeoptions, setSalaryRangeOptions] = useState([]);
 
   useEffect(() => setSalaryRangeOptions(AllSalaryRangeOption.slice(0, 10)), [salaryrange]);
@@ -130,9 +146,26 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
+              Experience type<span className="text-danger">*</span>
+            </Form.Label>
+            <Col sm={3}>
+              <Select
+                name="experiencetype"
+                options={Experiencetypeoptions}
+                onMenuScrollToBottom={loadMoreExpeiencetype}
+                placeholder="Select  type"
+                onChange={selected => {
+                  // You can store this in state or pass to your form handler
+                  console.log("Selected employer:", selected);
+                }}
+                isSearchable // this is the default behavior
+                isClearable // Allow clearing the selected option
+              />
+            </Col>
+             <Form.Label column sm={1}>
               Employer<span className="text-danger">*</span>
             </Form.Label>
-            <Col sm={9}>
+            <Col sm={5}>
               <CreatableSelect
                 name="employer"
                 options={Employeronoptions}

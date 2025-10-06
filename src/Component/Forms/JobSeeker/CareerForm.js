@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
+import { createCreerProfile } from "../../../Api/Jobseeker/JobSeekerProfileApi";
+import Swal from "sweetalert2";
+
 
 const ObjectiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
   const [career, setCareer] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const applicant_id = localStorage.getItem("applicantId");
+
 
   // Initialize data when applicant changes
   useEffect(() => {
@@ -29,33 +34,47 @@ const ObjectiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
       return;
     }
     setError(null);
-    setIsSubmitting(true);
-
+      setIsSubmitting(true);
     try {
-      // Send back updated career object
-      await onSubmit({
-        ...applicant?.careers?.[0], // keep id, applicant_id if they exist
-        career
-      });
+       const sendData={
+        "career":career
+       };
+      console.log("career object is 2025 now", career);
+    const response = await createCreerProfile(applicant_id ,sendData);
+          if (response.status === 200) {
+              Swal.fire({
+                title: "Success!",
+                text: response.data.success,
+                icon: "success",
+              });
+              
+            }
 
       onClose();
     } catch (err) {
-      setError("Failed to save career objectives. Please try again.");
+       Swal.fire({
+             title: "Error!",
+             text: "Something went wrong. Please try again.",
+             icon: "error",
+             confirmButtonText: "OK",
+           });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+
+
   return (
     <Modal show={isOpen} onHide={onClose} size="md" centered>
       <Modal.Header closeButton>
-        <Modal.Title  className="fs-5">Career Objectives</Modal.Title>
+        <Modal.Title className="fs-5">Career Profile</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group controlId="careerTextarea">
             <Form.Label>
-              Career Objective <span className="text-danger">*</span>
+              Career Profile <span className="text-danger">*</span>
             </Form.Label>
             <Form.Control
               as="textarea"

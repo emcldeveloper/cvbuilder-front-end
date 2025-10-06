@@ -5,8 +5,10 @@ import { faPlus, faPencilAlt, faDownload, faUserTie, faArrowLeft, faTrashAlt } f
 import RefereeModal from '../../Forms/JobSeeker/Referee';
 import { Pencil, Plus } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
+import useDeleteReferee from '../../../hooks/Candidate/deletereferee';
 
 const EditReferee = ({ applicant, showAddModal, showEditModal }) => {
+    const handleDeleteReferee = useDeleteReferee();
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');
@@ -57,14 +59,7 @@ const EditReferee = ({ applicant, showAddModal, showEditModal }) => {
         setCurrentReferee(referee);
         setIsModalOpen(true);
     };
-    const handleDeleteReferee = (id) => {
-        // Your delete logic here
-        console.log('Deleting referee with id:', id);
-     
-        if (window.confirm('Are you sure you want to delete this referee?')) {
-           // call api
-        }
-    };
+  
 
     return (
         <div className="referees-section mt-4">

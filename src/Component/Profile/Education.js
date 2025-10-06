@@ -38,7 +38,6 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
     const [IsModelOpen, setIsModelOpen] = useState(false);
 
     const HandleOpenModel = () => {
-        console.log("vip imefika pale pale");
         setIsModelOpen(true);
     }
 

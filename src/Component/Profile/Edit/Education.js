@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Container, Badge, Card, Button, Modal, Form, Row, Col,
     Spinner, Alert, Image
@@ -6,12 +6,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencilAlt, faDownload, faCalendarAlt, faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import useDeleteEducation from '../../../hooks/Candidate/DeleteEducation';
 
 import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
+import AddEducationModal from '../../Forms/JobSeeker/Education';
 
 const EditEducationDetails = ({ applicant, showAddModal, showEditModal }) => {
+    const handleDeleteEducation = useDeleteEducation();
+    const [IsModelOpen, setIsModelOpen] = useState(false);
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -42,12 +46,12 @@ const EditEducationDetails = ({ applicant, showAddModal, showEditModal }) => {
         console.log('Editing education:', education);
     };
 
-    const handleDeleteEducation = (id) => {
-        if (window.confirm('Are you sure you want to delete this education record?')) {
-            // Your delete logic here
-            console.log('Deleting education with id:', id);
-        }
-    };
+    const HandleOpenModel = () => {
+        setIsModelOpen(true);
+    }
+
+
+
     return (
         <div className="education-section">
             {/* Education Details Header */}
@@ -69,11 +73,14 @@ const EditEducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                             <Button
                                 variant="link"
                                 className="p-0 text-secondary"
-                                onClick={showAddEducationModal}
+                                onClick={HandleOpenModel}
                                 title="Add Education"
                             >
                                 <FontAwesomeIcon icon={faPlus} size="lg" />
                             </Button>
+                            <AddEducationModal
+                                show={IsModelOpen}
+                                onHide={() => setIsModelOpen(false)} />
                         </div>
                     </div>
 

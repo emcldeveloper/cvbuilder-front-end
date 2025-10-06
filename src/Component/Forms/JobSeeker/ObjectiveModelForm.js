@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import {
   Modal, Form, Button
 } from 'react-bootstrap';
+import Swal from "sweetalert2";
+import { createCreerObjective } from "../../../Api/Jobseeker/JobSeekerProfileApi";
 
 const ObejctiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
   const [objective, setObjective] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const applicant_id = localStorage.getItem("applicantId");
 
   // Initialize objective when applicant changes
   useEffect(() => {
     setObjective(applicant?.objective?.objective || '');
   }, [applicant]);
- console.log("applicatnt data 2025",applicant);
+  console.log("applicatnt data 2025", applicant);
   // Update char counter when objective changes
   useEffect(() => {
     setCharCount(objective.length);
@@ -29,13 +32,28 @@ const ObejctiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
     setIsSubmitting(true);
 
     try {
-      // Call parent onSubmit function
-      await onSubmit(objective);
+      const sendData = {
+        "objective": objective
+      };
+      console.log("career object is 2025 -2026 now", objective);
+      const response = await createCreerObjective(applicant_id, sendData);
+      if (response.status === 200) {
+        Swal.fire({
+          title: "Success!",
+          text: response.data.success,
+          icon: "success",
+        });
 
+      }
       // Close modal after saving
       onClose();
     } catch (err) {
-      setError("Failed to save objective. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -44,7 +62,7 @@ const ObejctiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
   return (
     <Modal show={isOpen} onHide={onClose} size="md" centered>
       <Modal.Header closeButton>
-        <Modal.Title  className="fs-5">Career Objectives</Modal.Title>
+        <Modal.Title className="fs-5">Career Objectives</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
@@ -55,7 +73,7 @@ const ObejctiveModelForm = ({ isOpen, onClose, onSubmit, applicant }) => {
             <Form.Control
               as="textarea"
               rows={8}
-              value={objective}   
+              value={objective}
               onChange={(e) => setObjective(e.target.value)}
               maxLength={300}
               placeholder="Start typing..."

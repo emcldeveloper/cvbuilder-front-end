@@ -190,6 +190,46 @@ export const createlanguage = async (sendData) => {
         error.message;
     }
 };
+export const createCreerProfile = async (applicant_id,career) => {
+    try {
+        const response = await api.put( `applicant/storecareerobjective/${applicant_id}`, career);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+export const createCreerObjective = async (applicant_id,objective) => {
+    try {
+        const response = await api.put( `applicant/storeObjective/${applicant_id}`, objective);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+export const createCulture = async (sendData) => {
+    try {
+        const response = await api.post( `applicant/culturestore`, sendData);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+
+export const createProfileImage = async (sendData) => {
+    try {
+        const response = await api.post('applicant/profileimagesave', sendData);
+        return response.data; // Return only the data part
+    } catch (error) {
+        // Throw the full error to preserve response data
+        throw error;
+    }
+};
 export const deleteLanguage = async (languageId) => {
   try {
     const response = await api.delete(`applicant/languagedelete/${languageId}`);
@@ -214,7 +254,56 @@ export const deleteReferee = async (RefereeId) => {
     );
   }
 };
- 
+export const deleteTraining = async (TrainingId) => {
+  try {
+    const response = await api.delete(`applicant/trainingdelete/${TrainingId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+export const deleteProficiency = async (ProficiencyId) => {
+  try {
+    const response = await api.delete(`applicant/deleteproficiency/${ProficiencyId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+export const deleteEducation = async (EducationId) => {
+  try {
+    const response = await api.delete(`applicant/deleteeducation/${EducationId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+export const deleteExperience = async (ExperienceId) => {
+  try {
+    const response = await api.delete(`applicant/deleteexperience/${ExperienceId}`);
+    return response;
+  } catch (error) {
+    throw (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message
+    );
+  }
+};
+
+
 export const createculture = async (sendData) => {
     try {
         const response = await api.post('applicant/culturestore', sendData);

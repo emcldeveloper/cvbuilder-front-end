@@ -32,7 +32,6 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
   };
   const [IsOpenModel ,setIsOpenModel]=useState(false);
    const handleOpenModelTraining =()=>{
-    console.log("training mode is open");
     setIsOpenModel(true);
     
    }
