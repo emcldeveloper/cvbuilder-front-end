@@ -27,6 +27,11 @@ import Template22 from "../../templates/template22";
 import Template23 from "../../templates/template23";
 import Template24 from "../../templates/template24";
 import Template25 from "../../templates/template25";
+import Template26 from "../../templates/template26";
+import Template27 from "../../templates/template27";
+import Template28 from "../../templates/template28";
+import Template29 from "../../templates/template29";
+import Template30 from "../../templates/template30";
 import { useCvProfileData } from "../../hooks/Candidate/Cv";
 import { Card, Col } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
@@ -68,6 +73,11 @@ const HomePageCv = () => {
         { id: 23, component: <Template23 /> },
         { id: 24, component: <Template24 /> },
         { id: 25, component: <Template25 /> },
+        { id: 26, component: <Template26 /> },
+        { id: 27, component: <Template27 /> },
+        { id: 28, component: <Template28 /> },
+        { id: 29, component: <Template29 /> },
+        { id: 30, component: <Template30 /> },
     ];
 
 

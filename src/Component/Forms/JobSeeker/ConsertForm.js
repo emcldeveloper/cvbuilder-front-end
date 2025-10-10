@@ -22,9 +22,7 @@ const ConsentFormModal = ({ show, onClose }) => {
         setIsSubmitting(true);
 
         // Simulate form submission
-        setTimeout(() => {
-            console.log('Consent submitted:', { applicantName, date, consentGiven });
-            setIsSubmitting(false);
+        setTimeout(() => {   setIsSubmitting(false);
             onClose();
         }, 1000);
     };

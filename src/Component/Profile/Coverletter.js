@@ -138,7 +138,7 @@ const CoverLetterCreator = () => {
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
     } catch (error) {
-      console.error("Error generating PDF:", error);
+  
     }
   };
 

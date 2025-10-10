@@ -19,7 +19,7 @@ const ApplicantPipeline = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const{jobseekerpipeline ,loading}=Usegetapplicantpipeline();
-    console.log("applicnt pipeline is present",jobseekerpipeline);
+   
 
     const [filteredData, setFilteredData] = useState([]);
     const [filterType, setFilterType] = useState('lastMonth');

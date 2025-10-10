@@ -34,8 +34,8 @@ export default function Template28() {
 
   useEffect(() => {
     fetch(API)
-      .then((res) => {
-        if (!res.ok) throw new Error(HTTP error! status: ${res.status});
+       .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((json) => {
@@ -166,14 +166,14 @@ export default function Template28() {
 
       {/* Hero */}
       <div className="t28-hero">
-        <img
+          <img
           src={
             profile?.picture
-              ? ${cvUrl}/${profile.picture}
-              : "https://placehold.co/160x160?text=Photo"
+              ? `${cvUrl}/${profile.picture}`
+              : "https://placehold.co/150x150?text=Photo"
           }
-          alt="profile"
-          className="t28-photo"
+          alt={fullName}
+          className="t27-photo"
         />
         <div className="t28-name">{fullName}</div>
         <div className="t28-role">{currentPosition}</div>

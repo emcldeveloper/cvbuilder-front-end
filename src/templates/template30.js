@@ -1,4 +1,4 @@
-template 30 // Template30.jsx — Elegant Timeline CV (Fredoka + Brand #dd8321)
+ 
 
 import { useEffect, useState, useMemo } from "react";
 import { Container, Row, Col, Spinner, Alert, Badge } from "react-bootstrap";
@@ -35,7 +35,7 @@ export default function Template30() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(HTTP error! status: ${res.status});
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((json) => {
@@ -182,10 +182,10 @@ export default function Template30() {
       {/* Hero */}
       <div className="t30-hero">
         <img
-          src={
+         src={
             profile?.picture
-              ? ${cvUrl}/${profile.picture}
-              : "https://placehold.co/140x140?text=Photo"
+              ? `${cvUrl}/${profile.picture}`
+              : "https://placehold.co/150x150?text=Photo"
           }
           alt="profile"
           className="t30-photo"

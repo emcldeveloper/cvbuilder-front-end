@@ -16,7 +16,7 @@ const EditCultureModal = ({ show, onHide }) => {
     // Applicant profile
     const applicant = MyProfile();
     const culturedata = Array.isArray(applicant?.culture) ? applicant.culture : [];
-    console.log("Applicant culture data:", culturedata);
+    
 
     // Culture options from universal API
     const { culture, loadculture } = useCulture();
@@ -54,47 +54,57 @@ const EditCultureModal = ({ show, onHide }) => {
     };
 
     // Submit
+    // Submit
+    // Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const cultureIds = selectedCultures.map(item => item.value);
-        setFormData({
-            ...formData,
-            culture: cultureIds
-        });
 
         if (cultureIds.length === 0) {
             setError("Culture selection is required.");
             return;
         }
 
+        // Final payload with applicant_id + culture
+        const payload = {
+            applicant_id: applicant_id,
+            culture: cultureIds
+        };
 
+      
 
         setError(null);
         setIsSubmitting(true);
+
         try {
-                    console.log("cultuer availale 2028",formData);
-            const response = await createCulture(formData)
-            if (response.status === 200) {
+            // Send payload to API
+            console.log("saf sana ", payload);
+            const response = await createCulture(payload);
+
+            if (response?.status === 200) {
                 Swal.fire({
                     title: "Success!",
                     text: response.data.success,
                     icon: "success",
                 });
-
+                onHide(); // close modal
             }
-            onHide(); // close modal
         } catch (err) {
+            
+
             Swal.fire({
                 title: "Error!",
-                text: "Something went wrong. Please try again.",
+                text: err.response?.data?.message || "Something went wrong. Please try again.",
                 icon: "error",
                 confirmButtonText: "OK",
             });
         } finally {
             setIsSubmitting(false);
         }
+
     };
+
 
     return (
         <Modal show={show} onHide={onHide} size="m" centered>
@@ -127,9 +137,14 @@ const EditCultureModal = ({ show, onHide }) => {
                         <Button variant="outline-secondary" onClick={onHide}>
                             Close
                         </Button>
-                        <Button variant="outline-secondary" type="submit">
-                            Save Changes
-                        </Button>
+                       
+                             <Button
+                                    variant="outline-primary"
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                  >
+                                    {isSubmitting ? "Saving..." : "Save Changes"}
+                                  </Button>
                     </Modal.Footer>
                 </Form>
             </Modal.Body>

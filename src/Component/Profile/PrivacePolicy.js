@@ -20,8 +20,8 @@ const PrivacyPolicySettings = () => {
   };
 
   const handleSave = () => {
-    // Here you would typically send the settings to your backend API
-    console.log('Saving privacy settings:', privacySettings);
+   
+ 
     alert('Privacy settings saved successfully!');
   };
 

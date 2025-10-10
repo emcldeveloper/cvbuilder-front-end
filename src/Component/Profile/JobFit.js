@@ -23,8 +23,7 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log('Form submitted:', formData);
+ 
     // Then close modal
    setIsModalOpen(false);
   };

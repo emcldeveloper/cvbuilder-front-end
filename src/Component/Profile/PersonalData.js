@@ -10,8 +10,9 @@ import useMalitalstatus from '../../hooks/Universal/MaritalStatus';
 import useRegions from '../../hooks/Universal/Region';
 import usegetCountries from '../../hooks/Universal/Country';
 import useCitizenship from '../../hooks/Universal/Citizenship';
-import { createProfileImage } from '../../Api/Jobseeker/JobSeekerProfileApi';
+import { createBackgroundImage, createProfileImage } from '../../Api/Jobseeker/JobSeekerProfileApi';
 import Swal from 'sweetalert2';
+import moment from "moment";
 
 const ProfileSection = ({ profile, address }) => {
     const applicant_id = localStorage.getItem("applicantId");
@@ -31,13 +32,41 @@ const ProfileSection = ({ profile, address }) => {
     const [Genderoptions, setGenderOptions] = useState([]);
     const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
     const [citizenshipoptions, setCitizenshipOptions] = useState([]);
+    console.log("profile complete to check the data", profile);
+    // const [profileImage, setProfileImage] = useState(
+    //     profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
+    // );
+    // const [bgImage, setBgImage] = useState(
+    //     profile?.background_picture ? `http://127.0.0.1:8000/${profile.background_picture}` : 'http://127.0.0.1:8000/svg/dotted.svg'
+    // );
+    const [profileImage, setProfileImage] = useState('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
+    const [bgImage, setBgImage] = useState('https://ekazi.co.tz/svg/dotted.svg');
 
-    const [profileImage, setProfileImage] = useState(
-        profile?.picture ? `https://ekazi.co.tz/${profile.picture}` : 'https://ekazi.co.tz/uploads/picture/pre_photo.jpg'
-    );
-    const [bgImage, setBgImage] = useState(
-        profile?.background_picture ? `https://ekazi.co.tz/${profile.background_picture}` : 'https://ekazi.co.tz/svg/dotted.svg'
-    );
+    useEffect(() => {
+        if (profile?.picture) {
+            const formattedPath = profile.picture.startsWith('/')
+                ? profile.picture.substring(1)
+                : profile.picture;
+            setProfileImage(`https://ekazi.co.tz/${formattedPath}`);
+        }
+
+        if (profile?.background_picture) {
+            const formattedPath = profile.background_picture.startsWith('/')
+                ? profile.background_picture.substring(1)
+                : profile.background_picture;
+            setBgImage(`https://ekazi.co.tz/${formattedPath}`);
+        }
+    }, [profile]);
+
+    const handleImageError = (type) => (e) => {
+        console.error(`${type} image failed to load:`, e.target.src);
+        if (type === 'background') {
+            setBgImage('https://ekazi.co.tz/svg/dotted.svg');
+        } else {
+            setProfileImage('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
+        }
+    };
+
 
     const [profileFile, setProfileFile] = useState(null);
     const [bgFile, setBgFile] = useState(null);
@@ -158,17 +187,23 @@ const ProfileSection = ({ profile, address }) => {
             formData.append("applicant_id", applicant_id);
 
             // Uncomment and implement your background image API call
-            // const response = await createBackgroundImage(formData);
+            const response = await createBackgroundImage(formData);
+            if (response?.status === 200 || response?.success) {
+                Swal.fire({
+                    title: "Success!",
 
-            // if (response?.status === 200) {
-            Swal.fire({
-                title: "Success!",
-                text: "Background image updated successfully!",
-                icon: "success",
-                confirmButtonText: "OK",
-            });
-            setShowBgModal(false);
-            // }
+                    text: response.success || "Background image updated successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                console.error("API returned unexpected response:", response);
+                throw new Error(response?.message || "Failed to save background image");
+            }
+
+
         } catch (err) {
             console.error(err);
             Swal.fire({
@@ -184,6 +219,26 @@ const ProfileSection = ({ profile, address }) => {
     const handleProfileImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (!validTypes.includes(file.type)) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please select a valid image file (JPEG, PNG, GIF, WEBP)",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
+            if (file.size > maxSize) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "File size must be less than 5MB",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
             setProfileFile(file);
             const reader = new FileReader();
             reader.onload = (event) => setProfileImage(event.target.result);
@@ -224,11 +279,11 @@ const ProfileSection = ({ profile, address }) => {
                     console.log(`${key}: ${value}`);
                 }
             }
-        
 
-          
+
+            console.log("profile image is avaulbel", formData);
             const response = await createProfileImage(formData);
-     
+
 
             if (response?.status === 200 || response?.success) {
                 Swal.fire({
@@ -238,7 +293,7 @@ const ProfileSection = ({ profile, address }) => {
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(() => {
-                    window.location.reload();
+                    setProfileImage(URL.createObjectURL(profileFile));
                 });
             } else {
                 console.error("API returned unexpected response:", response);
@@ -327,6 +382,7 @@ const ProfileSection = ({ profile, address }) => {
                     src={bgImage}
                     loading="lazy"
                     onLoad={(e) => (e.target.style.opacity = 1)}
+                    onError={handleImageError('background')}
                     style={{
                         height: "100px",
                         width: "100%",
@@ -334,6 +390,7 @@ const ProfileSection = ({ profile, address }) => {
                         backgroundColor: '#2995CC'
                     }}
                 />
+
 
                 <Button
                     variant="light"
@@ -459,7 +516,7 @@ const ProfileSection = ({ profile, address }) => {
                                 {address?.postal && `${address.postal}, `}
                                 {address?.sub_location && `${address.sub_location}, `}
                                 {address?.region_name}
-                                {address?.name || 'Tanzania'}
+                                {address?.name || "Tanzania"}
                             </span>
 
                             <Button
@@ -470,6 +527,13 @@ const ProfileSection = ({ profile, address }) => {
                                 <b>|</b> View Contacts
                             </Button>
                         </div>
+
+                        {/* ✅ Add member since here */}
+                        {profile?.created_at && (
+                            <div className="text-muted small mt-1">
+                                Member since {moment(profile.created_at).format("YYYY")}
+                            </div>
+                        )}
                     </Col>
 
                     <Col md={2} className="text-end pe-5">
@@ -483,6 +547,7 @@ const ProfileSection = ({ profile, address }) => {
                         </Button>
                     </Col>
                 </Row>
+
             </Container>
 
             {/* Contact Modal */}

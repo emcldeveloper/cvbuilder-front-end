@@ -29,49 +29,7 @@ const CareerObjectivesSection = ({ applicant, isApplicant }) => {
    }
   
 
-
-//   const hanSubmit = async (e) => {
-//     e.preventDefault();
-//     setIsSubmitting(true);
-//     setError(null);
-    
-//     try {
-//       const response = await axios.post('/api/applicant/objectives/add', {
-//         objective: objective
-//       }, {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-//         }
-//       });
  
-//       console.log('Success:', response.data);
-   
-//       handleCloseEdit();
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'An error occurred');
-//       console.error('Error:', err);
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   const handleDelete = async () => {
-//     setIsSubmitting(true);
-//     try {
-//       const response = await axios.delete(`/api/applicant/objectives/${applicant?.objective?.id}`);
-//       // Handle success
-//       console.log('Deleted:', response.data);
-//       // Update parent state or refetch data
-//       handleCloseDelete();
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'An error occurred');
-//       console.error('Error:', err);
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
   return (
     <>
       

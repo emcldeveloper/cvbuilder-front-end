@@ -49,7 +49,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
   };
     //experince type option
   const { experincetype, loadeexperincetype } = useExperienceType();
-  console.log("chap data",experincetype);
+  
   const AllexperiencetypeOptions = experincetype?.map(experincetype => ({
     value: experincetype.id,
     label: experincetype.name,

@@ -12,7 +12,7 @@ const AddEducationModal = ({ show, onHide }) => {
     const { course, loadingcourse } = useCourse();
     const { major, loadingmajor } = useMajor();
     const {organization,loadorganization}=useOrganization();
-    console.log("course  is available yes", major);
+ 
     const levelOptions = educationLevel.data?.map(level => ({
         value: level.id,
         label: level.education_level
@@ -43,7 +43,7 @@ const AddEducationModal = ({ show, onHide }) => {
         value: organization.id,
         label: organization.organization_name,
     })) || [];
-    console.log("orgnaization list yes",AllOrganizationOptions);
+    
     const [Organizationoptions, setOrganizationOptions] = useState([]);
 
     useEffect(() => setOrganizationOptions(AllOrganizationOptions.slice(0, 10)), [organization]);

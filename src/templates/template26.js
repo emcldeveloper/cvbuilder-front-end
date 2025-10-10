@@ -31,7 +31,7 @@ export default function Template26() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(HTTP error! status: ${res.status});
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((json) => {
@@ -165,7 +165,7 @@ export default function Template26() {
         <img
           src={
             profile?.picture
-              ? ${cvUrl}/${profile.picture}
+              ? `${cvUrl}/${profile.picture}`
               : "https://placehold.co/140x140?text=Photo"
           }
           alt="profile"
@@ -304,12 +304,12 @@ export default function Template26() {
             <Section title="Skills">
               <div className="d-flex flex-wrap">
                 {knowledge.map((k, i) => (
-                  <Badge key={i} className="t26-badge">
+                  <Badge key={`k-${i}`} className="t26-badge">
                     {k?.knowledge?.knowledge_name}
                   </Badge>
                 ))}
                 {software.map((s, i) => (
-                  <Badge key={i} className="t26-badge">
+                  <Badge key={`s-${i}`} className="t26-badge">
                     {s?.software?.software_name}
                   </Badge>
                 ))}
@@ -322,7 +322,7 @@ export default function Template26() {
                 <Section title="Languages">
                   <div className="d-flex flex-wrap">
                     {languages.map((l, i) => (
-                      <Badge key={i} className="t26-badge">
+                      <Badge key={`l-${i}`} className="t26-badge">
                         {l?.language?.language_name}
                       </Badge>
                     ))}
@@ -337,12 +337,12 @@ export default function Template26() {
                 <Section title="Culture & Personality">
                   <div className="d-flex flex-wrap">
                     {culture.map((c, i) => (
-                      <Badge key={i} bg="info" text="dark">
+                      <Badge key={`c-${i}`} bg="info" text="dark">
                         {c?.culture?.culture_name}
                       </Badge>
                     ))}
                     {personalities.map((p, i) => (
-                      <Badge key={i} bg="warning" text="dark">
+                      <Badge key={`p-${i}`} bg="warning" text="dark">
                         {p?.personality?.personality_name}
                       </Badge>
                     ))}
@@ -363,5 +363,5 @@ function Section({ title, children }) {
       <h5 className="t26-section-title">{title}</h5>
       {children}
     </div>
-  );
+  );
 }

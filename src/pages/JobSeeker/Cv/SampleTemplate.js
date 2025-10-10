@@ -39,6 +39,11 @@ import Template22 from "../../../templates/template22";
 import Template23 from "../../../templates/template23";
 import Template24 from "../../../templates/template24";
 import Template25 from "../../../templates/template25";
+import Template26 from "../../../templates/template26";
+import Template27 from "../../../templates/template27";
+import Template28 from "../../../templates/template28";
+import Template29 from "../../../templates/template29";
+import Template30 from "../../../templates/template30";
 import JobSeekerLayout from "../../../layouts/JobSeekerLayout";
 import { CvApi } from "../../../Api/Jobseeker/CvApi";
 
@@ -61,21 +66,26 @@ const SampleTemplate = () => {
         { id: 7, name: "Template 7", image: "/07.jpg", component: <Template7 /> },
         { id: 8, name: "Template 8", image: "/08.jpg", component: <Template8 /> },
         { id: 9, name: "Template 9", image: "/cv9.png", component: <Template9 /> },
-        { id: 10, name: "Template 10", image: "/cv10.png", component: <Template10 /> },
-        { id: 11, name: "Template 11", image: "/cv10.png", component: <Template11 /> },
-        { id: 12, name: "Template 12", image: "/cv10.png", component: <Template12 /> },
-        { id: 13, name: "Template 13", image: "/cv1.png", component: <Template13 /> },
-        { id: 14, name: "Template 14", image: "/cv1.png", component: <Template14 /> },
-        { id: 15, name: "Template 15", image: "/cv1.png", component: <Template15 /> },
-        { id: 17, name: "Template 17", image: "/cv1.png", component: <Template17 /> },
+        { id: 10, name: "Template 10", image: "/cv10.jpg", component: <Template10 /> },
+        { id: 11, name: "Template 11", image: "/cv11.jpg", component: <Template11 /> },
+        { id: 12, name: "Template 12", image: "/cv12.jpg", component: <Template12 /> },
+        { id: 13, name: "Template 13", image: "/cv12.jpg", component: <Template13 /> },
+        { id: 14, name: "Template 14", image: "/cv14.jpg", component: <Template14 /> },
+        { id: 15, name: "Template 15", image: "/cv15.jpg", component: <Template15 /> },
+        { id: 17, name: "Template 17", image: "/cv16.jpg", component: <Template17 /> },
         { id: 18, name: "Template 18", image: "/cv1.png", component: <Template18 /> },
-        { id: 19, name: "Template 19", image: "/cv1.png", component: <Template19 /> },
-        { id: 20, name: "Template 20", image: "/cv1.png", component: <Template20 /> },
-        { id: 21, name: "Template 21", image: "/cv1.png", component: <Template21 /> },
-        { id: 22, name: "Template 22", image: "/cv1.png", component: <Template22 /> },
-        { id: 23, name: "Template 23", image: "/cv1.png", component: <Template23 /> },
-        { id: 24, name: "Template 24", image: "/cv1.png", component: <Template24 /> },
+        { id: 19, name: "Template 19", image: "/cv19.jpg", component: <Template19 /> },
+        { id: 20, name: "Template 20", image: "/cv20.jpg", component: <Template20 /> },
+        { id: 21, name: "Template 21", image: "/cv21.jpg", component: <Template21 /> },
+        { id: 22, name: "Template 22", image: "/cv22.jpg", component: <Template22 /> },
+        { id: 23, name: "Template 23", image: "/cv23.jpg", component: <Template23 /> },
+        { id: 24, name: "Template 24", image: "/cv24.jpg", component: <Template24 /> },
         { id: 25, name: "Template 25", image: "/cv1.png", component: <Template25 /> },
+        { id: 26, name: "Template 26", image: "/cv26.jpg", component: <Template26 /> },
+        { id: 27, name: "Template 27", image: "/cv1.png", component: <Template27 /> },
+        { id: 28, name: "Template 28", image: "/cv1.png", component: <Template28 /> },
+        { id: 29, name: "Template 29", image: "/cv29.jpg", component: <Template29 /> },
+         { id: 30, name: "Template 30", image: "/cv30.jpg", component: <Template30 /> },
 
     ];
 

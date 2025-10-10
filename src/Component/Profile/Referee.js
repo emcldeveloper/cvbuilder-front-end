@@ -21,11 +21,10 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     const handleAddNewReferee = async (refereeData) => {
         setIsSaving(true);
         try {
-            // Add your API call to save new referee
-            console.log("Adding new referee:", refereeData);
+        
             // await api.addReferee(refereeData);
         } catch (error) {
-            console.error("Error adding referee:", error);
+          
         } finally {
             setIsSaving(false);
             setIsModalOpen(false);
@@ -35,11 +34,10 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     const handleUpdateReferee = async (refereeData) => {
         setIsSaving(true);
         try {
-            // Add your API call to update referee
-            console.log("Updating referee:", refereeData);
+           
             // await api.updateReferee(currentReferee.id, refereeData);
         } catch (error) {
-            console.error("Error updating referee:", error);
+          
         } finally {
             setIsSaving(false);
             setIsModalOpen(false);

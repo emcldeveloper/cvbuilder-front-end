@@ -74,10 +74,10 @@ const LeftSideBar = () => {
   // profile image
   const picture = dataprimary?.[0]?.picture
     ? `https://ekazi.co.tz/${dataprimary[0].picture}`
-    : "http://127.0.0.1:8000/uploads/picture/pre_photo.jpg";
+    : "https://ekazi.co.tz/uploads/picture/pre_photo.jpg";
   //background image
-  const backgroundpicture = dataprimary?.[0]?.picture
-    ? `https://ekazi.co.tz/${dataprimary?.[0]?.background_picturee}`
+  const backgroundpicture = dataprimary?.[0]?.background_picture
+    ? `https://ekazi.co.tz/${dataprimary?.[0]?.background_picture}`
     : "https://ekazi.co.tz/svg/dotted.svg";
     
  

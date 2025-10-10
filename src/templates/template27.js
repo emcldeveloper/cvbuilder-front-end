@@ -31,7 +31,7 @@ export default function Template27() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(HTTP error! status: ${res.status});
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((json) => {
@@ -175,10 +175,10 @@ export default function Template27() {
         <img
           src={
             profile?.picture
-              ? ${cvUrl}/${profile.picture}
+              ? `${cvUrl}/${profile.picture}`
               : "https://placehold.co/150x150?text=Photo"
           }
-          alt="profile"
+          alt={fullName}
           className="t27-photo"
         />
       </div>
@@ -191,10 +191,16 @@ export default function Template27() {
             <div className="t27-side-card">
               <h4>Contact</h4>
               <p>
-                <FiPhone className="me-2" /> {phone}
+                <FiPhone className="me-2" />{" "}
+                <a href={`tel:${phone}`} style={{ color: INK }}>
+                  {phone}
+                </a>
               </p>
               <p>
-                <FiMail className="me-2" /> {email}
+                <FiMail className="me-2" />{" "}
+                <a href={`mailto:${email}`} style={{ color: INK }}>
+                  {email}
+                </a>
               </p>
               <p>
                 <FiMapPin className="me-2" /> {location}
@@ -339,8 +345,12 @@ export default function Template27() {
                         {r?.referee_position || "—"}
                       </div>
                       <div>{r?.employer || "—"}</div>
-                      <div className="small">{r?.phone || "—"}</div>
-                      <div className="small">{r?.email || "—"}</div>
+                      <div className="small">
+                        <a href={`tel:${r?.phone}`}>{r?.phone || "—"}</a>
+                      </div>
+                      <div className="small">
+                        <a href={`mailto:${r?.email}`}>{r?.email || "—"}</a>
+                      </div>
                     </div>
                   );
                 })}
@@ -352,4 +362,3 @@ export default function Template27() {
     </Container>
   );
 }
-

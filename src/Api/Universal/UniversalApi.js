@@ -76,8 +76,8 @@ export const getRegions = () =>
     data: res.data.region
   }));
   export const getExperienceType = () =>
-  fetchWithCache('experiencetype', `${UNIVERSAL_APPLICANT_API}/experiencetype`, res => ({
-    data: res.data.experincy_type
+  fetchWithCache('experincytype', `${UNIVERSAL_APPLICANT_API}/experiencetype`, res => ({
+    data: res.data.experincytype
   }));
  
 export const getIndustry = () =>

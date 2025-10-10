@@ -26,13 +26,11 @@ const ApplicantSkillsSection = ({ applicant, isApplicant }) => {
 
     const handleShowEdit = () => setShowEditModal(true);
     const handleCloseEdit = () => setShowEditModal(false);
-    console.log('applicant culture',uniqueCultures)
+ 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log('Form submitted:', formData);
-        // You would typically make an API call here
+    
         handleCloseEdit();
     };
 

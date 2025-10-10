@@ -215,18 +215,45 @@ export const createCulture = async (sendData) => {
         const response = await api.post( `applicant/culturestore`, sendData);
         return response;
     } catch (error) {
-        throw error.response?.data?.message ||
-        error.response?.data?.error ||
-        error.message;
+        throw error;
     }
 };
 
-export const createProfileImage = async (sendData) => {
+export const createProfileImageu = async (sendData) => {
     try {
         const response = await api.post('applicant/profileimagesave', sendData);
         return response.data; // Return only the data part
     } catch (error) {
         // Throw the full error to preserve response data
+        throw error;
+    }
+};
+export const createProfileImage = async (formData) => {
+    try {
+        const response = await api.post('applicant/profileimagesave', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            // withCredentials: true // if using sessions
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+export const createBackgroundImage = async (formData) => {
+    try {
+        const response = await api.post('applicant/backgroundimagesave', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            // withCredentials: true // if using sessions
+        });
+        console.log("the is reach on this api",response);
+        return response.data;
+    } catch (error) {
         throw error;
     }
 };
@@ -304,16 +331,35 @@ export const deleteExperience = async (ExperienceId) => {
 };
 
 
-export const createculture = async (sendData) => {
+export const createculture = async (sendData, retries = 3, delay = 2000) => {
     try {
         const response = await api.post('applicant/culturestore', sendData);
         return response;
     } catch (error) {
-        throw error.response?.data?.message ||
-        error.response?.data?.error ||
-        error.message;
+        // If it's a 429 Too Many Requests
+        if (error.response?.status === 429 && retries > 0) {
+            // Check for Retry-After header from Laravel
+            let retryAfter = error.response.headers["retry-after"];
+            retryAfter = retryAfter ? parseInt(retryAfter, 10) * 1000 : delay;
+
+            console.warn(`429 received. Retrying after ${retryAfter / 1000}s...`);
+
+            // Wait before retry
+            await new Promise(resolve => setTimeout(resolve, retryAfter));
+
+            // Recursive retry
+            return createculture(sendData, retries - 1, delay * 2); // exponential backoff
+        }
+
+        // Otherwise, throw the error
+        throw (
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            error.message
+        );
     }
 };
+
 
 export const createcareer = async(data)=>{
     try {

@@ -34,8 +34,8 @@ export default function Template29() {
 
   useEffect(() => {
     fetch(API)
-      .then((res) => {
-        if (!res.ok) throw new Error(HTTP error! status: ${res.status});
+     .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((json) => {
@@ -164,14 +164,15 @@ export default function Template29() {
         <Row className="align-items-center g-4">
           <Col md={3} className="text-center">
             <img
-              src={
-                profile?.picture
-                  ? ${cvUrl}/${profile.picture}
-                  : "https://placehold.co/150x150?text=Photo"
-              }
+           src={
+            profile?.picture
+              ? `${cvUrl}/${profile.picture}`
+              : "https://placehold.co/150x150?text=Photo"
+          }
               alt="profile"
               className="t29-photo"
             />
+       
           </Col>
           <Col md={9}>
             <div className="t29-name">{fullName}</div>
