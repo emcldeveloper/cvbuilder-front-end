@@ -81,11 +81,11 @@ const SampleTemplate = () => {
         { id: 23, name: "Template 23", image: "/cv23.jpg", component: <Template23 /> },
         { id: 24, name: "Template 24", image: "/cv24.jpg", component: <Template24 /> },
         { id: 25, name: "Template 25", image: "/cv1.png", component: <Template25 /> },
-        { id: 26, name: "Template 26", image: "/cv26.jpg", component: <Template26 /> },
-        { id: 27, name: "Template 27", image: "/cv1.png", component: <Template27 /> },
-        { id: 28, name: "Template 28", image: "/cv1.png", component: <Template28 /> },
-        { id: 29, name: "Template 29", image: "/cv29.jpg", component: <Template29 /> },
-         { id: 30, name: "Template 30", image: "/cv30.jpg", component: <Template30 /> },
+        // { id: 26, name: "Template 26", image: "/cv26.jpg", component: <Template26 /> },
+        // { id: 27, name: "Template 27", image: "/cv1.png", component: <Template27 /> },
+        // { id: 28, name: "Template 28", image: "/cv1.png", component: <Template28 /> },
+        // { id: 29, name: "Template 29", image: "/cv29.jpg", component: <Template29 /> },
+        //  { id: 30, name: "Template 30", image: "/cv30.jpg", component: <Template30 /> },
 
     ];
 
