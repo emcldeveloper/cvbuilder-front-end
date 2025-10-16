@@ -79,8 +79,8 @@ const LeftSideBar = () => {
   const backgroundpicture = dataprimary?.[0]?.background_picture
     ? `https://ekazi.co.tz/${dataprimary?.[0]?.background_picture}`
     : "https://ekazi.co.tz/svg/dotted.svg";
-    
- 
+
+
   return (
     <div className="d-flex flex-column gap-2">
 
@@ -94,10 +94,10 @@ const LeftSideBar = () => {
               height: '80px',
               objectFit: 'cover',
               width: '100%',
-             backgroundImage: `url(${backgroundpicture})`,
+              backgroundImage: `url(${backgroundpicture})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              backgroundColor:'#2995CC'
+              backgroundColor: '#2995CC'
               // https://ekazi.co.tz
               // http://127.0.0.1:8000
             }}
@@ -229,7 +229,11 @@ const LeftSideBar = () => {
           />
           {/* Accordions */}
 
-          <Accordion flush className="text-start mb-1" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <Accordion
+            flush
+            className="text-start mb-1"
+            style={{ maxHeight: "300px", overflowY: "auto" }}
+          >
             {[
               {
                 key: "0",
@@ -239,58 +243,50 @@ const LeftSideBar = () => {
                   { name: "Build Cv", path: "/jobseeker/sample-selection" },
                   { name: "My Cv", path: "/jobseeker/my-resume", count: 5 },
                   { name: "My subscription", path: "/jobseeker/my-resume", count: 5 },
-                  { name: "create cover letter", path: "/jobseeker/cover-letter" }
-                ]
+                  { name: "Create Cover Letter", path: "/jobseeker/cover-letter" },
+                ],
               },
               {
                 key: "1",
-                title: "My Correspondend",
+                title: "My Correspondence",
                 icon: <PersonFill className="me-2" />,
                 items: [
                   { name: "Inbox", path: "/jobseeker/employer-correspondence", count: 10 },
                   { name: "Sent", path: "/jobseeker/employer-correspondence", count: 4 },
-
-                  { name: "Consent Form", onClick: () => setShowConsentModal(true) }
-                ]
+                  { name: "Consent Form", onClick: () => setShowConsentModal(true) },
+                ],
               },
               {
                 key: "2",
                 title: "My Application",
                 icon: <BriefcaseFill className="me-2" />,
                 items: [
-                  { name: "My Application", path: "/jobseeker/My-application", count: 8 },
+                  { name: "My Applied Job", path: "/jobseeker/My-application", count: 8 },
                   { name: "History", path: "/jobseeker/history", count: 2 },
-                  { name: "Saved Jobs", path: "/jobseeker/saved-jobs", count: 20 },
+                  { name: "Saved Jobs", path: "/jobseeker/saved-jobs", count: 120 },
                   { name: "Job Match", path: "/jobseeker/job-match", count: 3 },
-                ]
+                ],
               },
-              // {
-              //   key: "3",
-              //   title: "My Job Search",
-              //   icon: <Search className="me-2" />,
-              //   items: [
-              //     { name: "Saved Searches", path: "/jobseeker/saved-searches", count: 7 },
-              //     { name: "Recent Searches", path: "/jobseeker/recent-searches", count: 12 }
-              //   ]
-              // },
               {
                 key: "4",
                 title: "Resources",
                 icon: <BookFill className="me-2" />,
                 items: [
                   { name: "Resume Tips", path: "/jobseeker/resume-tips" },
-                  { name: "Interview Tips", path: "/jobseeker/interview-tips" }
-                ]
+                  { name: "Interview Tips", path: "/jobseeker/interview-tips" },
+                ],
               },
-            ].map(section => (
+            ].map((section) => (
               <Accordion.Item
                 eventKey={section.key}
                 key={section.key}
                 className="border-0"
               >
-                <Accordion.Header className="small py-0   border-top px-0" style={{ fontSize: '0.8rem' }} >
+                <Accordion.Header
+                  className="small py-0 border-top px-0"
+                  style={{ fontSize: "0.8rem" }}
+                >
                   <div className="d-flex align-items-center">
-                    {/* {section.icon} */}
                     {React.cloneElement(section.icon, { size: 14 })}
                     <span>{section.title}</span>
                   </div>
@@ -304,10 +300,24 @@ const LeftSideBar = () => {
                         action
                         onClick={item.onClick || (() => navigate(item.path))}
                       >
-                        <span className="text-decoration-none cursor-pointer">{item.name}</span>
+                        <span className="text-decoration-none cursor-pointer">
+                          {item.name}
+                        </span>
                         {item.count !== undefined && (
-                          <span className="badge bg-secondary rounded-pill" style={{ fontSize: '0.65rem' }}>
-                            {item.count}
+                          <span
+                            className="badge bg-secondary rounded-circle"
+                            style={{
+                              fontSize: "0.65rem",
+                              minWidth: "29px",
+                              height: "29px",
+                              lineHeight: "29px",
+                              display: "inline-flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              marginRight: "20px", // ✅ space on right
+                            }}
+                          >
+                            {item.count > 99 ? "99+" : item.count}
                           </span>
                         )}
                       </ListGroup.Item>
@@ -317,6 +327,7 @@ const LeftSideBar = () => {
               </Accordion.Item>
             ))}
           </Accordion>
+
         </Card.Body>
       </Card>
       <Modal show={showAvailabilityModal} onHide={() => setShowAvailabilityModal(false)}>

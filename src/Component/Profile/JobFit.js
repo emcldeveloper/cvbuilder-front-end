@@ -89,7 +89,7 @@ const JobsFitSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
               <Card className="border-0">
                 <Card.Body className="p-1">
                   <div className="d-flex flex-column flex-md-row align-items-start">
-                    <div className="me-md-2" style={{ minWidth: '150px' }}>
+                    <div className="me-md-2" style={{ minWidth: '200px' }}>
                       <h6 className="fw-bold mb-0">{industryName}</h6>
                     </div>
                     <div className="flex-grow-1">

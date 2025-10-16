@@ -1,4 +1,4 @@
-// Template6.jsx — Template1 data model + Template6 UI
+// Template6.jsx — Final Improved Full Version (with complete live data mapping)
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -21,24 +21,23 @@ import {
 } from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
- 
+
 const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
 const CV_BASE = "https://ekazi.co.tz";
-// Brand color for Template6 UI
 const BRAND = "#d36314";
 const BRAND_DARK = "#8B3A0F";
 
 // ------- Small UI helpers -------
-const SectionTitle = ({ icon: Icon, children, light = false }) => (
+const SectionTitle = ({ icon: Icon, children }) => (
   <div className="d-flex align-items-center gap-2 mb-3">
-    <Icon size={16} />
-    <h5 className={`fw-bold mb-0 ${light ? "text-light" : ""}`}>{children}</h5>
+    <Icon size={16} color={BRAND} />
+    <h5 className="fw-bold mb-0 text-dark">{children}</h5>
     <div
       style={{
         height: 3,
         background: BRAND,
-        width: 90,
-        marginLeft: 6,
+        width: 50,
+        marginLeft: 4,
         borderRadius: 2,
       }}
     />
@@ -47,13 +46,13 @@ const SectionTitle = ({ icon: Icon, children, light = false }) => (
 
 const TimelineItem = ({ title, right, subtitle, children }) => (
   <div className="pb-3 mb-3 position-relative">
-    <div className="d-flex justify-content-between align-items-start">
+    <div className="d-flex justify-content-between align-items-start flex-wrap">
       <div className="pe-3">
         <div className="fw-semibold">{title}</div>
         {subtitle && <div className="text-muted small">{subtitle}</div>}
       </div>
       {right && (
-        <Badge bg="light" text="dark" className="border">
+        <Badge bg="light" text="dark" className="border mt-1">
           {right}
         </Badge>
       )}
@@ -75,16 +74,15 @@ const TimelineItem = ({ title, right, subtitle, children }) => (
 
 // ================== COMPONENT ==================
 const Template6 = () => {
-  // ------- Fetch (from Template1) -------
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetch(API)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
+       .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
       })
       .then((json) => {
         setPayload(json?.data || {});
@@ -118,7 +116,7 @@ const Template6 = () => {
     );
   }
 
-  // ------- Parse (same as Template1, safely) -------
+  // ------- Parse Data -------
   const profiles = Array.isArray(payload?.applicant_profile)
     ? payload.applicant_profile
     : [];
@@ -226,22 +224,12 @@ const Template6 = () => {
           ed?.qualification?.qualification ||
           ed?.degree ||
           "—",
-        yearRange:
-          (start.isValid() ? start.format("YYYY") : "") +
-          (start.isValid() || end.isValid() ? " - " : "") +
-          (end.isValid()
-            ? end.format("YYYY")
-            : start.isValid()
-            ? "Present"
-            : ""),
-        period:
-          (start.isValid() ? start.format("MMM YYYY") : "") +
-          (start.isValid() || end.isValid() ? " – " : "") +
-          (end.isValid() ? end.format("MMM YYYY") : ""),
+        start: start.isValid() ? start.format("MMM YYYY") : "—",
+        end: end.isValid() ? end.format("MMM YYYY") : "Present",
       };
     });
 
-  // ================== RENDER (Template6 UI) ==================
+  // ================== RENDER ==================
   return (
     <Container
       fluid
@@ -249,11 +237,18 @@ const Template6 = () => {
       style={{
         fontFamily:
           '"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        background: "#f8fafc",
       }}
     >
-      <Row className="mx-auto" style={{ maxWidth: 1100 }}>
-        {/* Header / Hero */}
-        <Col xs={12} className="mb-4">
+      <Row
+        className="mx-auto g-4"
+        style={{
+          maxWidth: 1100,
+          alignItems: "stretch",
+        }}
+      >
+        {/* HEADER */}
+        <Col xs={12}>
           <Card className="border-0 shadow-sm">
             <Card.Body className="p-4 d-flex align-items-center gap-4">
               <Image
@@ -262,28 +257,27 @@ const Template6 = () => {
                     ? `${CV_BASE}/${profiles[0].picture}`
                     : "https://placehold.co/140x140?text=Photo"
                 }
+                   
                 onError={(e) =>
                   (e.currentTarget.src =
                     "https://placehold.co/140x140?text=Photo")
                 }
                 alt="Profile"
                 roundedCircle
-                style={{
-                  border: `6px solid ${BRAND}`,
-                  width: 140,
-                  height: 140,
-                  objectFit: "cover",
-                }}
+              style={{
+                border: `6px solid ${BRAND}`, // ✅ use backticks to form a string
+                width: 140,
+                height: 140,
+                objectFit: "cover",
+              }}
+
               />
               <div className="flex-grow-1">
                 <div className="text-uppercase small text-muted">
                   {currentTitle}
                 </div>
-                <h2 className="fw-extrabold mb-1" style={{ color: BRAND }}>
-                  {fullName?.split(" ")?.slice(0, -1).join(" ") || fullName}{" "}
-                  <span className="text-dark">
-                    {fullName?.split(" ").slice(-1)[0] || ""}
-                  </span>
+                <h2 className="fw-bold mb-1" style={{ color: BRAND }}>
+                  {fullName}
                 </h2>
                 <div
                   style={{
@@ -294,150 +288,144 @@ const Template6 = () => {
                   }}
                 />
               </div>
-              <div className="d-none d-md-block">
-                <div className="d-flex flex-column small">
-                  <span className="mb-1">
-                    <FiPhone /> {primaryPhone}
-                  </span>
-                  <span className="mb-1">
-                    <FiMail /> {primaryEmail}
-                  </span>
-                  <span>
-                    <FiMapPin /> {primaryAddress}
-                  </span>
+              <div className="d-none d-md-block small">
+                <div className="mb-1">
+                  <FiPhone /> {primaryPhone}
+                </div>
+                <div className="mb-1">
+                  <FiMail /> {primaryEmail}
+                </div>
+                <div>
+                  <FiMapPin /> {primaryAddress}
                 </div>
               </div>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* Left column (About + Skills) */}
-        <Col md={4} className="mb-4">
+        {/* LEFT COLUMN */}
+        <Col md={4}>
           <Card className="border-0 shadow-sm h-100">
             <Card.Body className="p-4">
               <SectionTitle icon={FiUser}>About Me</SectionTitle>
-              <p className="text-muted small">{summary}</p>
+              <p className="text-muted small text-justify">{summary}</p>
+              <hr className="my-3" style={{ opacity: 0.15 }} />
 
-              {/* Culture / Personality / Software / Skills / Tools */}
-              <div className="mt-4">
-                <SectionTitle icon={FiBookOpen}>Skills & Profile</SectionTitle>
+              <SectionTitle icon={FiBookOpen}>Skills & Profile</SectionTitle>
 
-                <div className="d-flex align-items-start gap-2 mb-2">
-                  <strong style={{ minWidth: 115 }} className="small">
-                    Culture Fit:
-                  </strong>
-                  <span className="small text-muted">
-                    {culture.length
-                      ? culture
-                          .map(
-                            (c) =>
-                              c?.culture?.culture_name ||
-                              c?.culture_name ||
-                              c?.name
-                          )
-                          .filter(Boolean)
-                          .join(", ")
-                      : "—"}
-                  </span>
-                </div>
-
-                <div className="d-flex align-items-start gap-2 mb-2">
-                  <strong style={{ minWidth: 115 }} className="small">
-                    Personality:
-                  </strong>
-                  <span className="small text-muted">
-                    {personalities.length
-                      ? personalities
-                          .map((p) => p?.personality?.personality_name)
-                          .filter(Boolean)
-                          .join(", ")
-                      : "—"}
-                  </span>
-                </div>
-
-                <div className="d-flex align-items-start gap-2 mb-2">
-                  <strong style={{ minWidth: 115 }} className="small">
-                    Software:
-                  </strong>
-                  <span className="small text-muted">
-                    {software.length
-                      ? software
-                          .map(
-                            (s) =>
-                              s?.software?.software_name || s?.software_name
-                          )
-                          .filter(Boolean)
-                          .join(", ")
-                      : "—"}
-                  </span>
-                </div>
-
-                <div className="d-flex align-items-start gap-2 mb-2">
-                  <strong style={{ minWidth: 115 }} className="small">
-                    Skills:
-                  </strong>
-                  <span className="small text-muted">
-                    {skills.length
-                      ? skills
-                          .map(
-                            (k) =>
-                              k?.knowledge?.knowledge_name || k?.knowledge_name
-                          )
-                          .filter(Boolean)
-                          .join(", ")
-                      : "—"}
-                  </span>
-                </div>
-
-                <div className="d-flex align-items-start gap-2">
-                  <strong style={{ minWidth: 115 }} className="small">
-                    Tools:
-                  </strong>
-                  <span className="small text-muted">
-                    {tools.length
-                      ? tools
-                          .map((t) => t?.tool?.tool_name || t?.tool_name)
-                          .filter(Boolean)
-                          .join(", ")
-                      : "—"}
-                  </span>
-                </div>
+              {/* Culture Fit */}
+              <div className="d-flex align-items-start gap-2 mb-2 small">
+                <strong style={{ minWidth: 100 }}>Culture Fit:</strong>
+                <span className="text-muted">
+                  {culture.length
+                    ? culture
+                        .map(
+                          (c) =>
+                            c?.culture?.culture_name ||
+                            c?.culture_name ||
+                            c?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </span>
               </div>
+
+              {/* Personality */}
+              <div className="d-flex align-items-start gap-2 mb-2 small">
+                <strong style={{ minWidth: 100 }}>Personality:</strong>
+                <span className="text-muted">
+                  {personalities.length
+                    ? personalities
+                        .map((p) => p?.personality?.personality_name)
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </span>
+              </div>
+
+              {/* Software */}
+              <div className="d-flex align-items-start gap-2 mb-2 small">
+                <strong style={{ minWidth: 100 }}>Software:</strong>
+                <span className="text-muted">
+                  {software.length
+                    ? software
+                        .map(
+                          (s) =>
+                            s?.software?.software_name ||
+                            s?.software_name ||
+                            s?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </span>
+              </div>
+
+              {/* Skills */}
+              <div className="d-flex align-items-start gap-2 mb-2 small">
+                <strong style={{ minWidth: 100 }}>Skills:</strong>
+                <span className="text-muted">
+                  {skills.length
+                    ? skills
+                        .map(
+                          (k) =>
+                            k?.knowledge?.knowledge_name ||
+                            k?.knowledge_name ||
+                            k?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </span>
+              </div>
+
+              {/* Tools */}
+              <div className="d-flex align-items-start gap-2 small">
+                <strong style={{ minWidth: 100 }}>Tools:</strong>
+                <span className="text-muted">
+                  {tools.length
+                    ? tools
+                        .map(
+                          (t) => t?.tool?.tool_name || t?.tool_name || t?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
+                </span>
+              </div>
+
+              <hr className="my-3" style={{ opacity: 0.15 }} />
 
               {/* Languages */}
-              <div className="mt-4">
-                <SectionTitle icon={FiGlobe}>Languages</SectionTitle>
-                <ul className="mb-0 small">
-                  {languages.length ? (
-                    languages.map((language, i) => (
-                      <li key={i}>
-                        {language?.language?.language_name || "—"}
-                      </li>
-                    ))
-                  ) : (
-                    <li>—</li>
-                  )}
-                </ul>
-              </div>
+              <SectionTitle icon={FiGlobe}>Languages</SectionTitle>
+              <ul className="mb-0 small ps-3">
+                {languages.length ? (
+                  languages.map((language, i) => (
+                    <li key={i}>{language?.language?.language_name || "—"}</li>
+                  ))
+                ) : (
+                  <li>—</li>
+                )}
+              </ul>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* Right column (Experience + Education + Referees) */}
-        <Col md={8} className="mb-4">
+        {/* RIGHT COLUMN */}
+        <Col md={8}>
           <Card className="border-0 shadow-sm h-100">
             <Card.Body className="p-4">
-              {/* Experience */}
               <SectionTitle icon={FiBriefcase}>Job Experience</SectionTitle>
               <div
                 className="ps-3 border-start"
-                style={{ borderColor: "#eee", borderWidth: 2 }}
+                style={{ borderColor: "#eee" }}
               >
                 {work.length > 0 ? (
                   work.map((exp, i) => (
                     <TimelineItem
                       key={i}
-                      title={`${exp.title} — ${exp.company}`}
+                      title={'${exp.title} — ${exp.company}'}
                       subtitle={
                         [exp.industry, exp.location && exp.location.trim()]
                           .filter(Boolean)
@@ -463,36 +451,50 @@ const Template6 = () => {
                 )}
               </div>
 
-              {/* Education */}
+              {/* EDUCATION */}
               <div className="mt-4">
                 <SectionTitle icon={FiBookOpen}>Education</SectionTitle>
-                <div
-                  className="ps-3 border-start"
-                  style={{ borderColor: "#eee", borderWidth: 2 }}
-                >
-                  {eduVM.length > 0 ? (
-                    eduVM.map((edu, i) => (
-                      <TimelineItem
-                        key={i}
-                        title={`${edu.course} — ${edu.school}`}
-                        right={edu.yearRange}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-muted small mb-0">
-                      No education records available.
-                    </p>
-                  )}
+                <div className="table-responsive">
+                  <table className="table table-bordered align-middle mb-0 small">
+                    <thead
+                      style={{
+                        backgroundColor: BRAND,
+                        color: "#fff",
+                      }}
+                    >
+                      <tr>
+                        <th>Institution</th>
+                        <th>Course</th>
+                        <th style={{ textAlign: "center" }}>Start</th>
+                        <th style={{ textAlign: "center" }}>End</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {eduVM.length ? (
+                        eduVM.map((ed, i) => (
+                          <tr key={i}>
+                            <td>{ed.school}</td>
+                            <td>{ed.course}</td>
+                            <td className="text-center">{ed.start}</td>
+                            <td className="text-center">{ed.end}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4" className="text-center text-muted">
+                            No education records available.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
-              {/* Referees */}
+              {/* REFEREES */}
               <div className="mt-4">
                 <SectionTitle icon={FiUser}>Referees</SectionTitle>
-                <ul
-                  className="p-0 list-unstyled mb-0"
-                  style={{ fontSize: "0.95rem" }}
-                >
+                <ul className="p-0 list-unstyled mb-0 small">
                   {referees.length > 0 ? (
                     referees.map((r, index) => {
                       const name = [r?.first_name, r?.middle_name, r?.last_name]
@@ -501,11 +503,11 @@ const Template6 = () => {
                       return (
                         <li key={index} className="mb-2 text-start">
                           <div className="fw-semibold">{name || "—"}</div>
-                          <div className="small text-muted">
+                          <div className="text-muted">
                             {r?.referee_position || "—"} • {r?.employer || "—"}
                           </div>
-                          <div className="small">{r?.email || "—"}</div>
-                          <div className="small">{r?.phone || "—"}</div>
+                          <div>{r?.email || "—"}</div>
+                          <div>{r?.phone || "—"}</div>
                         </li>
                       );
                     })
@@ -520,7 +522,7 @@ const Template6 = () => {
       </Row>
 
       {/* Footer stripe */}
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+      <div className="mx-auto mt-4" style={{ maxWidth: 1100 }}>
         <div
           style={{
             height: 8,
@@ -531,8 +533,30 @@ const Template6 = () => {
           }}
         />
       </div>
+
+      {/* INLINE STYLE IMPROVEMENTS */}
+      <style>{`
+        body { font-family: "Inter", sans-serif; background: #f8fafc; }
+        .card { border-radius: 10px; }
+        .table th, .table td {
+          padding: 0.6rem 0.75rem;
+          vertical-align: middle;
+        }
+        .table thead th {
+          font-weight: 600;
+          letter-spacing: .02em;
+        }
+        .table tbody tr:nth-of-type(odd) {
+          background-color: #f9fbfd;
+        }
+        .table tbody tr:hover {
+          background-color: #f3f6fb;
+        }
+        .text-justify { text-align: justify; }
+      `}</style>
     </Container>
   );
 };
 
 export default Template6;
+

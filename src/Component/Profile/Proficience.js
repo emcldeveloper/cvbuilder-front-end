@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import AddProficiencyModal from '../Forms/JobSeeker/Proficiency';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 const ProficiencyQualifications = ({ applicant }) => {
 
@@ -80,11 +81,7 @@ const ProficiencyQualifications = ({ applicant }) => {
                             applicant.proficiency.map((proficiency, index) => (
                                 <div key={index} className="d-flex mb-3 proficiency-item">
                                     <div className="me-3 mt-1">
-                                        <FontAwesomeIcon
-                                            icon={faMedal}
-                                            className="text-primaryu"
-                                            style={{ fontSize: '1.5rem' }}
-                                        />
+                                     <StarOutlineIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
                                     </div>
                                     <div className="flex-grow-1">
                                         <div className="d-flex justify-content-between">

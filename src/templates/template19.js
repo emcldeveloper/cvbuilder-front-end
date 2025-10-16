@@ -1,4 +1,4 @@
-// Template19.jsx — Premium Split CV | Brand #0c2b3b + Red Hat Display
+// Template19.jsx — Premium Split CV | Refined Design (Brand #0c2b3b + Red Hat Display)
 import { useEffect, useState, useMemo } from "react";
 import {
   Container,
@@ -21,9 +21,8 @@ const INK = "#222";
 
 /* Helpers */
 function formatMY(d) {
-  if (!d) return null;
   const m = moment(d);
-  return m.isValid() ? m.format("MMM YYYY") : null;
+  return m.isValid() ? m.format("MMM YYYY") : "—";
 }
 
 export default function Template19() {
@@ -34,7 +33,8 @@ export default function Template19() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error( `HTTP error! status: ${res.status} `);
+       
         return res.json();
       })
       .then((json) => {
@@ -86,72 +86,120 @@ export default function Template19() {
     [profile]
   );
 
-  if (loading) {
+  if (loading)
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
+        style={{ height: "70vh" }}
       >
         <Spinner animation="border" style={{ color: BRAND }} />
         <span className="ms-3">Loading CV…</span>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Container className="py-4">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
-  }
 
   return (
-    <Container fluid className="my-4">
-      {/* Font */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-      <style>{`
-        .t19-root { font-family: 'Red Hat Display', sans-serif; color: ${INK}; }
-        .t19-hero { background: ${BRAND}; color: #fff; padding: 2.5rem 2rem; }
-        .t19-photo {
-          width: 170px; height: 200px; border-radius: 12px; overflow: hidden;
-          border: 5px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,.25);
-        }
-        .t19-name { font-size: 2rem; font-weight: 700; margin-bottom: .25rem; }
-        .t19-sub { font-size: 1.1rem; opacity: 0.9; }
-        .t19-title {
-          color: ${BRAND}; font-weight: 700; margin-bottom: 1rem;
-          text-transform: uppercase; font-size: 1rem;
-          border-bottom: 2px solid ${BRAND}; padding-bottom: .25rem;
-          display: flex; align-items: center; gap: .5rem;
-        }
-        .t19-badge { background: ${BRAND}; color: #fff; }
-        .t19-card { border: 0; box-shadow: 0 4px 14px rgba(0,0,0,.06); margin-bottom: 1.5rem; }
-        .t19-timeline { border-left: 3px solid ${BRAND}; margin-left: .75rem; padding-left: 1rem; }
-        .t19-timeline-item { position: relative; margin-bottom: 1.5rem; }
-        .t19-timeline-item::before {
-          content: ''; width: 14px; height: 14px; border-radius: 50%;
-          background: ${BRAND}; position: absolute; left: -24px; top: 4px;
-        }
-      `}</style>
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-start py-5 px-3 px-md-5"
+      style={{ minHeight: "100vh", background: "#f6f7f8" }}
+    >
+      <div
+        className="t19-root w-100 shadow-lg rounded-4 overflow-hidden"
+        style={{ maxWidth: "1100px", background: "#fff" }}
+      >
+        {/* Fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
 
-      <div className="t19-root">
-        {/* Hero */}
+        {/* Styles */}
+        <style>{`
+          .t19-root { font-family: 'Red Hat Display', sans-serif; color: ${INK}; }
+          .t19-hero {
+            background: ${BRAND};
+            color: #fff;
+            padding: 3rem 2.5rem;
+            border-radius: 0 0 40px 40px;
+          }
+          .t19-photo {
+            width: 180px; height: 210px; border-radius: 16px;
+            overflow: hidden; border: 5px solid #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,.25);
+          }
+          .t19-name { font-size: 2.4rem; font-weight: 700; margin-bottom: .3rem; }
+          .t19-sub { font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem; }
+          .t19-title {
+            color: ${BRAND};
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1rem;
+            border-bottom: 2px solid ${BRAND};
+            padding-bottom: .25rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            margin-bottom: 1rem;
+          }
+          .t19-card {
+            border: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+            margin-bottom: 1.5rem;
+          }
+          .t19-timeline {
+            border-left: 3px solid ${BRAND};
+            margin-left: .75rem;
+            padding-left: 1rem;
+          }
+          .t19-timeline-item {
+            position: relative;
+            margin-bottom: 1.25rem;
+          }
+          .t19-timeline-item::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: ${BRAND};
+            position: absolute;
+            left: -23px;
+            top: 4px;
+          }
+          .t19-badge {
+            background: ${BRAND};
+            color: #fff;
+          }
+          @media (max-width: 768px) {
+            .t19-hero { text-align: center; padding: 2.2rem 1.5rem; border-radius: 0 0 24px 24px; }
+            .t19-name { font-size: 1.8rem; }
+            .t19-photo { width: 150px; height: 180px; margin: 1.5rem auto 0 auto; }
+          }
+        `}</style>
+
+        {/* ===== HERO ===== */}
         <div className="t19-hero">
           <Row className="align-items-center g-4">
             <Col md={8}>
               <div className="t19-name">{fullName}</div>
               <div className="t19-sub">{currentPosition}</div>
+              <p className="mb-0" style={{ maxWidth: "600px" }}>
+                {intro}
+              </p>
             </Col>
             <Col md={4} className="text-md-end text-center">
-              <div className="t19-photo">
+              <div className="t19-photo mx-auto mx-md-0">
                 <img
                   src={
                     profile?.picture
-                      ? `${cvUrl}/${profile.picture}`
+                      ?  `${cvUrl}/${profile.picture} `
                       : "https://placehold.co/170x200?text=Photo"
                   }
                   alt="profile"
@@ -162,8 +210,8 @@ export default function Template19() {
           </Row>
         </div>
 
-        {/* Content */}
-        <Row className="g-4 mt-3 px-3 px-md-5">
+        {/* ===== CONTENT ===== */}
+        <Row className="g-4 mt-4 px-3 px-md-5 pb-5">
           {/* Sidebar */}
           <Col md={4}>
             <Card body className="t19-card">
@@ -278,8 +326,10 @@ export default function Template19() {
                         .join(" ");
                       return (
                         <Col md={6} key={i} className="mb-3">
-                          <Card body className="shadow-sm border-0">
-                            <strong>{rname || "—"}</strong>
+                          <Card body className="shadow-sm border-0 rounded-3">
+                            <strong style={{ color: BRAND }}>
+                              {rname || "—"}
+                            </strong>
                             <div className="text-muted small">
                               {r?.referee_position || "—"}
                             </div>
@@ -301,6 +351,7 @@ export default function Template19() {
   );
 }
 
+/* --- Components --- */
 function Section({ title, children, icon }) {
   return (
     <div className="mb-3">
@@ -328,7 +379,7 @@ function Timeline({ items, isExperience }) {
               : item?.college?.college_name || item?.institution || ""}
           </div>
           <div className="text-muted small">
-            {formatMY(item?.start_date || item?.started) || "—"} –{" "}
+            {formatMY(item?.start_date || item?.started)} –{" "}
             {formatMY(item?.end_date || item?.ended) || "Present"}
           </div>
           {item?.responsibility && (
@@ -347,3 +398,4 @@ function Timeline({ items, isExperience }) {
     </div>
   );
 }
+

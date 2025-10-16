@@ -1,4 +1,4 @@
-// TemplateC.jsx
+
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -18,27 +18,6 @@ const CV_BASE = "https://ekazi.co.tz";
 const BRAND = "#1756a5";
 const BRAND_DARK = "#0e3668";
 const BRAND_LIGHT = "#e6eef8";
-
-function formatMY(d) {
-  if (!d) return "";
-  try {
-    return new Date(d).toLocaleDateString("en-GB", {
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return "";
-  }
-}
-
-function formatY(d) {
-  if (!d) return "";
-  try {
-    return new Date(d).getFullYear();
-  } catch {
-    return "";
-  }
-}
 
 export default function Template3() {
   const [payload, setPayload] = useState(null);
@@ -83,28 +62,25 @@ export default function Template3() {
     );
   }
 
-  const fmtMY = (d) => {
-    const m = moment(d);
-    return m.isValid() ? m.format("MMM YYYY") : "—";
-  };
+const formatMY = (d) => {
+  const m = moment(d);
+  return m.isValid() ? m.format("MMM YYYY") : "—";
+};
 
-  const profiles = Array.isArray(payload?.applicant_profile)
-    ? payload.applicant_profile
-    : [];
+ 
+
+
+  const profiles = payload?.applicant_profile || [];
   const profile = profiles[0] || {};
-  const experiences = Array.isArray(payload?.experience)
-    ? payload.experience
-    : [];
-  const referees = Array.isArray(payload?.referees) ? payload.referees : [];
-  const addresses = Array.isArray(payload?.address) ? payload.address : [];
-  const education = Array.isArray(payload?.education) ? payload.education : [];
-  const languages = Array.isArray(payload?.language) ? payload.language : [];
-  const knowledge = Array.isArray(payload?.knowledge) ? payload.knowledge : [];
-  const software = Array.isArray(payload?.software) ? payload.software : [];
-  const culture = Array.isArray(payload?.culture) ? payload.culture : [];
-  const personalities = Array.isArray(payload?.applicant_personality)
-    ? payload.applicant_personality
-    : [];
+  const experiences = payload?.experience || [];
+  const referees = payload?.referees || [];
+  const addresses = payload?.address || [];
+  const education = payload?.education || [];
+  const languages = payload?.language || [];
+  const knowledge = payload?.knowledge || [];
+  const software = payload?.software || [];
+  const culture = payload?.culture || [];
+  const personalities = payload?.applicant_personality || [];
 
   const phone =
     payload?.phone?.phone_number ||
@@ -145,58 +121,57 @@ export default function Template3() {
       .map((t) => normalizeBulletText(t))
       .filter(Boolean);
   }
+const workRows = experiences.map((e) => ({
+  org:
+    e?.employer?.employer_name ||
+    e?.institution ||
+    e?.organization ||
+    e?.company ||
+    "—",
+  dates: `${formatMY(e?.start_date)} — ${formatMY(e?.end_date) || "Present"}`,
+  role: e?.position?.position_name || e?.title || "—",
+  bullets: splitLines(e?.responsibility || ""),
+}));
 
-  const workRows = experiences.map((e) => ({
-    org:
-      e?.employer?.employer_name ||
-      e?.institution ||
-      e?.organization ||
-      e?.company ||
-      "—",
-    dates: `${formatMY(e?.start_date)} — ${formatMY(e?.end_date) || "Present"}`,
-    role: e?.position?.position_name || e?.title || "—",
-    bullets: splitLines(e?.responsibility || ""),
-  }));
+
 
   return (
-    <Container className="my-4">
+    <Container className="my-4 d-flex justify-content-center">
       <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet"
       />
-      <Card className="shadow-sm overflow-hidden">
+      <Card
+        className="shadow-sm overflow-hidden"
+        style={{
+          maxWidth: 900,
+          width: "100%",
+          borderRadius: 8,
+          border: "1px solid #e5e7eb",
+        }}
+      >
         <Row className="g-0">
-          <Col xs={12} lg={4} className="border-end">
+          {/* Sidebar */}
+          <Col xs={12} lg={4} className="sidebar border-end">
             <div
-              className="position-relative"
-              style={{ background: BRAND_LIGHT, height: 240 }}
+              className="d-flex justify-content-center align-items-center position-relative"
+              style={{
+                background: BRAND_LIGHT,
+                minHeight: 220,
+                padding: "1.5rem 0",
+              }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  right: 32,
-                  top: 28,
-                  width: 34,
-                  height: 110,
-                  background: BRAND,
-                  clipPath: "polygon(30% 0, 100% 0, 70% 100%, 0 100%)",
-                  boxShadow: "0 6px 10px rgba(23,86,165,.25)",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  left: 28,
-                  bottom: -46,
-                  width: 210,
-                  height: 210,
+                  width: 180,
+                  height: 180,
                   borderRadius: 12,
                   overflow: "hidden",
-                  boxShadow: "0 12px 24px rgba(0,0,0,.15)",
+                  boxShadow: "0 10px 20px rgba(0,0,0,.15)",
                   background: "#fff",
                 }}
               >
-                <img
+             <img
                   src={
                     profile?.picture
                       ? `${CV_BASE}/${profile.picture}`
@@ -214,9 +189,9 @@ export default function Template3() {
 
             <div
               className="px-3 px-lg-3"
-              style={{ paddingTop: 60, paddingBottom: 24 }}
+              style={{ paddingTop: 24, paddingBottom: 24 }}
             >
-              <AsideCard title="Address">
+              <AsideCard className="brand-color" title="Address">
                 <div className="text-secondary">{location}</div>
               </AsideCard>
 
@@ -230,45 +205,20 @@ export default function Template3() {
 
               <AsideCard title="Contacts">
                 <ListGroup variant="flush">
-                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2">
-                    <span
-                      className="d-inline-grid place-items-center rounded-pill"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        background: BRAND,
-                        color: "#fff",
-                        position: "relative",
-                      }}
-                    >
+                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2 flex-wrap">
+                    <span className="contact-icon">
                       <FiMail />
                     </span>
                     <span className="text-wrap">{email}</span>
                   </ListGroup.Item>
-                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2">
-                    <span
-                      className="d-inline-grid place-items-center rounded-pill"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        background: BRAND,
-                        color: "#fff",
-                      }}
-                    >
+                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2 flex-wrap">
+                    <span className="contact-icon">
                       <FiPhone />
                     </span>
                     <span>{phone}</span>
                   </ListGroup.Item>
-                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2">
-                    <span
-                      className="d-inline-grid place-items-center rounded-pill"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        background: BRAND,
-                        color: "#fff",
-                      }}
-                    >
+                  <ListGroup.Item className="px-0 d-flex align-items-center gap-2 flex-wrap">
+                    <span className="contact-icon">
                       <FiMapPin />
                     </span>
                     <span className="text-wrap">{location}</span>
@@ -276,7 +226,7 @@ export default function Template3() {
                 </ListGroup>
               </AsideCard>
 
-              <AsideCard title="Languages">
+          <AsideCard title="Languages">
                 {languages.length ? (
                   <ul className="mb-0 ps-3">
                     {languages.map((l, i) => (
@@ -289,8 +239,7 @@ export default function Template3() {
                   <div className="text-muted small">—</div>
                 )}
               </AsideCard>
-
-              <AsideCard title="Skills">
+               <AsideCard title="Skills">
                 {knowledge.length ? (
                   <ul className="mb-0 ps-3">
                     {knowledge.map((k, i) => (
@@ -306,10 +255,10 @@ export default function Template3() {
 
               <AsideCard title="Software">
                 {software.length ? (
-                  <ul className="mb-0 ps-3">
-                    {software.map((s, i) => (
-                      <li key={`s-${i}`} className="mb-1">
-                        {s?.software?.software_name}
+                <ul className="mb-0 ps-3">
+                    {culture.map((c, i) => (
+                      <li key={`c-${i}`} className="mb-1">
+                        {c?.culture?.culture_name || c?.name || c}
                       </li>
                     ))}
                   </ul>
@@ -318,9 +267,10 @@ export default function Template3() {
                 )}
               </AsideCard>
 
-              <AsideCard title="Culture Fit">
+              {/* Culture Fit - without brand background */}
+              <Section title="Culture Fit" accent={false}>
                 {culture.length ? (
-                  <ul className="mb-0 ps-3">
+                   <ul className="mb-0 ps-3">
                     {culture.map((c, i) => (
                       <li key={`c-${i}`} className="mb-1">
                         {c?.culture?.culture_name || c?.name || c}
@@ -342,12 +292,12 @@ export default function Template3() {
                     ))}
                   </ul>
                 )}
-              </AsideCard>
+              </Section>
 
               <AsideCard title="Personality">
                 {personalities.length ? (
                   <ul className="mb-0 ps-3">
-                    {personalities.map((p, i) => (
+                   {personalities.map((p, i) => (
                       <li key={`p-${i}`} className="mb-1">
                         {p?.personality?.personality_name}
                       </li>
@@ -393,36 +343,11 @@ export default function Template3() {
             </div>
           </Col>
 
+          {/* Main section */}
           <Col xs={12} lg={8}>
-            <div className="p-3 p-lg-4">
+            <div className="p-4 px-md-5 pt-md-4">
+              {/* Header */}
               <div className="pb-3 mb-3 border-bottom">
-                <div
-                  className="position-relative"
-                  style={{ height: 30, marginBottom: 6 }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      top: 6,
-                      width: 46,
-                      height: 18,
-                      background: BRAND,
-                      clipPath: "polygon(30% 0, 100% 0, 80% 100%, 10% 100%)",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: 56,
-                      top: 8,
-                      width: 14,
-                      height: 14,
-                      background: BRAND_DARK,
-                      clipPath: "polygon(30% 0, 100% 0, 80% 100%, 10% 100%)",
-                    }}
-                  />
-                </div>
                 <h1
                   className="fw-bold"
                   style={{ fontSize: 32, color: "#1f2937", marginBottom: 2 }}
@@ -439,6 +364,7 @@ export default function Template3() {
                 <p className="mb-0 text-justify">{intro}</p>
               </div>
 
+              {/* Work Experience */}
               <Section title="Work Experience" accent>
                 {workRows.length ? (
                   <div className="d-grid gap-4">
@@ -478,145 +404,142 @@ export default function Template3() {
                 )}
               </Section>
 
+              {/* Education - Improved Table Layout */}
               <Section title="Education" accent>
-                <Card className="border">
+                <Card className="border overflow-hidden rounded-3">
                   <div
-                    className="position-relative text-white"
-                    style={{ background: BRAND }}
+                    style={{
+                      background: BRAND,
+                      color: "#fff",
+                      fontWeight: 600,
+                      padding: "10px 16px",
+                      fontSize: "1rem",
+                      letterSpacing: ".02em",
+                    }}
                   >
-                    <Row className="g-0 fw-semibold">
-                      <Col
-                        xs={6}
-                        className="px-3 py-2 border-end"
-                        style={{ borderColor: "rgba(255,255,255,.25)" }}
-                      >
-                        School/College
-                      </Col>
-                      <Col
-                        xs={4}
-                        className="px-3 py-2 border-end"
-                        style={{ borderColor: "rgba(255,255,255,.25)" }}
-                      >
-                        Course/Degree
-                      </Col>
-                      <Col xs={2} className="px-3 py-2">
-                        Year
-                      </Col>
-                    </Row>
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        top: 0,
-                        width: 36,
-                        height: "100%",
-                        background: `linear-gradient(180deg, ${BRAND}, ${BRAND_DARK})`,
-                        clipPath: "polygon(40% 0, 100% 0, 100% 100%, 0 100%)",
-                      }}
-                    />
+                    Education
                   </div>
-                  <div>
-                    <Row className="g-0 bg-light fw-semibold small border-top border-bottom">
-                      <Col xs={6} className="px-3 py-2 border-end">
-                        Institution
-                      </Col>
-                      <Col xs={4} className="px-3 py-2 border-end">
-                        Course
-                      </Col>
-                      <Col xs={1} className="px-3 py-2 border-end">
-                        Start
-                      </Col>
-                      <Col xs={1} className="px-3 py-2">
-                        End
-                      </Col>
-                    </Row>
 
-                    {education.length ? (
-                      education
-                        .slice()
-                        .sort((a, b) => {
-                          const bEnd = moment(b?.ended || b?.end_date);
-                          const bStart = moment(b?.started || b?.start_date);
-                          const aEnd = moment(a?.ended || a?.end_date);
-                          const aStart = moment(a?.started || a?.start_date);
-                          const bKey =
-                            (bEnd.isValid() ? bEnd : bStart).valueOf() || 0;
-                          const aKey =
-                            (aEnd.isValid() ? aEnd : aStart).valueOf() || 0;
-                          return bKey - aKey;
-                        })
-                        .map((ed, i) => {
-                          const startStr = fmtMY(ed?.started || ed?.start_date);
-                          const endM = moment(ed?.ended || ed?.end_date);
-                          const endStr = endM.isValid()
-                            ? endM.format("MMM YYYY")
-                            : startStr !== "—"
-                            ? "Present"
-                            : "—";
+                  <div className="table-responsive">
+                    <table className="table mb-0 align-middle table-striped">
+                     <thead
+                        style={{
+                          backgroundColor: BRAND_LIGHT,
+                          color: "#1756a5",
+                          fontWeight: 600,
+                          borderBottom: `2px solid ${BRAND}`, // ✅ wrap in backticks and make it a string
+                        }}
+                      >
 
-                          return (
-                            <Row key={i} className="g-0 border-bottom">
-                              <Col xs={6} className="px-3 py-2 border-end">
-                                {ed?.college?.college_name ||
-                                  ed?.institution ||
-                                  "—"}
-                              </Col>
-                              <Col xs={4} className="px-3 py-2 border-end">
-                                {ed?.course?.course_name ||
-                                  ed?.degree ||
-                                  ed?.qualification?.qualification ||
-                                  "—"}
-                              </Col>
-                              <Col xs={1} className="px-3 py-2 border-end">
-                                {startStr}
-                              </Col>
-                              <Col xs={1} className="px-3 py-2">
-                                {endStr}
-                              </Col>
-                            </Row>
-                          );
-                        })
-                    ) : (
-                      <div className="px-3 py-2">—</div>
-                    )}
+                        <tr>
+                          <th style={{ width: "40%" }}>Institution</th>
+                          <th style={{ width: "35%" }}>Course</th>
+                          <th style={{ width: "12%", textAlign: "center" }}>
+                            Start
+                          </th>
+                          <th style={{ width: "13%", textAlign: "center" }}>
+                            End
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {education.length ? (
+                          education
+                            .slice()
+                            .sort((a, b) => {
+                              const bEnd = moment(b?.ended || b?.end_date);
+                              const aEnd = moment(a?.ended || a?.end_date);
+                              return (
+                                (bEnd.isValid() ? bEnd.valueOf() : 0) -
+                                (aEnd.isValid() ? aEnd.valueOf() : 0)
+                              );
+                            })
+                            .map((ed, i) => (
+                              <tr key={i}>
+                                <td>
+                                  {ed?.college?.college_name ||
+                                    ed?.institution ||
+                                    "—"}
+                                </td>
+                                <td>
+                                  {ed?.course?.course_name ||
+                                    ed?.degree ||
+                                    ed?.qualification?.qualification ||
+                                    "—"}
+                                </td>
+                                <td className="text-center">
+                                  {formatMY(ed?.started || ed?.start_date)}
+                                </td>
+                                <td className="text-center">
+                                  {formatMY(ed?.ended || ed?.end_date)}
+                                </td>
+                              </tr>
+                            ))
+                        ) : (
+                          <tr>
+                            <td
+                              colSpan="4"
+                              className="text-center text-muted py-3"
+                            >
+                              No education records available.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
                 </Card>
+
+                <style>{`
+    .table th, .table td {
+      padding: 0.55rem 0.75rem !important;
+      vertical-align: middle;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: #f9fbfd;
+    }
+    .table-striped > tbody > tr:hover {
+      background-color: #f1f5fb;
+    }
+  `}</style>
               </Section>
             </div>
           </Col>
         </Row>
       </Card>
+
+      {/* Styling */}
       <style>{`
-        body {
-          font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto,
-            "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
-            "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
-        }
-        .text-justify {
-          text-align: justify;
-        }
-        img, svg {
-          vertical-align: middle;
-          position: relative;
-          top: 5px;
-          left: 5px;
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        body { font-family: "Outfit", sans-serif; }
+        .text-justify { text-align: justify; }
+        .sidebar { background: #f8fafc; border-right: 1px solid #eef2f7 !important; }
+        .contact-icon {
+          width: 28px; height: 28px;
+          display: inline-flex; align-items: center; justify-content: center;
+          border-radius: 50%; background: ${BRAND}; color: #fff; flex-shrink: 0;
         }
         .d-inline-block.bg-white.text-dark.px-3.py-1.rounded-pill.fw-bold.border {
-          background: #0a58ca !important;
-          color: #ffffff !important;
-          border-color: #0a58ca !important;
+  background: #1756a5 !important; /* BRAND color */
+  color: #ffffff !important;      /* White text */
+  border-color: #1756a5 !important;
+}
+        @media (max-width: 768px) {
+          .sidebar { border-right: none !important; border-bottom: 1px solid #eef2f7 !important; }
+          .p-4, .px-md-5 { padding: 1.5rem !important; }
         }
       `}</style>
     </Container>
   );
 }
 
+/* Utility Components */
 function AsideCard({ title, children }) {
   return (
     <Card className="border-0 mb-3">
       <div
         className="d-inline-block bg-white text-dark px-3 py-1 rounded-pill fw-bold border"
-        style={{ boxShadow: "0 1px 0 rgba(0,0,0,.05)", width: "auto" }}
+        style={{ boxShadow: "0 1px 0 rgba(0,0,0,.05)" }}
       >
         {title}
       </div>
@@ -625,6 +548,7 @@ function AsideCard({ title, children }) {
   );
 }
 
+ 
 function Section({ title, accent = false, children }) {
   return (
     <div className="mt-3">

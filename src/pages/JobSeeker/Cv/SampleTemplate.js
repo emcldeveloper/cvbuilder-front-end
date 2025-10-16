@@ -69,7 +69,7 @@ const SampleTemplate = () => {
         { id: 10, name: "Template 10", image: "/cv10.jpg", component: <Template10 /> },
         { id: 11, name: "Template 11", image: "/cv11.jpg", component: <Template11 /> },
         { id: 12, name: "Template 12", image: "/cv12.jpg", component: <Template12 /> },
-        { id: 13, name: "Template 13", image: "/cv12.jpg", component: <Template13 /> },
+        { id: 13, name: "Template 13", image: "/cv13.jpg", component: <Template13 /> },
         { id: 14, name: "Template 14", image: "/cv14.jpg", component: <Template14 /> },
         { id: 15, name: "Template 15", image: "/cv15.jpg", component: <Template15 /> },
         { id: 17, name: "Template 17", image: "/cv16.jpg", component: <Template17 /> },

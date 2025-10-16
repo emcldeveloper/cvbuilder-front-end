@@ -1,4 +1,3 @@
-// Template14.jsx — Creative CV Template with Plus Jakarta Sans + Brand #ff6601
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -33,7 +32,8 @@ export default function Template14() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error(  `HTTP error! status: ${res.status} `);
+       
         return res.json();
       })
       .then((json) => {
@@ -46,37 +46,35 @@ export default function Template14() {
       });
   }, []);
 
-  if (loading) {
+  if (loading)
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
+        style={{ height: "70vh" }}
       >
         <Spinner animation="border" style={{ color: BRAND }} />
         <span className="ms-3">Loading CV…</span>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Container className="py-4">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
-  }
 
-  const profiles = payload?.applicant_profile ?? [];
-  const profile = profiles[0] ?? {};
+  // Extracted data
+  const profile = payload?.applicant_profile?.[0] ?? {};
   const experiences = payload?.experience ?? [];
   const referees = payload?.referees ?? [];
-  const addresses = payload?.address ?? [];
   const education = payload?.education ?? [];
   const languages = payload?.language ?? [];
   const knowledge = payload?.knowledge ?? [];
   const software = payload?.software ?? [];
   const culture = payload?.culture ?? [];
   const personalities = payload?.applicant_personality ?? [];
+  const addresses = payload?.address ?? [];
 
   const phone =
     payload?.phone?.phone_number ||
@@ -89,12 +87,10 @@ export default function Template14() {
         addresses[0]?.name ? ", " + addresses[0].name : ""
       }`
     : "—";
-
   const intro =
     payload?.careers?.[0]?.career ||
     payload?.objective?.objective ||
     "Professional summary not provided.";
-
   const currentPosition =
     payload?.current_position ||
     payload?.experience?.[0]?.position?.position_name ||
@@ -111,55 +107,43 @@ export default function Template14() {
   };
 
   return (
-    <Container fluid className="my-4">
-      {/* Load font */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-        rel="stylesheet"
-      />
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-start py-5 px-3 px-md-5"
+      style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+    >
       <Card
-        className="shadow-lg border-0 overflow-hidden"
-        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        className="border-0 shadow-lg overflow-hidden w-100"
+        style={{ maxWidth: "1000px", borderRadius: "12px" }}
       >
-        {/* Hero Header */}
-        <div
-          className="p-5 text-white d-flex flex-column flex-md-row align-items-center justify-content-between"
-          style={{ backgroundColor: BRAND }}
-        >
-          <div className="text-center text-md-start mb-3 mb-md-0">
+        {/* Font Load */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* ===== HERO SECTION ===== */}
+        <div className="hero d-flex flex-column flex-md-row align-items-center justify-content-between p-4 p-md-5">
+          <div className="text-white flex-grow-1 text-center text-md-start pe-md-4">
             <h1 className="fw-bold mb-1">
               {`${profile.first_name || ""} ${profile.middle_name || ""} ${
                 profile.last_name || ""
               }`.trim() || "—"}
             </h1>
-            <h4 className="fw-light">{currentPosition}</h4>
-            <p className="mt-3">{intro}</p>
+            <h4 className="fw-normal mb-3">{currentPosition}</h4>
+            <p className="mb-0">{intro}</p>
           </div>
 
-          {/* Octagon Profile Image */}
-          <div
-            style={{
-              width: "170px",
-              height: "170px",
-              clipPath:
-                "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-              overflow: "hidden",
-              border: "5px solid #fff",
-              boxShadow: "0 4px 15px rgba(0,0,0,.3)",
-            }}
-          >
+          <div className="profileOctagon mt-4 mt-md-0">
             <img
               src={
                 profile?.picture
-                  ? `${cvUrl}/${profile.picture}`
+                  ? `${cvUrl}/${profile.picture} `
+                 
                   : "https://placehold.co/200x200?text=Photo"
               }
               alt="profile"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
+              className="profileImg"
               onError={(e) =>
                 (e.currentTarget.src =
                   "https://placehold.co/200x200?text=Photo")
@@ -168,8 +152,8 @@ export default function Template14() {
           </div>
         </div>
 
-        {/* Contact Row */}
-        <div className="d-flex flex-wrap justify-content-center gap-4 p-3 bg-light">
+        {/* ===== CONTACT SECTION ===== */}
+        <div className="contact-bar d-flex flex-wrap justify-content-center gap-4 py-3">
           <span>
             <FiPhone className="me-2" />
             {phone}
@@ -184,62 +168,78 @@ export default function Template14() {
           </span>
         </div>
 
-        {/* Body */}
-        <Card.Body className="p-5">
-          {/* Skills & Traits Section */}
+        {/* ===== MAIN BODY ===== */}
+        <Card.Body className="p-4 p-md-5">
+          {/* Skills */}
           <SectionCard title="Skills & Traits">
-            <Row className="g-3">
+            <Row className="g-4">
               <Col md={6}>
                 <SkillCard title="Knowledge" icon={<FiStar />}>
-                  {knowledge.map((k, i) => (
-                    <Badge key={i} pill bg="secondary" className="me-1 mb-1">
-                      {k?.knowledge?.knowledge_name}
-                    </Badge>
-                  ))}
+                  {knowledge.length ? (
+                    knowledge.map((k, i) => (
+                      <Badge key={i} pill bg="secondary" className="me-1 mb-1">
+                        {k?.knowledge?.knowledge_name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-secondary">—</span>
+                  )}
                 </SkillCard>
               </Col>
               <Col md={6}>
                 <SkillCard title="Software" icon={<FiCpu />}>
-                  {software.map((s, i) => (
-                    <Badge key={i} pill bg="dark" className="me-1 mb-1">
-                      {s?.software?.software_name}
-                    </Badge>
-                  ))}
+                  {software.length ? (
+                    software.map((s, i) => (
+                      <Badge key={i} pill bg="dark" className="me-1 mb-1">
+                        {s?.software?.software_name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-secondary">—</span>
+                  )}
                 </SkillCard>
               </Col>
               <Col md={6}>
                 <SkillCard title="Culture" icon={<FiGlobe />}>
-                  {culture.map((c, i) => (
-                    <Badge
-                      key={i}
-                      pill
-                      style={{ backgroundColor: BRAND, color: "#fff" }}
-                      className="me-1 mb-1"
-                    >
-                      {c?.culture?.culture_name}
-                    </Badge>
-                  ))}
+                  {culture.length ? (
+                    culture.map((c, i) => (
+                      <Badge
+                        key={i}
+                        pill
+                        style={{ backgroundColor: BRAND, color: "#fff" }}
+                        className="me-1 mb-1"
+                      >
+                        {c?.culture?.culture_name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-secondary">—</span>
+                  )}
                 </SkillCard>
               </Col>
               <Col md={6}>
                 <SkillCard title="Personality" icon={<FiUser />}>
-                  {personalities.map((p, i) => (
-                    <Badge
-                      key={i}
-                      pill
-                      bg="info"
-                      text="dark"
-                      className="me-1 mb-1"
-                    >
-                      {p?.personality?.personality_name}
-                    </Badge>
-                  ))}
+                  {personalities.length ? (
+                    personalities.map((p, i) => (
+                      <Badge
+                        key={i}
+                        pill
+                        bg="info"
+                        text="dark"
+                        className="me-1 mb-1"
+                      >
+                        {p?.personality?.personality_name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-secondary">—</span>
+                  )}
                 </SkillCard>
               </Col>
-              {languages.length > 0 && (
-                <Col md={12}>
-                  <SkillCard title="Languages" icon={<FiGlobe />}>
-                    {languages.map((l, i) => (
+              <Col md={12}>
+                <SkillCard title="Languages" icon={<FiGlobe />}>
+                  {languages.length ? (
+                    languages.map((l, i) => (
                       <Badge
                         key={i}
                         pill
@@ -248,15 +248,17 @@ export default function Template14() {
                       >
                         {l?.language?.language_name}
                       </Badge>
-                    ))}
-                  </SkillCard>
-                </Col>
-              )}
+                    ))
+                  ) : (
+                    <span className="text-secondary">—</span>
+                  )}
+                </SkillCard>
+              </Col>
             </Row>
           </SectionCard>
 
           {/* Experience & Education */}
-          <Row>
+          <Row className="mt-4">
             <Col md={6}>
               <SectionCard title="Experience">
                 {experiences.length ? (
@@ -265,9 +267,10 @@ export default function Template14() {
                       key={i}
                       body
                       className="mb-3 border-0 shadow-sm"
-                      style={{ borderLeft: `5px solid ${BRAND}` }}
+                      style={{ borderLeft: `5px solid ${BRAND} ` }}
+                    
                     >
-                      <div className="fw-semibold">
+                      <div className="fw-semibold" style={{ color: BRAND }}>
                         {exp?.position?.position_name || "Job Title"}{" "}
                         {exp?.employer?.employer_name && (
                           <span className="text-muted">
@@ -280,7 +283,7 @@ export default function Template14() {
                         {formatY(exp?.end_date) || "Present"}
                       </div>
                       {exp?.responsibility && (
-                        <ul className="mb-0 small">
+                        <ul className="mb-0 small text-muted">
                           {exp.responsibility
                             .split("\n")
                             .map((t) => t.trim())
@@ -297,6 +300,7 @@ export default function Template14() {
                 )}
               </SectionCard>
             </Col>
+
             <Col md={6}>
               <SectionCard title="Education">
                 {education.length ? (
@@ -305,9 +309,9 @@ export default function Template14() {
                       key={i}
                       body
                       className="mb-3 border-0 shadow-sm"
-                      style={{ borderLeft: `5px solid ${BRAND}` }}
+                      style={{ borderLeft: `5px solid ${BRAND} ` }}
                     >
-                      <div className="fw-semibold">
+                      <div className="fw-semibold" style={{ color: BRAND }}>
                         {edu?.level?.education_level || edu?.degree || "—"}
                       </div>
                       <div>
@@ -336,9 +340,18 @@ export default function Template14() {
                     .filter(Boolean)
                     .join(" ");
                   return (
-                    <Col md={6} key={r.id ?? i} className="mb-3">
-                      <Card body className="border-0 shadow-sm">
-                        <strong>{fullName || "—"}</strong>
+                    <Col md={6} key={i} className="mb-3">
+                      <Card
+                        body
+                        className="border-0 shadow-sm"
+                        style={{
+                          borderLeft: `4px solid ${BRAND} `,
+                          borderRadius: 8,
+                        }}
+                      >
+                        <strong style={{ color: BRAND }}>
+                          {fullName || "—"}
+                        </strong>
                         <div className="text-muted small">
                           {r?.referee_position || "—"}
                         </div>
@@ -354,16 +367,63 @@ export default function Template14() {
           )}
         </Card.Body>
       </Card>
+
+      {/* ===== CUSTOM STYLES ===== */}
+      <style>{`
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hero {
+          background-color: ${BRAND};
+          color: #fff;
+          border-radius: 12px 12px 0 0;
+        }
+        .profileOctagon {
+          width: 180px;
+          height: 180px;
+          clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+          border: 5px solid #fff;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .profileImg {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .contact-bar {
+          background: #fff;
+          font-size: 0.95rem;
+          border-top: 1px solid #eee;
+          border-bottom: 2px solid ${BRAND};
+        }
+        .section-heading {
+          color: ${BRAND};
+          font-weight: 700;
+          border-bottom: 2px solid ${BRAND};
+          padding-bottom: 0.3rem;
+          margin-bottom: 1rem;
+        }
+        @media (max-width: 768px) {
+          .hero {
+            text-align: center;
+            flex-direction: column;
+          }
+          .profileOctagon {
+            width: 140px;
+            height: 140px;
+            margin-top: 1.5rem;
+          }
+        }
+      `}</style>
     </Container>
   );
 }
 
+/* --- Section Components --- */
 function SectionCard({ title, children }) {
   return (
     <div className="mb-5">
-      <h3 className="fw-bold mb-3" style={{ color: BRAND }}>
-        {title}
-      </h3>
+      <h3 className="section-heading">{title}</h3>
       {children}
     </div>
   );
@@ -381,6 +441,6 @@ function SkillCard({ title, icon, children }) {
         </h6>
         <div>{children}</div>
       </Card.Body>
-    </Card>
-  );
+    </Card>
+  );
 }

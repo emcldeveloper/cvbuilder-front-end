@@ -11,6 +11,7 @@ import { Plus, Pencil } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import AddEducationModal from '../Forms/JobSeeker/Education';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 
 const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
@@ -87,11 +88,7 @@ const EducationDetails = ({ applicant, showAddModal, showEditModal }) => {
                                         {/* Education Icon */}
 
                                         <div className="me-3 mt-1">
-                                            <FontAwesomeIcon
-                                                icon={faGraduationCap}
-                                                className="text-primary"
-                                                style={{ fontSize: '1.75rem' }}
-                                            />
+                                            <SchoolOutlinedIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
 
                                         </div>
 

@@ -5,6 +5,7 @@ import { faPlus, faPencilAlt, faDownload, faUserTie } from '@fortawesome/free-so
 import RefereeModal from '../Forms/JobSeeker/Referee';
 import { Pencil, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
     const getFileNameFromUrl = (url) => {
@@ -108,19 +109,7 @@ const RefereesSection = ({ applicant, showAddModal, showEditModal }) => {
                                 <tr key={index}>
                                     <td style={{ verticalAlign: 'top', width: '70px' }}>
                                         <div className="referee-avatar mt-1">
-                                            <FontAwesomeIcon
-                                                icon={faUserTie}
-                                                className="text-primary"
-                                                style={{
-                                                    fontSize: '1.25rem',  // Reduced from 2.5rem
-                                                    border: '3px solid #28a8e4',  // Thinner border
-                                                    borderRadius: '50%',
-                                                    padding: '3px',  // Less padding
-                                                    backgroundColor: 'white',
-                                                    width: '32px',   // Fixed dimensions
-                                                    height: '32px'
-                                                }}
-                                            />
+                                         <PersonOutlineIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
                                         </div>
                                     </td>
                                     <td style={{ paddingLeft: '1%' }}>

@@ -60,7 +60,7 @@ const AppHeader = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigator =useNavigate()
+  const navigator = useNavigate()
 
 
   useEffect(() => {
@@ -88,189 +88,231 @@ const AppHeader = () => {
 
   return (
     <>
-     <Navbar
-  expand="lg"
-  sticky="top"
-  style={{
-    zIndex: 1020,
-    backgroundColor: '#DFE3E2',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  }}
->
-  <Container className="d-flex justify-content-between align-items-center">
-    <Navbar.Brand href="/">
-      <img src="/logo.png" alt="eKazi" width="120" />
-    </Navbar.Brand>
+      <Navbar
+        expand="lg"
+        sticky="top"
+        style={{
+          zIndex: 1020,
+          backgroundColor: '#DFE3E2',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Container className="d-flex justify-content-between align-items-center">
+          <Navbar.Brand href="/">
+            <img src="/logo.png" alt="eKazi" width="120" />
+          </Navbar.Brand>
 
-    <Navbar.Toggle aria-controls="ekazi-navbar" />
-    <Navbar.Collapse id="ekazi-navbar" className="w-100">
-      <Nav className="mx-auto">
-        <Nav.Link href="/" className="text-primary">Home</Nav.Link>
-        <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
-        <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
-        <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link>
-        <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
-        <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
-      </Nav>
-      
-      <div className="d-flex align-items-center">
-      
+          <Navbar.Toggle aria-controls="ekazi-navbar" />
+          <Navbar.Collapse id="ekazi-navbar" className="w-100">
+            <Nav className="mx-auto">
+              <Nav.Link href="/" className="text-primary">Home</Nav.Link>
+              <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
+              <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
+              <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link>
+              <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
+              <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
+            </Nav>
 
-        {isLoggedIn && (
-          <>
-          
-            <Dropdown show={showNotifications} onToggle={handleNotificationClick} className="me-2">
-              <Dropdown.Toggle variant="light" id="dropdown-notifications" className="position-relative border-0 bg-transparent">
-                <Bell size={20} className="text-dark" />
-                {unreadCount > 0 && (
-                  <Badge
-                    pill
-                    bg="danger"
-                    className="position-absolute top-0 start-100 translate-middle"
-                    style={{ fontSize: '0.6rem' }}
-                  >
-                    {unreadCount}
-                  </Badge>
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="p-0" style={{ width: '350px' }}>
-                <Card className="border-0">
-                  <Card.Header className="d-flex justify-content-between align-items-center">
-                    <h6 className="mb-0">Notifications</h6>
-                    <small className="text-primary">Mark all as read</small>
-                  </Card.Header>
-                  <Card.Body className="p-0">
-                    <Tabs defaultActiveKey="correspondence" className="px-2">
-                      <Tab eventKey="correspondence" title="Updates">
-                        <ListGroup variant="flush">
-                          {notifications.correspondence.map(notif => (
-                            <ListGroup.Item key={notif.id} action className="py-2">
-                              <div className="d-flex align-items-center">
-                                <div className="bg-primary bg-opacity-10 p-2 rounded-circle me-2">
-                                  <Envelope className="text-primary" />
-                                </div>
-                                <div className="flex-grow-1">
-                                  <div className="d-flex justify-content-between">
-                                    <strong>{notif.employer}</strong>
-                                    <Badge pill bg="primary">{notif.count}</Badge>
-                                  </div>
-                                  <small className="text-muted">
-                                    {/* {dayjs(notif.timestamp).fromNow()} */}
-                                  </small>
-                                </div>
-                              </div>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </Tab>
-                      <Tab eventKey="chart" title="Chats">
-                        <ListGroup variant="flush">
-                          {notifications.chart.map(notif => (
-                            <ListGroup.Item key={notif.id} action className="py-2">
-                              <div className="d-flex align-items-center">
-                                <div className="bg-info bg-opacity-10 p-2 rounded-circle me-2">
-                                  <Briefcase className="text-info" />
-                                </div>
-                                <div className="flex-grow-1">
-                                  <div className="d-flex justify-content-between">
-                                    <div>
-                                      <strong>{notif.username}</strong>
-                                      <div className="small">{notif.message}</div>
+            <div className="d-flex align-items-center">
+
+
+              {isLoggedIn && (
+                <>
+
+                  <Dropdown show={showNotifications} onToggle={handleNotificationClick} className="me-2">
+                    <Dropdown.Toggle
+                      variant="light"
+                      id="dropdown-notifications"
+                      className="position-relative border-0 bg-transparent p-0"
+                      style={{ lineHeight: 1 }}
+                    >
+                      <Bell size={22} className="text-dark" />
+                      {unreadCount > 0 && (
+                        <span
+                          className="position-absolute rounded-circle bg-danger text-white d-flex justify-content-center align-items-center"
+                          style={{
+                            top: "-5px",
+                            right: "-5px",
+                            width: "18px",
+                            height: "18px",
+                            fontSize: "0.65rem",
+                            border: "2px solid white", // clean white outline
+                          }}
+                        >
+                          {unreadCount > 99 ? "99+" : unreadCount}
+                        </span>
+                      )}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="p-0" style={{ width: '300px' }}>
+                      <Card className="border-0">
+                        <Card.Header className="d-flex justify-content-between align-items-center">
+                          <h6 className="mb-0">Notifications</h6>
+                          <small className="text-primary cursor-pointer">Mark all as read</small>
+                        </Card.Header>
+
+                        <Card.Body className="p-0">
+                          <Tabs defaultActiveKey="correspondence" className="px-2">
+
+                            {/* --- Updates Tab --- */}
+                            <Tab eventKey="correspondence" title="Updates">
+                              <ListGroup variant="flush">
+                                {notifications.correspondence.map((notif) => (
+                                  <ListGroup.Item key={notif.id} action className="py-2">
+                                    <div className="d-flex align-items-center">
+                                      <div className="bg-primary bg-opacity-10 p-2 rounded-circle me-2">
+                                        <Envelope className="text-primary" />
+                                      </div>
+
+                                      <div className="flex-grow-1">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                          <strong>{notif.employer}</strong>
+                                          <span
+                                            className="rounded-circle d-flex justify-content-center align-items-center text-white bg-primary"
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                              fontSize: "0.7rem",
+                                              border: "2px solid #fff",
+                                              flexShrink: 0,
+                                            }}
+                                          >
+                                            {notif.count > 99 ? "99+" : notif.count}
+                                          </span>
+                                        </div>
+                                        <small className="text-muted">
+                                          {/* {dayjs(notif.timestamp).fromNow()} */}
+                                        </small>
+                                      </div>
                                     </div>
-                                    <Badge pill bg="info">{notif.count}</Badge>
-                                  </div>
-                                  <small className="text-muted">
-                                    {/* {dayjs(notif.timestamp).fromNow()} */}
-                                  </small>
-                                </div>
-                              </div>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </Tab>
-                    </Tabs>
-                  </Card.Body>
-                  <Card.Footer className="text-center">
-                    <Button variant="link" size="sm">
-                      View all notifications
-                    </Button>
-                  </Card.Footer>
-                </Card>
-              </Dropdown.Menu>
-            </Dropdown>
-          </>
-        )}
+                                  </ListGroup.Item>
+                                ))}
+                              </ListGroup>
+                            </Tab>
 
-        <Nav className="ms-lg-2 align-items-center">
-          {isLoggedIn ? (
-            <NavDropdown
-              align="end"
-              title={
-                <img
-                  src="/default_user.jpeg"
-                  alt="Profile"
-                  className="rounded-circle"
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    objectFit: 'cover',
-                  }}
-                />
-              }
-              id="profile-dropdown"
-            >
-              <NavDropdown.Header style={{ fontWeight: 'bold' }}>MY ACCOUNT</NavDropdown.Header>
-              <NavDropdown.Item href="/jobseeker/dashboard" className="d-flex align-items-center">
-                <HouseDoorFill style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>Dashboard</span>
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/jobseeker/profile-preview" className="d-flex align-items-center">
-                <PersonFill style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>My Profile</span>
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/jobseeker/account-settings" className="d-flex align-items-center">
-                <GearFill style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>Account Setting</span>
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/jobseeker/change-password" className="d-flex align-items-center">
-                <KeyFill style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>Change Password</span>
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/jobseeker/Privacy-policy" className="d-flex align-items-center">
-                <ShieldLockFill style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>Privacy Policy</span>
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={handleLogout} className="d-flex align-items-center text-danger">
-                <BoxArrowRight style={{ width: '14px', height: '14px' }} className="me-2" />
-                <span>Logout</span>
-              </NavDropdown.Item>
-            </NavDropdown>
-          ) : (
-            <>
-              <Nav.Link onClick={() => setShowRegisterModal(true)} className="text-primary">Register</Nav.Link>
-              <span className="mx-2 d-none d-lg-inline">|</span>
-              <Nav.Link onClick={() => setShowLoginModal(true)} className="text-primary">Login</Nav.Link>
-            </>
-          )}
+                            {/* --- Chats Tab --- */}
+                            <Tab eventKey="chart" title="Chats">
+                              <ListGroup variant="flush">
+                                {notifications.chart.map((notif) => (
+                                  <ListGroup.Item key={notif.id} action className="py-2">
+                                    <div className="d-flex align-items-center">
+                                      <div className="bg-info bg-opacity-10 p-2 rounded-circle me-2">
+                                        <Briefcase className="text-info" />
+                                      </div>
 
-          <Nav.Link href="/post-job" className="ms-lg-2">
-            <Button
-              style={{
-                backgroundColor: '#D36314',
-                color: '#fff',
-                border: 'none',
-                padding: '0.5rem 1.5rem',
-              }}
-            >
-              Post Job
-            </Button>
-          </Nav.Link>
-        </Nav>
-      </div>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+                                      <div className="flex-grow-1">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                          <div>
+                                            <strong>{notif.username}</strong>
+                                            <div className="small text-muted">{notif.message}</div>
+                                          </div>
+                                          <span
+                                            className="rounded-circle d-flex justify-content-center align-items-center text-white bg-info"
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                              fontSize: "0.7rem",
+                                              border: "2px solid #fff",
+                                              flexShrink: 0,
+                                            }}
+                                          >
+                                            {notif.count > 99 ? "99+" : notif.count}
+                                          </span>
+                                        </div>
+                                        <small className="text-muted">
+                                          {/* {dayjs(notif.timestamp).fromNow()} */}
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </ListGroup.Item>
+                                ))}
+                              </ListGroup>
+                            </Tab>
+                          </Tabs>
+                        </Card.Body>
+
+                        <Card.Footer className="text-center">
+                          <Button variant="link" size="sm">
+                            View all notifications
+                          </Button>
+                        </Card.Footer>
+                      </Card>
+                    </Dropdown.Menu>
+
+                  </Dropdown>
+                </>
+              )}
+
+              <Nav className="ms-lg-2 align-items-center">
+                {isLoggedIn ? (
+                  <NavDropdown
+                    align="end"
+                    title={
+                      <img
+                        src="/default_user.jpeg"
+                        alt="Profile"
+                        className="rounded-circle"
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    }
+                    id="profile-dropdown"
+                  >
+                    <NavDropdown.Header style={{ fontWeight: 'bold' }}>MY ACCOUNT</NavDropdown.Header>
+                    <NavDropdown.Item href="/jobseeker/dashboard" className="d-flex align-items-center">
+                      <HouseDoorFill style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>Dashboard</span>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/jobseeker/profile-preview" className="d-flex align-items-center">
+                      <PersonFill style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>My Profile</span>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/jobseeker/account-settings" className="d-flex align-items-center">
+                      <GearFill style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>Account Setting</span>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/jobseeker/change-password" className="d-flex align-items-center">
+                      <KeyFill style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>Change Password</span>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/jobseeker/Privacy-policy" className="d-flex align-items-center">
+                      <ShieldLockFill style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>Privacy Policy</span>
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={handleLogout} className="d-flex align-items-center text-danger">
+                      <BoxArrowRight style={{ width: '14px', height: '14px' }} className="me-2" />
+                      <span>Logout</span>
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                ) : (
+                  <>
+                    <Nav.Link onClick={() => setShowRegisterModal(true)} className="text-primary">Register</Nav.Link>
+                    <span className="mx-2 d-none d-lg-inline">|</span>
+                    <Nav.Link onClick={() => setShowLoginModal(true)} className="text-primary">Login</Nav.Link>
+                  </>
+                )}
+
+                <Nav.Link href="/post-job" className="ms-lg-2">
+                  <Button
+                    style={{
+                      backgroundColor: '#D36314',
+                      color: '#fff',
+                      border: 'none',
+                      padding: '0.5rem 1.5rem',
+                    }}
+                  >
+                    Post Job
+                  </Button>
+                </Nav.Link>
+              </Nav>
+            </div>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
       {/* Modals */}
       <RegisterModal show={showRegisterModal} onHide={() => setShowRegisterModal(false)} />

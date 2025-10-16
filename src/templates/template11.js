@@ -1,4 +1,4 @@
-// TemplateOrange.jsx — CV Template with #e38720 brand and Dosis font
+// Template11.jsx — Final Polished Layout (Same Design, Improved Spacing & Readability)
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -26,8 +26,9 @@ export default function Template11() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error( `HTTP error! status: ${res.status}`);
         return res.json();
+       
       })
       .then((json) => {
         setPayload(json?.data || {});
@@ -39,7 +40,7 @@ export default function Template11() {
       });
   }, []);
 
-  if (loading) {
+  if (loading)
     return (
       <div
         className="d-flex justify-content-center align-items-center"
@@ -49,15 +50,13 @@ export default function Template11() {
         <span className="ms-3">Loading CV…</span>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Container className="py-4">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
-  }
 
   const profiles = payload?.applicant_profile ?? [];
   const profile = profiles[0] ?? {};
@@ -98,36 +97,77 @@ export default function Template11() {
     return m.isValid() ? m.format("MMM YYYY") : "—";
   };
 
-  const formatY = (d) => {
-    const m = moment(d);
-    return m.isValid() ? m.format("YYYY") : "";
-  };
-
   return (
-    <Container fluid className="my-4">
+    <Container fluid className="my-4 px-3 px-md-5">
       <link
         href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
       />
+      <style>{`
+        * { font-family: "Dosis", sans-serif; }
+        h1,h4,h6 { letter-spacing: 0.5px; }
+        .header-section {
+          background-color: ${BRAND};
+          color: #fff;
+          border-radius: 12px 12px 0 0;
+        }
+        .contact-info {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
+          font-size: 0.95rem;
+          max-width: 700px;
+          margin: 0 auto;
+          word-break: break-word;
+        }
+        .contact-info span {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          white-space: nowrap;
+          line-height: 1.3;
+        }
+        .section-title {
+          color: ${BRAND};
+          border-bottom: 2px solid ${BRAND};
+          display: inline-block;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+        .bg-light {
+          background-color: #f8f9fa !important;
+        }
+        @media (max-width: 768px) {
+          .contact-info { flex-direction: column; align-items: center; gap: .6rem; }
+        }
+      `}</style>
+
       <Row className="justify-content-center">
         <Col md={11} lg={10}>
-          <Card className="shadow-lg border-0 rounded-3 overflow-hidden">
+          <Card className="shadow border-0 overflow-hidden rounded-3">
             {/* Header */}
-            <Card.Header
-              className="text-white text-center py-5"
-              style={{
-                backgroundColor: BRAND,
-                fontFamily: "Dosis, sans-serif",
-              }}
-            >
+            <div className="header-section text-center py-5">
               <h1 className="fw-bold mb-1" style={{ fontSize: "2.2rem" }}>
                 {`${profile.first_name || ""} ${profile.middle_name || ""} ${
                   profile.last_name || ""
                 }`.trim() || "—"}
               </h1>
-              <h5 className="mb-0 fw-light">{currentPosition}</h5>
-            </Card.Header>
+              <h5 className="mb-3 fw-light">{currentPosition}</h5>
+              <div className="contact-info">
+                <span>
+                  <FiPhone /> {phone}
+                </span>
+                <span>
+                  <FiMail /> {email}
+                </span>
+                <span>
+                  <FiMapPin /> {location}
+                </span>
+              </div>
+            </div>
 
+            {/* Body */}
             <Row className="g-0">
               {/* Sidebar */}
               <Col md={4} className="bg-light p-4 text-center text-md-start">
@@ -135,18 +175,20 @@ export default function Template11() {
                   <Image
                     src={
                       profile?.picture
-                        ? `${cvUrl}/${profile.picture}`
+                        ? `${cvUrl}/${profile.picture} `
                         : "https://placehold.co/200x200?text=Photo"
                     }
+                     
                     alt="profile"
                     roundedCircle
                     fluid
-                    className="mb-4 shadow"
+                    className="mb-4 shadow-sm"
                     style={{
                       width: "160px",
                       height: "160px",
                       objectFit: "cover",
-                      border: `4px solid ${BRAND}`,
+                      border:  `4px solid ${BRAND} ` ,
+                   
                     }}
                     onError={(e) =>
                       (e.currentTarget.src =
@@ -154,74 +196,84 @@ export default function Template11() {
                     }
                   />
 
-                  <Section icon={<FiMapPin />} title="Location">
-                    {location}
-                  </Section>
-                  <Section icon={<FiPhone />} title="Phone">
-                    {phone}
-                  </Section>
-                  <Section icon={<FiMail />} title="Email">
-                    {email}
-                  </Section>
+                  <SidebarSection title="Languages">
+                    <SkillChips
+                      items={languages}
+                      keyName="language"
+                      nestedKey="language_name"
+                    />
+                  </SidebarSection>
 
-                  {languages.length > 0 && (
-                    <Section title="Languages">
-                      <div className="d-flex flex-wrap gap-2">
-                        {languages.map((l, i) => (
-                          <Badge
-                            key={i}
-                            pill
-                            style={{
-                              backgroundColor: BRAND,
-                              color: "#fff",
-                              fontFamily: "Dosis, sans-serif",
-                            }}
-                          >
-                            {l?.language?.language_name || "Language"}
-                          </Badge>
-                        ))}
-                      </div>
-                    </Section>
-                  )}
+                  <SidebarSection title="Skills">
+                    <SkillChips
+                      items={knowledge}
+                      keyName="knowledge"
+                      nestedKey="knowledge_name"
+                    />
+                  </SidebarSection>
+
+                  <SidebarSection title="Software">
+                    <SkillChips
+                      items={software}
+                      keyName="software"
+                      nestedKey="software_name"
+                    />
+                  </SidebarSection>
+
+                  <SidebarSection title="Culture & Personality">
+                    <SkillChips
+                      items={culture}
+                      keyName="culture"
+                      nestedKey="culture_name"
+                    />
+                    <SkillChips
+                      items={personalities}
+                      keyName="personality"
+                      nestedKey="personality_name"
+                    />
+                  </SidebarSection>
                 </div>
               </Col>
 
-              {/* Main content */}
-              <Col
-                md={8}
-                className="p-4"
-                style={{ fontFamily: "Dosis, sans-serif" }}
-              >
-                <TimelineSection title="About Me">
-                  <p className="mb-0" style={{ textAlign: "justify" }}>
+              {/* Main */}
+              <Col md={8} className="p-4 bg-white">
+                <Section title="About Me">
+                  <p
+                    className="mb-0 text-muted"
+                    style={{ textAlign: "justify" }}
+                  >
                     {intro}
                   </p>
-                </TimelineSection>
+                </Section>
 
-                <TimelineSection title="Experience">
+                <Section title="Experience">
                   {experiences.length ? (
                     experiences.map((exp, i) => (
                       <Card
                         body
                         className="mb-3 border-0 shadow-sm"
                         key={i}
-                        style={{ borderLeft: `5px solid ${BRAND}` }}
+                        style={{
+                          borderLeft: `5px solid ${BRAND} `,
+                          borderRadius: 8,
+                          background: "#fff",
+                        }}
                       >
-                        <div className="fw-semibold">
+                        <div className="fw-semibold" style={{ color: BRAND }}>
                           {exp?.position?.position_name || "Job Title"}
                           {exp?.employer?.employer_name && (
                             <span className="text-muted">
                               {" "}
-                              @ {exp.employer.employer_name}
+                              — {exp.employer.employer_name}
                             </span>
                           )}
                         </div>
                         <div className="text-muted small mb-2">
-                          {formatY(exp?.start_date)} –{" "}
-                          {exp?.end_date ? formatY(exp.end_date) : "Present"}
+                          {formatMY(exp?.start_date)} –{" "}
+                          {formatMY(exp?.end_date) || "Present"}
                         </div>
                         {exp?.responsibility && (
-                          <ul className="mb-0 small">
+                          <ul className="mb-0 small text-muted">
                             {exp.responsibility
                               .split("\n")
                               .map((t) => t.trim())
@@ -238,26 +290,29 @@ export default function Template11() {
                       No job experience added.
                     </div>
                   )}
-                </TimelineSection>
+                </Section>
 
-                <TimelineSection title="Education">
+                <Section title="Education">
                   {education.length ? (
                     education.map((edu, i) => (
                       <Card
                         body
                         className="mb-3 border-0 shadow-sm"
                         key={i}
-                        style={{ borderLeft: `5px solid ${BRAND}` }}
+                        style={{
+                          borderLeft: `5px solid ${BRAND} `,
+                          borderRadius: 8,
+                        }}
                       >
-                        <div className="fw-semibold">
+                        <div className="fw-semibold" style={{ color: BRAND }}>
                           {edu?.level?.education_level || edu?.degree || "—"}
                         </div>
-                        <div>
+                        <div className="text-muted">
                           {edu?.college?.college_name ||
                             edu?.institution ||
                             "—"}
                         </div>
-                        <div className="text-muted small">
+                        <div className="small text-muted">
                           {formatMY(edu?.started)} – {formatMY(edu?.ended)}
                         </div>
                       </Card>
@@ -267,48 +322,10 @@ export default function Template11() {
                       No education records available.
                     </div>
                   )}
-                </TimelineSection>
-
-                <TimelineSection title="Skills & Tools">
-                  <div className="d-flex flex-wrap gap-2">
-                    {knowledge.map((k, i) => (
-                      <Badge
-                        key={i}
-                        pill
-                        style={{ backgroundColor: BRAND, color: "#fff" }}
-                      >
-                        {k?.knowledge?.knowledge_name}
-                      </Badge>
-                    ))}
-                    {software.map((s, i) => (
-                      <Badge
-                        key={i}
-                        pill
-                        bg="secondary"
-                        style={{ color: "#fff" }}
-                      >
-                        {s?.software?.software_name}
-                      </Badge>
-                    ))}
-                    {culture.map((c, i) => (
-                      <Badge
-                        key={i}
-                        pill
-                        style={{ backgroundColor: BRAND, color: "#fff" }}
-                      >
-                        {c?.culture?.culture_name}
-                      </Badge>
-                    ))}
-                    {personalities.map((p, i) => (
-                      <Badge key={i} pill bg="dark" style={{ color: "#fff" }}>
-                        {p?.personality?.personality_name}
-                      </Badge>
-                    ))}
-                  </div>
-                </TimelineSection>
+                </Section>
 
                 {referees.length > 0 && (
-                  <TimelineSection title="Referees">
+                  <Section title="Referees">
                     {referees.map((r, i) => {
                       const fullName = [
                         r.first_name,
@@ -322,19 +339,24 @@ export default function Template11() {
                           body
                           className="mb-3 border-0 shadow-sm"
                           key={r.id ?? i}
-                          style={{ borderLeft: `5px solid ${BRAND}` }}
+                          style={{
+                            borderLeft: `5px solid ${BRAND} `,
+                            borderRadius: 8,
+                          }}
                         >
-                          <div className="fw-semibold">{fullName || "—"}</div>
-                          <div className="text-muted">
+                          <div className="fw-semibold" style={{ color: BRAND }}>
+                            {fullName || "—"}
+                          </div>
+                          <div className="text-muted small">
                             {r?.referee_position || "—"}
                           </div>
-                          <div>{r?.employer || "—"}</div>
+                          <div className="small">{r?.employer || "—"}</div>
                           <div className="small">{r?.phone || "—"}</div>
                           <div className="small">{r?.email || "—"}</div>
                         </Card>
                       );
                     })}
-                  </TimelineSection>
+                  </Section>
                 )}
               </Col>
             </Row>
@@ -345,27 +367,46 @@ export default function Template11() {
   );
 }
 
-function Section({ title, children, icon }) {
+// ----- Subcomponents -----
+function SidebarSection({ title, children }) {
   return (
-    <div className="mb-3">
-      <h6
-        className="fw-semibold mb-1 d-flex align-items-center"
-        style={{ color: BRAND }}
-      >
-        {icon && <span className="me-2">{icon}</span>} {title}
+    <div className="mb-4 w-100">
+      <h6 className="fw-semibold mb-2" style={{ color: BRAND }}>
+        {title}
       </h6>
       <div>{children || "—"}</div>
     </div>
   );
 }
 
-function TimelineSection({ title, children }) {
+function Section({ title, children }) {
   return (
     <div className="mb-4">
-      <h4 className="fw-bold mb-3" style={{ color: BRAND }}>
-        {title}
-      </h4>
+      <h4 className="section-title">{title}</h4>
       {children}
     </div>
   );
+}
+
+function SkillChips({ items, keyName, nestedKey }) {
+  if (!items?.length) return "—";
+  return (
+    <div className="d-flex flex-wrap gap-2">
+      {items.map((it, i) => (
+        <Badge
+          key={i}
+          pill
+          style={{
+            backgroundColor: BRAND,
+            color: "#fff",
+            fontSize: "0.85rem",
+            padding: "0.4em 0.75em",
+            margin: "0.2em",
+          }}
+        >
+          {it?.[keyName]?.[nestedKey] || "Skill"}
+        </Badge>
+      ))}
+    </div>
+  );
 }

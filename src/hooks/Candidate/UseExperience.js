@@ -4,21 +4,26 @@ import Swal from "sweetalert2";
 
  
 
-const useLanguageForm = (editData, applicant_id, onSuccess) => {
+const useExperinceForm = (applicant_id) => {
   
-//   const { understandlanguage } = useUnderstandLanguage();
-
-//   const [loading, setLoading] = useState(false);
-//   const [formData, setFormData] = useState({
-//     id: null,
-//     language: null,
-//     read: null,
-//     write: null,
-//     speak: null,
-//     understand: null,
-//   });
-
+   const [formData, setFormData] = useState({
+       'started': '',
+       'ended': '',
+       'position': '',
+       'country': '',
+       'region': '',
+       'employer': '',
+       'industry': '',
+       'start_salary': '',
+       'end_salary': '',
+       'level': '',
+       'sub_location': '',
+       'remark': '',
+       'responsibility': ''
+     });
  
+
+   console.log("data experience is available on this type" ,formData);
 
   // Handle select change
   const handleChange = (field, value) => {
@@ -30,28 +35,35 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
   // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
 
-    const sendData = {
-      language: formData.language?.value || null,
-      read: formData.read?.value || null,
-      write: formData.write?.value || null,
-      speak: formData.speak?.value || null,
-      understand: formData.understand?.value || null,
-      applicant_id,
+     const sendData = {
+      employer: formData.employer?.value || null,
+      country: formData.country?.value || null,
+      region: formData.region?.value || null,
+      position: formData.position?.value || null,
+      start_salary: formData.start_salary?.value || null,
+      end_salary: formData.end_salary?.value || null ,
+      started: formData.started?.value || null,
+      ended: formData.ended?.value || null,
+      level: formData?.positionlevel.value || null ,
+
+    
     };
 
     try {
-      const response = await createlanguage(sendData);
-      if (response.status === 200) {
+        console.log("received employer from form",sendData);
+    //   const response = "200";
+    //   if (response.status === 200) {
         Swal.fire({
           title: "Success!",
-          text: response.data.success,
+        //   text: response.data.success,
+          text: " successful save the experience data",
           icon: "success",
           confirmButtonText: "OK",
         });
-        if (onSuccess) onSuccess(); // refresh parent data
-      }
+    //     if (onSuccess) onSuccess(); // refresh parent data
+    //   }
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -60,7 +72,7 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
         confirmButtonText: "OK",
       });
     } finally {
-      setLoading(false);
+    //   setLoading(false);
     }
   };
     const handleRemove = (id) => {
@@ -77,7 +89,8 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
                   if (result.isConfirmed) {
                       try {
   
-                          const response = await deleteLanguage(id) 
+                        //   const response = await deleteLanguage(id) 
+                        const response ="200";
   
                           if (response.status === 200) {
                               Swal.fire({
@@ -107,16 +120,12 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
 
   return {
     formData,
-    handleChange,
-    handleSubmit,
-    handleRemove,
-    loading,
-    AllLanguageOptions,
-    AllReadLanguageOptions,
-    AllWriteLanguageOptions,
-    AllSpeakLanguageOptions,
-    AllUnderstandLanguageOptions,
+     handleSubmit,
+     handleChange,
+    // handleRemove,
+    // loading,
+ 
   };
 };
 
-export default useLanguageForm;
+export default useExperinceForm;

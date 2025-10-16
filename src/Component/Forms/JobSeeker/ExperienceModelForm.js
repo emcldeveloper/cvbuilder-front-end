@@ -11,10 +11,17 @@ import usePositionLevel from '../../../hooks/Universal/PositionLevel';
 import usesalaryRange from '../../../hooks/Universal/SalaryRange';
 import useSalaryRange from '../../../hooks/Universal/SalaryRange';
 import useExperienceType from '../../../hooks/Universal/ExperienceType';
+import useExperinceForm from '../../../hooks/Candidate/UseExperience';
 
-const AddWorkExperienceModal = ({ show, onHide }) => {
+
+const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
+  const applicant_id = localStorage.getItem("applicantId");
+ 
   const [currentRole, setCurrentRole] = useState(false);
   const [showCustomIndustry, setShowCustomIndustry] = useState(false);
+  const {formData ,handleSubmit,handleChange}=useExperinceForm(applicant_id );
+
+
 
 
   const toggleCurrentRole = () => {
@@ -140,7 +147,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
         <Modal.Title className="fs-5">Add Experience</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form className="experience_applicant">
+        <Form className="experience_applicant" onSubmit={handleSubmit}>
 
           <input type="hidden" name="id" value="" />
 
@@ -154,10 +161,8 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                 options={Experiencetypeoptions}
                 onMenuScrollToBottom={loadMoreExpeiencetype}
                 placeholder="Select  type"
-                onChange={selected => {
-                  // You can store this in state or pass to your form handler
-                  console.log("Selected employer:", selected);
-                }}
+                onChange={(selected) => handleChange("experiencetype", selected)}
+                value={formData.experiencetype}
                 isSearchable // this is the default behavior
                 isClearable // Allow clearing the selected option
               />
@@ -171,10 +176,8 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                 options={Employeronoptions}
                 onMenuScrollToBottom={loadMoreEmployer}
                 placeholder="Select employer ..."
-                onChange={selected => {
-                  // You can store this in state or pass to your form handler
-                  console.log("Selected employer:", selected);
-                }}
+                 onChange={(selected) => handleChange("employer", selected)}
+                value={formData.employer}
                 isSearchable // this is the default behavior
                 isClearable // Allow clearing the selected option
               />
@@ -194,10 +197,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                     options={Countryoptions}
                     onMenuScrollToBottom={loadMoreCountry}
                     placeholder="Select country "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  country:", selected);
-                    }}
+                   onChange={(selected) => handleChange("country", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -206,14 +206,11 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                 <Col md={4}>
                   <Form.Label>Region / City<span className="text-danger">*</span></Form.Label>
                   <Select
-                    name="country"
+                    name="region"
                     options={Regionoptions}
                     onMenuScrollToBottom={loadMoreRegions}
                     placeholder="Select Region "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  region:", selected);
-                    }}
+                  onChange={(selected) => handleChange("region", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -244,10 +241,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                     options={Positionoptions}
                     onMenuScrollToBottom={loadMorePosition}
                     placeholder="Select Position "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  Position:", selected);
-                    }}
+                     onChange={(selected) => handleChange("position", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -259,10 +253,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                     options={positionleveloptions}
                     onMenuScrollToBottom={loadMorePositionLevel}
                     placeholder="Select level "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  level:", selected);
-                    }}
+                   onChange={(selected) => handleChange("positionlevel", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -281,10 +272,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                     options={Industryoptions}
                     onMenuScrollToBottom={loadMoreIndustry}
                     placeholder="Select industry "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  industry:", selected);
-                    }}
+                  onChange={(selected) => handleChange("industry", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -331,6 +319,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
                     name="started"
                     className="input-sm"
                     required
+                    
                   />
                 </Col>
                 <Col md={6}>
@@ -353,14 +342,11 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
             </Form.Label>
             <Col sm={4}>
                 <Select
-                    name="salaryRange"
+                    name="startsalaryRange"
                     options={salaryrangeoptions}
                     onMenuScrollToBottom={loadMoreSalaryRange}
                     placeholder="Select Salry Range "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  salary Range:", selected);
-                    }}
+                    onChange={(selected) => handleChange("salaryRange", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -370,7 +356,7 @@ const AddWorkExperienceModal = ({ show, onHide }) => {
             </Form.Label>
             <Col sm={4}>
                <Select
-                    name="salaryRange"
+                    name="endsalaryRange"
                     options={salaryrangeoptions}
                     onMenuScrollToBottom={loadMoreSalaryRange}
                     placeholder="Select Salry Range "

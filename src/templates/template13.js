@@ -1,4 +1,4 @@
-// Template13.jsx — CV Template with Bitter font + Brand #9896f0
+// Template13.jsx — Refined Crimson Text CV Template with brand #32489e
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -10,23 +10,15 @@ import {
   Badge,
   Image,
 } from "react-bootstrap";
-import {
-  FiPhone,
-  FiMail,
-  FiMapPin,
-  FiCpu,
-  FiStar,
-  FiGlobe,
-  FiUser,
-} from "react-icons/fi";
+import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
 
 const cvUrl = "https://ekazi.co.tz";
 const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
-const BRAND = "#242a64";
+const BRAND = "#32489e";
 
-export default function Template13() {
+export default function Template12() {
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -34,7 +26,8 @@ export default function Template13() {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error( `HTTP error! status: ${res.status} `);
+        
         return res.json();
       })
       .then((json) => {
@@ -47,7 +40,7 @@ export default function Template13() {
       });
   }, []);
 
-  if (loading) {
+  if (loading)
     return (
       <div
         className="d-flex justify-content-center align-items-center"
@@ -57,28 +50,27 @@ export default function Template13() {
         <span className="ms-3">Loading CV…</span>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Container className="py-4">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
-  }
 
-  const profiles = payload?.applicant_profile ?? [];
-  const profile = profiles[0] ?? {};
+  // Extract sections
+  const profile = payload?.applicant_profile?.[0] ?? {};
   const experiences = payload?.experience ?? [];
+  const education = payload?.education ?? [];
   const referees = payload?.referees ?? [];
   const addresses = payload?.address ?? [];
-  const education = payload?.education ?? [];
   const languages = payload?.language ?? [];
   const knowledge = payload?.knowledge ?? [];
   const software = payload?.software ?? [];
   const culture = payload?.culture ?? [];
   const personalities = payload?.applicant_personality ?? [];
 
+  // Contact details
   const phone =
     payload?.phone?.phone_number ||
     payload?.phone?.number ||
@@ -91,52 +83,78 @@ export default function Template13() {
       }`
     : "—";
 
+  // Intro and position
   const intro =
     payload?.careers?.[0]?.career ||
     payload?.objective?.objective ||
     "Professional summary not provided.";
-
   const currentPosition =
     payload?.current_position ||
     payload?.experience?.[0]?.position?.position_name ||
     "—";
 
+  // Helpers
   const formatMY = (d) => {
     const m = moment(d);
     return m.isValid() ? m.format("MMM YYYY") : "—";
   };
-
   const formatY = (d) => {
     const m = moment(d);
     return m.isValid() ? m.format("YYYY") : "";
   };
 
   return (
-    <Container fluid className="my-4">
+    <Container fluid className="my-4 px-md-5">
       <link
-        href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap"
         rel="stylesheet"
       />
-      <Card
-        className="shadow border-0 overflow-hidden"
-        style={{ fontFamily: "Bitter, serif" }}
-      >
+      <style>{`
+        * { font-family: "Crimson Text", serif; }
+        .banner {
+          background-color: ${BRAND};
+          color: #fff;
+          border-radius: 12px 12px 0 0;
+        }
+        .section-title {
+          color: ${BRAND};
+          border-bottom: 2px solid ${BRAND};
+          display: inline-block;
+          margin-bottom: 1rem;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+        .contact-info p {
+          margin-bottom: .4rem;
+          font-size: 1rem;
+        }
+        .badge-skill {
+          background-color: ${BRAND};
+          color: #fff;
+          font-size: 0.85rem;
+          padding: 0.4em 0.75em;
+        }
+        .shadow-soft {
+          box-shadow: 0 3px 10px rgba(50,72,158,0.12);
+        }
+      `}</style>
+
+      <Card className="border-0 shadow-soft overflow-hidden">
         {/* Header */}
-        <Card.Header
-          className="text-white py-4"
-          style={{ backgroundColor: BRAND }}
-        >
+        <div className="banner py-5 px-4">
           <Row className="align-items-center">
-            <Col md={3} className="text-center">
+            <Col md={3} className="text-center mb-3 mb-md-0">
               <Image
                 src={
                   profile?.picture
-                    ? `${cvUrl}/${profile.picture}`
+                    ?  `${cvUrl}/${profile.picture}`
                     : "https://placehold.co/200x200?text=Photo"
                 }
+                
                 alt="profile"
                 roundedCircle
-                className="shadow mb-3"
+                fluid
+                className="shadow"
                 style={{
                   width: "160px",
                   height: "160px",
@@ -155,118 +173,97 @@ export default function Template13() {
                   profile.last_name || ""
                 }`.trim() || "—"}
               </h1>
-              <h4 className="fw-light border-top pt-2">{currentPosition}</h4>
+              <h4 className="fw-light">{currentPosition}</h4>
             </Col>
           </Row>
-        </Card.Header>
+        </div>
 
         {/* Body */}
         <Card.Body className="p-4">
           <Row>
-            {/* Left column */}
-            <Col md={4}>
-              <SideCard title="Contact">
-                <p className="mb-2">
-                  <FiPhone className="me-2" /> {phone}
-                </p>
-                <p className="mb-2">
-                  <FiMail className="me-2" /> {email}
-                </p>
-                <p className="mb-0">
-                  <FiMapPin className="me-2" /> {location}
-                </p>
-              </SideCard>
+            {/* Left Column */}
+            <Col md={4} className="mb-4 mb-md-0">
+              <Card className="shadow-sm border-0 mb-4">
+                <Card.Body className="contact-info">
+                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
+                    Contact
+                  </h5>
+                  <p>
+                    <FiPhone className="me-2" />
+                    {phone}
+                  </p>
+                  <p>
+                    <FiMail className="me-2" />
+                    {email}
+                  </p>
+                  <p className="mb-0">
+                    <FiMapPin className="me-2" />
+                    {location}
+                  </p>
+                </Card.Body>
+              </Card>
 
-              {languages.length > 0 && (
-                <SideCard title="Languages">
+              <Card className="shadow-sm border-0 mb-4">
+                <Card.Body>
+                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
+                    Languages
+                  </h5>
+                  {languages.length ? (
+                    <div className="d-flex flex-wrap gap-2">
+                      {languages.map((l, i) => (
+                        <Badge key={i} pill className="badge-skill">
+                          {l?.language?.language_name || "Language"}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : (
+                    "—"
+                  )}
+                </Card.Body>
+              </Card>
+
+              <Card className="shadow-sm border-0 mb-4">
+                <Card.Body>
+                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
+                    Skills & Tools
+                  </h5>
                   <div className="d-flex flex-wrap gap-2">
-                    {languages.map((l, i) => (
-                      <Badge
-                        key={i}
-                        pill
-                        style={{ backgroundColor: BRAND, color: "#fff" }}
-                      >
-                        {l?.language?.language_name || "Language"}
+                    {knowledge.map((k, i) => (
+                      <Badge key={i} pill className="badge-skill">
+                        {k?.knowledge?.knowledge_name || "Skill"}
+                      </Badge>
+                    ))}
+                    {software.map((s, i) => (
+                      <Badge key={i} pill className="badge-skill">
+                        {s?.software?.software_name || "Software"}
                       </Badge>
                     ))}
                   </div>
-                </SideCard>
-              )}
+                </Card.Body>
+              </Card>
 
-              {/* Knowledge Skills */}
-              <SideCard
-                title={
-                  <>
-                    <FiStar className="me-2" /> Knowledge
-                  </>
-                }
-              >
-                <div className="d-flex flex-wrap gap-2">
-                  {knowledge.map((k, i) => (
-                    <Badge key={i} pill bg="secondary">
-                      {k?.knowledge?.knowledge_name}
-                    </Badge>
-                  ))}
-                </div>
-              </SideCard>
-
-              {/* Software Skills */}
-              <SideCard
-                title={
-                  <>
-                    <FiCpu className="me-2" /> Software
-                  </>
-                }
-              >
-                <div className="d-flex flex-wrap gap-2">
-                  {software.map((s, i) => (
-                    <Badge key={i} pill bg="dark">
-                      {s?.software?.software_name}
-                    </Badge>
-                  ))}
-                </div>
-              </SideCard>
-
-              {/* Culture */}
-              <SideCard
-                title={
-                  <>
-                    <FiGlobe className="me-2" /> Culture
-                  </>
-                }
-              >
-                <div className="d-flex flex-wrap gap-2">
-                  {culture.map((c, i) => (
-                    <Badge
-                      key={i}
-                      pill
-                      style={{ backgroundColor: BRAND, color: "#fff" }}
-                    >
-                      {c?.culture?.culture_name}
-                    </Badge>
-                  ))}
-                </div>
-              </SideCard>
-
-              {/* Personality */}
-              <SideCard
-                title={
-                  <>
-                    <FiUser className="me-2" /> Personality
-                  </>
-                }
-              >
-                <div className="d-flex flex-wrap gap-2">
-                  {personalities.map((p, i) => (
-                    <Badge key={i} pill bg="info" text="dark">
-                      {p?.personality?.personality_name}
-                    </Badge>
-                  ))}
-                </div>
-              </SideCard>
+              <Card className="shadow-sm border-0 mb-4">
+                <Card.Body>
+                  <h5 className="fw-bold mb-3" style={{ color: BRAND }}>
+                    Culture & Personality
+                  </h5>
+                  <div className="d-flex flex-wrap gap-2">
+                    {culture.map((c, i) => (
+                      <Badge key={i} pill className="badge-skill">
+                        {c?.culture?.culture_name}
+                      </Badge>
+                    ))}
+                    {personalities.map((p, i) => (
+                      <Badge key={i} pill className="badge-skill">
+                        {p?.personality?.personality_name}
+                      </Badge>
+                    ))}
+                  </div>
+                </Card.Body>
+              </Card>
             </Col>
 
-            {/* Right column */}
+            {/* Right Column */}
             <Col md={8}>
               <SectionCard title="About Me">
                 <p style={{ textAlign: "justify" }}>{intro}</p>
@@ -278,10 +275,11 @@ export default function Template13() {
                     <Card
                       key={i}
                       body
-                      className="mb-3 border-0"
-                      style={{ borderLeft: `5px solid ${BRAND}` }}
+                      className="mb-3 shadow-sm border-0"
+                      style={{ borderLeft:`5px solid ${BRAND}` }}
+                       
                     >
-                      <div className="fw-semibold">
+                      <div className="fw-semibold" style={{ color: BRAND }}>
                         {exp?.position?.position_name || "Job Title"}
                         {exp?.employer?.employer_name && (
                           <span className="text-muted">
@@ -318,10 +316,11 @@ export default function Template13() {
                     <Card
                       key={i}
                       body
-                      className="mb-3 border-0"
+                      className="mb-3 shadow-sm border-0"
                       style={{ borderLeft: `5px solid ${BRAND}` }}
+                   
                     >
-                      <div className="fw-semibold">
+                      <div className="fw-semibold" style={{ color: BRAND }}>
                         {edu?.level?.education_level || edu?.degree || "—"}
                       </div>
                       <div>
@@ -349,10 +348,12 @@ export default function Template13() {
                       <Card
                         key={r.id ?? i}
                         body
-                        className="mb-3 border-0"
+                        className="mb-3 shadow-sm border-0"
                         style={{ borderLeft: `5px solid ${BRAND}` }}
                       >
-                        <div className="fw-semibold">{fullName || "—"}</div>
+                        <div className="fw-semibold" style={{ color: BRAND }}>
+                          {fullName || "—"}
+                        </div>
                         <div className="text-muted">
                           {r?.referee_position || "—"}
                         </div>
@@ -375,26 +376,9 @@ export default function Template13() {
 function SectionCard({ title, children }) {
   return (
     <div className="mb-4">
-      <h4 className="fw-bold mb-3" style={{ color: BRAND }}>
-        {title}
-      </h4>
+      <h4 className="section-title">{title}</h4>
       {children}
     </div>
   );
 }
-
-function SideCard({ title, children }) {
-  return (
-    <Card className="mb-4 border-0 shadow-sm">
-      <Card.Body>
-        <h5
-          className="fw-bold mb-3 d-flex align-items-center"
-          style={{ color: BRAND }}
-        >
-          {title}
-        </h5>
-        {children}
-      </Card.Body>
-    </Card>
-  );
-}
+ 

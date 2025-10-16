@@ -5,6 +5,7 @@ import { faPlus, faPencilAlt, faDownload, faChalkboardTeacher } from '@fortaweso
 import { Pencil, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import AddTrainingModal from '../Forms/JobSeeker/Training';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 
 const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
   const formatDate = (dateString) => {
@@ -79,11 +80,7 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
               applicant.training.map((training, index) => (
                 <div key={index} className="d-flex mb-3 training-item">
                   <div className="me-3 mt-1">
-                    <FontAwesomeIcon
-                      icon={faChalkboardTeacher}
-                      className="text-primary"
-                      style={{ fontSize: '1.5rem' }}
-                    />
+                   <MenuBookOutlinedIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
                   </div>
                   <div className="flex-grow-1">
                     <div className="d-flex justify-content-between">
