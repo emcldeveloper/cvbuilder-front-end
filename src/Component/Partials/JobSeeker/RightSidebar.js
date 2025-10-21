@@ -35,8 +35,20 @@ const RightSideBar = () => {
       {/* Featured Companies Section */}
       <Card className="shadow-sm">
         <Card.Body>
-          <h5 className="fw-bold mb-3 " style={{ color: "#D36314" }}> Featured Companies</h5>
-          <hr className="border-primary" />
+
+          <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-yellow-500 h-24 flex items-center justify-between px-8 rounded-t-lg shadow-md">
+            <div>
+              <h5 className="text-white text-2xl font-bold tracking-wide">
+                Featured Companies
+              </h5>
+              <div className="mt-1 w-24 h-[3px] bg-white/80 rounded"></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-blue/90">Updated Weekly</span>
+              <i className="fa-solid fa-building text-white text-lg"></i>
+            </div>
+          </div>
+
           <div style={{
             maxHeight: '400px',
             overflowY: 'auto',
@@ -53,7 +65,7 @@ const RightSideBar = () => {
                   }
                 }}
               >
-                <div className="bg-light rounded-circle overflow-hidden" style={{ width: '48px', height: '48px' }}>
+                <div className="bg-light rounded-circle overflow-hidden" style={{ width: '60px', height: '60px' }}>
                   <a href={`/featured/employer/details/${company.id}`}>
                     <Image
                       src={company.logo ? `https://ekazi.co.tz/${company.logo}` : '/employer.png'}
@@ -74,7 +86,7 @@ const RightSideBar = () => {
                     style={{ maxWidth: '200px', cursor: 'pointer' }}
                     onClick={() => navigate(`/featured/employer/details/${company.id}`)}
                   >
-                    {company.client_name}
+                    {company.client_name} msoft company
                   </h6>
 
                   {/* Optional job count */}

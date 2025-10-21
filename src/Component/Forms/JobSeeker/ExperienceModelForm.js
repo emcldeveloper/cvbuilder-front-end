@@ -14,12 +14,12 @@ import useExperienceType from '../../../hooks/Universal/ExperienceType';
 import useExperinceForm from '../../../hooks/Candidate/UseExperience';
 
 
-const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
+const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   const applicant_id = localStorage.getItem("applicantId");
- 
+
   const [currentRole, setCurrentRole] = useState(false);
   const [showCustomIndustry, setShowCustomIndustry] = useState(false);
-  const {formData ,handleSubmit,handleChange}=useExperinceForm(applicant_id );
+  const { formData, handleSubmit, handleChange } = useExperinceForm(applicant_id);
 
 
 
@@ -32,7 +32,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
     value: employer.id,
     label: employer.employer_name,
   })) || [];
-   
+
   const [Employeronoptions, setEmployerOptions] = useState([]);
 
   useEffect(() => setEmployerOptions(AllEmployerOptions.slice(0, 10)), [employers]);
@@ -46,7 +46,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
     value: country.id,
     label: country.name,
   })) || [];
-  
+
   const [Countryoptions, setCountryOptions] = useState([]);
 
   useEffect(() => setCountryOptions(AllCountryOptions.slice(0, 10)), [countries]);
@@ -54,14 +54,14 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
   const loadMoreCountry = () => {
     setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
   };
-    //experince type option
+  //experince type option
   const { experincetype, loadeexperincetype } = useExperienceType();
-  
+
   const AllexperiencetypeOptions = experincetype?.map(experincetype => ({
     value: experincetype.id,
     label: experincetype.name,
   })) || [];
- 
+
   const [Experiencetypeoptions, setExperiencetypeOptions] = useState([]);
 
   useEffect(() => setExperiencetypeOptions(AllexperiencetypeOptions.slice(0, 10)), [countries]);
@@ -75,7 +75,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
     value: region.id,
     label: region.region_name
   })) || [];
-  
+
   const [Regionoptions, setRegionOptions] = useState([]);
 
   useEffect(() => setRegionOptions(AllRegionOptions.slice(0, 10)), [regions]);
@@ -89,7 +89,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
     value: position.id,
     label: position.position_name
   })) || [];
- 
+
   const [Positionoptions, setPositionOptions] = useState([]);
 
   useEffect(() => setPositionOptions(AllPositionOptions.slice(0, 10)), [positions]);
@@ -97,13 +97,13 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
   const loadMorePosition = () => {
     setPositionOptions(prev => AllPositionOptions.slice(0, prev.length + 10));
   };
-   //industry
-  const { industry, loadindustry} = useIndustry();
+  //industry
+  const { industry, loadindustry } = useIndustry();
   const AllIndustryOptions = industry?.map(industry => ({
     value: industry.id,
     label: industry.industry_name
   })) || [];
- 
+
   const [Industryoptions, setIndustryOptions] = useState([]);
 
   useEffect(() => setIndustryOptions(AllIndustryOptions.slice(0, 10)), [industry]);
@@ -111,14 +111,14 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
   const loadMoreIndustry = () => {
     setIndustryOptions(prev => AllIndustryOptions.slice(0, prev.length + 10));
   };
-   // positionlevel
-  const { positionlevel, loadpositionlevel} = usePositionLevel();
+  // positionlevel
+  const { positionlevel, loadpositionlevel } = usePositionLevel();
   const AllPositionLevelOptions = positionlevel?.map(positionlevel => ({
     value: positionlevel.id,
     label: positionlevel.position_name
 
   })) || [];
- 
+
   const [positionleveloptions, setPositionLevelOptions] = useState([]);
 
   useEffect(() => setPositionLevelOptions(AllPositionLevelOptions.slice(0, 10)), [positionlevel]);
@@ -127,19 +127,34 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
     setPositionLevelOptions(prev => AllPositionLevelOptions.slice(0, prev.length + 10));
   };
   //salry Range
-    const {salaryrange, loadsalryrange} = useSalaryRange();
+  const { salaryrange, loadsalryrange } = useSalaryRange();
   const AllSalaryRangeOption = salaryrange?.map(salaryrange => ({
     value: salaryrange.id,
     label: salaryrange.low
 
   })) || [];
-   
+
   const [salaryrangeoptions, setSalaryRangeOptions] = useState([]);
 
   useEffect(() => setSalaryRangeOptions(AllSalaryRangeOption.slice(0, 10)), [salaryrange]);
 
   const loadMoreSalaryRange = () => {
-    setSalaryRangeOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
+    setSalaryRangeOptions(prev => AllSalaryRangeOption.slice(0, prev.length + 10));
+  };
+  //second sa,ry range
+ 
+  const AllSalaryRangeOptiontwo = salaryrange?.map(salaryrange => ({
+    value: salaryrange.id,
+    label: salaryrange.low
+
+  })) || [];
+
+  const [salaryrangeoptionstwo, setSalaryRangeOptionstwo] = useState([]);
+
+  useEffect(() => setSalaryRangeOptionstwo(AllSalaryRangeOptiontwo.slice(0, 10)), [salaryrange]);
+
+  const loadMoreSalaryRangetwo = () => {
+    setSalaryRangeOptionstwo(prev => AllSalaryRangeOptiontwo.slice(0, prev.length + 10));
   };
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
@@ -167,7 +182,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                 isClearable // Allow clearing the selected option
               />
             </Col>
-             <Form.Label column sm={1}>
+            <Form.Label column sm={1}>
               Employer<span className="text-danger">*</span>
             </Form.Label>
             <Col sm={5}>
@@ -176,7 +191,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                 options={Employeronoptions}
                 onMenuScrollToBottom={loadMoreEmployer}
                 placeholder="Select employer ..."
-                 onChange={(selected) => handleChange("employer", selected)}
+                onChange={(selected) => handleChange("employer", selected)}
                 value={formData.employer}
                 isSearchable // this is the default behavior
                 isClearable // Allow clearing the selected option
@@ -197,7 +212,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                     options={Countryoptions}
                     onMenuScrollToBottom={loadMoreCountry}
                     placeholder="Select country "
-                   onChange={(selected) => handleChange("country", selected)}
+                    onChange={(selected) => handleChange("country", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -210,7 +225,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                     options={Regionoptions}
                     onMenuScrollToBottom={loadMoreRegions}
                     placeholder="Select Region "
-                  onChange={(selected) => handleChange("region", selected)}
+                    onChange={(selected) => handleChange("region", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -241,19 +256,19 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                     options={Positionoptions}
                     onMenuScrollToBottom={loadMorePosition}
                     placeholder="Select Position "
-                     onChange={(selected) => handleChange("position", selected)}
+                    onChange={(selected) => handleChange("position", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
                 </Col>
 
                 <Col md={5}>
-                   <Select
+                  <Select
                     name="positionlevel"
                     options={positionleveloptions}
                     onMenuScrollToBottom={loadMorePositionLevel}
                     placeholder="Select level "
-                   onChange={(selected) => handleChange("positionlevel", selected)}
+                    onChange={(selected) => handleChange("positionlevel", selected)}
                     isSearchable // this is the default behavior
                     isClearable // Allow clearing the selected option
                   />
@@ -267,15 +282,15 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
               Industry <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
-                <Select
-                    name="industry"
-                    options={Industryoptions}
-                    onMenuScrollToBottom={loadMoreIndustry}
-                    placeholder="Select industry "
-                  onChange={(selected) => handleChange("industry", selected)}
-                    isSearchable // this is the default behavior
-                    isClearable // Allow clearing the selected option
-                  />
+              <Select
+                name="industry"
+                options={Industryoptions}
+                onMenuScrollToBottom={loadMoreIndustry}
+                placeholder="Select industry "
+                onChange={(selected) => handleChange("industry", selected)}
+                isSearchable // this is the default behavior
+                isClearable // Allow clearing the selected option
+              />
             </Col>
           </Form.Group>
 
@@ -319,7 +334,7 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
                     name="started"
                     className="input-sm"
                     required
-                    
+
                   />
                 </Col>
                 <Col md={6}>
@@ -341,32 +356,29 @@ const AddWorkExperienceModal = ({ show, onHide ,edit}) => {
               Salary Range from <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={4}>
-                <Select
-                    name="startsalaryRange"
-                    options={salaryrangeoptions}
-                    onMenuScrollToBottom={loadMoreSalaryRange}
-                    placeholder="Select Salry Range "
-                    onChange={(selected) => handleChange("salaryRange", selected)}
-                    isSearchable // this is the default behavior
-                    isClearable // Allow clearing the selected option
-                  />
+              <Select
+                name="startsalaryRange"
+                options={salaryrangeoptions}
+                onMenuScrollToBottom={loadMoreSalaryRange}
+                placeholder="Select Salry Range "
+                onChange={(selected) => handleChange("startsalaryRange", selected)}
+                isSearchable // this is the default behavior
+                isClearable // Allow clearing the selected option
+              />
             </Col>
             <Form.Label column sm={1}>
               To <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={4}>
-               <Select
-                    name="endsalaryRange"
-                    options={salaryrangeoptions}
-                    onMenuScrollToBottom={loadMoreSalaryRange}
-                    placeholder="Select Salry Range "
-                    onChange={selected => {
-                      // You can store this in state or pass to your form handler
-                      console.log("Selected  salary Range:", selected);
-                    }}
-                    isSearchable // this is the default behavior
-                    isClearable // Allow clearing the selected option
-                  />
+              <Select
+                name="endsalaryRange"
+                options={salaryrangeoptionstwo}
+                onMenuScrollToBottom={loadMoreSalaryRangetwo}
+                placeholder="Select Salry Range "
+                onChange={(selected) => handleChange("endsalaryRange", selected)}
+                isSearchable // this is the default behavior
+                isClearable // Allow clearing the selected option
+              />
             </Col>
           </Form.Group>
 

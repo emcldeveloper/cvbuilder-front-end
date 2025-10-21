@@ -51,7 +51,7 @@ const WorkExperienceSection = ({ applicant, isApplicant }) => {
     // Group experience by employer ID
     const groupedExperience = _.groupBy(applicant?.experience || [], 'applicant_employer_id');
 
-    if (!applicant) return <Spinner animation="border" />;
+    // if (!applicant) return <Spinner animation="border" />;
 
     return (
         <div className="mt-4">

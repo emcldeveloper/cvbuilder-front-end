@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SubscriptionSection from './subscription';
 import {
   Navbar, Nav, Container, NavDropdown, Card,
   ListGroup,
@@ -36,6 +37,7 @@ import {
   StarFill
 } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
+
 
 
 const notificationData = {
@@ -111,12 +113,21 @@ const AppHeader = () => {
               <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link>
               <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
               <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
+                    
+              {isLoggedIn && (
+                <>
+                  <SubscriptionSection isLoggedIn={isLoggedIn}/>
+                </>
+              )}
+
+
             </Nav>
 
             <div className="d-flex align-items-center">
 
 
               {isLoggedIn && (
+
                 <>
 
                   <Dropdown show={showNotifications} onToggle={handleNotificationClick} className="me-2">

@@ -33,6 +33,18 @@ const LeftSideBar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const applicant_id = localStorage.getItem("applicantId");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleStatusChange = () => setIsOnline(navigator.onLine);
+    window.addEventListener("online", handleStatusChange);
+    window.addEventListener("offline", handleStatusChange);
+    return () => {
+      window.removeEventListener("online", handleStatusChange);
+      window.removeEventListener("offline", handleStatusChange);
+    };
+  }, []);
+
 
   useEffect(() => {
     const fetchCompleteProfile = async () => {
@@ -198,6 +210,43 @@ const LeftSideBar = () => {
               <span>{profileCompletion}%</span>
             </div>
             <ProgressBar now={profileCompletion} variant="success" className="mb-2" style={{ height: '5px' }} />
+            <>
+              {/* Inline animation for pulse effect */}
+              <style>
+                {`
+                @keyframes pulse {
+                  0% {
+                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+                  }
+                  70% {
+                    box-shadow: 0 0 0 8px rgba(40, 167, 69, 0);
+                  }
+                  100% {
+                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+                  }
+                }
+              `}
+              </style>
+
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: isOnline ? '#28a745' : '#6c757d', // green or gray
+                    display: 'inline-block',
+                    animation: isOnline ? 'pulse 1.5s infinite' : 'none',
+                  }}
+                ></div>
+
+                {isOnline ? (
+                  <small className="text-success fw-semibold">Online</small>
+                ) : (
+                  <small className="text-secondary fw-semibold">Offline</small>
+                )}
+              </div>
+            </>
           </div>
 
           {/* Upgrade Button */}
