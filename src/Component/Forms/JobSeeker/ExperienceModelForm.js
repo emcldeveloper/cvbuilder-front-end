@@ -22,8 +22,6 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   const { formData, handleSubmit, handleChange } = useExperinceForm(applicant_id);
 
 
-
-
   const toggleCurrentRole = () => {
     setCurrentRole(!currentRole);
   };

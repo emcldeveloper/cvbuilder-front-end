@@ -1,39 +1,53 @@
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-import useOrganization from '../../../hooks/Universal/Organization';
-import UsegetProficiency from '../../../hooks/Universal/Proficiency';
-import { useEffect, useState } from 'react';
+import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
+import CreatableSelect from "react-select/creatable";
+import useOrganization from "../../../hooks/Universal/Organization";
+import useGetProficiency from "../../../hooks/Universal/Proficiency";
+import { useEffect, useState } from "react";
+import useProficienceForm from "../../../hooks/Candidate/UseProficience";
 
 const AddProficiencyModal = ({ show, onHide }) => {
-  const { organization, loadorganization } = useOrganization();
-  const {proficiency ,loadsproficiency}= UsegetProficiency();
-  const AllOrganizationOptions = organization?.map(organization => ({
-    value: organization.id,
-    label: organization.organization_name,
-  })) || [];
-  console.log("orgnaization list yes", AllOrganizationOptions);
-  const [Organizationoptions, setOrganizationOptions] = useState([]);
+  const applicant_id = localStorage.getItem("applicantId");
 
-  useEffect(() => setOrganizationOptions(AllOrganizationOptions.slice(0, 10)), [organization]);
+  const { organization } = useOrganization();
+  const { proficiency } = useGetProficiency();
+  const { formData, handleChange, handleFileChange, handleSubmit, loading } =
+    useProficienceForm(applicant_id);
 
+  // Organization options
+  const AllOrganizationOptions =
+    organization?.map((org) => ({
+      value: org.id,
+      label: org.organization_name,
+    })) || [];
+
+  const [OrganizationOptions, setOrganizationOptions] = useState([]);
+  useEffect(
+    () => setOrganizationOptions(AllOrganizationOptions.slice(0, 10)),
+    [organization]
+  );
   const loadMoreOrganization = () => {
-    setOrganizationOptions(prev => AllOrganizationOptions.slice(0, prev.length + 10));
+    setOrganizationOptions((prev) =>
+      AllOrganizationOptions.slice(0, prev.length + 10)
+    );
   };
-  //proficinecy option
-  const AllProficiencyOptions = proficiency?.map(proficiency => ({
-    value: proficiency.id,
-    label: proficiency.proficiency_name,
-  })) || [];
-  console.log("proficiency list list yes", AllProficiencyOptions);
-  const [Proficiencyoptions, setProficiencyOptions] = useState([]);
 
-  useEffect(() => setProficiencyOptions(AllProficiencyOptions.slice(0, 10)), [proficiency]);
+  // Proficiency options
+  const AllProficiencyOptions =
+    proficiency?.map((p) => ({
+      value: p.id,
+      label: p.proficiency_name,
+    })) || [];
 
+  const [ProficiencyOptions, setProficiencyOptions] = useState([]);
+  useEffect(
+    () => setProficiencyOptions(AllProficiencyOptions.slice(0, 10)),
+    [proficiency]
+  );
   const loadMoreProficiency = () => {
-    setOrganizationOptions(prev => AllProficiencyOptions.slice(0, prev.length + 10));
+    setProficiencyOptions((prev) =>
+      AllProficiencyOptions.slice(0, prev.length + 10)
+    );
   };
-
 
   return (
     <Modal show={show} onHide={onHide} centered>
@@ -42,61 +56,68 @@ const AddProficiencyModal = ({ show, onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Form
-          method="POST"
-
+          onSubmit={(e) => handleSubmit(e, onHide)}
           encType="multipart/form-data"
           className="proficiency-applicant"
         >
-          <input type="hidden" name="id" value="" />
-
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Organization  <span className="text-danger">*</span>
+              Organization <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
               <CreatableSelect
-                name="major"
-                options={Organizationoptions}
+                name="organization"
+                options={OrganizationOptions}
+                value={
+                  OrganizationOptions.find(
+                    (opt) => opt.value === formData.organization
+                  ) || null
+                }
                 onMenuScrollToBottom={loadMoreOrganization}
                 placeholder="Select organization ..."
-                onChange={selected => {
-                  // You can store this in state or pass to your form handler
-                  console.log("Selected organization:", selected);
-                }}
-                isSearchable // this is the default behavior
-                isClearable // Allow clearing the selected option
+                onChange={(selected) =>
+                  handleChange("organization", selected?.value || "")
+                }
+                isSearchable
+                isClearable
               />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Proficiency<span className="text-danger">*</span>
+              Proficiency <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
-             <CreatableSelect
+              <CreatableSelect
                 name="proficiency"
-                options={Proficiencyoptions}
+                options={ProficiencyOptions}
+                value={
+                  ProficiencyOptions.find(
+                    (opt) => opt.value === formData.proficiency
+                  ) || null
+                }
                 onMenuScrollToBottom={loadMoreProficiency}
                 placeholder="Select proficiency ..."
-                onChange={selected => {
-                  // You can store this in state or pass to your form handler
-                  console.log("Selected proficiency:", selected);
-                }}
-                isSearchable // this is the default behavior
-                isClearable // Allow clearing the selected option
+                onChange={(selected) =>
+                  handleChange("proficiency", selected?.value || "")
+                }
+                isSearchable
+                isClearable
               />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Started<span className="text-danger">*</span>
+              Started <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="date"
                 name="started"
+                value={formData.started}
+                onChange={(e) => handleChange("started", e.target.value)}
                 required
               />
             </Col>
@@ -104,12 +125,14 @@ const AddProficiencyModal = ({ show, onHide }) => {
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Ended<span className="text-danger">*</span>
+              Ended <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="date"
                 name="ended"
+                value={formData.ended}
+                onChange={(e) => handleChange("ended", e.target.value)}
                 required
               />
             </Col>
@@ -117,12 +140,14 @@ const AddProficiencyModal = ({ show, onHide }) => {
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Awarded<span className="text-danger">*</span>
+              Awarded <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="text"
                 name="award"
+                value={formData.award}
+                onChange={(e) => handleChange("award", e.target.value)}
                 required
               />
             </Col>
@@ -130,12 +155,13 @@ const AddProficiencyModal = ({ show, onHide }) => {
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Attach Certificate<span className="text-danger">*</span>
+              Attach Certificate <span className="text-danger">*</span>
             </Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="file"
                 name="attachment"
+                 onChange={handleFileChange}
                 required
               />
             </Col>
@@ -145,8 +171,22 @@ const AddProficiencyModal = ({ show, onHide }) => {
             <Button variant="outline-secondary" onClick={onHide}>
               Close
             </Button>
-            <Button variant="outline-secondary" type="submit">
-              Save changes
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-2"
+                  />
+                  Saving...
+                </>
+              ) : (
+                "Save changes"
+              )}
             </Button>
           </Modal.Footer>
         </Form>

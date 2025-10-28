@@ -32,13 +32,8 @@ const ProfileSection = ({ profile, address }) => {
     const [Genderoptions, setGenderOptions] = useState([]);
     const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
     const [citizenshipoptions, setCitizenshipOptions] = useState([]);
-    console.log("profile complete to check the data", profile);
-    // const [profileImage, setProfileImage] = useState(
-    //     profile?.picture ? `http://127.0.0.1:8000/${profile.picture}` : 'http://127.0.0.1:8000/uploads/picture/pre_photo.jpg'
-    // );
-    // const [bgImage, setBgImage] = useState(
-    //     profile?.background_picture ? `http://127.0.0.1:8000/${profile.background_picture}` : 'http://127.0.0.1:8000/svg/dotted.svg'
-    // );
+  
+    
     const [profileImage, setProfileImage] = useState('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
     const [bgImage, setBgImage] = useState('https://ekazi.co.tz/svg/dotted.svg');
 
@@ -509,7 +504,6 @@ const ProfileSection = ({ profile, address }) => {
                                 {profile?.first_name} {profile?.middle_name} {profile?.last_name}
                             </h5>
                         </div>
-
                         <div className="text-dark d-flex align-items-center flex-wrap">
                             <FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" />
                             <span className="me-2">
@@ -518,7 +512,6 @@ const ProfileSection = ({ profile, address }) => {
                                 {address?.region_name}
                                 {address?.name || "Tanzania"}
                             </span>
-
                             <Button
                                 variant="link"
                                 className="p-0 ms-2 text-decoration-none"

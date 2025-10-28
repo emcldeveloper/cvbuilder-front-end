@@ -1,3 +1,4 @@
+import { Try } from '@mui/icons-material';
 import axios from 'axios';
 
 // Set up default base URL for all axios requests
@@ -218,7 +219,44 @@ export const createCulture = async (sendData) => {
         throw error;
     }
 };
+export const createProfileSubscription =async(sendData)=>{
+    try {
+        const response =await api.post (`applicant/accountsubscription`, sendData)
+        return response;
+    } catch (error) {
+         throw error;
+         
+    }
+}
+export const subscriptionstatus = async (applicant_id) => {
+  const cacheKey = `accountsubscriptionStatus_${applicant_id}`;
 
+  // Check if cache is valid
+  if (isCacheValid(cacheKey)) {
+    console.log("Cache hit for:", cacheKey);
+    return cache[cacheKey].data;
+  }
+
+  try {
+    const response = await api.get(`applicant/accountsubscriptionStatus/${applicant_id}`);
+
+    // Safely handle backend structure
+    const verificationStatus = response.data?.verification_status ?? null;
+
+    // Cache the response
+    cache[cacheKey] = {
+      data: verificationStatus,
+      timestamp: Date.now(),
+    };
+
+    return verificationStatus;
+  } catch (error) {
+    console.error("Error fetching subscription status:", error);
+    throw error;
+  }
+};
+ 
+ 
 export const createProfileImageu = async (sendData) => {
     try {
         const response = await api.post('applicant/profileimagesave', sendData);
@@ -242,6 +280,33 @@ export const createProfileImage = async (formData) => {
         throw error;
     }
 };
+export const createTraining = async (formData) => {
+  try {
+    const response = await api.post('applicant/storetraining', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    });
+    return response; // return full Axios response
+  } catch (error) {
+    throw error;
+  }
+};
+export const createProficience = async (formData) => {
+  try {
+    const response = await api.post('applicant/proficiencystore', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    });
+    return response; // return full Axios response
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createBackgroundImage = async (formData) => {
     try {
         const response = await api.post('applicant/backgroundimagesave', formData, {
