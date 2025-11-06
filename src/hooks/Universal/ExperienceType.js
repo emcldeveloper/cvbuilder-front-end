@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getCulture } from '../../Api/Universal/UniversalApi';
 import { getExperienceType } from '../../Api/Universal/UniversalApi';
 
 const useExperienceType = () => {
   const [experincetype, setexperiencetype] = useState([]);
   const [loading, setLoading] = useState(true);
+  console.log("check experinece type  Tanzania",experincetype);
 
   useEffect(() => {
     let mounted = true;
@@ -17,7 +17,7 @@ const useExperienceType = () => {
 
     return () => { mounted = false; };
   }, []);
-  console.log("check experinece type  yap",experincetype);
+ 
   return {experincetype, loading };
 };
 

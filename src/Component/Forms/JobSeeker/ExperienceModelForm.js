@@ -59,7 +59,8 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
     value: experincetype.id,
     label: experincetype.name,
   })) || [];
-
+ 
+  console.log("current change");
   const [Experiencetypeoptions, setExperiencetypeOptions] = useState([]);
 
   useEffect(() => setExperiencetypeOptions(AllexperiencetypeOptions.slice(0, 10)), [countries]);

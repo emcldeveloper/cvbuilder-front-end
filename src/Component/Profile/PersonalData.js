@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Container, Row, Col, Button, Modal, Form, Image, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import Select from 'react-select';
-import { ProgressBar, Accordion, ListGroup } from 'react-bootstrap';
-import { PencilFill, Camera } from 'react-bootstrap-icons';
+import { PencilFill } from 'react-bootstrap-icons';
 import useGenders from '../../hooks/Universal/Gender';
 import useMalitalstatus from '../../hooks/Universal/MaritalStatus';
 import useRegions from '../../hooks/Universal/Region';
@@ -13,6 +12,8 @@ import useCitizenship from '../../hooks/Universal/Citizenship';
 import { createBackgroundImage, createProfileImage } from '../../Api/Jobseeker/JobSeekerProfileApi';
 import Swal from 'sweetalert2';
 import moment from "moment";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../utils/cropImage";
 
 const ProfileSection = ({ profile, address }) => {
     const applicant_id = localStorage.getItem("applicantId");
@@ -20,6 +21,18 @@ const ProfileSection = ({ profile, address }) => {
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
     const [showBgModal, setShowBgModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const [showCropModal, setShowCropModal] = useState(false);
+    console.log("adrress yes boss", address);
+
+    // Crop states
+    const [imageSrc, setImageSrc] = useState(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [croppedImage, setCroppedImage] = useState(null);
+
+    // Add state for background file
+    const [bgFile, setBgFile] = useState(null);
 
     const { genders, loading } = useGenders();
     const { maritalstatus, maritalsatausloading } = useMalitalstatus();
@@ -32,8 +45,7 @@ const ProfileSection = ({ profile, address }) => {
     const [Genderoptions, setGenderOptions] = useState([]);
     const [MaritalStatusoptions, setMaritalStatusOptions] = useState([]);
     const [citizenshipoptions, setCitizenshipOptions] = useState([]);
-  
-    
+
     const [profileImage, setProfileImage] = useState('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
     const [bgImage, setBgImage] = useState('https://ekazi.co.tz/svg/dotted.svg');
 
@@ -52,6 +64,46 @@ const ProfileSection = ({ profile, address }) => {
             setBgImage(`https://ekazi.co.tz/${formattedPath}`);
         }
     }, [profile]);
+    const [selectedRegion, setSelectedRegion] = useState(null);
+    useEffect(() => {
+        if (address && address.region_name && address.region_id) {
+            console.log("Address yes boss", address.region_name);
+            setSelectedRegion({
+                value: address.region_id,
+                label: address.region_name,
+            });
+        }
+    }, [address]);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    useEffect(() => {
+        if (address && address.name && address.country_id) {
+            console.log("Address yes boss", address.name);
+            setSelectedCountry({
+                value: address.name,
+                label: address.name,
+            });
+        }
+    }, [address]);
+       const [selectedCitizenship, setSelectedCitizenship] = useState(null);
+    useEffect(() => {
+        if (address && address.citizenship && address.id) { 
+            setSelectedCitizenship({
+                value: address.citizenship,
+                label: address.citizenship,
+            });
+        }
+    }, [address]);
+
+
+
+    useEffect(() => {
+        const mapped = genders?.map(gender => ({
+            value: gender.id,
+            label: gender.gender_name,
+        })) || [];
+        setGenderOptions(mapped.slice(0, 10));
+    }, [genders]);
+
 
     const handleImageError = (type) => (e) => {
         console.error(`${type} image failed to load:`, e.target.src);
@@ -62,108 +114,167 @@ const ProfileSection = ({ profile, address }) => {
         }
     };
 
+    // 🟢 Step 1: Handle file selection → open crop modal
+    const handleProfileImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
-    const [profileFile, setProfileFile] = useState(null);
-    const [bgFile, setBgFile] = useState(null);
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
 
-    // Region options
-    useEffect(() => {
-        const AllRegionOptions = regions?.map(region => ({
-            value: region.id,
-            label: region.region_name
-        })) || [];
-        setRegionOptions(AllRegionOptions.slice(0, 10));
-    }, [regions]);
+        if (!validTypes.includes(file.type)) {
+            Swal.fire({
+                title: "Error!",
+                text: "Please select a valid image file (JPEG, PNG, JPG, WEBP)",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
 
-    const loadMoreRegions = () => {
-        const AllRegionOptions = regions?.map(region => ({
-            value: region.id,
-            label: region.region_name
-        })) || [];
-        setRegionOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
+        if (file.size > maxSize) {
+            Swal.fire({
+                title: "Error!",
+                text: "File size must be less than 5MB",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImageSrc(reader.result);
+            setShowCropModal(true);
+        };
+        reader.readAsDataURL(file);
     };
 
-    // Country options
-    useEffect(() => {
-        const AllCountryOptions = countries?.map(country => ({
-            value: country.id,
-            label: country.name,
-        })) || [];
-        setCountryOptions(AllCountryOptions.slice(0, 10));
-    }, [countries]);
+    // 🟢 Step 2: Handle crop area
+    const onCropComplete = useCallback((croppedArea, croppedPixels) => {
+        setCroppedAreaPixels(croppedPixels);
+    }, []);
 
-    const loadMoreCountry = () => {
-        const AllCountryOptions = countries?.map(country => ({
-            value: country.id,
-            label: country.name,
-        })) || [];
-        setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
+    // 🟢 Step 3: Generate cropped image preview
+    const showCroppedImage = useCallback(async () => {
+        try {
+            const croppedImg = await getCroppedImg(imageSrc, croppedAreaPixels);
+            setCroppedImage(croppedImg);
+            setProfileImage(croppedImg);
+            setShowCropModal(false);
+            setShowProfileModal(true); // Return to profile modal to show preview
+        } catch (e) {
+            console.error(e);
+            Swal.fire("Error!", "Failed to crop image.", "error");
+        }
+    }, [imageSrc, croppedAreaPixels]);
+
+    // 🟢 Step 4: Save final cropped image to backend
+    const saveProfileImage = async (e) => {
+        e.preventDefault();
+
+        if (!croppedImage) {
+            Swal.fire("Error!", "Please crop the image first.", "error");
+            return;
+        }
+
+        try {
+            // Convert data URL to blob
+            const response = await fetch(croppedImage);
+            const blob = await response.blob();
+            const file = new File([blob], "cropped-profile.jpg", { type: "image/jpeg" });
+
+            const formData = new FormData();
+            formData.append("picture", file);
+            formData.append("applicant_id", applicant_id);
+
+            console.log("=== FormData Debug ===");
+            console.log("FormData has picture:", formData.has("picture"));
+            console.log("FormData has applicant_id:", formData.has("applicant_id"));
+
+            const apiResponse = await createProfileImage(formData);
+
+            if (apiResponse?.status === 200 || apiResponse?.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: apiResponse.success || "Profile image updated successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    setShowProfileModal(false);
+                    // Optionally reload the page or update parent state
+                    window.location.reload();
+                });
+            } else {
+                throw new Error(apiResponse?.message || "Failed to save profile image");
+            }
+        } catch (err) {
+            console.error("Error in saveProfileImage:", err);
+            let errorMessage = "Error saving profile image";
+
+            if (err.response?.data?.errors) {
+                const errors = err.response.data.errors;
+                errorMessage = Array.isArray(errors) ? errors.join(', ') : errors;
+            } else if (err.response?.data?.message) {
+                errorMessage = err.response.data.message;
+            } else if (err.response?.status === 422 && err.response?.data) {
+                const errors = err.response.data.errors;
+                if (typeof errors === 'object') {
+                    errorMessage = Object.values(errors).flat().join(', ');
+                } else {
+                    errorMessage = errors || "Validation error";
+                }
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            Swal.fire({
+                title: "Error!",
+                text: errorMessage,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
     };
 
-    // Gender options
-    useEffect(() => {
-        const AllGenderOptions = genders?.map(gender => ({
-            value: gender.id,
-            label: gender.gender_name,
-        })) || [];
-        setGenderOptions(AllGenderOptions.slice(0, 10));
-    }, [genders]);
-
-    const loadMoreGender = () => {
-        const AllGenderOptions = genders?.map(gender => ({
-            value: gender.id,
-            label: gender.gender_name,
-        })) || [];
-        setGenderOptions(prev => AllGenderOptions.slice(0, prev.length + 10));
-    };
-
-    // Marital status options
-    useEffect(() => {
-        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
-            value: status.id,
-            label: status.marital_status,
-        })) || [];
-        setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10));
-    }, [maritalstatus]);
-
-    const loadMoreMaritalStatus = () => {
-        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
-            value: status.id,
-            label: status.marital_status,
-        })) || [];
-        setMaritalStatusOptions(prev => AllMaritalStatusOptions.slice(0, prev.length + 10));
-    };
-
-    // Citizenship options
-    useEffect(() => {
-        const AllCitizenshipOptions = citizenship?.map(citizen => ({
-            value: citizen.id,
-            label: citizen.citizenship,
-        })) || [];
-        setCitizenshipOptions(AllCitizenshipOptions.slice(0, 10));
-    }, [citizenship]);
-
-    const loadMoreCitizenship = () => {
-        const AllCitizenshipOptions = citizenship?.map(citizen => ({
-            value: citizen.id,
-            label: citizen.citizenship,
-        })) || [];
-        setCitizenshipOptions(prev => AllCitizenshipOptions.slice(0, prev.length + 10));
-    };
-
-    // Background image handlers
+    // ✅ FIXED: Background image handlers
     const handleBgImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setBgFile(file);
+            // Validate file type and size
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!validTypes.includes(file.type)) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please select a valid image file (JPEG, PNG, JPG, WEBP)",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
+
+            if (file.size > maxSize) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "File size must be less than 5MB",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return;
+            }
+
+            setBgFile(file); // Store the actual file
             const reader = new FileReader();
             reader.onload = (event) => {
-                setBgImage(event.target.result);
+                setBgImage(event.target.result); // Set preview image
             };
             reader.readAsDataURL(file);
         }
     };
 
+    // ✅ FIXED: Save background image function
     const saveBackgroundImage = async (e) => {
         e.preventDefault();
         if (!bgFile) {
@@ -178,93 +289,12 @@ const ProfileSection = ({ profile, address }) => {
 
         try {
             const formData = new FormData();
-            formData.append("background_picture", bgFile); // Append the actual file
-            formData.append("applicant_id", applicant_id);
-
-            // Uncomment and implement your background image API call
-            const response = await createBackgroundImage(formData);
-            if (response?.status === 200 || response?.success) {
-                Swal.fire({
-                    title: "Success!",
-
-                    text: response.success || "Background image updated successfully!",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else {
-                console.error("API returned unexpected response:", response);
-                throw new Error(response?.message || "Failed to save background image");
-            }
-
-
-        } catch (err) {
-            console.error(err);
-            Swal.fire({
-                title: "Error!",
-                text: "Error saving background image",
-                icon: "error",
-                confirmButtonText: "OK",
-            });
-        }
-    };
-
-    // Profile image handlers
-    const handleProfileImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (!validTypes.includes(file.type)) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Please select a valid image file (JPEG, PNG, GIF, WEBP)",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-                return;
-            }
-            if (file.size > maxSize) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "File size must be less than 5MB",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-                return;
-            }
-            setProfileFile(file);
-            const reader = new FileReader();
-            reader.onload = (event) => setProfileImage(event.target.result);
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const saveProfileImage = async (e) => {
-        e.preventDefault();
-
-        console.log("saveProfileImage called");
-        console.log("profileFile state:", profileFile);
-
-        if (!profileFile) {
-            Swal.fire({
-                title: "Error!",
-                text: "Please select an image first!",
-                icon: "error",
-                confirmButtonText: "OK",
-            });
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append("picture", profileFile);
+            formData.append("background_picture", bgFile); // Append the actual FILE, not the URL
             formData.append("applicant_id", applicant_id);
 
             // Debug FormData contents
-            console.log("=== FormData Debug ===");
-            console.log("FormData has picture:", formData.has("picture"));
+            console.log("=== Background Image FormData Debug ===");
+            console.log("FormData has background_picture:", formData.has("background_picture"));
             console.log("FormData has applicant_id:", formData.has("applicant_id"));
 
             for (let [key, value] of formData.entries()) {
@@ -275,53 +305,43 @@ const ProfileSection = ({ profile, address }) => {
                 }
             }
 
-
-            console.log("profile image is avaulbel", formData);
-            const response = await createProfileImage(formData);
-
+            const response = await createBackgroundImage(formData);
 
             if (response?.status === 200 || response?.success) {
                 Swal.fire({
                     title: "Success!",
-
-                    text: response.success || "Profile image updated successfully!",
+                    text: response.success || "Background image updated successfully!",
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(() => {
-                    setProfileImage(URL.createObjectURL(profileFile));
+                    setShowBgModal(false);
+                    setBgFile(null); // Clear the file state
+                    window.location.reload();
                 });
             } else {
                 console.error("API returned unexpected response:", response);
-                throw new Error(response?.message || "Failed to save profile image");
+                throw new Error(response?.message || "Failed to save background image");
             }
 
-            setShowProfileModal(false);
         } catch (err) {
-            console.error("Error in saveProfileImage:", err);
+            console.error("Error saving background image:", err);
 
-            let errorMessage = "Error saving profile image";
+            let errorMessage = "Error saving background image";
 
-            // Check if error response contains Laravel validation errors
+            // Enhanced error handling
             if (err.response?.data?.errors) {
                 const errors = err.response.data.errors;
                 errorMessage = Array.isArray(errors) ? errors.join(', ') : errors;
-            }
-            // Check if error has a direct message
-            else if (err.response?.data?.message) {
+            } else if (err.response?.data?.message) {
                 errorMessage = err.response.data.message;
-            }
-            // Handle Laravel validation error format
-            else if (err.response?.status === 422 && err.response?.data) {
-                // Laravel often returns { errors: { field: ["error1", "error2"] } }
+            } else if (err.response?.status === 422 && err.response?.data) {
                 const errors = err.response.data.errors;
                 if (typeof errors === 'object') {
                     errorMessage = Object.values(errors).flat().join(', ');
                 } else {
                     errorMessage = errors || "Validation error";
                 }
-            }
-            // Use the error message if available
-            else if (err.message) {
+            } else if (err.message) {
                 errorMessage = err.message;
             }
 
@@ -334,7 +354,12 @@ const ProfileSection = ({ profile, address }) => {
         }
     };
 
-    // Save address + personal info
+    // Reset background file when modal closes
+    const handleBgModalClose = () => {
+        setBgFile(null);
+        setShowBgModal(false);
+    };
+
     const saveAddressInfo = async (e) => {
         e.preventDefault();
         try {
@@ -366,6 +391,88 @@ const ProfileSection = ({ profile, address }) => {
         }
     };
 
+    // Region options (unchanged)
+    useEffect(() => {
+        const AllRegionOptions = regions?.map(region => ({
+            value: region.id,
+            label: region.region_name
+        })) || [];
+        setRegionOptions(AllRegionOptions.slice(0, 10));
+    }, [regions]);
+
+    const loadMoreRegions = () => {
+        const AllRegionOptions = regions?.map(region => ({
+            value: region.id,
+            label: region.region_name
+        })) || [];
+        setRegionOptions(prev => AllRegionOptions.slice(0, prev.length + 10));
+    };
+
+    // Other option loaders (unchanged)
+    useEffect(() => {
+        const AllCountryOptions = countries?.map(country => ({
+            value: country.id,
+            label: country.name,
+        })) || [];
+        setCountryOptions(AllCountryOptions.slice(0, 10));
+    }, [countries]);
+
+    const loadMoreCountry = () => {
+        const AllCountryOptions = countries?.map(country => ({
+            value: country.id,
+            label: country.name,
+        })) || [];
+        setCountryOptions(prev => AllCountryOptions.slice(0, prev.length + 10));
+    };
+
+    useEffect(() => {
+        const AllGenderOptions = genders?.map(gender => ({
+            value: gender.id,
+            label: gender.gender_name,
+        })) || [];
+        setGenderOptions(AllGenderOptions.slice(0, 10));
+    }, [genders]);
+
+    const loadMoreGender = () => {
+        const AllGenderOptions = genders?.map(gender => ({
+            value: gender.id,
+            label: gender.gender_name,
+        })) || [];
+        setGenderOptions(prev => AllGenderOptions.slice(0, prev.length + 10));
+    };
+
+    useEffect(() => {
+        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
+            value: status.id,
+            label: status.marital_status,
+        })) || [];
+        setMaritalStatusOptions(AllMaritalStatusOptions.slice(0, 10));
+    }, [maritalstatus]);
+
+    const loadMoreMaritalStatus = () => {
+        const AllMaritalStatusOptions = maritalstatus?.map(status => ({
+            value: status.id,
+            label: status.marital_status,
+        })) || [];
+        setMaritalStatusOptions(prev => AllMaritalStatusOptions.slice(0, prev.length + 10));
+    };
+
+    useEffect(() => {
+        const AllCitizenshipOptions = citizenship?.map(citizen => ({
+            value: citizen.id,
+            label: citizen.citizenship,
+        })) || [];
+        setCitizenshipOptions(AllCitizenshipOptions.slice(0, 10));
+    }, [citizenship]);
+
+    const loadMoreCitizenship = () => {
+        const AllCitizenshipOptions = citizenship?.map(citizen => ({
+            value: citizen.id,
+            label: citizen.citizenship,
+        })) || [];
+        setCitizenshipOptions(prev => AllCitizenshipOptions.slice(0, prev.length + 10));
+    };
+
     if (loading) return <p>Loading...</p>;
 
     return (
@@ -385,7 +492,6 @@ const ProfileSection = ({ profile, address }) => {
                         backgroundColor: '#2995CC'
                     }}
                 />
-
 
                 <Button
                     variant="light"
@@ -420,8 +526,8 @@ const ProfileSection = ({ profile, address }) => {
                 </div>
             </div>
 
-            {/* Background Image Edit Modal */}
-            <Modal show={showBgModal} onHide={() => setShowBgModal(false)} centered>
+            {/* ✅ FIXED: Background Image Edit Modal */}
+            <Modal show={showBgModal} onHide={handleBgModalClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title className='fs-5'>Edit Background Image</Modal.Title>
                 </Modal.Header>
@@ -439,12 +545,19 @@ const ProfileSection = ({ profile, address }) => {
                                 accept="image/*"
                                 onChange={handleBgImageUpload}
                             />
+                            <Form.Text className="text-muted">
+                                Supported formats: JPEG, PNG, JPG, WEBP. Max size: 5MB
+                            </Form.Text>
                         </Form.Group>
                         <div className="d-flex justify-content-end gap-2">
-                            <Button variant="outline-secondary" onClick={() => setShowBgModal(false)}>
+                            <Button variant="outline-secondary" onClick={handleBgModalClose}>
                                 Cancel
                             </Button>
-                            <Button variant="primary" type="submit">
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                disabled={!bgFile}
+                            >
                                 Save Changes
                             </Button>
                         </div>
@@ -452,7 +565,7 @@ const ProfileSection = ({ profile, address }) => {
                 </Modal.Body>
             </Modal>
 
-            {/* Profile Image Edit Modal - FIXED: Only one modal */}
+            {/* Profile Image Edit Modal with Crop Integration */}
             <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title className='fs-5'>Edit Profile Image</Modal.Title>
@@ -472,6 +585,9 @@ const ProfileSection = ({ profile, address }) => {
                                 accept="image/*"
                                 onChange={handleProfileImageUpload}
                             />
+                            <Form.Text className="text-muted">
+                                Supported formats: JPEG, PNG, JPG, WEBP. Max size: 5MB
+                            </Form.Text>
                         </Form.Group>
                         <div className="d-flex justify-content-end gap-2">
                             <Button variant="outline-secondary" onClick={() => setShowProfileModal(false)}>
@@ -482,17 +598,78 @@ const ProfileSection = ({ profile, address }) => {
                                 className="me-auto"
                                 onClick={() => {
                                     setProfileImage('https://ekazi.co.tz/uploads/picture/pre_photo.jpg');
-                                    setProfileFile(null);
+                                    setCroppedImage(null);
                                 }}
                             >
                                 Remove Photo
                             </Button>
-                            <Button variant="primary" type="submit">
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                disabled={!croppedImage}
+                            >
                                 Save Changes
                             </Button>
                         </div>
                     </Form>
                 </Modal.Body>
+            </Modal>
+
+            {/* Crop Modal */}
+            <Modal show={showCropModal} onHide={() => setShowCropModal(false)} centered size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>Crop Your Profile Image</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div
+                        style={{
+                            position: "relative",
+                            width: "100%",
+                            height: "400px",
+                            background: "#333",
+                            borderRadius: "8px",
+                            overflow: "hidden"
+                        }}
+                    >
+                        <Cropper
+                            image={imageSrc}
+                            crop={crop}
+                            zoom={zoom}
+                            aspect={1}
+                            onCropChange={setCrop}
+                            onZoomChange={setZoom}
+                            onCropComplete={onCropComplete}
+                            cropShape="round"
+                            showGrid={false}
+                            style={{
+                                containerStyle: {
+                                    borderRadius: "8px"
+                                }
+                            }}
+                        />
+                    </div>
+                    <div className="mt-3">
+                        <Form.Label>Zoom: {Math.round(zoom * 100)}%</Form.Label>
+                        <Form.Range
+                            min={1}
+                            max={3}
+                            step={0.1}
+                            value={zoom}
+                            onChange={(e) => setZoom(parseFloat(e.target.value))}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-secondary" onClick={() => setShowCropModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={showCroppedImage}
+                    >
+                        Crop & Preview
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             {/* Personal Info Section */}
@@ -509,7 +686,7 @@ const ProfileSection = ({ profile, address }) => {
                             <span className="me-2">
                                 {address?.postal && `${address.postal}, `}
                                 {address?.sub_location && `${address.sub_location}, `}
-                                {address?.region_name}
+                                {address?.region_name} {""}
                                 {address?.name || "Tanzania"}
                             </span>
                             <Button
@@ -521,7 +698,6 @@ const ProfileSection = ({ profile, address }) => {
                             </Button>
                         </div>
 
-                        {/* ✅ Add member since here */}
                         {profile?.created_at && (
                             <div className="text-muted small mt-1">
                                 Member since {moment(profile.created_at).format("YYYY")}
@@ -540,7 +716,6 @@ const ProfileSection = ({ profile, address }) => {
                         </Button>
                     </Col>
                 </Row>
-
             </Container>
 
             {/* Contact Modal */}
@@ -566,7 +741,7 @@ const ProfileSection = ({ profile, address }) => {
                     <Row className="mb-3">
                         <Col xs={1}><FontAwesomeIcon icon={faPhone} /></Col>
                         <Col xs={11}>
-                            {address?.country_code && <div>{address.country_code} 123456789</div>}
+                            {address?.country_code && <div>{address.country_code} 0000</div>}
                         </Col>
                     </Row>
 
@@ -681,6 +856,10 @@ const ProfileSection = ({ profile, address }) => {
                                     name="country"
                                     options={Countryoptions}
                                     onMenuScrollToBottom={loadMoreCountry}
+                                    value={selectedCountry}
+                                    onChange={(option) => {
+                                        setSelectedCountry(option);
+                                    }}
                                     placeholder="Select country"
                                     isSearchable
                                     isClearable
@@ -692,6 +871,10 @@ const ProfileSection = ({ profile, address }) => {
                                 <Select
                                     name="citizenship"
                                     options={citizenshipoptions}
+                                    value={selectedCitizenship}
+                                    onChange={(option)=>{ 
+                                        setSelectedCitizenship(option)
+                                     }}
                                     onMenuScrollToBottom={loadMoreCitizenship}
                                     placeholder="Select citizenship"
                                     isSearchable
@@ -706,7 +889,11 @@ const ProfileSection = ({ profile, address }) => {
                                 <Select
                                     name="region"
                                     options={Regionoptions}
+                                    value={selectedRegion}
                                     onMenuScrollToBottom={loadMoreRegions}
+                                       onChange={(option) => {
+                                        setSelectedRegion(option);
+                                    }}
                                     placeholder="Select Region"
                                     isSearchable
                                     isClearable

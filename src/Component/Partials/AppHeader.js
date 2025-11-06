@@ -110,7 +110,7 @@ const AppHeader = () => {
               <Nav.Link href="/" className="text-primary">Home</Nav.Link>
               <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
               <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>
-              <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link>
+              {/* <Nav.Link href="/jobseeker/sample-selection" className="text-primary">CV Builder</Nav.Link> */}
               <Nav.Link href="/salary-calculator" className="text-primary">Salary Calculator</Nav.Link>
               <Nav.Link href="/pricelists" className="text-primary">Pricing</Nav.Link>
                     

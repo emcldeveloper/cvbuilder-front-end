@@ -76,8 +76,8 @@ export const getRegions = () =>
     data: res.data.region
   }));
   export const getExperienceType = () =>
-  fetchWithCache('experincytype', `${UNIVERSAL_APPLICANT_API}/experiencetype`, res => ({
-    data: res.data.experincytype
+  fetchWithCache('experincy_type', `${UNIVERSAL_APPLICANT_API}/experiencetype`, res => ({
+    data: res.data.experincy_type
   }));
  
 export const getIndustry = () =>
@@ -97,6 +97,10 @@ export const getCourse = () =>
 export const getOrganization = () =>
   fetchWithCache('organization', `${UNIVERSAL_APPLICANT_API}/organization`, res => ({
     data: res.data.organization
+  }));
+  export const getCollege = () =>
+  fetchWithCache('college', `${UNIVERSAL_APPLICANT_API}/college`, res => ({
+    data: res.data.college
   }));
 
 

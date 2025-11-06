@@ -6,6 +6,7 @@ import { Pencil, Plus } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import AddTrainingModal from '../Forms/JobSeeker/Training';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 
 const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
   const formatDate = (dateString) => {
@@ -80,7 +81,7 @@ const TrainingWorkshops = ({ applicant, showAddModal, showEditModal }) => {
               applicant.training.map((training, index) => (
                 <div key={index} className="d-flex mb-3 training-item">
                   <div className="me-3 mt-1">
-                   <MenuBookOutlinedIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
+                   <WorkspacePremiumOutlinedIcon sx={{ fontSize: 40, color: '#2E58A6' }} />
                   </div>
                   <div className="flex-grow-1">
                     <div className="d-flex justify-content-between">

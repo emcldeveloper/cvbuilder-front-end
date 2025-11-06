@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Nav, Modal, Button, Form, Table } from "react-bootstrap";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp ,FaUserCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { createProfileSubscription } from "../../Api/Jobseeker/JobSeekerProfileApi";
 import useSubscriptionStatus from "../../hooks/Candidate/SubscriptionStatus";
+ 
 // import MySubscriptionStatus from "../../hooks/Candidate/SubscriptionStatus";
 const SubscriptionSection = ({ isLoggedIn }) => {
     const [showSubscription, setShowSubscription] = useState(false);
@@ -12,9 +13,9 @@ const SubscriptionSection = ({ isLoggedIn }) => {
     const [selectedPlan, setSelectedPlan] = useState("free");
     const [paymentCode, setPaymentCode] = useState("");
     const fullName = "Halidi Selemani";
-     
+
     const { subscriptionData, loading, error } = useSubscriptionStatus();
-     
+
 
 
     const handleSubscriptionOpen = () => setShowSubscription(true);
@@ -64,39 +65,39 @@ const SubscriptionSection = ({ isLoggedIn }) => {
                 <Nav.Link
                     onClick={handleSubscriptionOpen}
                     style={{
-                        marginLeft: "150px",
+                        marginLeft: "250px",
                         background: "linear-gradient(90deg, #D36314, #FF8C00)",
                         color: "#fff",
-                        fontWeight: "600",
-                        borderRadius: "20px",
-                        padding: "6px 14px",
-                        fontSize: "13px",
-                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.4px",
+                        fontWeight: "500",
+                        borderRadius: "18px",
+                        padding: "4px 10px", // smaller padding
+                        fontSize: "11.5px", // smaller font
+                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.15)",
+                        textTransform: "capitalize", // first letter capital only
+                        letterSpacing: "0.3px",
                         border: "1px solid #fff",
                         transition: "all 0.3s ease",
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "6px",
+                        gap: "5px",
                         cursor: "pointer",
                     }}
                     onMouseOver={(e) => {
-                        e.target.style.background =
-                            "linear-gradient(90deg, #FF8C00, #D36314)";
-                        e.target.style.transform = "scale(1.05)";
+                        e.target.style.background = "linear-gradient(90deg, #FF8C00, #D36314)";
+                        e.target.style.transform = "scale(1.04)";
                     }}
                     onMouseOut={(e) => {
-                        e.target.style.background =
-                            "linear-gradient(90deg, #D36314, #FF8C00)";
+                        e.target.style.background = "linear-gradient(90deg, #D36314, #FF8C00)";
                         e.target.style.transform = "scale(1)";
                     }}
                 >
-                    <span role="img" aria-label="star">
+                    {/* <span role="img" aria-label="star" style={{ fontSize: "13px" }}>
                         🌟
-                    </span>{" "}
-                    Subscription
+                    </span> */}
+                      <FaUserCircle style={{ fontSize: "13px" }} />
+                    Upgrade
                 </Nav.Link>
+
             )}
 
             {/* Subscription Modal */}
@@ -230,47 +231,68 @@ const SubscriptionSection = ({ isLoggedIn }) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                     <div className="mt-4">
-                    {subscriptionData?.verify ===1 ?(
-                        <>
-                        
-                        <p className="text-muted">
-                            Pay <strong>10,000 TZS</strong> to the{" "}
-                            <strong>Tigo Pesa Lipa number</strong> below, then paste your payment
-                            code and send to WhatsApp and system.
-                        </p>
+                    <div className="mt-4">
+                        {subscriptionData?.verify === 1 ? (
+                            <>
 
-                        <Table bordered hover responsive className="mt-3">
-                            <thead className="table-light">
-                                <tr>
-                                    <th>Invoice No.</th>
-                                    <th>Date</th>
-                                    <th>Amount (TZS)</th>
-                                    <th>Payment Method</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#INV-2025-001</td>
-                                    <td>22 Oct 2025</td>
-                                    <td>10,000</td>
-                                    <td>Mixx by Yas (Lipa Number)</td>
-                                    <td>
-                                        <span className="badge bg-warning text-dark">Pending</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                 
-                        </>
-                        
+                                <p className="text-muted">
+                                    Pay <strong>10,000 TZS</strong> to the{" "}
+                                    <strong>Tigo Pesa Lipa number</strong> below, then paste your payment
+                                    code and send to WhatsApp and system.
+                                </p>
 
-                    ):(
-                  <p>onr</p>
-                    )}
-                       </div>
-                   
+                                <Table bordered hover responsive className="mt-3">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th>Invoice No.</th>
+                                            <th>Date</th>
+                                            <th>Amount (TZS)</th>
+                                            <th>Payment Method</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#INV-2025-001</td>
+                                            <td>22 Oct 2025</td>
+                                            <td>10,000</td>
+                                            <td>Mixx by Yas (Lipa Number)</td>
+                                            <td>
+                                                <span className="badge bg-warning text-dark">Pending</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+
+                            </>
+
+
+                        ) : (
+                            <Table bordered hover responsive className="mt-3">
+                                <thead className="table-light">
+                                    <tr>
+                                        <th>Invoice No.</th>
+                                        <th>Date</th>
+                                        <th>Amount (TZS)</th>
+                                        <th>Payment Method</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#INV-2025-001</td>
+                                        <td>22 Oct 2025</td>
+                                        <td>10,000</td>
+                                        <td>Mixx by Yas (Lipa Number)</td>
+                                        <td>
+                                            <span className="badge bg-warning text-dark">Active</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        )}
+                    </div>
+
 
                     <div
                         style={{

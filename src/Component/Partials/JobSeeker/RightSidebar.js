@@ -3,6 +3,7 @@ import { Card, Button, Image } from "react-bootstrap";
 import { getListOfEmployers } from "../../../Api/Employer/ListOfEmployerApi";
 import ChatApp from "../../../pages/ChatSystem/ChatMessage";
 import { useNavigate } from "react-router-dom";
+import JobAlertsSection from "./Jobalert";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 
@@ -99,7 +100,7 @@ const RightSideBar = () => {
       </Card>
 
       {/* Job Alerts Section */}
-      <Card className="shadow-sm">
+      {/* <Card className="shadow-sm">
         <Card.Body>
           <h6 className="fw-bold mb-2">Job Alerts</h6>
           <p className="text-muted small mb-3">
@@ -109,7 +110,8 @@ const RightSideBar = () => {
             Create Job Alert
           </Button>
         </Card.Body>
-      </Card>
+      </Card> */}
+      <JobAlertsSection />
       {/* <ChatApp /> */}
     </div>
   );

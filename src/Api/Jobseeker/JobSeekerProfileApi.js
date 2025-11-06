@@ -219,6 +219,14 @@ export const createCulture = async (sendData) => {
         throw error;
     }
 };
+export const createExperience = async (sendData) => {
+    try {
+        const response = await api.post( `applicant/experiencestore`, sendData);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
 export const createProfileSubscription =async(sendData)=>{
     try {
         const response =await api.post (`applicant/accountsubscription`, sendData)
@@ -296,6 +304,19 @@ export const createTraining = async (formData) => {
 export const createProficience = async (formData) => {
   try {
     const response = await api.post('applicant/proficiencystore', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+    });
+    return response; // return full Axios response
+  } catch (error) {
+    throw error;
+  }
+};
+export const createEducation = async (formData) => {
+  try {
+    const response = await api.post('applicant/educationstore', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'X-Requested-With': 'XMLHttpRequest'
