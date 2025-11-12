@@ -48,7 +48,7 @@ export const profile = async (applicant_id) => {
     if (isCacheValid(cacheKey)) {
         return cache[cacheKey].data;
     }
-
+    
     try {
         const response = await api.get(`applicant/profile`, {
             params: { applicant_id },
@@ -63,6 +63,54 @@ export const profile = async (applicant_id) => {
         throw error;
     }
 };
+// export const profile = async (applicant_id) => {
+//   const cacheKey = `profile_${applicant_id}`;
+
+//   if (isCacheValid(cacheKey)) {
+//     return cache[cacheKey].data;
+//   }
+
+//   try {
+//     const response = await api.get(`applicant/profile`, {
+//       params: { applicant_id },
+//     });
+    
+//     // Normalize the response to match your backend structure
+//     const normalizedData = {
+//       address: response.data?.address || null,
+//       phone: response.data?.phone || null,
+//       objective: response.data?.objective || null,
+//       education: response.data?.education || [],
+//       referees: response.data?.referees || [], // Note: 'referees' not 'referee'
+//       experience: response.data?.experience || [],
+//       training: response.data?.training || [],
+//       language: response.data?.language || [],
+//       applicant_profile: response.data?.applicant_profile || null,
+//       culture: response.data?.culture || [],
+//       tools: response.data?.tools || [],
+//       applicant_personality: response.data?.applicant_personality || null,
+//       knowledge: response.data?.knowledge || [],
+//       software: response.data?.software || [],
+//       proficiency: response.data?.proficiency || [],
+//       careers: response.data?.careers || [],
+//       marital_status: response.data?.marital_status || 'Unknown marital',
+//       current_position: response.data?.current_position || null,
+//       subscription: response.data?.subscription || null,
+//       applicant_tag: response.data?.applicant_tag || [],
+//       user: response.data?.user || null,
+//     };
+    
+//     cache[cacheKey] = {
+//       data: normalizedData,
+//       timestamp: Date.now(),
+//     };
+    
+//     return normalizedData;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
 
 export const applicantpipeline = async (applicant_id) => {
     const cacheKey = `applicantpipeline_${applicant_id}`;

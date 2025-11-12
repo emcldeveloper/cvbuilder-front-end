@@ -39,7 +39,7 @@ const useEducationForm = (applicant_id) => {
                 college: formData.college,
                 attachment: formData.attachment,
             };
-          
+
             const response = await createEducation(sendData)
 
             if (response && response.status === 200) {
@@ -49,7 +49,8 @@ const useEducationForm = (applicant_id) => {
                     icon: "success",
                     confirmButtonText: "OK",
                 });
-                window.location.reload(); // Reloads the entire page
+              
+                // window.location.reload();
             } else {
                 Swal.fire({
                     title: "Error!",

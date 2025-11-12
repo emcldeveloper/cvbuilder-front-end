@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, Spinner } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import useEmployers from '../../../hooks/Universal/Employer';
 import Select from 'react-select';
@@ -19,7 +19,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
 
   const [currentRole, setCurrentRole] = useState(false);
   const [showCustomIndustry, setShowCustomIndustry] = useState(false);
-  const { formData, handleSubmit, handleChange } = useExperinceForm(applicant_id);
+  const { formData, handleSubmit, handleChange ,loading} = useExperinceForm(applicant_id);
 
 
   const toggleCurrentRole = () => {
@@ -27,7 +27,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   };
   const { employers, loademployer } = useEmployers();
   const AllEmployerOptions = employers?.map(employer => ({
-    value: employer.id,
+    value: employer.employer_name,
     label: employer.employer_name,
   })) || [];
 
@@ -41,7 +41,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   //country option
   const { countries, loadecountry } = UsegetCountries();
   const AllCountryOptions = countries?.map(country => ({
-    value: country.id,
+    value: country.name,
     label: country.name,
   })) || [];
 
@@ -71,8 +71,8 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   //region option
   const { regions, loaderegion } = useRegions();
   const AllRegionOptions = regions?.map(region => ({
-    value: region.id,
-    label: region.region_name
+    value: region.region_name,
+    label: region.region_name,
   })) || [];
 
   const [Regionoptions, setRegionOptions] = useState([]);
@@ -85,7 +85,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   //position option
   const { positions, loadposition } = usePosition();
   const AllPositionOptions = positions?.map(position => ({
-    value: position.id,
+    value: position.position_name,
     label: position.position_name
   })) || [];
 
@@ -99,7 +99,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
   //industry
   const { industry, loadindustry } = useIndustry();
   const AllIndustryOptions = industry?.map(industry => ({
-    value: industry.id,
+    value: industry.industry_name,
     label: industry.industry_name
   })) || [];
 
@@ -192,6 +192,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                 placeholder="Select employer ..."
                 onChange={(selected) => handleChange("employer", selected)}
                 value={formData.employer}
+              
                 isSearchable // this is the default behavior
                 isClearable // Allow clearing the selected option
               />
@@ -236,7 +237,9 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                     type="text"
                     name="sub_location"
                     className="sub_location"
-                    required
+                    value={formData.sub_location}
+                    onChange={(e) => handleChange("sub_location", e.target.value)}
+          
                   />
                 </Col>
               </Row>
@@ -304,7 +307,7 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                   id="custom-industry"
                   name="custom_industry"
                   className="custom-industry"
-                  required
+                  
                 />
               </Col>
             </Form.Group>
@@ -331,8 +334,10 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                   <Form.Control
                     type="date"
                     name="started"
+                    value={formData.started}
                     className="input-sm"
-                    required
+                    onChange={(e) => handleChange("started", e.target.value)}
+                    
 
                   />
                 </Col>
@@ -342,8 +347,10 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                     type="date"
                     name="ended"
                     className="input-sm"
+                    value={formData.ended}
+                    onChange={(e) => handleChange("ended", e.target.value)}
                     disabled={currentRole}
-                    required={!currentRole}
+                    
                   />
                 </Col>
               </Row>
@@ -390,7 +397,9 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                 as="textarea"
                 name="responsibility"
                 style={{ height: '100px' }}
-                required
+                value={formData.responsibility}
+                onChange={(e) => handleChange("responsibility", e.target.value)}
+                
               />
             </Col>
           </Form.Group>
@@ -404,7 +413,9 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
                 as="textarea"
                 name="remark"
                 style={{ height: '100px' }}
-                required
+                value={formData.remark}
+                onChange={(e) => handleChange("remark", e.target.value)}
+          
               />
             </Col>
           </Form.Group>
@@ -413,9 +424,23 @@ const AddWorkExperienceModal = ({ show, onHide, edit }) => {
             <Button variant="outline-secondary" onClick={onHide}>
               Close
             </Button>
-            <Button variant="outline-secondary" type="submit">
-              Save changes
-            </Button>
+              <Button variant="primary" type="submit" disabled={loading}>
+                          {loading ? (
+                            <>
+                              <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                                className="me-2"
+                              />
+                              Saving...
+                            </>
+                          ) : (
+                            "Save changes"
+                          )}
+                        </Button>
           </Modal.Footer>
         </Form>
       </Modal.Body>

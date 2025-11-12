@@ -36,24 +36,26 @@
          try {
              const sendData = {
                  applicant_id,
-                 industry: formData.industry,
-                 position: formData.position,
-                 employer: formData.employer,
-                 experiencetype: formData.experiencetype,
-                 started: formData.started,
-                 ended: formData.ended,
-                 country: formData.country,
-                 region:formData.region,
+                 industry: formData.industry?.value || null,
+                 position: formData.position?.value || null,
+                 employer: formData.employer?.value || null,
+                 experiencetype: formData.experiencetype?.value || null,
+                 started: formData.started || null,
+                 ended: formData.ended || null,
+                 country: formData.country?.value || null,
+                 region:formData.region?.value || null,
+                 sub_location:formData.sub_location,
                 responsibility: formData.responsibility,
                 remark:formData.remark,
-                positionlevel:formData.positionlevel,
-                startsalaryRange:formData.startsalaryRange,
-                endsalaryRange:formData.endsalaryRange,
+                level:formData.positionlevel?.value || null,
+                start_salary:formData.startsalaryRange?.value || null,
+                end_salary:formData.endsalaryRange?.value|| null ,
 
                
              };
-           
-             const response = await createExperience(sendData);
+             console.log("current datab experince",sendData);
+            const response = await createExperience(sendData);
+            
  
              if (response && response.status === 200) {
                  Swal.fire({
@@ -64,6 +66,7 @@
                  });
                 //  window.location.reload(); // Reloads the entire page
              } else {
+                console.log("database error",response);
                  Swal.fire({
                      title: "Error!",
                      text: response?.data?.error || "Failed to save Experince record.",

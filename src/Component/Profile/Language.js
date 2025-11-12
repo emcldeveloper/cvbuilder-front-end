@@ -7,7 +7,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import AddLanguageModal from '../Forms/JobSeeker/Language';
 
-const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
+const LanguagesSection = ({editData, applicant,  onLanguageSaved }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [IsOpenModel, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -17,7 +17,6 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
         speak: '',
         understand: ''
     });
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -25,7 +24,7 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         setShowAddModal(false);
     };
 
@@ -57,7 +56,13 @@ const LanguagesSection = ({ applicant, isApplicant, encryptedApplicantId }) => {
                             className="text-muted"
                         />
                     </Button>
-                    <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage} />
+                    {/* <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage}  /> */}
+                    <AddLanguageModal
+                        show={IsOpenModel}
+                        onHide={CloseModelLnaguage}
+                        onSuccess={onLanguageSaved} // ✅ Pass refresh trigger to modal
+                    />
+
                     <Link
                         to={`/jobseeker/Edit-Language`}
                     >

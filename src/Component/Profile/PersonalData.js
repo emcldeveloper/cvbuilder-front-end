@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Modal, Form, Image, Card } from 'react-boo
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import Select from 'react-select';
-import { PencilFill } from 'react-bootstrap-icons';
+import { PencilFill, Phone } from 'react-bootstrap-icons';
 import useGenders from '../../hooks/Universal/Gender';
 import useMalitalstatus from '../../hooks/Universal/MaritalStatus';
 import useRegions from '../../hooks/Universal/Region';
@@ -14,15 +14,16 @@ import Swal from 'sweetalert2';
 import moment from "moment";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../utils/cropImage";
+import useAddressForm from '../../hooks/Candidate/UseAddress';
 
-const ProfileSection = ({ profile, address }) => {
+const ProfileSection = ({ profile, address ,phone}) => {
     const applicant_id = localStorage.getItem("applicantId");
     const [showContactModal, setShowContactModal] = useState(false);
     const [showBasicInfoModal, setShowBasicInfoModal] = useState(false);
     const [showBgModal, setShowBgModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [showCropModal, setShowCropModal] = useState(false);
-    console.log("adrress yes boss", address);
+    console.log("profile  yes boss", phone);
 
     // Crop states
     const [imageSrc, setImageSrc] = useState(null);
@@ -84,6 +85,16 @@ const ProfileSection = ({ profile, address }) => {
             });
         }
     }, [address]);
+     const [selectedGender, setSelectedGender] = useState(null);
+    useEffect(() => {
+        if (profile && profile.gender_name && profile.gender_id) {
+           
+            setSelectedGender({
+                value: profile.gender_id,
+                label: profile.gender_name,
+            });
+        }
+    }, [address])
        const [selectedCitizenship, setSelectedCitizenship] = useState(null);
     useEffect(() => {
         if (address && address.citizenship && address.id) { 
@@ -366,11 +377,7 @@ const ProfileSection = ({ profile, address }) => {
             const formData = new FormData(e.target);
             formData.append("user_id", profile?.id);
 
-            // Implement your API call here
-            // const res = await fetch(`${API_URL}/profile/address`, {
-            //     method: "POST",
-            //     body: formData,
-            // });
+            console.log("adrres data for new data is saved ok",formData);
 
             Swal.fire({
                 title: "Success!",
@@ -472,7 +479,12 @@ const ProfileSection = ({ profile, address }) => {
         })) || [];
         setCitizenshipOptions(prev => AllCitizenshipOptions.slice(0, prev.length + 10));
     };
-
+        
+const {formData,
+        handleChange,
+        handleSubmit,
+        loadings,
+    }=useAddressForm(profile,address,Phone)
     if (loading) return <p>Loading...</p>;
 
     return (
@@ -760,7 +772,7 @@ const ProfileSection = ({ profile, address }) => {
                     <Modal.Title className='fs-5'>Personal Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={saveAddressInfo}>
+                    <Form onSubmit={handleSubmit}>
                         <input type="hidden" name="id" value={profile?.id} />
                         <Row>
                             <Form.Group as={Col} md={4}>
@@ -769,7 +781,9 @@ const ProfileSection = ({ profile, address }) => {
                                     type="text"
                                     placeholder="First Name"
                                     name="first_name"
-                                    defaultValue={profile?.first_name}
+                                    value={formData.first_name}
+                                    onChange={handleChange}
+                                     
                                     required
                                 />
                             </Form.Group>
@@ -779,6 +793,7 @@ const ProfileSection = ({ profile, address }) => {
                                     type="text"
                                     placeholder="Middle Name"
                                     name="middle_name"
+                                    value={formData.middel_name}
                                     defaultValue={profile?.middle_name}
                                 />
                             </Form.Group>
@@ -788,6 +803,7 @@ const ProfileSection = ({ profile, address }) => {
                                     type="text"
                                     placeholder="Last Name"
                                     name="last_name"
+                                    value={formData.last_name}
                                     defaultValue={profile?.last_name}
                                     required
                                 />
@@ -800,7 +816,13 @@ const ProfileSection = ({ profile, address }) => {
                                 <Select
                                     name="gender"
                                     options={Genderoptions}
+                                    value={selectedGender}
                                     onMenuScrollToBottom={loadMoreGender}
+                                    onChange={(option)=>{
+                                        setSelectedGender(option)
+                                    }
+
+                                    }
                                     placeholder="Select Gender"
                                     isSearchable
                                     isClearable
@@ -835,6 +857,7 @@ const ProfileSection = ({ profile, address }) => {
                                 <Form.Control
                                     type="text"
                                     name="phone"
+                                    defaultValue={phone?.phone_number}
                                     required
                                 />
                             </Form.Group>
