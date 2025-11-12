@@ -13,7 +13,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
 
 const cvUrl = "https://ekazi.co.tz";
-const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const applicant_id = localStorage.getItem("applicantId");
+const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
+ 
 
 const BRAND = "#cf470c";
 const INK = "#222";

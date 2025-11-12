@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
  
 const cvUrl = "https://ekazi.co.tz";
-const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+ 
+const applicant_id = localStorage.getItem("applicantId");
+const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
+
+ 
 export default function Template2() {
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);

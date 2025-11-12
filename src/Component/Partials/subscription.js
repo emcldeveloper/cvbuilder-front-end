@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Nav, Modal, Button, Form, Table } from "react-bootstrap";
-import { FaWhatsapp ,FaUserCircle } from "react-icons/fa";
+import { FaWhatsapp, FaUserCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { createProfileSubscription } from "../../Api/Jobseeker/JobSeekerProfileApi";
 import useSubscriptionStatus from "../../hooks/Candidate/SubscriptionStatus";
- 
+
 // import MySubscriptionStatus from "../../hooks/Candidate/SubscriptionStatus";
 const SubscriptionSection = ({ isLoggedIn }) => {
     const [showSubscription, setShowSubscription] = useState(false);
@@ -64,39 +64,29 @@ const SubscriptionSection = ({ isLoggedIn }) => {
             {isLoggedIn && (
                 <Nav.Link
                     onClick={handleSubscriptionOpen}
+                    className="upgrade-btn ms-lg-3 my-2 my-lg-0"
                     style={{
-                        marginLeft: "250px",
                         background: "linear-gradient(90deg, #D36314, #FF8C00)",
                         color: "#fff",
                         fontWeight: "500",
                         borderRadius: "18px",
-                        padding: "4px 10px", // smaller padding
-                        fontSize: "11.5px", // smaller font
+                        padding: "6px 14px",
+                        fontSize: "12px",
                         boxShadow: "0 2px 5px rgba(0, 0, 0, 0.15)",
-                        textTransform: "capitalize", // first letter capital only
-                        letterSpacing: "0.3px",
-                        border: "1px solid #fff",
-                        transition: "all 0.3s ease",
+                        textTransform: "capitalize",
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "5px",
-                        cursor: "pointer",
+                        gap: "6px",
+                        transition: "all 0.3s ease",
+                        
                     }}
-                    onMouseOver={(e) => {
-                        e.target.style.background = "linear-gradient(90deg, #FF8C00, #D36314)";
-                        e.target.style.transform = "scale(1.04)";
-                    }}
-                    onMouseOut={(e) => {
-                        e.target.style.background = "linear-gradient(90deg, #D36314, #FF8C00)";
-                        e.target.style.transform = "scale(1)";
-                    }}
+                    onMouseOver={(e) => (e.target.style.opacity = "0.9")}
+                    onMouseOut={(e) => (e.target.style.opacity = "1")}
                 >
-                    {/* <span role="img" aria-label="star" style={{ fontSize: "13px" }}>
-                        🌟
-                    </span> */}
-                      <FaUserCircle style={{ fontSize: "13px" }} />
+                    <FaUserCircle style={{ fontSize: "13px" }} />
                     Upgrade
                 </Nav.Link>
+
 
             )}
 

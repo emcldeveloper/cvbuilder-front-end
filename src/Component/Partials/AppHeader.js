@@ -106,7 +106,7 @@ const AppHeader = () => {
 
           <Navbar.Toggle aria-controls="ekazi-navbar" />
           <Navbar.Collapse id="ekazi-navbar" className="w-100">
-            <Nav className="mx-auto">
+            <Nav className="mx-auto flex-wrap text-center">
               <Nav.Link href="/" className="text-primary">Home</Nav.Link>
               <Nav.Link href="/jobs" className="text-primary">Find Jobs</Nav.Link>
               <Nav.Link href="/employers" className="text-primary">Employers</Nav.Link>

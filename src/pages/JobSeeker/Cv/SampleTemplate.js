@@ -268,30 +268,42 @@ const SampleTemplate = () => {
     return (
         <JobSeekerLayout>
             <Container className="py-4">
-                <Row className="mb-4">
-                    <Col>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <h4 className="d-flex align-items-center gap-3 mb-0">
-                                <FaFileAlt className="text-primary" style={{ fontSize: '1.5rem' }} />
-                                <span className="fw-bold"> CV Templates</span>
-                                <Badge bg="light" text="dark" className="ms-2 d-flex align-items-center">
-                                    <FaEye className="me-1" />
+                <Row className="mb-3">
+                    <Col xs={12}>
+                        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center">
+                            {/* Title and badge */}
+                            <h5 className="d-flex align-items-center gap-2 mb-2 mb-sm-0">
+                                <FaFileAlt className="text-primary" style={{ fontSize: '1.2rem' }} />
+                                <span className="fw-semibold">CV Templates</span>
+                                <Badge
+                                    bg="light"
+                                    text="dark"
+                                    className="ms-1 d-flex align-items-center"
+                                    style={{ fontSize: "0.9rem", padding: "0.35em 0.6em" }}
+                                >
+                                    <FaEye className="me-1" style={{ fontSize: "0.9rem" }} />
                                     {totalview}
                                 </Badge>
-                            </h4>
+                            </h5>
 
                             {/* CV Subscription Button */}
                             <Button
                                 variant="outline-primary"
-                                className="d-flex align-items-center gap-2"
+                                className="d-flex align-items-center gap-1 px-2 py-1"
+                                style={{
+                                    fontSize: "0.8rem",
+                                    borderRadius: "15px",
+                                    whiteSpace: "nowrap",
+                                }}
                                 onClick={() => setShowModal(true)}
                             >
-                                <FaCrown className="text-warning" />
-                                CV Subscription
+                                <FaCrown className="text-warning" style={{ fontSize: "1rem" }} />
+                                Subscription
                             </Button>
                         </div>
                     </Col>
                 </Row>
+
 
                 {/* Modal for CV Subscription */}
                 <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>

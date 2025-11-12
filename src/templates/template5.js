@@ -13,7 +13,8 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FiMail, FiPhone, FiMapPin, FiGlobe, FiLinkedin } from "react-icons/fi";
 import moment from "moment";
- const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const applicant_id = localStorage.getItem("applicantId");
+const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
 const CV_BASE = "https://ekazi.co.tz";
 // Brand + UI
 const BRAND = "#D36314";

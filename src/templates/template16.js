@@ -22,8 +22,10 @@ import moment from "moment";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // 📌 API endpoint
-const API = "/api/cv/template18";
-const cvUrl = "/storage/cv";
+ 
+const cvUrl = "https://ekazi.co.tz";
+const applicant_id = localStorage.getItem("applicantId");
+const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
 
 const Template16 = () => {
   const [payload, setPayload] = useState({});

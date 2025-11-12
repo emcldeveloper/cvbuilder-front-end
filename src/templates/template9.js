@@ -15,7 +15,8 @@ import moment from "moment";
 // Define your API endpoint and CV base URL
  
   const cvUrl = "https://ekazi.co.tz";
-const API_URL = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+  const applicant_id = localStorage.getItem("applicantId");
+const API_URL = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
 export default function Template9() {
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);

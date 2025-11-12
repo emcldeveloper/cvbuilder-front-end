@@ -11,8 +11,8 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
-
-const API = "https://ekazi.co.tz/api/cv/cv_builder/30750";
+const applicant_id = localStorage.getItem("applicantId");
+const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
 const CV_BASE = "https://ekazi.co.tz";
 const BRAND = "#1756a5";
 const BRAND_DARK = "#0e3668";
@@ -25,7 +25,8 @@ const Template1 = () => {
   useEffect(() => {
     fetch(API)
       .then((res) => {
-        if (!res.ok) throw new Error('HTTP error! status: ${res.status}');
+       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
         return res.json();
       })
       .then((json) => {
