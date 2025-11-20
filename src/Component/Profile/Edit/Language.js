@@ -28,10 +28,34 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
     };
 
 
-    const handleEditLanguage = (language) => {
-        // Your edit logic here
-        console.log('Editing language:', language);
-    };
+  const handleEditLanguage = (language) => {
+    setEditData({
+        id: language.id,
+        language: {
+            value: language.language_id,
+            label: language.language?.language_name
+        },
+        read: {
+            value: language.read_id,
+            label: language.read?.read_ability
+        },
+        write: {
+            value: language.write_id,
+            label: language.write?.write_ability
+        },
+        speak: {
+            value: language.speak_id,
+            label: language.speak?.speak_ability
+        },
+        understand: {
+            value: language.understand_id,
+            label: language.understand?.understand_ability
+        }
+    });
+
+    setIsModalOpen(true); // open modal for editing
+};
+console.log("the edit language is presnet",editData);
     const handleOpenLnagugae = () => {
         setIsModalOpen(true);
     }
@@ -64,7 +88,7 @@ const EditLanguages = ({ applicant, isApplicant, encryptedApplicantId }) => {
                     >
                         <FontAwesomeIcon icon={faPlus} size="lg" />
                     </Button>
-                    <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage} />
+                    <AddLanguageModal show={IsOpenModel} onHide={CloseModelLnaguage}  editData={editData}  />
 
                 </div>
             </div>

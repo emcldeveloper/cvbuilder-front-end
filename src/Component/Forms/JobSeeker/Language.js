@@ -1,10 +1,11 @@
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import useLanguageForm from "../../../hooks/Candidate/useLanguageForm";
+import { useEffect, useState } from "react";
 
 const AddLanguageModal = ({ show, onHide, onSave, editData }) => {
   const applicant_id = localStorage.getItem("applicantId");
-
+ 
   const {
     formData,
     handleChange,

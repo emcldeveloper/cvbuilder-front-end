@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencilAlt, faDownload, faCertificate, faArrowLeft, Plus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Pencil } from 'react-bootstrap-icons';
-import moment from 'moment';
-import { Link, useNavigate } from 'react-router-dom';
-import { faMedal } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPencilAlt, faDownload, faCertificate, faArrowLeft, faTrashAlt, faMedal } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import useDeleteProficiency from '../../../hooks/Candidate/DeleteProficiency';
 import AddProficiencyModal from '../../Forms/JobSeeker/Proficiency';
 
-
 const EditProficiency = ({ applicant }) => {
-    const handleDeleteproficiency = useDeleteProficiency();
+    const handleDeleteProficiency = useDeleteProficiency();
+
     const [IsOpenModel, setIsOpenModel] = useState(false);
+    const [editData, setEditData] = useState(null); // <-- Added
+
+    const navigate = useNavigate();
+
     const formatYear = (dateString) => {
         const options = { year: 'numeric', month: 'short' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-    const navigate = useNavigate();
+
     const getFileNameFromUrl = (url) => {
         if (!url) return '';
         const parts = url.split('/');
@@ -34,50 +35,79 @@ const EditProficiency = ({ applicant }) => {
 
         return `${shortenedName}${extension}`;
     };
+
+    // -------------------------------
+    // ✅ Handle Edit Proficiency
+    // -------------------------------
     const handleEditProficiency = (proficiency) => {
-        // Your edit logic here
+        setEditData({
+            id: proficiency.id,
+            proficiency: {
+                value: proficiency.proficiency_id,
+                label: proficiency.proficiency?.proficiency_name
+            },
+            award: proficiency.award,
+            organization: {
+                value: proficiency.organization_id,
+                label: proficiency.organization?.organization_name
+            },
+            started: proficiency.started,
+            ended: proficiency.ended,
+            attachment: proficiency.attachment
+        });
+
+        setIsOpenModel(true); // open modal
     };
 
+    // -------------------------------
+    // Add New Proficiency
+    // -------------------------------
     const handleModelProficiency = () => {
+        setEditData(null); // <-- Clear old data when adding new
         setIsOpenModel(true);
-    }
-
-
-
+    };
 
     return (
         <div className="proficiency-section mt-3">
-            {/* Proficiency Header */}
             {applicant?.proficiency && (
                 <div>
 
+                    {/* Header */}
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <h6 className="section-title mb-0">
                             <b>PROFICIENCY QUALIFICATION</b>
                         </h6>
+
                         <div className="d-flex gap-2">
                             <Button
                                 variant="link"
                                 className="p-0 text-secondary me-2"
-                                onClick={() => navigate(-1)}  // Using react-router's navigate function
-                                title="Back to Training"
+                                onClick={() => navigate(-1)}
+                                title="Back"
                             >
                                 <FontAwesomeIcon icon={faArrowLeft} size="lg" />
                             </Button>
+
                             <Button
                                 variant="link"
                                 className="p-0 text-secondary"
-                              onClick={handleModelProficiency}
+                                onClick={handleModelProficiency}
                             >
                                 <FontAwesomeIcon icon={faPlus} size="lg" />
                             </Button>
-                                <AddProficiencyModal  show={IsOpenModel} onHide={()=>{setIsOpenModel(false)}}/>
+
+                            {/* Modal with editData */}
+                            <AddProficiencyModal
+                                show={IsOpenModel}
+                                onHide={() => setIsOpenModel(false)}
+                                editData={editData} 
+                            />
                         </div>
                     </div>
 
                     <div className="mb-3 divider" />
 
-                    {/* Proficiency List */}
+                    {/* List */}
                     <div className="proficiency-list">
                         {applicant.proficiency.length > 0 ? (
                             applicant.proficiency.map((proficiency, index) => (
@@ -89,33 +119,36 @@ const EditProficiency = ({ applicant }) => {
                                             style={{ fontSize: '1.5rem' }}
                                         />
                                     </div>
+
                                     <div className="flex-grow-1">
                                         <div className="d-flex justify-content-between align-items-center">
                                             <h6 className="mb-0 fw-bold">
-                                                {proficiency.proficiency?.proficiency_name} - {' '}
+                                                {proficiency.proficiency?.proficiency_name} -{' '}
                                                 <span className="fw-light text-muted">
                                                     {formatYear(proficiency.started)} - {formatYear(proficiency.ended)}
                                                 </span>
                                             </h6>
+
                                             <div>
                                                 <Button
                                                     variant="link"
                                                     className="p-0 text-secondary me-2"
                                                     onClick={() => handleEditProficiency(proficiency)}
-                                                    title="Edit"
                                                 >
                                                     <FontAwesomeIcon icon={faPencilAlt} />
                                                 </Button>
+
                                                 <Button
                                                     variant="link"
                                                     className="p-0 text-danger"
-                                                    onClick={() => handleDeleteproficiency(proficiency.id)}
+                                                    onClick={() => handleDeleteProficiency(proficiency.id)}
                                                     title="Delete"
                                                 >
                                                     <FontAwesomeIcon icon={faTrashAlt} />
                                                 </Button>
                                             </div>
                                         </div>
+
                                         <p className="mb-0 text-uppercase">
                                             {proficiency.award} ({proficiency.organization?.organization_name})
                                         </p>
@@ -146,20 +179,20 @@ const EditProficiency = ({ applicant }) => {
             )}
 
             <style>{`
-        .divider {
-          height: 1px;
-          width: 100%;
-          background-color: rgb(235, 235, 235);
-        }
-        .proficiency-item {
-          transition: background-color 0.2s;
-          padding: 8px;
-          border-radius: 4px;
-        }
-        .proficiency-item:hover {
-          background-color: rgba(0, 0, 0, 0.03);
-        }
-      `}</style>
+                .divider {
+                    height: 1px;
+                    width: 100%;
+                    background-color: rgb(235, 235, 235);
+                }
+                .proficiency-item {
+                    transition: background-color 0.2s;
+                    padding: 8px;
+                    border-radius: 4px;
+                }
+                .proficiency-item:hover {
+                    background-color: rgba(0, 0, 0, 0.03);
+                }
+            `}</style>
         </div>
     );
 };

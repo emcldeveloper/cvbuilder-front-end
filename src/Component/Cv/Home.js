@@ -127,14 +127,14 @@ const HomePageCv = () => {
                                         </button>
 
                                         <button
-                                            // onClick={() => {
-                                            //     setDownloading(true);
-                                            //     axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${originalDetails.applicant_profile[0].first_name}`)
-                                            //         .then((response) => {
-                                            //             setDownloading(false);
-                                            //             window.open(response.data.body.link, '_blank');
-                                            //         });
-                                            // }}
+                                            onClick={() => {
+                                                setDownloading(true);
+                                                axios.get(`http://localhost:5001/generatePdf/?template=${template}&name="mspft"`)
+                                                    .then((response) => {
+                                                        setDownloading(false);
+                                                        window.open(response.data.body.link, '_blank');
+                                                    });
+                                            }}
                                             className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 flex items-center gap-2 transition-colors w-full md:w-auto justify-center"
                                             disabled={downloading}
                                         >
@@ -151,7 +151,7 @@ const HomePageCv = () => {
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                                                     </svg>
-                                                    <span>Download PDF</span>
+                                                    <span>Download PDF 5555</span>
                                                 </>
                                             )}
                                         </button>
@@ -185,13 +185,30 @@ const HomePageCv = () => {
                                             </button>
 
                                             <button
-                                                onClick={() => {
-                                                    setDownloading(true);
-                                                    axios.get(`https://cvtemplate.ekazi.co.tz/generatePdf/?template=${template}&uuid=${uuid}&name=${originalDetails.applicant_profile[0].first_name}`)
-                                                        .then((response) => {
-                                                            setDownloading(false);
-                                                            window.open(response.data.body.link, '_blank');
-                                                        });
+                                                onClick={async () => {
+                                                    try {
+                                                        setDownloading(true);
+
+                                                        const response = await axios.get(
+                                                            `http://localhost:5001/generatePdf/?template=${template}&uuid=${uuid}&name="maneno"`,
+                                                            { responseType: "blob" } // very important for files
+                                                        );
+
+                                                        setDownloading(false);
+
+                                                        // Create download link
+                                                        const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                                                        const link = document.createElement("a");
+                                                        link.href = fileURL;
+                                                        link.setAttribute("download", `${originalDetails.applicant_profile[0].first_name}_CV.pdf`);
+                                                        document.body.appendChild(link);
+                                                        link.click();
+                                                        link.remove();
+                                                    } catch (error) {
+                                                        setDownloading(false);
+                                                        console.error("Download error:", error);
+                                                        alert("Failed to generate PDF. Please try again.");
+                                                    }
                                                 }}
                                                 className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 flex items-center gap-2 transition-colors w-full md:w-auto justify-center"
                                                 disabled={downloading}
@@ -209,10 +226,11 @@ const HomePageCv = () => {
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                                                         </svg>
-                                                        <span>Download PDF</span>
+                                                        <span>Download PDF 6666</span>
                                                     </>
                                                 )}
                                             </button>
+
                                         </div>
                                     </div>
 

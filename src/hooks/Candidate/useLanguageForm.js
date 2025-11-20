@@ -8,6 +8,7 @@ import useUnderstandLanguage from "../Universal/Undertsand";
 import { createlanguage } from "../../Api/Jobseeker/JobSeekerProfileApi";
 import Swal from "sweetalert2";
 import { deleteLanguage } from "../../Api/Jobseeker/JobSeekerProfileApi";
+import { UpdateLanguage } from "../../Api/Jobseeker/JobSeekerProfileApi";
 
 const useLanguageForm = (editData, applicant_id, onSuccess) => {
   const { languages } = useLanguage();
@@ -79,6 +80,7 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
     setLoading(true);
 
     const sendData = {
+      id: formData.id,
       language: formData.language?.value || null,
       read: formData.read?.value || null,
       write: formData.write?.value || null,
@@ -86,18 +88,36 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
       understand: formData.understand?.value || null,
       applicant_id,
     };
+    
 
     try {
-      const response = await createlanguage(sendData);
-      if (response.status === 200) {
-        Swal.fire({
-          title: "Success!",
-          text: response.data.success,
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        if (onSuccess) onSuccess(); // refresh parent data
+
+      if (formData.id) {
+        console.log("current langue solve",sendData);
+        const response = await UpdateLanguage(sendData);
+        if (response.status === 200) {
+          Swal.fire({
+            title: "Success!",
+            text: response.data.success,
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          if (onSuccess) onSuccess(); // refresh parent data
+        }
+      } else {
+        const response = await createlanguage(sendData);
+        if (response.status === 200) {
+          Swal.fire({
+            title: "Success!",
+            text: response.data.success,
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          if (onSuccess) onSuccess(); // refresh parent data
+        }
+
       }
+
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -109,47 +129,48 @@ const useLanguageForm = (editData, applicant_id, onSuccess) => {
       setLoading(false);
     }
   };
-    const handleRemove = (id) => {
-          {
+  const handleRemove = (id) => {
+    {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This action will permanently delete the item. Do you want to proceed? ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+
+            const response = await deleteLanguage(id)
+
+
+            if (response.status === 200) {
               Swal.fire({
-                  title: 'Are you sure?',
-                  text: "This action will permanently delete the item. Do you want to proceed? ",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#d33',
-                  cancelButtonColor: '#3085d6',
-                  confirmButtonText: 'Yes, delete it!'
-              }).then(async (result) => {
-                  if (result.isConfirmed) {
-                      try {
-  
-                          const response = await deleteLanguage(id) 
-  
-                          if (response.status === 200) {
-                              Swal.fire({
-                                  title: 'Success!',
-                                  text: 'Data has been deleted permanently.',
-                                  icon: 'success',
-                                  confirmButtonText: 'OK'
-                              }).then(() => {
-                                  window.location.reload(); // Reloads the entire page after the success message
-                              });
-                          }
-  
-                      } catch (error) {
-                          console.error('There was an error removing the referee:', error);
-  
-                          Swal.fire({
-                              title: 'Error!',
-                              text: 'Failed to remove referee. Please try again.',
-                              icon: 'error',
-                              confirmButtonText: 'OK'
-                          });
-                      }
-                  }
+                title: 'Success!',
+                text: 'Data has been deleted permanently.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(() => {
+                window.location.reload(); // Reloads the entire page after the success message
               });
-          };
-      };
+            }
+
+          } catch (error) {
+            console.error('There was an error removing the referee:', error);
+
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to remove referee. Please try again.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        }
+      });
+    };
+  };
 
   return {
     formData,

@@ -4,32 +4,8 @@ import useSoftware from '../../../hooks/Universal/Software';
 import useTool from '../../../hooks/Universal/Tools';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import MyProfile from '../../../hooks/Candidate/ProfileData';
-import Swal from 'sweetalert2';
-import { createSoftware } from '../../../Api/Jobseeker/JobSeekerProfileApi';
-
 
 const EditSoftwareModal = ({ show, onHide }) => {
-    // State for form data
-    const applicant = MyProfile();
-    const applicant_id = localStorage.getItem("applicantId");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState(null);
-    const softwaredata = Array.isArray(applicant?.software) ? applicant.software : [];
-    const [selectedSoftware, setSelectedSoftware] = useState([]);
-    useEffect(() => {
-        if (softwaredata.length > 0) {
-            const mapped = softwaredata.map(item => ({
-                value: item.software?.id || item.software_id,
-                label: item.software?.software_name || item.software_name
-            }));
-            setSelectedSoftware(mapped);
-        }
-    }, [softwaredata, show]);
-
-    const handlesoftwareChange = (selected) => {
-        setSelectedSoftware(selected || []);
-    };
     // State for form data
     const [formData, setFormData] = useState({
         software: [],
@@ -47,58 +23,11 @@ const EditSoftwareModal = ({ show, onHide }) => {
         });
     };
 
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const softwareIds = selectedSoftware.map(item => item.value);
-
-        const payload = {
-            applicant_id: applicant_id,
-            software: softwareIds,
-        };
-
-        setError(null);
-        setIsSubmitting(true);
-
-        try {
-            console.log("software send data from form", payload);
-            const response = await createSoftware(payload);
-
-            if (response?.status === 200) {
-                Swal.fire({
-                    title: "Success!",
-                    text: response.data.success,
-                    icon: "success",
-                });
-                onHide();
-            }
-        } catch (error) {
-            // Handle Laravel 422 validation errors
-            if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.error;
-
-                // Convert object to readable message
-                const messages = Object.values(validationErrors)
-                    .flat()
-                    .join("\n");
-
-                Swal.fire({
-                    title: "Validation Error",
-                    text: messages,
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                });
-            } else {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Something went wrong. Please try again.",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
+        // Handle form submission here
+        console.log(formData);
+        onHide(); // Close modal after submission
     };
     const { software, loadsoftware } = useSoftware()
     const AllsoftwareOptions = software?.map(software => ({
@@ -111,11 +40,22 @@ const EditSoftwareModal = ({ show, onHide }) => {
     const loadMoreSoftware = () => {
         setSoftwareOptions(prev => AllsoftwareOptions.slice(0, prev.length + 10));
     };
+     const {tool, loadtool } = useTool()
+    const AlltoolOptions = tool?.map(tool => ({
+        value: tool.id,
+        label: tool.tool_name,
+    })) || [];
+    const [toolOptions, settoolOptions] = useState([]);
+    console.log("knowlege is tool yes", AlltoolOptions);
+    useEffect(() => settoolOptions(AlltoolOptions.slice(0, 10)), [tool]);
+    const loadMoretool = () => {
+        settoolOptions(prev => AlltoolOptions.slice(0, prev.length + 10));
+    };
 
     return (
         <Modal show={show} onHide={onHide} size="m" centered>
             <Modal.Header closeButton>
-                <Modal.Title className="fs-5">Software Application</Modal.Title>
+                <Modal.Title className="fs-5">Software & Tools</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
@@ -128,9 +68,11 @@ const EditSoftwareModal = ({ show, onHide }) => {
                                         name="software"
                                         options={softwareOptions}
                                         onMenuScrollToBottom={loadMoreSoftware}
-                                        value={selectedSoftware}
                                         placeholder="Select software ..."
-                                        onChange={handlesoftwareChange}
+                                        onChange={selected => {
+                                            // You can store this in state or pass to your form handler
+                                            console.log("Selected software:", selected);
+                                        }}
                                         isSearchable // this is the default behavior
                                         isMulti // Enable multi-select
                                         isClearable // Allow clearing the selected option
@@ -139,6 +81,30 @@ const EditSoftwareModal = ({ show, onHide }) => {
                             </Form.Group>
                         </Col>
                     </Row>
+
+                    <Row className="mb-3">
+                        <Col md={12}>
+                            <Form.Group as={Row}>
+                                <Form.Label column sm={2}>Tools</Form.Label>
+                                <Col sm={10}>
+                                  <CreatableSelect
+                                        name="software"
+                                        options={toolOptions}
+                                        onMenuScrollToBottom={loadMoretool}
+                                        placeholder="Select tool ..."
+                                        onChange={selected => {
+                                            // You can store this in state or pass to your form handler
+                                            console.log("Selected tool:", selected);
+                                        }}
+                                        isSearchable // this is the default behavior
+                                        isMulti // Enable multi-select
+                                        isClearable // Allow clearing the selected option
+                                    />
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
                     <Modal.Footer>
                         <Button variant="outline-secondary" onClick={onHide}>
                             Close

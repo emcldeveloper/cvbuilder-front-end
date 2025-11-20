@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
  
-const cvUrl = "https://ekazi.co.tz";
+const cvUrl = "http://127.0.0.1:8000";
  
 const applicant_id = localStorage.getItem("applicantId");
-const API = `https://ekazi.co.tz/api/cv/cv_builder/${applicant_id}`;
+const API = `http://127.0.0.1:8000/api/cv/cv_builder/${applicant_id}`;
 
  
 export default function Template2() {

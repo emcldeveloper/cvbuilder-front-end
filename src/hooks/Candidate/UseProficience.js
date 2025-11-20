@@ -1,83 +1,110 @@
-// src/hooks/Candidate/useTrainingForm.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { createTraining } from "../../Api/Jobseeker/JobSeekerProfileApi";
-import { createProficience } from "../../Api/Jobseeker/JobSeekerProfileApi";
+import { createProficience ,UpdateProficiency } from "../../Api/Jobseeker/JobSeekerProfileApi";
 
-const useProficienceForm = (applicant_id) => {
+const useProficienceForm = (applicant_id, editData) => {
+    
     const [formData, setFormData] = useState({
+        id: "",
         started: "",
         ended: "",
         award: "",
         proficiency: "",
+        organization: "",
         attachment: null,
     });
-    const [loading, setLoading] = useState(false); 
+
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        if (editData) {
+            setFormData({
+                id: editData.id || "",
+                started: editData.started?.split(" ")[0] || "",
+                ended: editData.ended?.split(" ")[0] || "",
+                award: editData.award || "",
+                proficiency: editData.proficiency?.value || "",
+                organization: editData.organization?.value || "",
+                attachment: null, 
+            });
+        } else {
+            setFormData({
+                id: "",
+                started: "",
+                ended: "",
+                award: "",
+                proficiency: "",
+                organization: "",
+                attachment: null,
+            });
+        }
+    }, [editData]);
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFormData((prev) => ({ ...prev, attachment: file }));
+        setFormData((prev) => ({ ...prev, attachment: e.target.files[0] }));
     };
 
+    // -------------------------------
+    // SAVE / UPDATE LOGIC
+    // -------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // start loading 🕐
+        setLoading(true);
 
         try {
-            const sendData = {
-                applicant_id,
-                award: formData.award,
-                proficiency: formData.proficiency,
-                started: formData.started,
-                ended: formData.ended,
-                organization: formData.organization,
-                attachment: formData.attachment,
-            };
-            console.log("proficeincy data is availbel",sendData)
-            const response = await createProficience(sendData);
+            // Use FormData for file uploads
+            const FD = new FormData();
+            FD.append("applicant_id", applicant_id);
+            FD.append("award", formData.award);
+            FD.append("proficiency", formData.proficiency);
+            FD.append("organization", formData.organization);
+            FD.append("started", formData.started);
+            FD.append("ended", formData.ended);
 
-            if (response && response.status === 200) {
+            if (formData.attachment) {
+                FD.append("attachment", formData.attachment);
+            }
+
+            let response;
+            if (formData.id) {
+                FD.append("id", formData.id);
+                 console.log("updte proficinecy",FD);
+                response= await UpdateProficiency(FD);
+            }
+            else {
+                response = await createProficience(FD);
+            }
+
+            if (response.status === 200) {
                 Swal.fire({
                     title: "Success!",
-                    text: response.data?.success || "Training record saved successfully!",
+                    text: response.data.success,
                     icon: "success",
-                    confirmButtonText: "OK",
                 });
-                window.location.reload(); // Reloads the entire page
-            } else {
-                Swal.fire({
-                    title: "Error!",
-                    text: response?.data?.error || "Failed to save training record.",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
+                window.location.reload();
             }
 
         } catch (error) {
-            console.error("Error saving training:", error);
             Swal.fire({
                 title: "Error!",
-                text: error.response?.data?.error || "Something went wrong. Please try again.",
+                text: error.response?.data?.error || "Something went wrong",
                 icon: "error",
-                confirmButtonText: "OK",
             });
-        }
-        finally {
-            setLoading(false); // stop loading 🔚
+
+        } finally {
+            setLoading(false);
         }
     };
-
 
     return {
         formData,
         handleChange,
         handleFileChange,
         handleSubmit,
-        loading
+        loading,
     };
 };
 

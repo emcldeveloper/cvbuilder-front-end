@@ -17,7 +17,6 @@ const EditCultureModal = ({ show, onHide }) => {
     const applicant = MyProfile();
     const culturedata = Array.isArray(applicant?.culture) ? applicant.culture : [];
     
-
     // Culture options from universal API
     const { culture, loadculture } = useCulture();
     const AllCultureOptions = culture?.map(cultures => ({

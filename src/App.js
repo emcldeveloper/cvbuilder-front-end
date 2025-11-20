@@ -43,8 +43,7 @@ import SkillsCv from './pages/JobSeeker/Cv/Skills';
 import LanguageCv from './pages/JobSeeker/Cv/Language';
 import RefereeCv from './pages/JobSeeker/Cv/Referee';
 import HomeCv from './pages/JobSeeker/Cv/Home';
-import Template3 from './templates/template3';
-import Template6 from './templates/template6';
+
 
 
 // Employer Routes
@@ -62,7 +61,34 @@ import EditLanguagePage from './pages/JobSeeker/EditJobseeker/Language';
 import EditRefereePage from './pages/JobSeeker/EditJobseeker/Referee';
 import EditExperincePage from './pages/JobSeeker/EditJobseeker/Experience';
 import EditEducationPage from './pages/JobSeeker/EditJobseeker/Education';
- 
+import Template2 from './templates/template2';
+import Template4 from './templates/template4';
+import Template1 from './templates/template1';
+import Template5 from './templates/template5';
+import Template7 from './templates/template7';
+import Template8 from './templates/template8';
+import Template9 from './templates/template9';
+import Template10 from './templates/template10';
+import Template11 from './templates/template11';
+import Template12 from './templates/template12';
+import Template13 from './templates/template13';
+import Template14 from './templates/template14';
+import Template3 from './templates/template3';
+import Template6 from './templates/template6';
+import Template16 from './templates/template15';
+import Template17 from './templates/template17';
+import Template18 from './templates/template18';
+import Template19 from './templates/template19';
+import Template20 from './templates/template20';
+import Template21 from './templates/template21';
+import Template22 from './templates/template22';
+import Template23 from './templates/template23';
+import Template24 from './templates/template24';
+import Template25 from './templates/template25';
+import Template26 from './templates/template26';
+import Template27 from './templates/template27';
+import Template28 from './templates/template28';
+
 
 function App() {
   return (
@@ -137,9 +163,34 @@ function App() {
             <Route path="/jobseeker/Trainingcv" element={<TrainingCv />} />
             <Route path="/jobseeker/cvprogress" element={<CVComponent />} />
             <Route path="/jobseeker/CompleteCv" element={<Complete />} />
+            <Route path="template1" element={<Template1 />} />
+           
+            <Route path="template3" element={<Template3 />} />
+            <Route path="template4" element={<Template4 />} />
+            <Route path="template6" element={<Template6 />} />
+            <Route path="template5" element={<Template5 />} />
+            <Route path="template7" element={<Template7 />} />
+            <Route path="template8" element={<Template8 />} />
+            <Route path="template9" element={<Template9 />} />
+            <Route path="template10" element={<Template10 />} />
+            <Route path="template11" element={<Template11 />} />
+            <Route path="template12" element={<Template12 />} />
+            <Route path="template13" element={<Template13 />} />
+            <Route path="template14" element={<Template14 />} />
+            <Route path="template16" element={<Template16 />} />
+            <Route path="template17" element={<Template17 />} />
+            <Route path="template18" element={<Template18 />} />
+            <Route path="template19" element={<Template19 />} />
+            <Route path="template20" element={<Template20 />} />
+            <Route path="template21" element={<Template21 />} />
+            <Route path="template22" element={<Template22 />} />
+            <Route path="template23" element={<Template23 />} />
+            <Route path="template24" element={<Template24 />} />
+            <Route path="template25" element={<Template25 />} />
+
           </Route>
 
-
+          <Route path="template2" element={<Template2 />} />
           {/* <Route path="jobseeker/Job/Applied-job" element={<AppliedJob />} /> */}
 
           {/* Employers Routes */}

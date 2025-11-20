@@ -1,19 +1,28 @@
-import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import CreatableSelect from "react-select/creatable";
 import useOrganization from "../../../hooks/Universal/Organization";
 import useGetProficiency from "../../../hooks/Universal/Proficiency";
 import { useEffect, useState } from "react";
 import useProficienceForm from "../../../hooks/Candidate/UseProficience";
 
-const AddProficiencyModal = ({ show, onHide }) => {
+const AddProficiencyModal = ({ show, onHide, editData }) => {
   const applicant_id = localStorage.getItem("applicantId");
 
   const { organization } = useOrganization();
   const { proficiency } = useGetProficiency();
-  const { formData, handleChange, handleFileChange, handleSubmit, loading } =
-    useProficienceForm(applicant_id);
 
-  // Organization options
+  
+  const {
+    formData,
+    handleChange,
+    handleFileChange,
+    handleSubmit,
+    loading,
+  } = useProficienceForm(applicant_id, editData);
+
+  console.log("check the current date ",formData);
+
+  // ------------ ORGANIZATION OPTIONS WITH LAZY LOADING --------------
   const AllOrganizationOptions =
     organization?.map((org) => ({
       value: org.id,
@@ -21,17 +30,17 @@ const AddProficiencyModal = ({ show, onHide }) => {
     })) || [];
 
   const [OrganizationOptions, setOrganizationOptions] = useState([]);
-  useEffect(
-    () => setOrganizationOptions(AllOrganizationOptions.slice(0, 10)),
-    [organization]
-  );
+  useEffect(() => {
+    setOrganizationOptions(AllOrganizationOptions.slice(0, 10));
+  }, [organization]);
+
   const loadMoreOrganization = () => {
     setOrganizationOptions((prev) =>
       AllOrganizationOptions.slice(0, prev.length + 10)
     );
   };
 
-  // Proficiency options
+  // ------------- PROFICIENCY OPTIONS ----------------
   const AllProficiencyOptions =
     proficiency?.map((p) => ({
       value: p.id,
@@ -39,10 +48,10 @@ const AddProficiencyModal = ({ show, onHide }) => {
     })) || [];
 
   const [ProficiencyOptions, setProficiencyOptions] = useState([]);
-  useEffect(
-    () => setProficiencyOptions(AllProficiencyOptions.slice(0, 10)),
-    [proficiency]
-  );
+  useEffect(() => {
+    setProficiencyOptions(AllProficiencyOptions.slice(0, 10));
+  }, [proficiency]);
+
   const loadMoreProficiency = () => {
     setProficiencyOptions((prev) =>
       AllProficiencyOptions.slice(0, prev.length + 10)
@@ -52,17 +61,20 @@ const AddProficiencyModal = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title className="fs-5">Add Proficiency</Modal.Title>
+        <Modal.Title className="fs-5">
+          {formData.id ? "Edit Proficiency" : "Add Proficiency"}
+        </Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
         <Form
           onSubmit={(e) => handleSubmit(e, onHide)}
           encType="multipart/form-data"
-          className="proficiency-applicant"
         >
+          {/* ORGANIZATION */}
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Organization <span className="text-danger">*</span>
+              Organization *
             </Form.Label>
             <Col sm={9}>
               <CreatableSelect
@@ -78,15 +90,15 @@ const AddProficiencyModal = ({ show, onHide }) => {
                 onChange={(selected) =>
                   handleChange("organization", selected?.value || "")
                 }
-                isSearchable
                 isClearable
               />
             </Col>
           </Form.Group>
 
+          {/* PROFICIENCY */}
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Proficiency <span className="text-danger">*</span>
+              Proficiency *
             </Form.Label>
             <Col sm={9}>
               <CreatableSelect
@@ -102,16 +114,14 @@ const AddProficiencyModal = ({ show, onHide }) => {
                 onChange={(selected) =>
                   handleChange("proficiency", selected?.value || "")
                 }
-                isSearchable
                 isClearable
               />
             </Col>
           </Form.Group>
 
+          {/* STARTED */}
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm={3}>
-              Started <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label column sm={3}>Started *</Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="date"
@@ -123,10 +133,9 @@ const AddProficiencyModal = ({ show, onHide }) => {
             </Col>
           </Form.Group>
 
+          {/* ENDED */}
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm={3}>
-              Ended <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label column sm={3}>Ended *</Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="date"
@@ -138,10 +147,9 @@ const AddProficiencyModal = ({ show, onHide }) => {
             </Col>
           </Form.Group>
 
+          {/* AWARD */}
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm={3}>
-              Awarded <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label column sm={3}>Award *</Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="text"
@@ -153,16 +161,18 @@ const AddProficiencyModal = ({ show, onHide }) => {
             </Col>
           </Form.Group>
 
+          {/* FILE UPLOAD */}
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={3}>
-              Attach Certificate <span className="text-danger">*</span>
+              Attachment{" "}
+              {!formData.id && <span className="text-danger">*</span>}
             </Form.Label>
             <Col sm={9}>
               <Form.Control
                 type="file"
                 name="attachment"
-                 onChange={handleFileChange}
-                required
+                onChange={handleFileChange}
+                required={!formData.id}
               />
             </Col>
           </Form.Group>
@@ -171,22 +181,15 @@ const AddProficiencyModal = ({ show, onHide }) => {
             <Button variant="outline-secondary" onClick={onHide}>
               Close
             </Button>
+
             <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    className="me-2"
-                  />
-                  Saving...
-                </>
-              ) : (
-                "Save changes"
-              )}
+              {loading
+                ? formData.id
+                  ? "Updating..."
+                  : "Saving..."
+                : formData.id
+                ? "Update"
+                : "Save"}
             </Button>
           </Modal.Footer>
         </Form>

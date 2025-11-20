@@ -259,6 +259,27 @@ export const createCreerObjective = async (applicant_id,objective) => {
         error.message;
     }
 };
+export const UpdateLanguage = async (language) => {
+    try {
+        const response = await api.put( `applicant/languageupdate`, language);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+export const UpdateProficiency = async (Proficience) => {
+    try {
+        const response = await api.put( `applicant/updateproficiency`, Proficience);
+        return response;
+    } catch (error) {
+        throw error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message;
+    }
+};
+ 
 export const createCulture = async (sendData) => {
     try {
         const response = await api.post( `applicant/culturestore`, sendData);
@@ -267,6 +288,24 @@ export const createCulture = async (sendData) => {
         throw error;
     }
 };
+
+export const createKnowledge = async (sendData) => {
+    try {
+        const response = await api.post( `applicant/knowledgestore`, sendData);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+export const createSoftware = async (sendData) => {
+    try {
+        const response = await api.post(`applicant/softwarestore`, sendData);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const createExperience = async (sendData) => {
     try {
         const response = await api.post( `applicant/experiencestore`, sendData);
